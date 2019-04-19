@@ -1,0 +1,21 @@
+﻿  ATM.cpp
+  dijkstra.cpp
+  Hanoi.cpp
+  Joseph.cpp
+  Sample.cpp
+  ScoreManagement.cpp
+  ScoreManagementTypeLL.cpp
+  ScoreManagementTypeLL_V2.cpp
+d:\sc\c_c++\my\project1\project1\scoremanagementtypell_v2.cpp(585): warning C4101: 'age' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\my\project1\project1\scoremanagementtypell_v2.cpp(585): warning C4101: 'index' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\my\project1\project1\scoremanagementtypell_v2.cpp(585): warning C4101: 'kor' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\my\project1\project1\scoremanagementtypell_v2.cpp(584): warning C4101: 'buffer' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\my\project1\project1\scoremanagementtypell_v2.cpp(585): warning C4101: 'math' :참조되지 않은 지역 변수입니다.
+  ss.cpp
+  strfunc.cpp
+  test.cpp
+  vtr.cpp
+  코드를 생성하고 있습니다.
+  All 21 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  Project1.vcxproj -> D:\SC\C_C++\My\Project1\x64\Release\Project1.exe

@@ -1,0 +1,28 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#ifdef TEST
+#include <stdio.h>
+#include <iostream>
+
+
+int main()
+{
+	char aaa[40];
+	FILE* fp = fopen("input.txt", "r");
+
+	while (!feof(fp))
+	{
+		fgets(aaa, 40, fp);
+		printf("%-15s", aaa);
+		
+
+
+	}
+
+
+	system("pause");
+
+
+}
+
+#endif

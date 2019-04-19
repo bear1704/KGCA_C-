@@ -1,0 +1,9 @@
+﻿  ScoreManagementTypeLL_V2.cpp
+  test.cpp
+d:\sc\c_c++\my\project1\project1\test.cpp(6): error C2059: 구문 오류: ')'
+d:\sc\c_c++\my\project1\project1\test.cpp(7): error C2143: 구문 오류: ';'이(가) '{' 앞에 없습니다.
+d:\sc\c_c++\my\project1\project1\test.cpp(7): error C2447: '{': 함수 헤더가 없습니다. 이전 스타일의 형식 목록입니까?
+d:\sc\c_c++\my\project1\project1\test.cpp(18): error C2059: 구문 오류: ')'
+d:\sc\c_c++\my\project1\project1\test.cpp(19): error C2143: 구문 오류: ';'이(가) '{' 앞에 없습니다.
+d:\sc\c_c++\my\project1\project1\test.cpp(19): error C2447: '{': 함수 헤더가 없습니다. 이전 스타일의 형식 목록입니까?
+  코드를 생성하고 있습니다...
