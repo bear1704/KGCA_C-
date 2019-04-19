@@ -4,6 +4,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #define TEST
+
 #ifdef TEST
 
 
@@ -101,6 +102,10 @@ int main()
 
 	_getche();
 
+	const int* p = NULL;
+	*p = 4;
+	p = NULL;
+		
 	return 0;
 }
 
