@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClCompile Include="ATM.cpp" />
     <ClCompile Include="dijkstra.cpp" />
+    <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="Hanoi.cpp" />
     <ClCompile Include="HeaderManager.h" />
     <ClCompile Include="Joseph.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="ScoreManagement.cpp" />
+    <ClCompile Include="ScoreManagementManager.cpp" />
     <ClCompile Include="ScoreManagementTypeLL.cpp" />
     <ClCompile Include="ScoreManagementTypeLL_V2.cpp" />
     <ClCompile Include="ss.cpp" />
@@ -138,8 +140,10 @@
     <ClCompile Include="vtr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileIO.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="ScoreManagementManager.h" />
     <ClInclude Include="StudentData.h" />
   </ItemGroup>
   <ItemGroup>

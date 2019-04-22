@@ -1,14 +1,20 @@
-#include "StudentData.h"
-#include "Node.h"
+#pragma once
+#define _CRT_SECURE_NO_WARNINGS
 
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <conio.h>
+#include <iostream>
 
-enum FILESTATUS {
+enum class FILESTATUS : int {
 	SAVE_,
 	LOAD_,
 };
 
-enum SELECT {
+enum class SELECT : int {
 	EXIT,
 	CREATE,
 	INSERT,

@@ -68,47 +68,44 @@ enum SELECT {
 };
 
 
+//이식중
 
-void Init();
-FILE* CreateLoadFile(FILESTATUS status);
-void DeleteStudent(NODE* node);
-void SearchModify(LinkedList* LL);
-LinkedList* CreateInitialList(); //연결리스트 초기 생성
-void PrintData(const LinkedList* studentLL); //데이터 전부 출력
+//이식완료
 NODE* CreateNode(int index, const char* name, const int age, const int korScore, const int mathScore); //노드 만들기
+void Init();
+LinkedList* CreateInitialList(); //연결리스트 초기 생성
 void InsertStudent(LinkedList* studentLL); //학생 정보 임의 입력
 void InsertStudentNode(LinkedList* studentLL, NODE* node /*, int age*/);
-void WriteSampleData(LinkedList* studentLL); //샘플데이터 생성
-void AllFree(NODE* node); //데이터 할당 해제
-void SaveData(LinkedList* studentLL); //데이터 세이브
-LinkedList* LoadData(); //데이터 로드
 void SortData(LinkedList* studentLL); //연결리스트 정렬
 NODE* SwapStudent(NODE* A, NODE* B); //A와 B를 스왑
-void SearchDeleteTarget(char* name, LinkedList* studentLL); //삭제할 요소를 이름으로 검색
+void DeleteStudent(NODE* node);
 void IndexRearrange(LinkedList* studentLL); //인덱스 재정렬
+void InsertStudentNode(LinkedList* studentLL, NODE* node /*, int age*/);
+void SearchModify(LinkedList* LL);
+void SearchDeleteTarget(char* name, LinkedList* studentLL); //삭제할 요소를 이름으로 검색
+void WriteSampleData(LinkedList* studentLL); //샘플데이터 생성
+void AllFree(NODE* node); //데이터 할당 해제
+FILE* CreateLoadFile(FILESTATUS status);
+void PrintData(const LinkedList* studentLL); //데이터 전부 출력
+void SaveData(LinkedList* studentLL); //데이터 세이브
+LinkedList* LoadData(); //데이터 로드
 
-//학생 데이터
-//노드 데이터
-//학생 LL 관리 (insert, delete 등..) head, tail
-//파일 입출력
 
-int main()
-{
-	Init();
 
-	_getche();
-
-	const int* p = NULL;
-	*p = 4;
-	p = NULL;
-		
-	return 0;
-}
+//
+//int main()
+//{
+//	Init();
+//
+//	_getche();
+//
+//	return 0;
+//}
 
 
 
 void Init()
-{
+{//Manager
 	char temp = NULL;
 	SELECT inputData = NONE;
 
@@ -195,7 +192,7 @@ void Init()
 
 
 void AllFree(NODE* node)
-{
+{ //LinkedList
 
 	NODE* nextNode;
 	NODE* prevNode;
@@ -219,7 +216,7 @@ void AllFree(NODE* node)
 }
 
 LinkedList* CreateInitialList()
-{
+{ // Manager
 
 	LinkedList* studentList = new LinkedList;
 
@@ -245,7 +242,7 @@ LinkedList* CreateInitialList()
 
 
 NODE* CreateNode(int index, const char* name, const int age, const int korScore, const int mathScore) //index => 이전 LL 노드에서 가져온 인덱스 (+1할 것)
-{
+{ // LinkedList
 	NODE* node = new NODE;
 
 	node->data.age = age;
@@ -260,7 +257,7 @@ NODE* CreateNode(int index, const char* name, const int age, const int korScore,
 }
 
 void InsertStudent(LinkedList* studentLL)//student는 지역변수 parameter로 들어왔다. func(int a)가 함수가 끝나면 값이 없어지듯이, student도 마찬가지
-{
+{//LinkedList
 
 	//중간생성 구현필요
 	if (!studentLL)
@@ -289,7 +286,7 @@ void InsertStudent(LinkedList* studentLL)//student는 지역변수 parameter로 들어왔
 
 }
 void InsertStudentNode(LinkedList* studentLL, NODE* node /*, int age*/)
-{
+{//LL?NODE??
 	
 
 	/*이중 연결리스트에서 정렬 없이 삽입하는 코드*/
@@ -306,8 +303,8 @@ void InsertStudentNode(LinkedList* studentLL, NODE* node /*, int age*/)
 
 
 
-void SearchModify(LinkedList *LL)
-{
+void SearchModify(LinkedList *LL) //LinkdedList
+{//LL
 	char *name = new char[30];
 	printf("찾을 이름 입력 (0 : 종료)\n");
 
@@ -371,8 +368,8 @@ void SearchModify(LinkedList *LL)
 
 }
 
-void WriteSampleData(LinkedList* studentLL)
-{
+void WriteSampleData(LinkedList* studentLL)  //LinkdedList
+{//LL
 	int sampleDataCount;
 	char randomName[4];
 
@@ -422,7 +419,7 @@ void WriteSampleData(LinkedList* studentLL)
 
 
 void PrintData(const LinkedList* studentLL)
-{
+{//LL
 
 	if (studentLL == nullptr)
 	{
@@ -451,7 +448,7 @@ void PrintData(const LinkedList* studentLL)
 }
 
 FILE* CreateLoadFile(FILESTATUS status)
-{
+{//IO
 	FILE* fp = NULL;
 
 	if (status == FILESTATUS::LOAD_)
@@ -473,7 +470,7 @@ FILE* CreateLoadFile(FILESTATUS status)
 
 
 void SaveData(LinkedList* studentLL)
-{
+{//IO
 	FILESTATUS status = FILESTATUS::SAVE_;
 
 	FILE *fp = CreateLoadFile(status);
@@ -493,7 +490,7 @@ void SaveData(LinkedList* studentLL)
 }
 
 LinkedList* LoadData()
-{
+{//IO
 	FILE *fp = CreateLoadFile(FILESTATUS::LOAD_);
 	char buffer[20];
 	int index, age, kor, math;
@@ -537,7 +534,7 @@ LinkedList* LoadData()
 
 
 void DeleteStudent(NODE* node)
-{
+{//LL
 	NODE* prevNode;
 	NODE* postNode;
 
@@ -556,7 +553,7 @@ void DeleteStudent(NODE* node)
 }
 
 void SortData(LinkedList* studentLL)
-{
+{//LL
 	index = 1;
 	NODE* startNode = studentLL->head->next;
 	NODE* minNode = nullptr;
@@ -585,7 +582,7 @@ void SortData(LinkedList* studentLL)
 }
 
 NODE* SwapStudent(NODE* A, NODE* B) //반환값으로 새로운 iterI를 리턴해야 한다. iterI가 delete되면서 iterJ가 길을 잃기 때문.
-{
+{//LL
 	NODE* tempA = new NODE;
 	NODE* tempB = new NODE;
 
@@ -615,7 +612,7 @@ NODE* SwapStudent(NODE* A, NODE* B) //반환값으로 새로운 iterI를 리턴해야 한다. i
 }
 
 void SearchDeleteTarget(char* name, LinkedList* studentLL)
-{
+{ //LinkdedList
 	if (studentLL)
 	{
 		NODE* iterNode = studentLL->head->next;
