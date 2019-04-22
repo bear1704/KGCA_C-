@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -123,7 +123,10 @@
     <ClCompile Include="ATM.cpp" />
     <ClCompile Include="dijkstra.cpp" />
     <ClCompile Include="Hanoi.cpp" />
+    <ClCompile Include="HeaderManager.h" />
     <ClCompile Include="Joseph.cpp" />
+    <ClCompile Include="LinkedList.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="ScoreManagement.cpp" />
     <ClCompile Include="ScoreManagementTypeLL.cpp" />
@@ -135,6 +138,8 @@
     <ClCompile Include="vtr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="StudentData.h" />
   </ItemGroup>
   <ItemGroup>

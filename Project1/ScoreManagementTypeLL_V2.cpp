@@ -47,10 +47,6 @@ typedef struct LL_ {
 
 
 
-
-
-
-
 enum FILESTATUS {
 	SAVE_,
 	LOAD_,
