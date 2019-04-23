@@ -18,15 +18,18 @@ LinkedList * ScoreManagementManager::CreateInitialList()
 
 
 		LinkedList* studentList = new LinkedList;
-
+		
 		/*Head, Tail 선언*/
-		studentList->head = new Node;
-		studentList->tail = new Node;
+		studentList->SetHeadAndTail(new Node(), new Node());
+		
 
-		studentList->head->next = studentList->tail; //Head의 다음 노드는 Tail로
-		studentList->tail->prev = studentList->head; //Taill의 이전 노드는 head로
-		studentList->head->prev = nullptr;
-		studentList->tail->next = nullptr;
+		//studentList->getHead()->getNext() = studentList->getTail(); //Head의 다음 노드는 Tail로
+		//studentList->getTail()->prev = studentList->getHead(); //Taill의 이전 노드는 head로
+		//studentList->getHead()->prev = nullptr;
+		//studentList->getTail()->next = nullptr;
+
+		studentList->getHead()->SetNextAndPrev(studentList->getTail(), nullptr);
+		studentList->getTail()->SetNextAndPrev(nullptr, studentList->getHead());
 
 		LinkedList::index = 1;  // static index 초기화
 
@@ -115,7 +118,7 @@ void ScoreManagementManager::Init()
 			break;
 		case SELECT::EXIT:
 			if (studentList)
-				studentList->AllFree(studentList->head->next);
+				studentList->AllFree(studentList->getHead()->getNext());
 			
 			if(studentList)
 				delete studentList;

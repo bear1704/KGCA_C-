@@ -18,36 +18,37 @@ FileIO::~FileIO()
 FILE* FileIO::CreateLoadFile(FILESTATUS status)
 {//IO
 
+	FILE* fp_ = nullptr;
 	if (status == FILESTATUS::LOAD_)
 	{
-		fp = fopen("student.txt", "r+");
-		if (!fp)
+		fp_ = fopen("student.txt", "r+");
+		if (!fp_)
 			printf("불러올 데이터가 없습니다!\n");
 	}
 
 
 	if (status == FILESTATUS::SAVE_)
 	{
-		fp = fopen("student.txt", "w+");
+		fp_ = fopen("student.txt", "w+");
 	}
 
-	return fp;
+	return fp_;
 }
 
 void FileIO::SaveData(LinkedList* studentList)
 {//IO
 	FILESTATUS status = FILESTATUS::SAVE_;
 
-
 	fp = CreateLoadFile(status);
 
-	Node* iterNode = studentList->head->next;
+	Node* iterNode = studentList->getHead()->getNext();
 
-	//fprintf("%d\n", index);
-	while (iterNode->next != nullptr) //next인 이유는 tail을 계산에서 빼기 위해
+
+	while (iterNode->getNext() != nullptr) //next인 이유는 tail을 계산에서 빼기 위해
 	{
-		fprintf(fp, "%d %s %d %d %d\n", iterNode->data.index, iterNode->data.name, iterNode->data.age, iterNode->data.korScore, iterNode->data.mathScore);
-		iterNode = iterNode->next;
+		fprintf(fp, "%d %s %d %d %d\n", iterNode->getData().getIntInfo("index"), iterNode->getData().getStringInfo("name"),
+			iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
+		iterNode = iterNode->getNext();
 	}
 
 	fclose(fp);
@@ -74,20 +75,29 @@ void FileIO::LoadData(LinkedList** doublePtrList)
 	{
 		LinkedList* newLL = new LinkedList;
 
-		newLL->head = new Node;
-		newLL->tail = new Node;
+		newLL->SetHeadAndTail(new Node(), new Node());
 
-		newLL->head->next = newLL->tail;
-		newLL->tail->prev = newLL->head;
 
-		newLL->head->prev = nullptr;
-		newLL->tail->next = nullptr;
+		newLL->getHead()->SetNextAndPrev(newLL->getTail(), nullptr);
+		newLL->getTail()->SetNextAndPrev(nullptr, newLL->getHead());
 
+		/*newLL->getHead()->next = newLL->getTail();
+		newLL->getTail()->prev = newLL->getHead();
+
+		newLL->getHead()->prev = nullptr;
+		newLL->getTail()->next = nullptr;
+		*/
 
 		while (!feof(fp))
 		{
+			int index, age, korScore, mathScore;
+			char name[25];
+
 			Node* node = new Node;
-			fscanf(fp, "%d %s %d %d %d\n", &node->data.index, &node->data.name, &node->data.age, &node->data.korScore, &node->data.mathScore);
+
+			fscanf(fp, "%d %s %d %d %d\n", &index, name, &age, &korScore, &mathScore);
+
+			node->getData().SetData(index, name, age, korScore, mathScore);
 
 			newLL->InsertStudentNode(node);
 		}
@@ -103,3 +113,4 @@ void FileIO::LoadData(LinkedList** doublePtrList)
 	}
 
 }
+

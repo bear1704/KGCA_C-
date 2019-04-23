@@ -21,12 +21,8 @@ LinkedList::~LinkedList()
 Node* LinkedList::CreateNode(int index, const char* name, const int age, const int korScore, const int mathScore) //index => 이전 LL 노드에서 가져온 인덱스 (+1할 것)
 {
 	Node* node = new Node;
-
-	node->data.age = age;
-	node->data.korScore = korScore;
-	node->data.mathScore = mathScore;
-	node->data.index = index;
-	strcpy(node->data.name, name);
+	
+	node->getData().SetData(index, const_cast<char*>(name), age, korScore, mathScore);
 
 	return node;
 
@@ -36,16 +32,12 @@ Node* LinkedList::CreateNode(int index, const char* name, const int age, const i
 void LinkedList::InsertStudentNode(Node* node)
 {
 	/*이중 연결리스트에서 정렬 없이 삽입하는 코드*/
-	Node* prevNode = tail->prev;
+	Node* prevNode = tail->getPrev();
 	Node* postNode = tail;
 
-	node->prev = prevNode;
-	prevNode->next = node;
-
-	node->next = postNode;
-	postNode->prev = node;
-
-
+	node->SetNextAndPrev(postNode, prevNode);
+	prevNode->SetNextAndPrev(node, nullptr);
+	postNode->SetNextAndPrev(nullptr, node);
 }
 
 void LinkedList::InsertStudent()//data는 지역변수 parameter로 들어왔다. func(int a)가 함수가 끝나면 값이 없어지듯이, data도 마찬가지
@@ -73,18 +65,18 @@ void LinkedList::InsertStudent()//data는 지역변수 parameter로 들어왔다. func(int
 void LinkedList::SortData()
 {//LL
 	index = 1;
-	Node* startNode = head->next;
+	Node* startNode = head->getNext();
 	Node* minNode = nullptr;
-	for (Node* iterI = startNode; iterI != tail; iterI = iterI->next)
+	for (Node* iterI = startNode; iterI != tail; iterI = iterI->getNext())
 	{
 		int min = 9999;
 
-		for (Node* iterJ = iterI; iterJ != tail; iterJ = iterJ->next)
+		for (Node* iterJ = iterI; iterJ != tail; iterJ = iterJ->getNext())
 		{
-			if (iterJ->data.age < min)
+			if (iterJ->getData().getIntInfo("age") < min)
 			{
 				minNode = iterJ;
-				min = iterJ->data.age;
+				min = iterJ->getData().getIntInfo("age");
 			}
 		}
 
@@ -104,23 +96,36 @@ Node* LinkedList::SwapStudent(Node* A, Node* B) //반환값으로 새로운 iterI를 리턴
 	Node* tempA = new Node;
 	Node* tempB = new Node;
 
-	tempA->data = A->data;
-	tempA->prev = A->prev;
-	tempA->next = A->next;
+	//
 
-	tempB->data = B->data;
-	tempB->prev = B->prev;
-	tempB->next = B->next;
+	//tempA->data = A->data;
+	//tempA->getPrev() = A->getPrev();
+	//tempA->getNext() = A->getNext();
 
-	tempB->prev = A->prev;
-	tempB->next = A;
-	A->prev->next = tempB;
-	A->prev = tempB;
+	//tempB->data = B->data;
+	//tempB->getPrev() = B->getPrev();
+	//tempB->getNext() = B->getNext();
 
-	tempA->prev = B->prev;
-	tempA->next = B;
-	B->prev->next = tempA;
-	B->prev = tempA;
+	//tempB->getPrev() = A->getPrev();
+	//tempB->getNext() = A;
+	//A->getPrev()->getNext() = tempB;
+	//A->getPrev() = tempB;
+
+	//tempA->getPrev() = B->getPrev();
+	//tempA->getNext() = B;
+	//B->getPrev()->getNext() = tempA;
+	//B->getPrev() = tempA;
+
+	tempA = A;
+	tempB = B;
+
+	tempB->SetNextAndPrev(A, A->getPrev());
+	A->SetAdressPrevToNext(A, tempB);
+	A->SetNextAndPrev(nullptr, tempB);
+
+	tempA->SetNextAndPrev(B, B->getPrev());
+	B->SetAdressPrevToNext(B, tempA);
+	B->SetNextAndPrev(nullptr, tempA);
 
 	DeleteStudent(A);
 	DeleteStudent(B);
@@ -134,8 +139,8 @@ void LinkedList::DeleteStudent(Node* node)
 	Node* prevNode;
 	Node* postNode;
 
-	prevNode = node->prev;
-	postNode = node->next;
+	prevNode = node->getPrev();
+	postNode = node->getNext();
 
 	if (node)
 	{
@@ -143,21 +148,25 @@ void LinkedList::DeleteStudent(Node* node)
 		node = nullptr;
 	}
 
-	prevNode->next = postNode;
-	postNode->prev = prevNode;
+	prevNode->SetNextAndPrev(postNode, nullptr);
+	postNode->SetNextAndPrev(nullptr, prevNode);
+
+	//prevNode->getNext() = postNode;
+	//postNode->getPrev() = prevNode;
 
 }
 
 void LinkedList::IndexRearrange()
 {
 	index = 1;
-	Node* iterNode = head->next;
+	Node* iterNode = head->getNext();
 
-	while (iterNode->next != nullptr)
+	while (iterNode->getNext() != nullptr)
 	{
-		iterNode->data.index = index;
+		iterNode->getData().SetIndex(index);
+		
 		index++;
-		iterNode = iterNode->next;
+		iterNode = iterNode->getNext();
 	}
 
 }
@@ -169,19 +178,20 @@ void LinkedList::PrintData()
 	printf("번호 이름   나이 국어 수학\n");
 
 
-	if (head->next == tail)
+	if (head->getNext() == tail)
 	{
 		printf("테이블에 내용이 없습니다");
 		_getche();
 		return;
 	}
 
-	Node* iterNode = head->next;
+	Node* iterNode = head->getNext();
 
-	while (iterNode->next != nullptr)
+	while (iterNode->getNext() != nullptr)
 	{
-		printf("%2d %5s %5d %5d %5d\n", iterNode->data.index, iterNode->data.name, iterNode->data.age, iterNode->data.korScore, iterNode->data.mathScore);
-		iterNode = iterNode->next;
+		printf("%2d %5s %5d %5d %5d\n", iterNode->getData().getIntInfo("index"), iterNode->getData().getStringInfo("name"), 
+			iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
+		iterNode = iterNode->getNext();
 	}
 	_getche();
 }
@@ -208,37 +218,41 @@ void LinkedList::SearchModify() //LinkdedList
 
 	while (iterNode != nullptr)
 	{
-		if (_stricmp(name, iterNode->data.name) == 0)
+		if (_stricmp(name, iterNode->getData().getStringInfo("name")) == 0)
 		{
+			char name[25];
+			int age, korScore, mathScore;
+
 			printf("이름 나이 국어 수학\n");
-			printf("%5s %5d %5d %5d\n", iterNode->data.name, iterNode->data.age, iterNode->data.korScore, iterNode->data.mathScore);
+			printf("%5s %5d %5d %5d\n", iterNode->getData().getStringInfo("name"), iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
 
 			printf("\n수정할 이름 : ");
-			scanf("%s", &iterNode->data.name);
+			scanf("%s", &name);
 
 			printf("\n수정할 나이 : ");
-			scanf("%d", &iterNode->data.age);
-
+			scanf("%d", &age);
 
 			printf("\n수정할 국어 점수 : ");
-			scanf("%d", &iterNode->data.korScore);
-
+			scanf("%d", &korScore);
 
 			printf("\n수정할 수학 점수 : ");
-			scanf("%d", &iterNode->data.mathScore);
+			scanf("%d", &mathScore);
 
-			printf("\n%5s %5d %5d %5d\n", iterNode->data.name, iterNode->data.age, iterNode->data.korScore, iterNode->data.mathScore);
+			iterNode->getData().SetData(iterNode->getData().getIntInfo("index"), name, age, korScore, mathScore);
+
+
+			printf("\n%5s %5d %5d %5d\n", iterNode->getData().getStringInfo("name"), iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
 			printf("\n적용되었습니다\n ");
 
 			SortData();
 
 			iterNode = nullptr;
-			delete name;
+			//delete name;
 
 			_getche();
 			return;
 		}
-		iterNode = iterNode->next;
+		iterNode = iterNode->getNext();
 	}
 
 
@@ -254,10 +268,10 @@ void LinkedList::SearchModify() //LinkdedList
 
 void LinkedList::SearchDeleteTarget(char* name)
 { //LinkdedList
-		Node* iterNode = head->next;
-		while (iterNode->next != nullptr)
+		Node* iterNode = head->getNext();
+		while (iterNode->getNext() != nullptr)
 		{
-			if (_stricmp(name, iterNode->data.name) == 0)
+			if (_stricmp(name, iterNode->getData().getStringInfo("name")) == 0)
 			{
 				DeleteStudent(iterNode);
 				printf("삭제되었습니다\n");
@@ -265,7 +279,7 @@ void LinkedList::SearchDeleteTarget(char* name)
 				_getch();
 				return;
 			}
-			iterNode = iterNode->next;
+			iterNode = iterNode->getNext();
 
 		}
 
@@ -280,9 +294,9 @@ void LinkedList::WriteSampleData()  //LinkdedList
 	char randomName[4];
 
 
-		if (head->next != nullptr) //혹시 이미 만들어진 경우 클리닝
+		if (head->getNext() != nullptr) //혹시 이미 만들어진 경우 클리닝
 		{
-			AllFree(head->next);
+			AllFree(head->getNext());
 
 			index = 1;
 		}
@@ -319,17 +333,38 @@ void LinkedList::AllFree(Node* node)
 	Node* nextNode;
 	Node* prevNode;
 
-	while (node->next != nullptr)
+	while (node->getNext() != nullptr)
 	{
-		nextNode = node->next;
-		prevNode = node->prev;
-		printf("%s free\n", node->data.name);
+		nextNode = node->getNext();
+		prevNode = node->getPrev();
+		printf("%s free\n", node->getData().getStringInfo("name"));
 
 		delete node;
 		node = nextNode;
 
-		prevNode->next = node;//이전 노드의 후방 연결
-		node->prev = prevNode; //전방 연결
+		prevNode->SetNextAndPrev(node, nullptr);
+		node->SetNextAndPrev(nullptr, prevNode);
+		//prevNode->getNext() = node;//이전 노드의 후방 연결
+		//node->getPrev() = prevNode; //전방 연결
 	}
 
 }
+
+Node* LinkedList::getHead()
+{
+	return head;
+}
+Node* LinkedList::getTail()
+{
+	return tail;
+}
+
+void LinkedList::SetHeadAndTail(Node* head_, Node* tail_)
+{
+	if (head_)
+		head = head_;
+	if (tail_)
+		tail = tail_; 
+}
+
+

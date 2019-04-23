@@ -6,15 +6,22 @@
 class Node
 {
 	
-public:
-	StudentData data;
+private:
+	StudentData* data;
 	Node* next;
 	Node* prev;
 
 public:
-	Node(StudentData student_, Node* next_, Node* prev_);
+	Node(StudentData *student_, Node* next_, Node* prev_);
 	Node();
 	~Node();
+	Node* getNext();
+	Node* getPrev();
+	void SetNextAndPrev(Node* next_ = nullptr, Node* prev_ = nullptr);
+	StudentData* getData();
+	void SetData(StudentData* data_);
+	void SetAdressPrevToNext(Node* source, Node* target);
+	Node& operator=(const Node& pt);
 
 };
 

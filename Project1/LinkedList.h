@@ -9,10 +9,11 @@ class Node;
 
 class LinkedList
 {
-public:
+private:
 
 	Node* head;
 	Node* tail;
+public:
 	static int index;
 
 public:
@@ -30,5 +31,10 @@ public:
 	void SearchDeleteTarget(char* name);
 	void WriteSampleData();
 	void AllFree(Node* node);
+	Node* getHead();
+	Node* getTail();
+	void SetHeadAndTail(Node* head_ = nullptr, Node* tail_ = nullptr);
+
+
 };
 

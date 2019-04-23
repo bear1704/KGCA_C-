@@ -4,7 +4,7 @@
 
 class FileIO
 {
-public:
+private:
 	FILE* fp;
 
 public:
@@ -13,5 +13,6 @@ public:
 	FILE* CreateLoadFile(FILESTATUS status);
 	void SaveData(LinkedList* studentList);
 	void LoadData(LinkedList** doublePtrList);
+
 };
 
