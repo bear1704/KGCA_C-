@@ -48,7 +48,9 @@ StudentData* Node::getData()
 
 void Node::SetData(StudentData* data_)
 {
-	data->SetData(data_->index, data_->name, data_->age, data_->korScore, data_->mathScore);
+	
+	data->SetData(data_->getIntInfo("index"), data_->getStringInfo("name"), data_->getIntInfo("age"), 
+		data_->getIntInfo("korScore"), data_->getIntInfo("mathScore"));
 }
 
 void Node::SetAdressPrevToNext(Node * source, Node* target)

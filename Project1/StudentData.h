@@ -7,7 +7,7 @@
 class StudentData
 {
 
-public:
+private:
 	int index;
 	char name[25];
 	int age;
