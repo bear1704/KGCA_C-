@@ -9,9 +9,11 @@ Node::Node(StudentData *student_, Node* next_, Node* prev_)
 	prev = prev_;
 }
 
-Node::Node() 
+Node::Node() : data(new StudentData())
 {
-
+	//data = new StudentData();
+	next = nullptr;
+	prev = nullptr;
 }
 
 Node::~Node()
@@ -41,7 +43,7 @@ void Node::SetNextAndPrev(Node * next_, Node * prev_)
 
 StudentData* Node::getData()
 {
-	return &data;
+	return data;
 }
 
 void Node::SetData(StudentData* data_)
@@ -54,11 +56,17 @@ void Node::SetAdressPrevToNext(Node * source, Node* target)
 	source->prev->next = target;
 }
 
-Node & Node::operator=(const Node & pt)
+Node& Node::operator=(const Node & pt)
 {
 	next = pt.next;
 	prev = pt.prev;
-	data = pt.data;
+	//*data = *pt.data;
+
+	StudentData* data_ = new StudentData(pt.data->getIntInfo("index"), pt.data->getStringInfo("name"),
+		pt.data->getIntInfo("age"), pt.data->getIntInfo("korScore"), pt.data->getIntInfo("mathScore"));
+
+	data = data_;
+
 	return *this;
 }
 

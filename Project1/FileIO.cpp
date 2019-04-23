@@ -46,8 +46,8 @@ void FileIO::SaveData(LinkedList* studentList)
 
 	while (iterNode->getNext() != nullptr) //next인 이유는 tail을 계산에서 빼기 위해
 	{
-		fprintf(fp, "%d %s %d %d %d\n", iterNode->getData().getIntInfo("index"), iterNode->getData().getStringInfo("name"),
-			iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
+		fprintf(fp, "%d %s %d %d %d\n", iterNode->getData()->getIntInfo("index"), iterNode->getData()->getStringInfo("name"),
+			iterNode->getData()->getIntInfo("age"), iterNode->getData()->getIntInfo("korScore"), iterNode->getData()->getIntInfo("mathScore"));
 		iterNode = iterNode->getNext();
 	}
 
@@ -97,7 +97,7 @@ void FileIO::LoadData(LinkedList** doublePtrList)
 
 			fscanf(fp, "%d %s %d %d %d\n", &index, name, &age, &korScore, &mathScore);
 
-			node->getData().SetData(index, name, age, korScore, mathScore);
+			node->getData()->SetData(index, name, age, korScore, mathScore);
 
 			newLL->InsertStudentNode(node);
 		}

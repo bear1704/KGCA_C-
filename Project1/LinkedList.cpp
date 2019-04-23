@@ -22,7 +22,7 @@ Node* LinkedList::CreateNode(int index, const char* name, const int age, const i
 {
 	Node* node = new Node;
 	
-	node->getData().SetData(index, const_cast<char*>(name), age, korScore, mathScore);
+	node->getData()->SetData(index, const_cast<char*>(name), age, korScore, mathScore);
 
 	return node;
 
@@ -73,18 +73,15 @@ void LinkedList::SortData()
 
 		for (Node* iterJ = iterI; iterJ != tail; iterJ = iterJ->getNext())
 		{
-			if (iterJ->getData().getIntInfo("age") < min)
+			if (iterJ->getData()->getIntInfo("age") < min)
 			{
 				minNode = iterJ;
-				min = iterJ->getData().getIntInfo("age");
+				min = iterJ->getData()->getIntInfo("age");
 			}
 		}
 
-
 		if (iterI != minNode) //최소인 노드와, 현재 스왑해야 할 노드가 같다면 이중해제 문제가 발생함
 			iterI = SwapStudent(iterI, minNode);
-
-
 	}
 
 	IndexRearrange(); //인덱스 재정렬
@@ -95,8 +92,6 @@ Node* LinkedList::SwapStudent(Node* A, Node* B) //반환값으로 새로운 iterI를 리턴
 {//LL
 	Node* tempA = new Node;
 	Node* tempB = new Node;
-
-	//
 
 	//tempA->data = A->data;
 	//tempA->getPrev() = A->getPrev();
@@ -116,19 +111,28 @@ Node* LinkedList::SwapStudent(Node* A, Node* B) //반환값으로 새로운 iterI를 리턴
 	//B->getPrev()->getNext() = tempA;
 	//B->getPrev() = tempA;
 
-	tempA = A;
+	/*tempA = A;
 	tempB = B;
+		*/
+	//오버로딩이 제대로 작동하지 않는 것 같음
+
+	tempA->SetData(A->getData());
+	tempA->SetNextAndPrev(A->getNext(), A->getPrev());
+	tempB->SetData(B->getData());
+	tempB->SetNextAndPrev(B->getNext(), B->getPrev()); //오버로딩 대체 
+
 
 	tempB->SetNextAndPrev(A, A->getPrev());
 	A->SetAdressPrevToNext(A, tempB);
 	A->SetNextAndPrev(nullptr, tempB);
+	
 
 	tempA->SetNextAndPrev(B, B->getPrev());
 	B->SetAdressPrevToNext(B, tempA);
 	B->SetNextAndPrev(nullptr, tempA);
 
 	DeleteStudent(A);
-	DeleteStudent(B);
+	DeleteStudent(B); //아마 얕은 복사가 되면서.. IterI가 없어져버린 것 같은데.. 왜 그전엔 됐지...
 
 	return tempB;
 
@@ -163,7 +167,7 @@ void LinkedList::IndexRearrange()
 
 	while (iterNode->getNext() != nullptr)
 	{
-		iterNode->getData().SetIndex(index);
+		iterNode->getData()->SetIndex(index);
 		
 		index++;
 		iterNode = iterNode->getNext();
@@ -189,8 +193,8 @@ void LinkedList::PrintData()
 
 	while (iterNode->getNext() != nullptr)
 	{
-		printf("%2d %5s %5d %5d %5d\n", iterNode->getData().getIntInfo("index"), iterNode->getData().getStringInfo("name"), 
-			iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
+		printf("%2d %5s %5d %5d %5d\n", iterNode->getData()->getIntInfo("index"), iterNode->getData()->getStringInfo("name"),
+			iterNode->getData()->getIntInfo("age"), iterNode->getData()->getIntInfo("korScore"), iterNode->getData()->getIntInfo("mathScore"));
 		iterNode = iterNode->getNext();
 	}
 	_getche();
@@ -218,13 +222,14 @@ void LinkedList::SearchModify() //LinkdedList
 
 	while (iterNode != nullptr)
 	{
-		if (_stricmp(name, iterNode->getData().getStringInfo("name")) == 0)
+		if (_stricmp(name, iterNode->getData()->getStringInfo("name")) == 0)
 		{
 			char name[25];
 			int age, korScore, mathScore;
 
 			printf("이름 나이 국어 수학\n");
-			printf("%5s %5d %5d %5d\n", iterNode->getData().getStringInfo("name"), iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
+			printf("%5s %5d %5d %5d\n", iterNode->getData()->getStringInfo("name"), iterNode->getData()->getIntInfo("age"),
+				iterNode->getData()->getIntInfo("korScore"), iterNode->getData()->getIntInfo("mathScore"));
 
 			printf("\n수정할 이름 : ");
 			scanf("%s", &name);
@@ -238,10 +243,11 @@ void LinkedList::SearchModify() //LinkdedList
 			printf("\n수정할 수학 점수 : ");
 			scanf("%d", &mathScore);
 
-			iterNode->getData().SetData(iterNode->getData().getIntInfo("index"), name, age, korScore, mathScore);
+			iterNode->getData()->SetData(iterNode->getData()->getIntInfo("index"), name, age, korScore, mathScore);
 
 
-			printf("\n%5s %5d %5d %5d\n", iterNode->getData().getStringInfo("name"), iterNode->getData().getIntInfo("age"), iterNode->getData().getIntInfo("korScore"), iterNode->getData().getIntInfo("mathScore"));
+			printf("\n%5s %5d %5d %5d\n", iterNode->getData()->getStringInfo("name"), iterNode->getData()->getIntInfo("age"), 
+				iterNode->getData()->getIntInfo("korScore"), iterNode->getData()->getIntInfo("mathScore"));
 			printf("\n적용되었습니다\n ");
 
 			SortData();
@@ -271,7 +277,7 @@ void LinkedList::SearchDeleteTarget(char* name)
 		Node* iterNode = head->getNext();
 		while (iterNode->getNext() != nullptr)
 		{
-			if (_stricmp(name, iterNode->getData().getStringInfo("name")) == 0)
+			if (_stricmp(name, iterNode->getData()->getStringInfo("name")) == 0)
 			{
 				DeleteStudent(iterNode);
 				printf("삭제되었습니다\n");
@@ -337,7 +343,7 @@ void LinkedList::AllFree(Node* node)
 	{
 		nextNode = node->getNext();
 		prevNode = node->getPrev();
-		printf("%s free\n", node->getData().getStringInfo("name"));
+		printf("%s free\n", node->getData()->getStringInfo("name"));
 
 		delete node;
 		node = nextNode;
