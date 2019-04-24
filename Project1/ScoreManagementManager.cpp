@@ -134,7 +134,7 @@ void ScoreManagementManager::Init()
 		}
 
 		inputData = SELECT::NONE;
-
+		//
 	}
 
 
@@ -160,5 +160,33 @@ int main()
 {
 	ScoreManagementManager scoreManager;
 	scoreManager.Init();
+
+	//char name[25] = "aaaaaa";
+	//char name2[25] = "bbbbb";
+	//StudentData* stdata = new StudentData(1, name, 3, 4,5);
+	//StudentData* stdata2 = new StudentData(2, name2, 7, 7, 7);
+	//Node* node1 = new Node(stdata, nullptr, nullptr);
+	//Node* node2 = new Node(stdata2, nullptr, nullptr);
+
+
+	//std::cout << node1->getData()->getStringInfo("name") << std::endl;
+	//node1 = node2;
+	//std::cout << node1->getData()->getStringInfo("name") << std::endl;
+	//
+	///*delete node2;
+	//std::cout << node1->getData()->getStringInfo("name") << std::endl;
+	//*/
+
+
+	//Node node1_(stdata, nullptr, nullptr);
+	//Node node2_(stdata2, nullptr, nullptr);
+
+	//node1_ = node2_;
+
+	system("pause");
+
+
+
+
 
 }

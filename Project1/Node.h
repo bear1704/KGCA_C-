@@ -21,7 +21,9 @@ public:
 	StudentData* getData();
 	void SetData(StudentData* data_);
 	void SetAdressPrevToNext(Node* source, Node* target);
+	StudentData** getDataAdr();
 	Node& operator=(const Node& pt);
+
 
 };
 

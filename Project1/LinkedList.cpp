@@ -13,8 +13,10 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
+	
 	delete head;
 	delete tail;
+	
 }
 
 
@@ -23,7 +25,7 @@ Node* LinkedList::CreateNode(int index, const char* name, const int age, const i
 	Node* node = new Node;
 	
 	node->getData()->SetData(index, const_cast<char*>(name), age, korScore, mathScore);
-
+	
 	return node;
 
 }
@@ -146,8 +148,11 @@ void LinkedList::DeleteStudent(Node* node)
 	prevNode = node->getPrev();
 	postNode = node->getNext();
 
+
+
 	if (node)
 	{
+		delete node->getData();
 		delete node;
 		node = nullptr;
 	}
@@ -262,7 +267,7 @@ void LinkedList::SearchModify() //LinkdedList
 	}
 
 
-
+	delete iterNode;
 	iterNode = nullptr;
 	delete name;
 	printf("\n타겟이 없습니다\n ");
@@ -345,6 +350,7 @@ void LinkedList::AllFree(Node* node)
 		prevNode = node->getPrev();
 		printf("%s free\n", node->getData()->getStringInfo("name"));
 
+		delete node->getData(); //StudentData 해제
 		delete node;
 		node = nextNode;
 
@@ -367,6 +373,7 @@ Node* LinkedList::getTail()
 
 void LinkedList::SetHeadAndTail(Node* head_, Node* tail_)
 {
+	
 	if (head_)
 		head = head_;
 	if (tail_)

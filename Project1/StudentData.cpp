@@ -24,6 +24,7 @@ StudentData::~StudentData()
 {
 	
 
+	//std::cout << "¼Ò¸êµÊ" << std::endl;
 }
 
 void StudentData::SetData(int index_, char * name_, int age_, int korScore_, int mathScore_)
@@ -66,6 +67,7 @@ char* StudentData::getStringInfo(const char * text)
 void StudentData::SetIndex(int index)
 {
 	this->index = index;
+
 }
 
 

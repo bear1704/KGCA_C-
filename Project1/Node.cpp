@@ -18,7 +18,7 @@ Node::Node() : data(new StudentData())
 
 Node::~Node()
 {
-
+ 
 }
 
 Node * Node::getNext()
@@ -46,6 +46,10 @@ StudentData* Node::getData()
 	return data;
 }
 
+StudentData** Node::getDataAdr()
+{
+	return &data;
+}
 void Node::SetData(StudentData* data_)
 {
 	
@@ -58,7 +62,7 @@ void Node::SetAdressPrevToNext(Node * source, Node* target)
 	source->prev->next = target;
 }
 
-Node& Node::operator=(const Node & pt)
+Node& Node::operator=(const Node& pt)
 {
 	next = pt.next;
 	prev = pt.prev;
@@ -68,6 +72,8 @@ Node& Node::operator=(const Node & pt)
 		pt.data->getIntInfo("age"), pt.data->getIntInfo("korScore"), pt.data->getIntInfo("mathScore"));
 
 	data = data_;
+
+	std::cout << "operator overloading = " << std::endl;
 
 	return *this;
 }
