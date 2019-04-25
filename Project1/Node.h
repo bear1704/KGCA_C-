@@ -2,7 +2,6 @@
 #include "HeaderManager.h"
 #include "StudentData.h"
 
-
 class Node
 {
 	
