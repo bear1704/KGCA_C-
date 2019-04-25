@@ -13,8 +13,8 @@ class ScoreManagementManager
 public:
 	ScoreManagementManager();
 	~ScoreManagementManager();
-	LinkedList* CreateInitialList();
-	bool isListEmpty(LinkedList* LL);
+	LinkedList<StudentData>* CreateInitialList();
+	bool isListEmpty(LinkedList<StudentData>* LL);
 
 	void Init();
 };

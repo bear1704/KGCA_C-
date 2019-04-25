@@ -126,8 +126,6 @@
     <ClCompile Include="Hanoi.cpp" />
     <ClCompile Include="HeaderManager.h" />
     <ClCompile Include="Joseph.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
-    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="ScoreManagement.cpp" />
     <ClCompile Include="ScoreManagementManager.cpp" />

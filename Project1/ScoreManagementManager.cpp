@@ -13,25 +13,19 @@ ScoreManagementManager::~ScoreManagementManager()
 {
 }
 
-LinkedList * ScoreManagementManager::CreateInitialList()
+LinkedList<StudentData> * ScoreManagementManager::CreateInitialList()
 {
 
 
-		LinkedList* studentList = new LinkedList;
+		LinkedList<StudentData>* studentList = new LinkedList<StudentData>();
 		
 		/*Head, Tail 선언*/
-		studentList->SetHeadAndTail(new Node(), new Node());
+		studentList->SetHeadAndTail(new Node<StudentData>(), new Node<StudentData>());
 		
-
-		//studentList->getHead()->getNext() = studentList->getTail(); //Head의 다음 노드는 Tail로
-		//studentList->getTail()->prev = studentList->getHead(); //Taill의 이전 노드는 head로
-		//studentList->getHead()->prev = nullptr;
-		//studentList->getTail()->next = nullptr;
-
 		studentList->getHead()->SetNextAndPrev(studentList->getTail(), nullptr);
 		studentList->getTail()->SetNextAndPrev(nullptr, studentList->getHead());
 
-		LinkedList::index = 1;  // static index 초기화
+		LinkedList<StudentData>::index = 1;  // static index 초기화
 
 		printf("\n테이블이 생성되었습니다\n");
 
@@ -48,11 +42,11 @@ void ScoreManagementManager::Init()
 	char temp = NULL;
 	SELECT inputData = SELECT::NONE;
 
-	//STUDENT* student = NULL;
 
 
-	LinkedList* studentList = nullptr;
-	FileIO* fileIO = new FileIO;
+	LinkedList<StudentData>* studentList = nullptr;
+	
+	FileIO<StudentData, StudentData>* fileIO = new FileIO<StudentData, StudentData>;
 
 
 
@@ -134,14 +128,14 @@ void ScoreManagementManager::Init()
 		}
 
 		inputData = SELECT::NONE;
-		//
+	
 	}
 
 
 
 }
 
-bool ScoreManagementManager::isListEmpty(LinkedList* LL)
+bool ScoreManagementManager::isListEmpty(LinkedList<StudentData>* LL)
 {
 	if (!LL)
 	{
@@ -161,27 +155,6 @@ int main()
 	ScoreManagementManager scoreManager;
 	scoreManager.Init();
 
-	//char name[25] = "aaaaaa";
-	//char name2[25] = "bbbbb";
-	//StudentData* stdata = new StudentData(1, name, 3, 4,5);
-	//StudentData* stdata2 = new StudentData(2, name2, 7, 7, 7);
-	//Node* node1 = new Node(stdata, nullptr, nullptr);
-	//Node* node2 = new Node(stdata2, nullptr, nullptr);
-
-
-	//std::cout << node1->getData()->getStringInfo("name") << std::endl;
-	//node1 = node2;
-	//std::cout << node1->getData()->getStringInfo("name") << std::endl;
-	//
-	///*delete node2;
-	//std::cout << node1->getData()->getStringInfo("name") << std::endl;
-	//*/
-
-
-	//Node node1_(stdata, nullptr, nullptr);
-	//Node node2_(stdata2, nullptr, nullptr);
-
-	//node1_ = node2_;
 
 	system("pause");
 
