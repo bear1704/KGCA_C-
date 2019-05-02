@@ -1,22 +1,30 @@
 #pragma once
 #include <iostream>
 #include "BinaryTree.h"
+#include "BinarySearchTree.h"
 
 int main()
 {
-	int val = 0;
-	BinaryTree tree;
 	
+	BinarySearchTree tree;
 
-	std::cin >> val;
-	BinaryNode *a = new BinaryNode(val, nullptr, nullptr);
+	BinaryNode *d = new BinaryNode('D', nullptr, nullptr);
+	BinaryNode *e = new BinaryNode('E', nullptr, nullptr);
+	BinaryNode *b = new BinaryNode('B', d, e);
+	BinaryNode *f = new BinaryNode('F', nullptr, nullptr);
+	BinaryNode *c = new BinaryNode('C', f, nullptr);
+	BinaryNode *a = new BinaryNode('A', b, c);
+	
 	tree.SetRoot(a);
-	
 
-	
+	tree.LevelOrder(a);
 
-	tree.PreOrder();
+	std::cout << "\n끝\n" << std::endl;
 
+	std::cout << "재귀함수로 구현한 검색 : " << tree.SearchRecursive(a, 68)->GetData() << std::endl;
+
+
+	system("pause");
 
 	return 0;
 }

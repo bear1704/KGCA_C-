@@ -28,12 +28,12 @@ public:
 	void SearchModify();
 	void SearchDeleteTarget(char* name);
 	void WriteSampleData();
+	
 	void AllFree(Node<J>* node);
 	Node<J>* getHead();
 	Node<J>* getTail();
 	void SetHeadAndTail(Node<J>* head_ = nullptr, Node<J>* tail_ = nullptr);
 	
-
 
 };
 
@@ -70,6 +70,9 @@ Node<J>* LinkedList<J>::CreateNode(int index, const char* name, const int age, c
 
 }
 
+
+
+
 template<typename J>
 void LinkedList<J>::InsertStudentNode(Node<J>* node)
 {
@@ -87,7 +90,6 @@ void LinkedList<J>::InsertStudent()//data는 지역변수 parameter로 들어왔다. func(
 
 	char name[25];
 	int age, kor, math;
-
 
 	printf("입력 이름 나이 국어 수학\n");
 	scanf("%s %d %d %d", name, &age, &kor, &math);
@@ -355,6 +357,7 @@ void LinkedList<J>::WriteSampleData()  //LinkdedList
 	printf("작성 완료 \n");
 	_getche();
 }
+
 template<typename J>
 void LinkedList<J>::AllFree(Node<J>* node)
 { //LinkedList

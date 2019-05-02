@@ -8,7 +8,7 @@ class BinaryTree
 
 public:
 	BinaryTree();
-	~BinaryTree();
+	virtual ~BinaryTree();
 
 	void SetRoot(BinaryNode* node);
 	BinaryNode* GetRoot();
@@ -20,7 +20,8 @@ public:
 	void PreOrder(BinaryNode* node);
 	void PostOrder();
 	void PostOrder(BinaryNode* node);
-	void LevelOrder();
+	void LevelOrder(BinaryNode* node);
+	void InsertTree(BinaryNode* node);
 
 
 

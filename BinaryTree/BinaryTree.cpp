@@ -1,6 +1,8 @@
 #include "BinaryTree.h"
+#include <queue>
+#include <conio.h>
 
-
+static std::queue<BinaryNode*> levelQueue;
 
 BinaryTree::BinaryTree()
 {
@@ -39,8 +41,9 @@ void BinaryTree::InOrder(BinaryNode * node) // LVR
 {
 	if (node->GetLeft() != nullptr)
 		InOrder(node->GetLeft());
+	
 	std::cout <<  node->GetData() << " ";
-	//printf("%c ", node->GetData());
+
 	if (node->GetRight() != nullptr)
 		InOrder(node->GetRight());
 }
@@ -53,7 +56,6 @@ void BinaryTree::PreOrder()
 void BinaryTree::PreOrder(BinaryNode* node) //VLR 
 {
 	std::cout <<  node->GetData() << "\n";
-	//printf("%c ", node->GetData());
 	
 	if (node->GetLeft() != nullptr)
 		PreOrder(node->GetLeft());
@@ -72,7 +74,29 @@ void BinaryTree::PostOrder(BinaryNode * node)
 		PostOrder(node->GetLeft());
 	if (node->GetRight() != nullptr)
 		PostOrder(node->GetRight());
+	
 	std::cout << node->GetData() << " ";
-	//printf("%c ", node->GetData());
 }
 
+void BinaryTree::LevelOrder(BinaryNode* node)
+{
+	levelQueue.push(node);
+
+	while (!levelQueue.empty())
+	{
+		if (levelQueue.front())
+		{
+			std::cout << levelQueue.front()->GetData() << " ";
+			
+			if(levelQueue.front()->GetLeft() != nullptr)
+				levelQueue.push(levelQueue.front()->GetLeft());
+			if (levelQueue.front()->GetRight() != nullptr)
+				levelQueue.push(levelQueue.front()->GetRight());
+
+			levelQueue.pop();
+
+			std::cout << ".." << std::endl;
+		} 
+	}
+
+}

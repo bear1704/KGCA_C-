@@ -1,143 +1,151 @@
+#include <string>
+#include <vector>
 #include <iostream>
+#define MAX_SCOVILE 1000000
+
 using namespace std;
 
-template <typename J, typename C>
-class templateClass {
 
+class HeapNode
+{
 private:
-	J* pData;
+	int K;
 
 public:
-	J voidF();
-
-};
-
-template <typename T, typename J>
-class aaa {
-
-
-
-};
-
-
-class Base {
-
-protected:
-	int fff;
-public:
-	void pa(int a) { fff = a;   std::cout << fff << std::endl; }
-	void print() { cout << "i'm base!" << endl; }
-};
-
-class Derived : public Base {
-
-private:
-	int fff = 22;
-public:
-	void print() { ///<-여기
-		cout << "i'm Derived!" << endl;
-		pa(444);
-		std::cout << fff << std::endl;
-		
+	void SetK(int k_)
+	{
+		K = k_;
+	}
+	int GetK()
+	{
+		return K;
 	}
 };
-#define TEST3
 
-#ifdef TEST3
-
-template <typename J>
-class LinkedList_J {
-public:
-	LinkedList_J();
-	J<J>* head;
-	J<J>* tail;
-};
-
-template<typename J>
-class TNode_J
+class Heap
 {
+private:
+	HeapNode node[MAX_SCOVILE];
+	int size;
+
 public:
-	TNode_J();
-	TNode_J<J>* next;
-	TNode_J<J>* prev;
-	J* data;
+	Heap() : size(0) {}
+
+	bool isEmpty() { return size <= 0; }
+	bool isFull() { return size == MAX_SCOVILE - 1; }
+	int GetSize() { return size; }
+	HeapNode GetNode(int i) { return node[i]; }
+
+	void insert(int K)
+	{
+		if (isFull())
+			return;
+
+		size++;
+		int i = size;
+
+		while (i != 1 && K < GetParent(i).GetK()) //MIN HEAP
+		{
+			node[i] = GetParent(i);
+			i /= 2;
+		}
+
+		node[i].SetK(K);
+	}
+
+	int remove()
+	{
+		if (isEmpty()) return -1;
+
+		HeapNode item = node[1];
+		HeapNode last = node[size--];
+
+		int parent = 1;
+		int child = 2;
+
+		while (child <= size)
+		{
+
+			if (child < size && GetLeftChild(parent).GetK() > GetRightChild(parent).GetK()) // MIN_HEAP
+				child++;
+
+			if (last.GetK() <= node[child].GetK())
+				break;
+
+			node[parent] = node[child];
+			parent = child;
+			child = parent * 2;
+		}
+
+		node[parent] = last;
+		return item.GetK();
+
+	}
+
+	HeapNode& GetParent(int i) { return node[i / 2]; }
+	HeapNode& GetLeftChild(int i) { return node[2 * i]; }
+	HeapNode& GetRightChild(int i) { return node[2 * i + 1]; }
 };
 
+
+bool isAllScovilleOverK(Heap* heap, int K)
+{
+	for (int i = 1; i < heap->GetSize() + 1; i++)
+	{
+		if (heap->GetNode(i).GetK() < K)
+			return false;
+	}
+	return true;
+}
+
+
+
+int solution(vector<int> scoville, int K) {
+
+	int totalBlend = 0;
+	Heap *heap = new Heap();
+	for (auto i = scoville.begin(); i != scoville.end(); i++)
+	{
+		heap->insert(*i);
+	}
+
+	int first;
+	int second;
+
+	while (!(heap->isEmpty()))
+	{
+
+		if (isAllScovilleOverK(heap, K))
+			return totalBlend;
+
+		if (heap->GetSize() <= 1) //2회 remove할 때, size가 0이하로 떨어지지 않게 하기 위함
+			break;
+
+		totalBlend++;
+
+		first = heap->remove();
+		second = heap->remove();
+
+		int newFoodScoville = first + second * 2;
+
+		heap->insert(newFoodScoville);
+
+	}
+
+	return -1;
+}
 
 int main()
 {
-	/*LinkedList_J<int>* LL = new LinkedList_J<int>();
-	int* node;
-	LL->head = node;
+	std::vector<int> scoville;
+	scoville.push_back(0);
+	scoville.push_back(0);
+	scoville.push_back(1);
 
-	TNode_J<int>* JJ = new TNode_J<int>();
-	JJ->next = node;
-	*(JJ->data) = 4;
-	*/
-	LinkedList_J<TNode_J<int>>* LL = new LinkedList_J<TNode_J<int>>();
-	TNode_J<int>* aa = new TNode_J<int>();
-	LL->head = aa;
+	int answer = solution(scoville, 3);
 
+	std::cout << "answer : " << answer << std::endl;
 
 	system("pause");
-}
-#endif
-/*		---------		*/
 
-#define TEST2
-
-#ifdef TEST1
-template <typename T>
-class TNode
-{
-public:
-	T* data;
-	T* next;
-	T* prev;
-};
-#endif
-#ifdef TEST2
-template <typename T>
-class TNode
-{
-public:
-	T* data;
-	TNode<T>* next;
-	TNode<T>* prev;
-};
-#endif
-
-
-
-template <typename T>
-class LinkedList
-{
-public:
-	LinkedList();
-	TNode<T>* head;
-	TNode<T>* tail;
-	
-};
-
-#ifndef TEST3
-int main()
-{
-	LinkedList<int>* LL = new LinkedList<int>();
-	
-	TNode<int>* node1 = new TNode<int>();
-	TNode<int>* node2 = new TNode<int>();
-	TNode<int>* node3 = new TNode<int>();
-
-	LL->head = node1;
-	node1->next = node2;
-
-	
-	system("pause");
-}
-
-#endif
-
-template<typename J>
-TNode_J<J>::TNode_J()
-{
 }

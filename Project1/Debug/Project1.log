@@ -1,13 +1,12 @@
-﻿  FileIO.cpp
-  HeaderManager.h
+﻿  HeaderManager.h
   ScoreManagementManager.cpp
-d:\sc\c_c++\git\project1\fileio.h(83): warning C4101: 'age' :참조되지 않은 지역 변수입니다.
-  d:\sc\c_c++\git\project1\fileio.h(79): note: 클래스 템플릿 멤버 함수 'void FileIO<StudentData,StudentData>::LoadData(LinkedList<StudentData> **)'을(를) 컴파일하고 있습니다.
+d:\sc\c_c++\git\project1\fileio.h(82): warning C4101: 'age' :참조되지 않은 지역 변수입니다.
+  d:\sc\c_c++\git\project1\fileio.h(78): note: 클래스 템플릿 멤버 함수 'void FileIO<StudentData,StudentData>::LoadData(LinkedList<StudentData> **)'을(를) 컴파일하고 있습니다.
   d:\sc\c_c++\git\project1\scoremanagementmanager.cpp(101): note: 컴파일 중인 함수 템플릿 인스턴스화 'void FileIO<StudentData,StudentData>::LoadData(LinkedList<StudentData> **)'에 대한 참조를 확인하십시오.
   d:\sc\c_c++\git\project1\scoremanagementmanager.cpp(49): note: 컴파일 중인 클래스 템플릿 인스턴스화 'FileIO<StudentData,StudentData>'에 대한 참조를 확인하세요.
-d:\sc\c_c++\git\project1\fileio.h(83): warning C4101: 'index' :참조되지 않은 지역 변수입니다.
-d:\sc\c_c++\git\project1\fileio.h(83): warning C4101: 'kor' :참조되지 않은 지역 변수입니다.
-d:\sc\c_c++\git\project1\fileio.h(82): warning C4101: 'buffer' :참조되지 않은 지역 변수입니다.
-d:\sc\c_c++\git\project1\fileio.h(83): warning C4101: 'math' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\git\project1\fileio.h(82): warning C4101: 'index' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\git\project1\fileio.h(82): warning C4101: 'kor' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\git\project1\fileio.h(81): warning C4101: 'buffer' :참조되지 않은 지역 변수입니다.
+d:\sc\c_c++\git\project1\fileio.h(82): warning C4101: 'math' :참조되지 않은 지역 변수입니다.
   코드를 생성하고 있습니다...
   Project1.vcxproj -> D:\SC\C_C++\Git\Debug\Project1.exe

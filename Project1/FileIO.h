@@ -60,7 +60,6 @@ void FileIO<C, N>::SaveData(LinkedList<C>* studentList)
 
 	Node<N>* iterNode = studentList->getHead()->getNext();
 
-
 	while (iterNode->getNext() != nullptr) //next인 이유는 tail을 계산에서 빼기 위해
 	{
 		fprintf(fp, "%d %s %d %d %d\n", iterNode->getData()->getIntInfo("index"), iterNode->getData()->getStringInfo("name"),
@@ -119,7 +118,13 @@ void FileIO<C, N>::LoadData(LinkedList<C>** doublePtrList)
 		LinkedList<StudentData>* tempList;
 		tempList = *doublePtrList;
 
+		if(tempList != nullptr)
+			tempList->AllFree(tempList->getHead()->getNext());
+
 		*doublePtrList = newLL;
+
+		
+		//_getche();
 	}
 
 }
