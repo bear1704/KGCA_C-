@@ -1,0 +1,19 @@
+#pragma once
+#include "PStd.h"
+
+class PWindow
+{
+public:
+	PWindow(LPCWSTR className);
+	PWindow();
+	virtual ~PWindow();
+public:
+	HINSTANCE hInstance;
+	HWND hWnd;
+	LPCWSTR className;
+public:
+	bool InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X = 0, int Y = 0, int width = 800, int height = 600);
+	bool MyRegisterClass();
+
+};
+
