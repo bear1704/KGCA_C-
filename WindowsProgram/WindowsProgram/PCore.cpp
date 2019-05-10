@@ -18,6 +18,7 @@ bool PCore::Init()
 
 bool PCore::Frame()
 {
+
 	return true;
 }
 
@@ -33,11 +34,13 @@ bool PCore::Release()
 
 bool PCore::PCoreInit()
 {
+	PInput::GetInstance().Init();
 	return true;
 }
 
 bool PCore::PCoreFrame()
 {
+	PInput::GetInstance().Frame();
 	return true;
 }
 

@@ -6,5 +6,10 @@ class Sample :
 public:
 	Sample();
 	~Sample();
+public:
+	bool Init();
+	bool Frame();
+	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 };
 

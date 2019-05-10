@@ -1,16 +1,28 @@
 #include "PWindow.h"
 
+PWindow* myWindow = nullptr;
+
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+
+	if (myWindow != nullptr)
+	{
+		myWindow->MsgProc(hWnd, msg, wParam, lParam);
+	}
+
 	switch (msg)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
 	}
-
+	
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
+
+LRESULT PWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return 1; }
 
 
 bool PWindow::InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X, int Y, int width, int height)
@@ -27,6 +39,8 @@ bool PWindow::InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X, int Y, i
 	if (hWnd == NULL) return 0;
 
 	ShowWindow(hWnd, SW_SHOW);
+
+	CenterWindow();
 	return true;
 }
 
@@ -57,6 +71,20 @@ bool PWindow::MyRegisterClass()
 	
 }
 
+void PWindow::CenterWindow()
+{
+	RECT rtWindow;
+	GetWindowRect(hWnd, &rtWindow);
+
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	int x = (screenWidth - (rtWindow.right - rtWindow.left)) / 2;
+	int y = (screenHeight - (rtWindow.right - rtWindow.left)) / 2;
+	MoveWindow(hWnd, x, y, rtWindow.right - rtWindow.left, rtWindow.bottom - rtWindow.top, true);
+}
+
+
+
 
 
 
@@ -68,6 +96,7 @@ PWindow::PWindow(LPCWSTR className)
 PWindow::PWindow()
 {
 	this->className = L"KGCA";
+	myWindow = this;
 }
 
 

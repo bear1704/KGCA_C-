@@ -1,5 +1,7 @@
 #pragma once
 #include "PWindow.h"
+#include "PInput.h"
+
 class PCore :
 	public PWindow
 {

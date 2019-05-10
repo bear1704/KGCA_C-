@@ -14,6 +14,9 @@ public:
 public:
 	bool InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X = 0, int Y = 0, int width = 800, int height = 600);
 	bool MyRegisterClass();
+	void CenterWindow();
+	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	
 
 };
 

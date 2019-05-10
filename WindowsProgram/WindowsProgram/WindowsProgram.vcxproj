@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PCore.h" />
+    <ClInclude Include="PInput.h" />
     <ClInclude Include="PStd.h" />
     <ClInclude Include="PWindow.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCore.cpp" />
+    <ClCompile Include="PInput.cpp" />
     <ClCompile Include="PWindow.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
@@ -117,6 +119,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
