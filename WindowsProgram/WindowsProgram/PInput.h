@@ -19,9 +19,11 @@ public:
 	bool Frame();
 	bool Release();
 	bool Render();
+	LRESULT MsgProc(MSG msg);
 
 public:
 	virtual ~PInput();
 	KEYSTAT KeyCheck(DWORD key);
+	DWORD Key(DWORD key_);
 };
 

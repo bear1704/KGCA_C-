@@ -1,7 +1,7 @@
 #include "PWindow.h"
 
 PWindow* myWindow = nullptr;
-
+HWND g_hWnd;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

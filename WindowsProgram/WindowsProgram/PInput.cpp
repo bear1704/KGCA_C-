@@ -1,6 +1,7 @@
 #include "PInput.h"
 #include <iostream>
 
+POINT g_mousePos;
 PInputActionMap g_InputActionMap;
 
 
@@ -12,6 +13,8 @@ PInput::PInput()
 bool PInput::Init()
 {
 	std::fill_n(keyboardKeyState, 256, KEYSTAT::KEY_FREE);
+	std::fill_n(mouseKeyState, 3, KEYSTAT::KEY_FREE);
+	std::fill_n(mouseBeforeState, 3, KEYSTAT::KEY_FREE);
 	return false;
 }
 
@@ -24,10 +27,31 @@ bool PInput::Frame()
 	g_InputActionMap.exitKey = KeyCheck(VK_ESCAPE);
 	g_InputActionMap.jumpKey = KeyCheck(VK_SPACE);
 
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+	g_mousePos = mousePos;
 
+	for (int i = 0; i < 3; i++)
+	{
+		if (mouseBeforeState[i] == KEYSTAT::KEY_PUSH)
+		{
+			if (mouseKeyState[i] == KEYSTAT::KEY_PUSH)
+			{
+				mouseKeyState[i] = KEYSTAT::KEY_HOLD;
+			}
+		}
+		mouseBeforeState[i] = mouseKeyState[i];
+	}
+	g_InputActionMap.leftClick = mouseKeyState[0];
+	g_InputActionMap.middleClick = mouseKeyState[1];
+	g_InputActionMap.rightClick = mouseKeyState[2];
 
+	if (g_InputActionMap.leftClick == KEYSTAT::KEY_PUSH)
+	{
+		OutputDebugStringW(L"aaaa");
+	}
 
-	return false;
+	return true;
 }
 
 bool PInput::Release()
@@ -38,6 +62,37 @@ bool PInput::Release()
 bool PInput::Render()
 {
 	return false;
+}
+
+LRESULT PInput::MsgProc(MSG msg)
+{
+	mouseKeyState[0] = KEYSTAT::KEY_FREE;
+	mouseKeyState[1] = KEYSTAT::KEY_FREE;
+	mouseKeyState[2] = KEYSTAT::KEY_FREE;
+
+	switch (msg.message)
+	{
+	case WM_LBUTTONDOWN:
+		mouseKeyState[0] = KEYSTAT::KEY_PUSH;
+		break;
+	case WM_LBUTTONUP:
+		mouseKeyState[0] = KEYSTAT::KEY_UP;
+		break;
+	case WM_MBUTTONDOWN:
+		mouseKeyState[1] = KEYSTAT::KEY_PUSH;
+		break;
+	case WM_MBUTTONUP:
+		mouseKeyState[1] = KEYSTAT::KEY_UP;
+		break;
+	case WM_RBUTTONDOWN:
+		mouseKeyState[2] = KEYSTAT::KEY_PUSH;
+		break;
+	case WM_RBUTTONUP:
+		mouseKeyState[2] = KEYSTAT::KEY_UP;
+		break;
+	}
+	return 1;
+	
 }
 
 
@@ -74,4 +129,10 @@ KEYSTAT PInput::KeyCheck(DWORD key)
 
 	}
 	return keyboardKeyState[key];
+}
+
+DWORD PInput::Key(DWORD key_)
+{
+	int key = GetAsyncKeyState(key_);
+	return key;	
 }

@@ -34,24 +34,39 @@ bool PCore::Release()
 
 bool PCore::PCoreInit()
 {
+	timer.Init();
 	PInput::GetInstance().Init();
-	return true;
+	PSoundMgr::GetInstance().Init();
+	return Init();
 }
 
 bool PCore::PCoreFrame()
 {
+	timer.Frame();
 	PInput::GetInstance().Frame();
-	return true;
+	PSoundMgr::GetInstance().Frame();
+	return Frame();
 }
 
 bool PCore::PCoreRender()
 {
-	return true;
+	timer.Frame();
+	PInput::GetInstance().Render();
+	PSoundMgr::GetInstance().Render();
+	return Render();
 }
 
 bool PCore::PCoreRelease()
 {
+	timer.Release();
+	PInput::GetInstance().Release();
+	PSoundMgr::GetInstance().Release();
 	return true;
+}
+
+void PCore::MessageProc(MSG msg)
+{
+	PInput::GetInstance().MsgProc(msg);
 }
 
 bool PCore::Run()
@@ -65,6 +80,7 @@ bool PCore::Run()
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			MessageProc(msg);
 		}
 		else
 		{

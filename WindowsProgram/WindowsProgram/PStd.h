@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <tchar.h>
 
 #define PCORE_RUN(title,x,y,w,h) \
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)\
@@ -33,6 +34,11 @@ struct PInputActionMap
 
 };
 
+
+extern HWND g_hWnd;
+extern POINT g_MousePos;
+extern float g_fGameTimer;
+extern float g_SecondPerFrame;
 extern PInputActionMap g_InputActionMap;
 
 template <typename T>

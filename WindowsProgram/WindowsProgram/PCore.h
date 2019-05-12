@@ -1,6 +1,8 @@
 #pragma once
 #include "PWindow.h"
 #include "PInput.h"
+#include "PTimer.h"
+#include "PSoundMgr.h"
 
 class PCore :
 	public PWindow
@@ -8,6 +10,8 @@ class PCore :
 public:
 	PCore();
 	virtual ~PCore();
+public:
+	PTimer timer;
 
 public:
 	virtual bool Init();
@@ -19,6 +23,7 @@ private:
 	bool PCoreFrame();
 	bool PCoreRender();
 	bool PCoreRelease();
+	void MessageProc(MSG msg);
 
 public:
 	bool Run();
