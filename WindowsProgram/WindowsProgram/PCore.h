@@ -4,6 +4,7 @@
 #include "PTimer.h"
 #include "PSoundMgr.h"
 
+
 class PCore :
 	public PWindow
 {

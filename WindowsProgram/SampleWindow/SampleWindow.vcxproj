@@ -18,6 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\PCoreLib\PCore.h" />
+    <ClInclude Include="..\PCoreLib\PInput.h" />
+    <ClInclude Include="..\PCoreLib\PSound.h" />
+    <ClInclude Include="..\PCoreLib\PSoundMgr.h" />
+    <ClInclude Include="..\PCoreLib\PStd.h" />
+    <ClInclude Include="..\PCoreLib\PTimer.h" />
+    <ClInclude Include="..\PCoreLib\PWindow.h" />
+    <ClInclude Include="..\PCoreLib\Sample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\PCoreLib\PInput.cpp" />
+    <ClCompile Include="..\PCoreLib\PSound.cpp" />
+    <ClCompile Include="..\PCoreLib\PSoundMgr.cpp" />
+    <ClCompile Include="..\PCoreLib\PTimer.cpp" />
+    <ClCompile Include="..\PCoreLib\PWindow.cpp" />
+    <ClCompile Include="..\PCoreLib\Sample.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{17489167-263B-461A-B5A5-CA8C88444DB0}</ProjectGuid>
@@ -142,8 +160,6 @@
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
