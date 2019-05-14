@@ -38,6 +38,8 @@ bool Sample::Init()
 	stat2.rect = rect2;
 	character_npc_.Set(stat2);
 
+	PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"../../data/sound/onlyLove.mp3"));
+
 	return true;
 }
 
@@ -46,6 +48,7 @@ bool Sample::Frame()
 	object_background_bitmap_.Frame();
 	hero_.Frame();
 	character_npc_.Frame();
+	
 	return true;
 }
 
@@ -65,7 +68,5 @@ bool Sample::Release()
 	return true;
 }
 
-
-
-
 PCORE_RUN(L"abcd", 0, 0, 800, 600);
+

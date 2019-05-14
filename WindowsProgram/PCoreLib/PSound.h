@@ -12,7 +12,8 @@ public:
 	virtual ~PSound();
 public:
 	FMOD::System*	pSystem;
-	std::string		name;
+	multibyte_string	name;
+	multibyte_string	sound_path;
 	int				index;
 public:
 	FMOD::Sound*	pSound;

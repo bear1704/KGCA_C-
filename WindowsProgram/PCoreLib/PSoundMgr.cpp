@@ -55,20 +55,51 @@ bool PSoundMgr::Release()
 	return true;
 }
 
-int PSoundMgr::Load(const char * pFilePath)
+int PSoundMgr::Load(multibyte_string sound_path)
 {
+	if (sound_path.empty()) return -1;
+
+	TCHAR drive[MAX_PATH] = { 0, };
+	TCHAR directory[MAX_PATH] = { 0, };
+	TCHAR filename[MAX_PATH] = { 0, };
+	TCHAR file_extension[MAX_PATH] = { 0, };
+	_tsplitpath_s(sound_path.c_str(),
+		drive, directory, filename, file_extension);
+
+	multibyte_string filename_extension = filename;
+	
+	filename_extension += file_extension;
+
+	multibyte_string path = drive;
+	path += directory;
+	// 중복제거
+	for (auto itor = soundList.begin(); itor != soundList.end(); itor++)
+	{
+		PSound* sound = (*itor).second;
+		if (sound->name == path)
+		{
+			return sound->index;
+		}
+	}
+
+
+	std::string filepath = unicode_to_multibyte_str(sound_path);
 	PSound* pSound = new PSound;
-	FMOD_RESULT ret = pSystem->createSound(pFilePath, FMOD_DEFAULT, 0, &pSound->pSound);
+	FMOD_RESULT ret = pSystem->createSound(
+		filepath.c_str(),
+		FMOD_DEFAULT, 0, &pSound->pSound);
 	if (ret != FMOD_OK)
 	{
+		delete pSound;
 		return -1;
 	}
 	pSound->pSystem = pSystem;
-	pSound->name = pFilePath;
+	pSound->name = filename;
+	pSound->sound_path = path;
 	pSound->index = iNumSound++;
-
 	soundList.insert(std::make_pair(pSound->index, pSound));
 	return pSound->index;
+
 }
 
 PSound * PSoundMgr::GetPtr(int key)

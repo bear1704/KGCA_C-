@@ -21,7 +21,7 @@ public:
 	bool	Frame() override;
 	bool	Render() override;
 	bool	Release() override;
-	int		Load(const char* pFilePath);
+	int		Load(multibyte_string sound_path);
 	PSound* GetPtr(int key);
 	bool	Delete(int key);
 	void	Play(int key);

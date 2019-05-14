@@ -22,7 +22,8 @@ public:
 	PRectObject();
 	virtual ~PRectObject();
 protected:
-	PBitmap pbitmap_bitmap_;
+	PBitmap* bitmap_;
+	PBitmap* bitmap_mask_;
 	pPoint position_;
 	float moveSpeed_;
 	RECT rect_;

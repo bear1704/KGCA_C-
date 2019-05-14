@@ -1,5 +1,5 @@
 #include "PRectObject.h"
-
+#include "PBitmapManager.h"
 
 
 PRectObject::PRectObject()
@@ -23,13 +23,23 @@ bool PRectObject::Frame()
 
 bool PRectObject::Render()
 {
-	pbitmap_bitmap_.Draw(position_.x, position_.y, rect_);
+	if (bitmap_mask_ != nullptr)
+	{
+		bitmap_mask_->Draw(position_.x, position_.y, rect_, SRCAND);
+		bitmap_->Draw(position_.x, position_.y, rect_, SRCINVERT);
+		bitmap_mask_->Draw(position_.x, position_.y, rect_, SRCINVERT);
+	}
+	else
+	{
+		bitmap_->Draw(position_.x, position_.y, rect_, SRCCOPY);
+	}
 	return true;
 }
 
 bool PRectObject::Release()
 {
-	pbitmap_bitmap_.Release();
+	bitmap_->Release();
+	bitmap_mask_->Release();
 	return true;
 }
 
@@ -57,6 +67,13 @@ void PRectObject::Set(PRectObjectStat stat)
 
 bool PRectObject::Load(std::wstring filename)
 {
-	pbitmap_bitmap_.Load(filename);
-	return false;
+	int key = PBitmapManager::GetInstance().BitmapLoad(filename, PLoadMode::BITMAP);
+	if (key != -1)
+		bitmap_ = PBitmapManager::GetInstance().get_bitmap_from_map(key);
+	
+	int key_mask = PBitmapManager::GetInstance().BitmapLoad(filename, PLoadMode::BITMAPMASK);
+	if (key_mask != -1)
+		bitmap_mask_ = PBitmapManager::GetInstance().get_bitmap_from_map(key_mask);
+
+	return true;
 }

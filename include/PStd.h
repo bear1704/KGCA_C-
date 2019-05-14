@@ -2,8 +2,10 @@
 #include <Windows.h>
 #include <tchar.h>
 #include <string>
+#include <map>
 
 #pragma comment(lib, "PCoreLib.lib")
+#pragma comment(lib, "msimg32")
 
 #define PCORE_RUN(title,x,y,w,h) \
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)\
@@ -13,7 +15,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
  sample.Run();\
 }
 
+typedef std::wstring unicode_string;
+typedef std::basic_string<TCHAR> multibyte_string;
 
+static std::wstring multibyte_to_unicode_str(std::string str)
+{
+	std::wstring ret = std::wstring(str.begin(), str.end());
+	return ret;
+}
+static std::string unicode_to_multibyte_str(std::wstring str)
+{
+	std::string ret = std::string(str.begin(), str.end());
+	return ret;
+}
 
 enum class KEYSTAT
 {
@@ -21,6 +35,12 @@ enum class KEYSTAT
 	KEY_PUSH,
 	KEY_HOLD,
 	KEY_UP
+};
+
+enum class PLoadMode
+{
+	BITMAP,
+	BITMAPMASK,
 };
 
 struct PInputActionMap
@@ -36,6 +56,8 @@ struct PInputActionMap
 	KEYSTAT jumpKey;
 
 };
+
+
 
 
 typedef struct pPoint_
