@@ -1,6 +1,7 @@
 #pragma once
 #include <assert.h>
 #include "PSprite.h"
+#
 
 class PSpriteManager : public PSingleton<PSpriteManager>
 {
