@@ -177,8 +177,12 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PBitmap.h" />
+    <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PCore.h" />
     <ClInclude Include="PInput.h" />
+    <ClInclude Include="PPlayerController.h" />
+    <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
     <ClInclude Include="PStd.h" />
@@ -186,8 +190,12 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PBitmap.cpp" />
+    <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PCore.cpp" />
     <ClCompile Include="PInput.cpp" />
+    <ClCompile Include="PPlayerController.cpp" />
+    <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
     <ClCompile Include="PTimer.cpp" />

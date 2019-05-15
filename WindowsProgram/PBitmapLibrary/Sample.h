@@ -15,6 +15,7 @@ private:
 	PRectObject object_background_bitmap_;
 
 public:
+
 	Sample();
 	~Sample();
 public:

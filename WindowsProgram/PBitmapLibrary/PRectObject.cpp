@@ -33,6 +33,7 @@ bool PRectObject::Render()
 	{
 		bitmap_->Draw(position_.x, position_.y, rect_, SRCCOPY);
 	}
+
 	return true;
 }
 

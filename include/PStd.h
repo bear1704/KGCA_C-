@@ -3,6 +3,9 @@
 #include <tchar.h>
 #include <string>
 #include <map>
+#include <vector>
+
+using namespace std;
 
 #pragma comment(lib, "PCoreLib.lib")
 #pragma comment(lib, "msimg32")
