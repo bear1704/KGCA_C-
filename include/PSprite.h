@@ -1,5 +1,6 @@
 #pragma once
 #include "PBitmapManager.h"
+#include "PRectObject.h"
 
 struct SpriteDataInfo
 {
@@ -18,15 +19,13 @@ struct SpriteDataInfo
 	}
 };
 
-class PSprite
+class PSprite : public PRectObject
 {
 public:
 	PSprite();
 	~PSprite();
 
 private:
-	PBitmap* sprite_;
-	PBitmap* sprite_mask_;
 	vector<RECT> rect_list;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
@@ -52,8 +51,8 @@ public:
 	void Draw(DWORD drawmode);
 	void Draw(int x, int y, DWORD drawmode);
 	void DrawCenter(DWORD drawmode);
+	bool Alpha24BitsDraw(PSprite sprite, float alpha);
 	
-
 	// bool Draw(); //(¿¹Á¤)
 
 

@@ -21,14 +21,13 @@ class PRectObject
 public:
 	PRectObject();
 	virtual ~PRectObject();
+private:
+	RECT rect_;
 protected:
 	PBitmap* bitmap_;
 	PBitmap* bitmap_mask_;
 	pPoint position_;
 	float moveSpeed_;
-	RECT rect_;
-	float alpha_;
-
 public:
 	virtual bool Init();
 	virtual bool Frame();

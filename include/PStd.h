@@ -80,6 +80,7 @@ typedef struct pPoint_
 
 }pPoint;
 
+
 extern HWND g_hWnd;
 extern POINT g_MousePos;
 extern float g_fGameTimer;
@@ -88,6 +89,7 @@ extern PInputActionMap g_InputActionMap;
 extern HDC g_handle_off_screenDC;
 extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
+
 
 template <typename T>
 class PSingleton

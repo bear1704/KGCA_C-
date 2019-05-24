@@ -12,7 +12,7 @@ rtExplosion 12 5 0.4 ../../data/bitmap/bitmap1.bmp
 9	321 142 27 26
 10	349 142 24 24
 11	374 142 22 18	
-rtBomb 9 10 1 ../../data/bitmap/bitmap1.bmp
+rtBomb 9 30 1 ../../data/bitmap/bitmap1.bmp
 0	161 85 11 12
 1	173 85 22 20
 2	196 85 26 24

@@ -10,6 +10,7 @@ public:
 private:
 	//PSprite sprite1;
 	PSprite sprites[30];
+	PRectObject background;
 public:
 	bool Init() override;
 	bool Frame() override;
