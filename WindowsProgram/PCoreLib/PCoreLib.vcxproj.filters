@@ -61,6 +61,12 @@
     <ClInclude Include="PPlayerController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PSprite.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PSpriteManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCore.cpp">
@@ -91,6 +97,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="PPlayerController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PSprite.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PSpriteManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

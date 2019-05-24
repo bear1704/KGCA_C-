@@ -24,9 +24,11 @@ public:
 protected:
 	PBitmap* bitmap_;
 	PBitmap* bitmap_mask_;
-	pPoint position_;
 	float moveSpeed_;
 	RECT rect_;
+public:
+	pPoint position_;
+	
 
 public:
 	virtual bool Init();

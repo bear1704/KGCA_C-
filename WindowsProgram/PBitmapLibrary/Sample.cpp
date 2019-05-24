@@ -38,7 +38,7 @@ bool Sample::Init()
 	stat2.rect = rect2;
 	character_npc_.Set(stat2);
 
-	PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"../../data/sound/onlyLove.mp3"));
+	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"../../data/sound/onlyLove.mp3"));
 
 	return true;
 }

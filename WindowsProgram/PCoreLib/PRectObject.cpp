@@ -66,6 +66,42 @@ void PRectObject::Set(PRectObjectStat stat)
 	rect_ = stat.rect;
 }
 
+PBitmap * PRectObject::get_bitmap_()
+{
+	return bitmap_;
+}
+
+PBitmap * PRectObject::get_bitmap_mask_()
+{
+	return bitmap_mask_;
+}
+
+pPoint PRectObject::get_position_()
+{
+	return position_;
+}
+
+float * PRectObject::get_position_xy(PXY axis)
+{
+	if (axis == PXY::X)
+		return &position_.x;
+	else if (axis == PXY::Y)
+		return &position_.y;
+
+	return nullptr;
+}
+
+
+RECT PRectObject::get_rect_()
+{
+	return rect_;
+}
+
+float PRectObject::get_moveSpeed_()
+{
+	return moveSpeed_;
+}
+
 bool PRectObject::Load(std::wstring filename)
 {
 	int key = PBitmapManager::GetInstance().BitmapLoad(filename, PLoadMode::BITMAP);

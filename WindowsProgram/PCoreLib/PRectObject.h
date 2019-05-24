@@ -27,6 +27,7 @@ protected:
 	pPoint position_;
 	float moveSpeed_;
 	RECT rect_;
+	float alpha_;
 
 public:
 	virtual bool Init();
@@ -37,6 +38,12 @@ public:
 	virtual void Set(float x, float y, RECT rect, float fSpeed);
 	virtual void Set(pPoint p, RECT rect, float fSpeed);
 	virtual void Set(PRectObjectStat stat);
+	PBitmap* get_bitmap_();
+	PBitmap* get_bitmap_mask_();
+	pPoint get_position_();
+	float* get_position_xy(PXY axis);
+	RECT get_rect_();
+	float get_moveSpeed_();
 	bool Load(std::wstring filename);
 
 };

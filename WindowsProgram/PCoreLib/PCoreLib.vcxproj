@@ -185,6 +185,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
+    <ClInclude Include="PSprite.h" />
+    <ClInclude Include="PSpriteManager.h" />
     <ClInclude Include="PStd.h" />
     <ClInclude Include="PTimer.h" />
     <ClInclude Include="PWindow.h" />
@@ -198,6 +200,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
+    <ClCompile Include="PSprite.cpp" />
+    <ClCompile Include="PSpriteManager.cpp" />
     <ClCompile Include="PTimer.cpp" />
     <ClCompile Include="PWindow.cpp" />
   </ItemGroup>

@@ -46,6 +46,13 @@ enum class PLoadMode
 	BITMAPMASK,
 };
 
+enum class PXY
+{
+	X,
+	Y,
+
+};
+
 struct PInputActionMap
 {
 	KEYSTAT wKey;

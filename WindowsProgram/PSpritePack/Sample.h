@@ -1,7 +1,6 @@
 #pragma once
 #include "PCore.h"
 #include "PSpriteManager.h"
-#include "PSpriteObject.h"
 
 class Sample : public PCore
 {
@@ -9,9 +8,14 @@ public:
 	Sample();
 	~Sample();
 private:
-	PSpriteObject object_sprite;
+	//PSprite sprite1;
+	PSprite sprites[30];
 public:
 	bool Init() override;
+	bool Frame() override;
+	bool Render() override;
+
+	
 };
 
-PCORE_RUN(L"abcd", 0, 0, 800, 600);
+ PCORE_RUN(L"abcd", 0, 0, 800, 600);
