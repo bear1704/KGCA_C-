@@ -25,8 +25,8 @@ public:
 	~PSprite();
 
 private:
-	PBitmap* sprite_;
-	PBitmap* sprite_mask_;
+	PBitmap* bitmap_;
+	PBitmap* bitmap_mask_;
 	vector<RECT> rect_list;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
