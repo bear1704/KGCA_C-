@@ -108,6 +108,7 @@ bool PBitmap::Draw(float x, float y, RECT rect, BLENDFUNCTION bf)
 	AlphaBlend(g_handle_off_screenDC, x, y,
 		rect.right, rect.bottom, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
 		bf);
+
 	return true;
 }
 

@@ -13,6 +13,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PBitmapLibrary", "PBitmapLi
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PSpritePack", "PSpritePack\PSpritePack.vcxproj", "{CC9633E0-5FAD-4DB4-B0BD-2FFD8B5D6746}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7BD277D4-F7F3-4464-907D-C8AE28181A85} = {7BD277D4-F7F3-4464-907D-C8AE28181A85}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitmapBlend", "BitmapBlend\BitmapBlend.vcxproj", "{79A25A18-13B8-4602-A6BC-4FF1B9E49433}"
 EndProject

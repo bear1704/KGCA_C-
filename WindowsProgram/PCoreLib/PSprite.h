@@ -52,7 +52,7 @@ public:
 	void Draw(DWORD drawmode);
 	void Draw(int x, int y, DWORD drawmode);
 	void DrawCenter(DWORD drawmode);
-	
+	bool AlphaDraw24Bits(PRectObject object_my_character, PRectObject );
 
 	// bool Draw(); //(¿¹Á¤)
 

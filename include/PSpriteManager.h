@@ -5,7 +5,7 @@
 
 
 class PSpriteManager : public PSingleton<PSpriteManager>
-{
+{//name maxframe lifetime once_playtime path
 public:
 	PSpriteManager();
 	~PSpriteManager();
@@ -20,7 +20,7 @@ public:
 	bool Release() override;
 
 	SpriteDataInfo* get_sprite_data_list_from_map(std::wstring key);
-	void LoadDataFromScript(multibyte_string filepath);  //파일에서 스프라이트 정보(Rect 좌표 등...)를 전부 읽어서 맵에 저장한다.
+	void LoadDataFromScript(multibyte_string filepath);  //파일에서 스프라이트 정보(Rect 좌표 등...)를 전부 읽어서 맵에 저장한다. name maxframe lifetime once_playtime path
 	bool Delete(int key);
 	
 

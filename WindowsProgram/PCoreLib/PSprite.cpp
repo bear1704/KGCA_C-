@@ -98,7 +98,7 @@ void PSprite::Draw(DWORD drawmode)
 	BLENDFUNCTION bf;
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
-	bf.SourceConstantAlpha = alpha_;
+	bf.SourceConstantAlpha = 0xff;
 	if (sprite_->bitmap_info.bmBitsPixel == 32) //ARGB 이미지
 	{
 		bf.AlphaFormat = AC_SRC_ALPHA;
@@ -108,14 +108,46 @@ void PSprite::Draw(DWORD drawmode)
 	else // RGB 이미지
 	{
 		bf.AlphaFormat = AC_SRC_OVER;
-		sprite_->Draw(position_.x, position_.y,
-			rect_list[current_played_spriteframe_], drawmode);
+		if (sprite_mask_ != nullptr)
+		{
+			sprite_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCAND);
+			sprite_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);
+			sprite_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);
+		}
+		else
+		{
+			sprite_->Draw(position_.x, position_.y,
+				rect_list[current_played_spriteframe_], drawmode);
+		}
 	}
 }
-void  PSprite::Draw(int x, int y, DWORD dwMode)
+void  PSprite::Draw(int x, int y, DWORD drawmode)
 {
-	sprite_->Draw(x, y,
-		rect_list[current_played_spriteframe_], dwMode);
+	BLENDFUNCTION bf;
+	bf.BlendOp = AC_SRC_OVER;
+	bf.BlendFlags = 0;
+	bf.SourceConstantAlpha = alpha_;
+	if (sprite_->bitmap_info.bmBitsPixel == 32) //ARGB 이미지
+	{
+		bf.AlphaFormat = AC_SRC_ALPHA;
+		sprite_->Draw(x, y,
+			rect_list[current_played_spriteframe_], bf);
+	}
+	else // RGB 이미지
+	{
+		bf.AlphaFormat = AC_SRC_OVER;
+		if (sprite_mask_ != nullptr)
+		{
+			sprite_mask_->Draw(x, y, rect_list.at(current_played_spriteframe_), SRCAND);
+			sprite_->Draw(x, y, rect_list.at(current_played_spriteframe_), SRCINVERT);
+			sprite_mask_->Draw(x, y, rect_list.at(current_played_spriteframe_), SRCINVERT);
+		}
+		else
+		{
+			sprite_->Draw(x, y,
+				rect_list[current_played_spriteframe_], drawmode);
+		}
+	}
 }
 
 

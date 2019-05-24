@@ -70,7 +70,7 @@ void PSpriteManager::LoadDataFromScript(multibyte_string filepath)
 		_stscanf_s(buffer, _T("%s%d%f%f%s"), temp_buffer, _countof(temp_buffer), 
 			&number_of_max_frames, &sprite_data_info->lifetime, &sprite_data_info->once_playtime,
 			temp_name_buffer, _countof(temp_buffer));
-
+		
 		sprite_data_info->max_frame = number_of_max_frames;
 		sprite_data_info->bitmap_path = temp_name_buffer;
 

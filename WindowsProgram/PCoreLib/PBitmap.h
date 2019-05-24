@@ -23,5 +23,6 @@ public:
 	bool Draw(float x, float y, RECT rect, BLENDFUNCTION bf);
 	bool DrawColorKey(float x, float y, RECT rect, COLORREF key_color);
 
+
 };
 

@@ -1,5 +1,5 @@
-#SPRITE 4
-rtExplosion 12 2 0.4 ../../data/bitmap/bitmap1.bmp
+#SPRITE 6
+rtExplosion 12 5 0.4 ../../data/bitmap/bitmap1.bmp
 0	1	142 41 41 
 1	43 142 38 43 
 2	82 142 36 43 
@@ -29,5 +29,9 @@ rtClash 6 10 0.2 ../../data/bitmap/bitmap1.bmp
 3 219 62 18 19
 4 238 62 14 13
 5 253 62 11 10
-rtTest 1 10 1 ../../data/bitmap/bitmap1.bmp
-0 161 62 12 11
+rtTest 1 20 20 ../../data/bitmap/bitmap1.bmp
+0 219 62 18 19
+rtNormal 1 20 20 ../../data/bitmap/popup_normal.bmp
+0 0 0 195 123
+rtAlpha 1 20 20 ../../data/bitmap/popup_normal_Alpha.bmp
+0 0 0 195 123

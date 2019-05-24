@@ -15,7 +15,7 @@ public:
 	bool Frame() override;
 	bool Render() override;
 	bool Release() override;
-	bool AlphaBlendRender();
+
 };
 
 PCORE_RUN(L"uarrrrrr", 0, 0, 800, 600);

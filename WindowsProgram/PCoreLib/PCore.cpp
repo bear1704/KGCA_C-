@@ -55,7 +55,7 @@ bool PCore::PCoreInit()
 	handle_off_screen_bitmap = CreateCompatibleBitmap(handle_ScreenDC, rectangle_client.right, rectangle_client.bottom); //백버퍼에 사용할 비트맵
 	SelectObject(handle_off_screenDC, handle_off_screen_bitmap); //비트맵과 백버퍼를 바인드
 
-	background_color = RGB(0, 0, 0);
+	background_color = RGB(255, 0, 0);
 	handle_background_brush = CreateSolidBrush(background_color); //백그라운드에 사용할 컬러 브러시(블랙)
 	SelectObject(handle_off_screenDC, handle_background_brush); //브러시와 백버퍼를 바인드
 
