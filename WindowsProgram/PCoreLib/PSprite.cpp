@@ -5,6 +5,7 @@
 PSprite::PSprite()
 {
 	isDead = false;
+	alpha_ = 1.0f;
 }
 
 
@@ -71,7 +72,7 @@ bool PSprite::Load(std::wstring filename)
 	return true;
 }
 
-bool PSprite::Set(SpriteDataInfo info)
+bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 {
 	rect_list = info.rect_list;
 	remain_lifetime_ = info.lifetime;
@@ -80,6 +81,9 @@ bool PSprite::Set(SpriteDataInfo info)
 	position_.y = info.posY;
 	number_of_max_spriteframe_ = info.max_frame;
 	allocatetime_for_onesprite = info.once_playtime / info.max_frame;
+	alpha_ = alpha;
+	scale_ = scale;
+
 	Load(info.bitmap_path);
 
 	return true;
@@ -98,12 +102,12 @@ void PSprite::Play()
 	remain_lifetime_ = lifetime_;
 }
 
-void PSprite::Draw(DWORD drawmode)
+void PSprite::Draw()
 {
 	BLENDFUNCTION bf;
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
-	bf.SourceConstantAlpha = 0xff;
+	bf.SourceConstantAlpha = alpha_ * 255.f;
 	if (bitmap_->bitmap_info.bmBitsPixel == 32) //ARGB 이미지
 	{
 		bf.AlphaFormat = AC_SRC_ALPHA;
@@ -115,19 +119,16 @@ void PSprite::Draw(DWORD drawmode)
 		bf.AlphaFormat = AC_SRC_OVER;
 		if (bitmap_mask_ != nullptr)
 		{
-		/*	bitmap_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCAND);
-			bitmap_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);
-			bitmap_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);*/
-			Alpha24BitsDraw(*this, 0.7f);
+			Alpha24BitsDraw(*this, alpha_, scale_);
 		}
 		else
 		{
 			bitmap_->Draw(position_.x, position_.y,
-				rect_list[current_played_spriteframe_], drawmode);
+				rect_list[current_played_spriteframe_], SRCCOPY);
 		}
 	}
 }
-void  PSprite::Draw(int x, int y, DWORD drawmode)
+void  PSprite::Draw(int x, int y)
 {
 	BLENDFUNCTION bf;
 	bf.BlendOp = AC_SRC_OVER;
@@ -151,38 +152,41 @@ void  PSprite::Draw(int x, int y, DWORD drawmode)
 		else
 		{
 			bitmap_->Draw(x, y,
-				rect_list[current_played_spriteframe_], drawmode);
+				rect_list[current_played_spriteframe_], SRCCOPY);
 		}
 	}
 }
 
 
-void PSprite::DrawCenter(DWORD drawmode)
+void PSprite::DrawCenter()
 {
 	RECT rt = rect_list[current_played_spriteframe_];
 	rt.left = position_.x - (rt.right / 2);
 	rt.top = position_.y - (rt.bottom / 2);
 	bitmap_->Draw(rt.left, rt.top,
-		rect_list[current_played_spriteframe_],drawmode);
+		rect_list[current_played_spriteframe_], SRCCOPY);
 }
 
-bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha)
+bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale)
 {
 	//주의! 좌표(sprite_coord.txt같은)에서 쓰는 방법은 left, top, right, bottom이 아니라  left, right-left, top, bottom-top 임! abs
-	int sprite_width =sprite.rect_list[current_played_spriteframe_].right;
+	int sprite_width = sprite.rect_list[current_played_spriteframe_].right;
 	int sprite_height = sprite.rect_list[current_played_spriteframe_].bottom;
+	int stretched_width = sprite.rect_list[current_played_spriteframe_].right * scale; 
+	int stretched_height = sprite.rect_list[current_played_spriteframe_].bottom * scale;
+
 	RECT rectangle_client;
 	GetClientRect(g_hWnd, &rectangle_client);
 
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFO));
 	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bmi.bmiHeader.biWidth = sprite_width;
-	bmi.bmiHeader.biHeight = sprite_height;
+	bmi.bmiHeader.biWidth = stretched_width;
+	bmi.bmiHeader.biHeight = stretched_height;
 	bmi.bmiHeader.biPlanes = 1;
 	bmi.bmiHeader.biBitCount = 32;
 	bmi.bmiHeader.biCompression = BI_RGB;
-	bmi.bmiHeader.biSizeImage = sprite_width * sprite_height * 4;
+	bmi.bmiHeader.biSizeImage = stretched_width * stretched_height * 4;
 
 	void* pivot_bitmap = 0;
 	void* pivot_mask_bitmap = 0;
@@ -191,31 +195,40 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha)
 	HBITMAP handle_bitmap = CreateDIBSection(g_handle_screenDC, &bmi, DIB_RGB_COLORS, &pivot_bitmap, NULL, 0);
 	HDC bitmap_dc = CreateCompatibleDC(NULL);
 	SelectObject(bitmap_dc, handle_bitmap);
-	BitBlt(bitmap_dc, 0, 0, sprite_width, sprite_height, sprite.get_bitmap_()->handle_memoryDC_,
-		sprite.rect_list[current_played_spriteframe_].left, sprite.rect_list[current_played_spriteframe_].top, SRCCOPY);
+	/*BitBlt(bitmap_dc, 0, 0, sprite_width, sprite_height, sprite.get_bitmap_()->handle_memoryDC_,
+		sprite.rect_list[current_played_spriteframe_].left, sprite.rect_list[current_played_spriteframe_].top, SRCCOPY);*/
+	StretchBlt(bitmap_dc, 0, 0, stretched_width, stretched_height, sprite.get_bitmap_()->handle_memoryDC_,
+		sprite.rect_list[current_played_spriteframe_].left, sprite.rect_list[current_played_spriteframe_].top,
+		sprite_width, sprite_height, SRCCOPY);
 	DeleteDC(bitmap_dc);
 
 	HBITMAP handle_mask_bitmap = CreateDIBSection(g_handle_screenDC, &bmi, DIB_RGB_COLORS, &pivot_mask_bitmap, NULL, 0);
 	HDC bitmap_mask_dc = CreateCompatibleDC(NULL);
 	SelectObject(bitmap_mask_dc, handle_mask_bitmap);
-	BitBlt(bitmap_mask_dc, 0, 0, sprite_width, sprite_height, sprite.get_bitmap_mask_()->handle_memoryDC_,
-		sprite.rect_list[current_played_spriteframe_].left, sprite.rect_list[current_played_spriteframe_].top, SRCCOPY);
+	/*BitBlt(bitmap_mask_dc, 0, 0, sprite_width, sprite_height, sprite.get_bitmap_mask_()->handle_memoryDC_,
+		sprite.rect_list[current_played_spriteframe_].left, sprite.rect_list[current_played_spriteframe_].top, SRCCOPY);*/
+	StretchBlt(bitmap_mask_dc, 0, 0, stretched_width, stretched_height, sprite.get_bitmap_mask_()->handle_memoryDC_,
+		sprite.rect_list[current_played_spriteframe_].left, sprite.rect_list[current_played_spriteframe_].top,
+		sprite_width, sprite_height, SRCCOPY);
 	DeleteDC(bitmap_mask_dc);
 
 	HBITMAP handle_offscreen_bitmap = CreateDIBSection(g_handle_screenDC, &bmi, DIB_RGB_COLORS, &pivot_offscreen_bitmap, NULL, 0);
 	HDC bitmap_offscreen_dc = CreateCompatibleDC(NULL);
 	SelectObject(bitmap_offscreen_dc, handle_offscreen_bitmap);
-	BitBlt(bitmap_offscreen_dc, 0, 0, sprite_width, sprite_height, g_handle_off_screenDC,
-		sprite.position_.x, sprite.position_.y, SRCCOPY); //원본과 다름, 주의!
+	//BitBlt(bitmap_offscreen_dc, 0, 0, sprite_width, sprite_height, g_handle_off_screenDC,
+	//	sprite.position_.x, sprite.position_.y, SRCCOPY); //원본과 다름, 주의!
+	StretchBlt(bitmap_offscreen_dc, 0, 0, stretched_width, stretched_height, g_handle_off_screenDC,
+		sprite.position_.x, sprite.position_.y, stretched_width, stretched_height, SRCCOPY); //원본과 다름, 주의!
+	//배경은 늘어난 크기만큼 잘라와 줘야 한다.
 	DeleteDC(bitmap_offscreen_dc);
 
-	for (int y = 0; y < sprite_height; y++)
+	for (int y = 0; y < stretched_height; y++)
 	{
-		byte* bitmap_RGB = (byte*)&((DWORD*)pivot_bitmap)[y * sprite_width];
-		byte* bitmap_mask_RGB = (byte*)&((DWORD*)pivot_mask_bitmap)[y* sprite_width];
-		byte* bitmap_offscreen_RGB = (byte*)&((DWORD*)pivot_offscreen_bitmap)[y* sprite_width];
+		byte* bitmap_RGB = (byte*)&((DWORD*)pivot_bitmap)[y * stretched_width];
+		byte* bitmap_mask_RGB = (byte*)&((DWORD*)pivot_mask_bitmap)[y* stretched_width];
+		byte* bitmap_offscreen_RGB = (byte*)&((DWORD*)pivot_offscreen_bitmap)[y* stretched_width];
 
-		for (int x = 0; x < sprite_width; x++)
+		for (int x = 0; x < stretched_width; x++)
 		{
 			byte origin_A = bitmap_RGB[3];
 			byte origin_R = bitmap_RGB[2];
@@ -248,8 +261,8 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha)
 
 	SetStretchBltMode(g_handle_off_screenDC, HALFTONE);
 	StretchBlt(g_handle_off_screenDC,
-		sprite.position_.x, sprite.position_.y, sprite_width, sprite_height,
-		bitmap_dc, 0, 0, sprite_width, sprite_height,
+		sprite.position_.x, sprite.position_.y, stretched_width, stretched_height,
+		bitmap_dc, 0, 0, stretched_width, stretched_height,
 		SRCCOPY);
 
 	DeleteObject(handle_bitmap);
@@ -258,5 +271,10 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha)
 	DeleteObject(bitmap_dc);
 
 	return true;
+}
+
+void PSprite::set_alpha_(float alpha)
+{
+	alpha_ = alpha;
 }
 

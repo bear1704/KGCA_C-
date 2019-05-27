@@ -11,11 +11,13 @@ struct SpriteDataInfo
 	float once_playtime;
 	float posX;
 	float posY;
+	float scale;
 
 	SpriteDataInfo()
 	{
 		posX = 100.0f;
 		posY = 100.0f;
+		scale = 1.0f;
 	}
 };
 
@@ -37,6 +39,7 @@ private:
 	pPoint position_;
 	bool isDead;
 	float alpha_;
+	float scale_;
 
 
 public:
@@ -45,14 +48,17 @@ public:
 	bool Render();
 	bool Release();
 	bool Load(std::wstring filename);
-	bool Set(SpriteDataInfo info);
+	bool Set(SpriteDataInfo info, float alpha, float scale);
 	bool SetPosition(float x, float y);
 	void Play();
-	void Draw(DWORD drawmode);
-	void Draw(int x, int y, DWORD drawmode);
-	void DrawCenter(DWORD drawmode);
-	bool Alpha24BitsDraw(PSprite sprite, float alpha);
-	
+	void Draw();
+	void Draw(int x, int y);
+	void DrawCenter();
+	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale);
+	void set_alpha_(float alpha);
+
+
+
 	// bool Draw(); //(¿¹Á¤)
 
 
