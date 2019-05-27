@@ -64,6 +64,12 @@ struct PInputActionMap
 	KEYSTAT middleClick;
 	KEYSTAT exitKey;
 	KEYSTAT jumpKey;
+	KEYSTAT leftArrowKey;
+	KEYSTAT rightArrowKey;
+	KEYSTAT upArrowKey;
+	KEYSTAT downArrowKey;
+	
+
 
 };
 

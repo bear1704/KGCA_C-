@@ -20,11 +20,11 @@ bool PSprite::Init()
 
 bool PSprite::Frame()
 {
-	remain_lifetime_ -= g_SecondPerFrame;
-	
 	if (remain_lifetime_ <= 0) isDead = true;
 	if (isDead == true) return true;
 
+	remain_lifetime_ -= g_SecondPerFrame;
+	
 	time_after_spriteopen_ += g_SecondPerFrame;
 	if (time_after_spriteopen_ > allocatetime_for_onesprite)
 	{
@@ -41,7 +41,7 @@ bool PSprite::Frame()
 
 bool PSprite::Render()
 {
-	if (bitmap_mask_ != nullptr)
+	/*if (bitmap_mask_ != nullptr)
 	{
 		bitmap_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCAND);
 		bitmap_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);
@@ -50,12 +50,17 @@ bool PSprite::Render()
 	else
 	{
 		bitmap_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCCOPY);
-	}
+	}*/
 	return true;
 }
 
 bool PSprite::Release()
 {
+	if (isDead)
+	{
+		bitmap_->Release();
+		bitmap_mask_->Release();
+	}
 	return false;
 }
 
@@ -75,7 +80,12 @@ bool PSprite::Load(std::wstring filename)
 bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 {
 	rect_list = info.rect_list;
-	remain_lifetime_ = info.lifetime;
+
+	if (info.lifetime == 777)
+		remain_lifetime_ = 999999999.5f;
+	else
+		remain_lifetime_ = info.lifetime;
+
 	lifetime_ = info.lifetime;
 	position_.x = info.posX;
 	position_.y = info.posY;
@@ -104,6 +114,9 @@ void PSprite::Play()
 
 void PSprite::Draw()
 {
+	if (isDead)
+		return;
+
 	BLENDFUNCTION bf;
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
@@ -125,11 +138,16 @@ void PSprite::Draw()
 		{
 			bitmap_->Draw(position_.x, position_.y,
 				rect_list[current_played_spriteframe_], SRCCOPY, scale_);
+			//SetROP2(g_handle_off_screenDC, R2_COPYPEN);
+			//Rectangle(g_handle_off_screenDC, 0, 0, 100, 100);
 		}
 	}
 }
 void  PSprite::Draw(int x, int y)
 {
+	if (isDead)
+		return;
+
 	BLENDFUNCTION bf;
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
@@ -158,17 +176,9 @@ void  PSprite::Draw(int x, int y)
 }
 
 
-void PSprite::DrawCenter()
-{
-	RECT rt = rect_list[current_played_spriteframe_];
-	rt.left = position_.x - (rt.right / 2);
-	rt.top = position_.y - (rt.bottom / 2);
-	bitmap_->Draw(rt.left, rt.top,
-		rect_list[current_played_spriteframe_], SRCCOPY);
-}
-
 bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale)
 {
+
 	//주의! 좌표(sprite_coord.txt같은)에서 쓰는 방법은 left, top, right, bottom이 아니라  left, right-left, top, bottom-top 임! abs
 	int sprite_width = sprite.rect_list[current_played_spriteframe_].right;
 	int sprite_height = sprite.rect_list[current_played_spriteframe_].bottom;

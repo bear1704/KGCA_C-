@@ -15,14 +15,14 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
-	background.Init();
-	background.Load(L"../../data/bitmap/kgcabk.bmp");
-	PRectObjectStat background_stat;
-	background_stat.position = pPoint(rectangle_client.right/2, rectangle_client.bottom/2);
-	RECT background_rect = { 0, 0, rectangle_client.right, rectangle_client.bottom };
-	background_stat.rect = background_rect;
-	background_stat.moveSpeed = 0.0f;
-	background.Set(background_stat);
+	//background.Init();
+	//background.Load(L"../../data/bitmap/kgcabk.bmp");
+	//PRectObjectStat background_stat;
+	//background_stat.position = pPoint(rectangle_client.right/2, rectangle_client.bottom/2);
+	//RECT background_rect = { 0, 0, rectangle_client.right, rectangle_client.bottom };
+	//background_stat.rect = background_rect;
+	//background_stat.moveSpeed = 0.0f;
+	//background.Set(background_stat);
 
 	PSpriteManager::GetInstance().LoadDataFromScript(L"sprite_coord.txt"); //스프라이트 총 3개의 rect데이터를 지닌 스프라이트 로드
 	sprites[0].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtNormal"), 0.5f, 1.0f);
@@ -36,6 +36,7 @@ bool Sample::Init()
 
 bool Sample::Frame()
 {
+
 	sprites[0].Frame();
 	sprites[1].Frame();
 	sprites[2].Frame();
@@ -44,12 +45,17 @@ bool Sample::Frame()
 
 bool Sample::Render()
 {
-	background.Render();
+	//background.Render();
 	sprites[2].Draw();
 	sprites[0].Draw();
 	sprites[1].Draw();
 	
 	//sprite2.Render();
 	
+	return true;
+}
+
+bool Sample::Release()
+{
 	return true;
 }

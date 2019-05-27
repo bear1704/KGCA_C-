@@ -36,7 +36,6 @@ private:
 	float allocatetime_for_onesprite;
 	int sprite_id_;
 	float time_after_spriteopen_;
-	pPoint position_;
 	bool isDead;
 	float alpha_;
 	float scale_;
@@ -53,13 +52,8 @@ public:
 	void Play();
 	void Draw();
 	void Draw(int x, int y);
-	void DrawCenter();
 	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale);
 	void set_alpha_(float alpha);
-
-
-
-	// bool Draw(); //(¿¹Á¤)
 
 
 };

@@ -18,6 +18,7 @@ public:
 	HBITMAP handle_off_screen_bitmap;
 	DWORD background_color;
 	HBRUSH handle_background_brush;
+	HANDLE handle_pen;
 
 public:
 	virtual bool Init();

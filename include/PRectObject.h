@@ -3,15 +3,15 @@
 
 struct PRectObjectStat
 {
-	pPoint position;
-	RECT rect;
-	float moveSpeed;
+	pPoint position_;
+	RECT collision_box_;
+	float move_speed_;
 	PRectObjectStat() {}
-	PRectObjectStat(pPoint p, RECT rect_, float moveSpeed_ = 0.0f)
+	PRectObjectStat(pPoint position, RECT collision_box, float move_speed = 0.0f)
 	{
-		position = p;
-		rect = rect_;
-		moveSpeed = moveSpeed;
+		position_ = position;
+		collision_box_ = collision_box;
+		move_speed_ = move_speed;
 	}
 
 };
@@ -21,13 +21,12 @@ class PRectObject
 public:
 	PRectObject();
 	virtual ~PRectObject();
-private:
-	RECT rect_;
 protected:
 	PBitmap* bitmap_;
 	PBitmap* bitmap_mask_;
 	pPoint position_;
-	float moveSpeed_;
+	float move_speed_;
+	RECT collision_box_;
 public:
 	virtual bool Init();
 	virtual bool Frame();
@@ -41,7 +40,7 @@ public:
 	PBitmap* get_bitmap_mask_();
 	pPoint get_position_();
 	float* get_position_xy(PXY axis);
-	RECT get_rect_();
+	RECT get_collision_rect_();
 	float get_moveSpeed_();
 	bool Load(std::wstring filename);
 

@@ -24,6 +24,12 @@ bool PInput::Frame()
 	g_InputActionMap.sKey = KeyCheck('S');
 	g_InputActionMap.aKey = KeyCheck('A');
 	g_InputActionMap.dKey = KeyCheck('D');
+	g_InputActionMap.upArrowKey = KeyCheck(VK_UP);
+	g_InputActionMap.downArrowKey = KeyCheck(VK_DOWN);
+	g_InputActionMap.leftArrowKey = KeyCheck(VK_LEFT);
+	g_InputActionMap.rightArrowKey = KeyCheck(VK_RIGHT);
+	
+
 	g_InputActionMap.exitKey = KeyCheck(VK_ESCAPE);
 	g_InputActionMap.jumpKey = KeyCheck(VK_SPACE);
 

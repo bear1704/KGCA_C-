@@ -25,13 +25,13 @@ bool PRectObject::Render()
 {
 	if (bitmap_mask_ != nullptr)
 	{
-		bitmap_mask_->Draw(position_.x, position_.y, rect_, SRCAND);
-		bitmap_->Draw(position_.x, position_.y, rect_, SRCINVERT);
-		bitmap_mask_->Draw(position_.x, position_.y, rect_, SRCINVERT);
+		bitmap_mask_->Draw(position_.x, position_.y, collision_box_, SRCAND);
+		bitmap_->Draw(position_.x, position_.y, collision_box_, SRCINVERT);
+		bitmap_mask_->Draw(position_.x, position_.y, collision_box_, SRCINVERT);
 	}
 	else
 	{
-		bitmap_->Draw(position_.x, position_.y, rect_, SRCCOPY);
+		bitmap_->Draw(position_.x, position_.y, collision_box_, SRCCOPY);
 	}
 
 	return true;
@@ -39,8 +39,17 @@ bool PRectObject::Render()
 
 bool PRectObject::Release()
 {
-	bitmap_->Release();
-	bitmap_mask_->Release();
+	if (!bitmap_)
+	{
+		bitmap_->Release();
+		delete bitmap_;
+	}
+	if (!bitmap_mask_)
+	{
+		bitmap_mask_->Release();
+		delete bitmap_mask_;
+	}
+	
 	return true;
 }
 
@@ -48,22 +57,22 @@ void PRectObject::Set(float x, float y, RECT rect, float fSpeed)
 {
 	position_.x = x;
 	position_.y = y;
-	rect_ = rect;
-	moveSpeed_ = fSpeed;
+	collision_box_ = rect;
+	move_speed_ = fSpeed;
 }
 
 void PRectObject::Set(pPoint p, RECT rect, float fSpeed)
 {
 	position_ = p;
-	rect_ = rect;
-	moveSpeed_ = fSpeed;
+	collision_box_ = rect;
+	move_speed_ = fSpeed;
 }
 
 void PRectObject::Set(PRectObjectStat stat)
 {
-	position_ = stat.position;
-	moveSpeed_ = stat.moveSpeed;
-	rect_ = stat.rect;
+	position_ = stat.position_;
+	move_speed_ = stat.move_speed_;
+	collision_box_ = stat.collision_box_;
 }
 
 PBitmap * PRectObject::get_bitmap_()
@@ -92,14 +101,14 @@ float * PRectObject::get_position_xy(PXY axis)
 }
 
 
-RECT PRectObject::get_rect_()
+RECT PRectObject::get_collision_rect_()
 {
-	return rect_;
+	return collision_box_;
 }
 
 float PRectObject::get_moveSpeed_()
 {
-	return moveSpeed_;
+	return move_speed_;
 }
 
 bool PRectObject::Load(std::wstring filename)

@@ -131,12 +131,12 @@ bool PPlayer::Render()
 
 	//PRectObject::Render(); 
 	
-	HBITMAP bitmap = CreateCompatibleBitmap(g_handle_screenDC, rect_.right, rect_.bottom);
+	HBITMAP bitmap = CreateCompatibleBitmap(g_handle_screenDC, collision_box_.right, collision_box_.bottom);
 	if (bitmap == NULL)
 		return false;
 	SelectObject(handle_colorDC_, bitmap);
 
-	HBITMAP bitmap2 = CreateCompatibleBitmap(g_handle_screenDC, rect_.right, rect_.bottom);
+	HBITMAP bitmap2 = CreateCompatibleBitmap(g_handle_screenDC, collision_box_.right, collision_box_.bottom);
 	if (bitmap == NULL)
 		return false;
 
@@ -146,14 +146,14 @@ bool PPlayer::Render()
 	SelectObject(handle_colorDC_, handle_white_brush);
 	HBRUSH handle_white_brush2 = CreateSolidBrush(RGB(255, 255, 255));
 	SelectObject(handle_maskDC_, handle_white_brush2);
-	PatBlt(handle_colorDC_, 0, 0, rect_.right, rect_.bottom, PATCOPY);
-	PatBlt(handle_maskDC_, 0, 0, rect_.right, rect_.bottom, PATCOPY);
+	PatBlt(handle_colorDC_, 0, 0, collision_box_.right, collision_box_.bottom, PATCOPY);
+	PatBlt(handle_maskDC_, 0, 0, collision_box_.right, collision_box_.bottom, PATCOPY);
 	DeleteObject(handle_white_brush);
 	DeleteObject(handle_white_brush2);
 
-	BitBlt(handle_colorDC_, 0, 0, rect_.right, rect_.bottom, bitmap_->handle_memoryDC_, rect_.left, rect_.top, SRCCOPY);
-	BitBlt(handle_maskDC_, 0, 0, rect_.right, rect_.bottom,
-		bitmap_mask_->handle_memoryDC_, rect_.left, rect_.top, SRCCOPY);
+	BitBlt(handle_colorDC_, 0, 0, collision_box_.right, collision_box_.bottom, bitmap_->handle_memoryDC_, collision_box_.left, collision_box_.top, SRCCOPY);
+	BitBlt(handle_maskDC_, 0, 0, collision_box_.right, collision_box_.bottom,
+		bitmap_mask_->handle_memoryDC_, collision_box_.left, collision_box_.top, SRCCOPY);
 
 	/*BitBlt(g_handle_off_screenDC, 0, 0, rect_.right, rect_.bottom,
 		bitmap_mask_->handle_memoryDC_, rect_.left, rect_.top, SRCCOPY);*/
