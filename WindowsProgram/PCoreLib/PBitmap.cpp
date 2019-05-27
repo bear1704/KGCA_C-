@@ -94,12 +94,11 @@ bool PBitmap::Load(std::wstring filename)
 
 bool PBitmap::Draw(float x, float y, RECT rect, DWORD draw_mode, float scale)
 {
-	/*BitBlt(g_handle_off_screenDC, x, y,
-		rect.right, rect.bottom,
-		handle_memoryDC_,
-		rect.left, rect.top,
-		draw_mode);*/
-	StretchBlt(g_handle_off_screenDC, x, y,
+	float half_width = (rect.right * scale - rect.left) / 2;
+	float half_height = (rect.bottom * scale - rect.top) / 2;
+
+	SetStretchBltMode(g_handle_off_screenDC, HALFTONE);
+	StretchBlt(g_handle_off_screenDC, x - half_width, y - half_height,
 		 rect.right * scale, rect.bottom * scale,
 		handle_memoryDC_,
 		rect.left, rect.top, rect.right ,rect.bottom,
@@ -109,7 +108,10 @@ bool PBitmap::Draw(float x, float y, RECT rect, DWORD draw_mode, float scale)
 
 bool PBitmap::Draw(float x, float y, RECT rect, BLENDFUNCTION bf, float scale)
 {
-	AlphaBlend(g_handle_off_screenDC, x, y,
+	float half_width = (rect.right * scale - rect.left) / 2;
+	float half_height = (rect.bottom * scale - rect.top) / 2;
+
+	AlphaBlend(g_handle_off_screenDC, x - half_width , y - half_height ,
 		rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
 		bf);
 

@@ -174,6 +174,8 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale)
 	int sprite_height = sprite.rect_list[current_played_spriteframe_].bottom;
 	int stretched_width = sprite.rect_list[current_played_spriteframe_].right * scale; 
 	int stretched_height = sprite.rect_list[current_played_spriteframe_].bottom * scale;
+	float half_width = stretched_width / 2;
+	float half_height = stretched_height / 2;
 
 	RECT rectangle_client;
 	GetClientRect(g_hWnd, &rectangle_client);
@@ -218,8 +220,8 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale)
 	//BitBlt(bitmap_offscreen_dc, 0, 0, sprite_width, sprite_height, g_handle_off_screenDC,
 	//	sprite.position_.x, sprite.position_.y, SRCCOPY); //원본과 다름, 주의!
 	StretchBlt(bitmap_offscreen_dc, 0, 0, stretched_width, stretched_height, g_handle_off_screenDC,
-		sprite.position_.x, sprite.position_.y, stretched_width, stretched_height, SRCCOPY); //원본과 다름, 주의!
-	//배경은 늘어난 크기만큼 잘라와 줘야 한다.
+		sprite.position_.x - half_width, sprite.position_.y - half_height, stretched_width, stretched_height, SRCCOPY);
+	//배경은 늘어난 크기만큼 잘라와 줘야 한다. 또한 센터 출력이므로 센터 - RECT/2만큼의 위치부터 가져와야 한다. 
 	DeleteDC(bitmap_offscreen_dc);
 
 	for (int y = 0; y < stretched_height; y++)
@@ -256,12 +258,14 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale)
 		}
 	}
 
+
+
 	bitmap_dc = CreateCompatibleDC(NULL);
 	SelectObject(bitmap_dc, handle_bitmap);
 
 	SetStretchBltMode(g_handle_off_screenDC, HALFTONE);
 	StretchBlt(g_handle_off_screenDC,
-		sprite.position_.x, sprite.position_.y, stretched_width, stretched_height,
+		sprite.position_.x - half_width, sprite.position_.y - half_height , stretched_width, stretched_height,
 		bitmap_dc, 0, 0, stretched_width, stretched_height,
 		SRCCOPY);
 
