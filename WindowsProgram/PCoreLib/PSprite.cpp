@@ -112,7 +112,7 @@ void PSprite::Draw()
 	{
 		bf.AlphaFormat = AC_SRC_ALPHA;
 		bitmap_->Draw(position_.x, position_.y,
-			rect_list[current_played_spriteframe_], bf);
+			rect_list[current_played_spriteframe_], bf, scale_);
 	}
 	else // RGB ÀÌ¹ÌÁö
 	{
@@ -124,7 +124,7 @@ void PSprite::Draw()
 		else
 		{
 			bitmap_->Draw(position_.x, position_.y,
-				rect_list[current_played_spriteframe_], SRCCOPY);
+				rect_list[current_played_spriteframe_], SRCCOPY, scale_);
 		}
 	}
 }

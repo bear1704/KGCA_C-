@@ -25,11 +25,11 @@ bool Sample::Init()
 	background.Set(background_stat);
 
 	PSpriteManager::GetInstance().LoadDataFromScript(L"sprite_coord.txt"); //스프라이트 총 3개의 rect데이터를 지닌 스프라이트 로드
-	sprites[0].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtNormal"), 0.5f, 5.0f);
+	sprites[0].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtNormal"), 0.5f, 1.2f);
 	sprites[0].SetPosition(100, 100);
-	sprites[1].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtAlpha"), 0.7f, 5.0f);
-	sprites[1].SetPosition(400, 100);
-	sprites[2].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtExplosion"), 0.9f,3.0f);
+	sprites[1].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtAlpha"), 0.7f, 1.4f);
+	sprites[1].SetPosition(395, 100);
+	sprites[2].Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"rtClash"), 0.2f,6.0f);
 	sprites[2].SetPosition(300, 300);
 	return true;
 }

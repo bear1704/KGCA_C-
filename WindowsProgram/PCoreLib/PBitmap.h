@@ -19,8 +19,8 @@ public:
 	virtual bool Render();
 	virtual bool Release();
 	virtual bool Load(std::wstring filename);
-	bool Draw(float x, float y, RECT rect, DWORD draw_mode);
-	bool Draw(float x, float y, RECT rect, BLENDFUNCTION bf);
+	bool Draw(float x, float y, RECT rect, DWORD draw_mode, float scale = 1.0f);
+	bool Draw(float x, float y, RECT rect, BLENDFUNCTION bf, float scale = 1.0f);
 	bool DrawColorKey(float x, float y, RECT rect, COLORREF key_color);
 
 

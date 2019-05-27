@@ -92,21 +92,25 @@ bool PBitmap::Load(std::wstring filename)
 	return true;
 }
 
-bool PBitmap::Draw(float x, float y, RECT rect, DWORD draw_mode)
+bool PBitmap::Draw(float x, float y, RECT rect, DWORD draw_mode, float scale)
 {
-	BitBlt(g_handle_off_screenDC, x, y,
+	/*BitBlt(g_handle_off_screenDC, x, y,
 		rect.right, rect.bottom,
 		handle_memoryDC_,
 		rect.left, rect.top,
+		draw_mode);*/
+	StretchBlt(g_handle_off_screenDC, x, y,
+		 rect.right * scale, rect.bottom * scale,
+		handle_memoryDC_,
+		rect.left, rect.top, rect.right ,rect.bottom,
 		draw_mode);
-
 	return true;
 }
 
-bool PBitmap::Draw(float x, float y, RECT rect, BLENDFUNCTION bf)
+bool PBitmap::Draw(float x, float y, RECT rect, BLENDFUNCTION bf, float scale)
 {
 	AlphaBlend(g_handle_off_screenDC, x, y,
-		rect.right, rect.bottom, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
+		rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
 		bf);
 
 	return true;
