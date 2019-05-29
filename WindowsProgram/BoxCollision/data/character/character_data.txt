@@ -1,2 +1,5 @@
-#DATA 1
-player 100.0 266 119 53 77
+#DATA 4
+player 100.0 0 0 53 77
+player2 0.0 0 0 50 81
+orange_mushroom_normal  150.0 0 0 59 56
+orange_mushroom_other 150.0 0 0 59 56

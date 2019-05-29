@@ -1,6 +1,6 @@
 #pragma once
 #include "PBitmapManager.h"
-#include "PRectObject.h"
+#include "PStd.h"
 
 struct SpriteDataInfo
 {
@@ -21,13 +21,14 @@ struct SpriteDataInfo
 	}
 };
 
-class PSprite : public PRectObject
+class PSprite
 {
 public:
 	PSprite();
 	~PSprite();
 
 private:
+
 	vector<RECT> rect_list;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
@@ -39,9 +40,11 @@ private:
 	bool isDead;
 	float alpha_;
 	float scale_;
-
+	pPoint position_;
 
 public:
+	PBitmap* bitmap_;
+	PBitmap* bitmap_mask_;
 	bool Init();
 	bool Frame();
 	bool Render();
@@ -51,10 +54,12 @@ public:
 	bool SetPosition(float x, float y);
 	void Play();
 	void Draw();
-	void Draw(int x, int y);
-	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale);
+	//void Draw(int x, int y);
+	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
 	void set_alpha_(float alpha);
-
+	PBitmap* get_bitmap_();
+	PBitmap* get_bitmap_mask_();
+	vector<RECT> get_rect_list_copy();
 
 };
 

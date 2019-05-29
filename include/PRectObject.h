@@ -1,5 +1,7 @@
 #pragma once
 #include "PBitmap.h"
+#include "PCollision.h"
+#include "PSprite.h"
 
 struct PRectObjectStat
 {
@@ -22,11 +24,14 @@ public:
 	PRectObject();
 	virtual ~PRectObject();
 protected:
-	PBitmap* bitmap_;
-	PBitmap* bitmap_mask_;
+	PSprite sprite_;
 	pPoint position_;
 	float move_speed_;
 	RECT collision_box_;
+	RECT collision_box_norm_;
+	float rotate_speed_;
+	float scale_;
+
 public:
 	virtual bool Init();
 	virtual bool Frame();
@@ -38,11 +43,15 @@ public:
 	virtual void Set(PRectObjectStat stat);
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
+	PSprite* get_sprite_();
 	pPoint get_position_();
 	float* get_position_xy(PXY axis);
 	RECT get_collision_rect_();
 	float get_moveSpeed_();
-	bool Load(std::wstring filename);
+	//bool Load(std::wstring filename);
+	void set_collision_box_(RECT input_box);
+	float get_scale_();
+
 
 };
 
