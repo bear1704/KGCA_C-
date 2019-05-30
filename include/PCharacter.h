@@ -1,8 +1,6 @@
 #include "PRectObject.h"
-#include "PSpriteManager.h"
-#include "PCharacterDataManager.h"
-
 #pragma once
+
 
 class PCharacter : public PRectObject
 {
@@ -18,16 +16,11 @@ public:
 	bool Release();
 protected:
 	multibyte_string character_name_;
+	float move_speed_;	
+	float gravity_;
 public:
 	void Movement();
+	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
+	void SetGravity(float gravity);
 
 };
-
-/*
-PBitmap* bitmap_;
-	PBitmap* bitmap_mask_;
-	pPoint position_;
-	float move_speed_;
-	RECT collision_box_;
-*/
-

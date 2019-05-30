@@ -9,7 +9,5 @@ public:
 public:
 	bool Init();
 	bool Frame();
-	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 };
-
+PCORE_RUN(L"aaaaaa", 0, 0, 800, 600);

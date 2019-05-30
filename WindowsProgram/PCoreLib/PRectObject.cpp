@@ -1,11 +1,9 @@
 #include "PRectObject.h"
-#include "PBitmapManager.h"
 
 
 PRectObject::PRectObject()
 {
-	move_speed_ = 0.0f;
-	position_ = { 0,0 }; //√ ±‚»≠
+	
 }
 
 
@@ -57,25 +55,21 @@ bool PRectObject::Release()
 }
 
 
-void PRectObject::Set(pPoint p, RECT collision_box, float move_speed, multibyte_string object_data_path, multibyte_string object_name,
-	multibyte_string sprite_path, multibyte_string sprite_name, float alpha, float scale)
+void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
-	PCharacterDataManager::GetInstance().LoadDataFromScript(object_data_path);
-	CharacterStatus* status = PCharacterDataManager::GetInstance().get_character_status_list_from_map(L"player");
-	scale_ = 1.0f;
+	PObjectDataManager::GetInstance().LoadDataFromScript(data_path);
+	ObjectInfo info = *(PObjectDataManager::GetInstance().get_object_info_list_from_map(object_name));
 
-	PSpriteManager::GetInstance().LoadDataFromScript(L"data/character/sprite/character_coord.txt");
+	object_name_ = info.object_name_;
+	position_ = position;
+	collision_box_norm_ = info.collision_box_;
+	alpha_ = info.alpha_;
+	scale_ = info.scale_;
 
-	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"playerCharacter"), 1.0f, scale_);
+	PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
+	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
 	sprite_.SetPosition(position_.x, position_.y);
-}
 
-void PRectObject::Set(PRectObjectStat stat)
-{
-	position_ = stat.position_;
-	move_speed_ = stat.move_speed_;
-	collision_box_norm_ = stat.collision_box_;
-	set_collision_box_(stat.collision_box_);
 }
 
 PBitmap * PRectObject::get_bitmap_()
@@ -114,11 +108,6 @@ RECT PRectObject::get_collision_rect_()
 	return collision_box_;
 }
 
-float PRectObject::get_moveSpeed_()
-{
-	return move_speed_;
-}
-
 //
 //
 //bool PRectObject::Load(std::wstring filename)
@@ -134,7 +123,7 @@ float PRectObject::get_moveSpeed_()
 //	return true;
 //}
 
-inline void PRectObject::set_collision_box_(RECT norm_box)
+void PRectObject::set_collision_box_(RECT norm_box)
 {
 
 	float half_width = norm_box.right / 2;

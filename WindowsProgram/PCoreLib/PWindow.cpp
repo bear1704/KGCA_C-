@@ -82,7 +82,7 @@ void PWindow::CenterWindow()
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 	int x = (screenWidth - (rtWindow.right - rtWindow.left)) / 2;
-	int y = (screenHeight - (rtWindow.right - rtWindow.left)) / 2;
+	int y = (screenHeight - (rtWindow.bottom - rtWindow.top)) / 2;
 	MoveWindow(hWnd, x, y, rtWindow.right - rtWindow.left, rtWindow.bottom - rtWindow.top, true);
 }
 

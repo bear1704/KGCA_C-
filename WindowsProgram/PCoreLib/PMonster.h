@@ -4,7 +4,7 @@
 class PMonster : public PCharacter
 {
 public:
-	PMonster(pPoint point, multibyte_string monster_name);
+	PMonster();
 	~PMonster();
 private:
 	multibyte_string monster_name_;

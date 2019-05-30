@@ -1,22 +1,11 @@
 #pragma once
 #include "PBitmap.h"
 #include "PCollision.h"
-#include "PSprite.h"
+#include "PSpriteManager.h"
+#include "PObjectDataManager.h"
+#include "PPhysicsModule.h"
 
-struct PRectObjectStat
-{
-	pPoint position_;
-	RECT collision_box_;
-	float move_speed_;
-	PRectObjectStat() {}
-	PRectObjectStat(pPoint position, RECT collision_box, float move_speed = 0.0f)
-	{
-		position_ = position;
-		collision_box_ = collision_box;
-		move_speed_ = move_speed;
-	}
 
-};
 
 class PRectObject
 {
@@ -26,11 +15,14 @@ public:
 protected:
 	PSprite sprite_;
 	pPoint position_;
-	float move_speed_;
 	RECT collision_box_;
 	RECT collision_box_norm_;
-	float rotate_speed_;
+	float alpha_;
 	float scale_;
+	multibyte_string object_name_;
+	PPhysicsModule physics_;
+private:
+
 
 public:
 	virtual bool Init();
@@ -38,18 +30,15 @@ public:
 	virtual bool Render();
 	virtual bool Release();
 
-	virtual void Set(float x, float y, RECT rect, float fSpeed);
-	virtual void Set(pPoint p, RECT rect, float fSpeed);
-	virtual void Set(PRectObjectStat stat);
+	virtual void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
 	PSprite* get_sprite_();
 	pPoint get_position_();
 	float* get_position_xy(PXY axis);
 	RECT get_collision_rect_();
-	float get_moveSpeed_();
 	//bool Load(std::wstring filename);
-	void set_collision_box_(RECT input_box);
+	void set_collision_box_(RECT norm_box);
 	float get_scale_();
 
 

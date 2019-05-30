@@ -18,11 +18,9 @@ public:
 	bool Release();
 public:
 	PCharacter* player_character_;
-	PMonster* monster_;
-	PMonster* tester_;
-	PMonster* tester2_;
-	PMonster* other_side_tester_;
-	float angle = 0.0f;
+	PMonster* monster_[3];
+	float angle = 0;
+
 
 };
 
