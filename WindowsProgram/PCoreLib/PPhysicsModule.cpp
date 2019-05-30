@@ -16,13 +16,17 @@ void PPhysicsModule::Jump(float first_time, pPoint & position, float jump_force,
 {
 	
 	float last_time = g_fGameTimer;
-	if ((last_time - first_time) <= jump_length && isjump == true)
+	if ((last_time - first_time) <= (jump_length - jump_length/5) && isjump == true)
 	{
 		position.y -= jump_force * g_SecondPerFrame;
 	}
-	else
+	else if ((last_time - first_time) >= (jump_length - jump_length / 5)&& (last_time - first_time) <= jump_length && isjump == true)
 	{
-		isjump = false;
+ 		position.y = position.y;
+	}
+	else 
+	{
+ 		isjump = false;
 	}
 	
 
