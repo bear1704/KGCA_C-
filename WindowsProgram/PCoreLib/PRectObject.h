@@ -5,15 +5,18 @@
 
 struct PRectObjectStat
 {
-	pPoint position_;
-	RECT collision_box_;
-	float move_speed_;
+	pPoint position;
+	RECT collision_box;
+	float alpha;
+	float scale;
+
 	PRectObjectStat() {}
-	PRectObjectStat(pPoint position, RECT collision_box, float move_speed = 0.0f)
+	PRectObjectStat(pPoint position, RECT collision_box, float alpha, float scale)
 	{
-		position_ = position;
-		collision_box_ = collision_box;
-		move_speed_ = move_speed;
+		this->position = position;
+		this->collision_box = collision_box;
+		this->alpha = alpha;
+		this->scale = scale;
 	}
 
 };
@@ -26,10 +29,10 @@ public:
 protected:
 	PSprite sprite_;
 	pPoint position_;
-	float move_speed_;
 	RECT collision_box_;
 	RECT collision_box_norm_;
 	float rotate_speed_;
+	float alpha_;
 	float scale_;
 
 public:
@@ -38,8 +41,7 @@ public:
 	virtual bool Render();
 	virtual bool Release();
 
-	virtual void Set(float x, float y, RECT rect, float fSpeed);
-	virtual void Set(pPoint p, RECT rect, float fSpeed);
+	virtual void Set(pPoint positoin, RECT collision_box, float alpha, float scale);
 	virtual void Set(PRectObjectStat stat);
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();

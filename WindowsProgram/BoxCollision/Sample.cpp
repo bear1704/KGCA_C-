@@ -47,19 +47,19 @@ bool  Sample::Render()
 {
 
 	//충돌 테스트 코드(콜리전박스 확인용) 
-	//RECT player_collision_rect = player_character_->get_collision_rect_();
-	//SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
-	//int prevMode = Rectangle(g_handle_off_screenDC, player_collision_rect.left, player_collision_rect.top,
-	//	player_collision_rect.right,
-	//	player_collision_rect.bottom);
-	//SetROP2(handle_off_screenDC, prevMode);
+	RECT player_collision_rect = player_character_->get_collision_rect_();
+	SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
+	int prevMode = Rectangle(g_handle_off_screenDC, player_collision_rect.left, player_collision_rect.top,
+		player_collision_rect.right,
+		player_collision_rect.bottom);
+	SetROP2(handle_off_screenDC, prevMode);
 
-	//RECT monster_collision_rect = monster_->get_collision_rect_();
-	//SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
-	//int prevMode1 = Rectangle(g_handle_off_screenDC, monster_collision_rect.left, monster_collision_rect.top,
-	//	monster_collision_rect.right,
-	//	monster_collision_rect.bottom);
-	//SetROP2(handle_off_screenDC, prevMode1);
+	RECT monster_collision_rect = monster_->get_collision_rect_();
+	SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
+	int prevMode1 = Rectangle(g_handle_off_screenDC, monster_collision_rect.left, monster_collision_rect.top,
+		monster_collision_rect.right,
+		monster_collision_rect.bottom);
+	SetROP2(handle_off_screenDC, prevMode1);
 
 
 
@@ -72,8 +72,9 @@ bool  Sample::Render()
 	other_side_tester_->Render();
 
 
-	PObjectRotateUtil::RotateAndDraw(player_character_->get_sprite_(), 0, 100, 300, angle);
-	angle += 0.1f;
+	PObjectRotateUtil::RotateAndDraw(other_side_tester_->get_sprite_(), 0, 300, 200, angle, 1.0f, 4.0f, true);
+	PObjectRotateUtil::RotateAndDraw(player_character_->get_sprite_(), 0,600, 200, angle, 0.3f, 2.0f,  false);
+	angle += 0.1f  * g_SecondPerFrame * 600.f;
 
 	return true;
 }

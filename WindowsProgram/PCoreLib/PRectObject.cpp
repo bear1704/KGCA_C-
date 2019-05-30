@@ -56,21 +56,18 @@ bool PRectObject::Release()
 	return true;
 }
 
-void PRectObject::Set(float x, float y, RECT rect, float fSpeed)
-{
-	position_.x = x;
-	position_.y = y;
-	collision_box_norm_ = rect;
-	set_collision_box_(rect);
-	move_speed_ = fSpeed;
-}
 
-void PRectObject::Set(pPoint p, RECT rect, float fSpeed)
+void PRectObject::Set(pPoint p, RECT collision_box, float move_speed, multibyte_string object_data_path, multibyte_string object_name,
+	multibyte_string sprite_path, multibyte_string sprite_name, float alpha, float scale)
 {
-	position_ = p;
-	collision_box_norm_ = rect;
-	set_collision_box_(rect);
-	move_speed_ = fSpeed;
+	PCharacterDataManager::GetInstance().LoadDataFromScript(object_data_path);
+	CharacterStatus* status = PCharacterDataManager::GetInstance().get_character_status_list_from_map(L"player");
+	scale_ = 1.0f;
+
+	PSpriteManager::GetInstance().LoadDataFromScript(L"data/character/sprite/character_coord.txt");
+
+	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"playerCharacter"), 1.0f, scale_);
+	sprite_.SetPosition(position_.x, position_.y);
 }
 
 void PRectObject::Set(PRectObjectStat stat)
