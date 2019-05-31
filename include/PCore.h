@@ -3,6 +3,7 @@
 #include "PInput.h"
 #include "PTimer.h"
 #include "PSoundMgr.h"
+#include "P2DCamera.h"
 
 
 class PCore :

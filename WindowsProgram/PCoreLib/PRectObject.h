@@ -34,6 +34,7 @@ public:
 	pPoint get_position_();
 	void set_position_(pPoint XY);
 	RECT get_collision_rect_();
+	RECT get_collision_rect_norm_();
 	//bool Load(std::wstring filename);
 	void set_collision_box_(RECT norm_box);
 	float get_scale_();

@@ -69,21 +69,6 @@ bool PBitmap::Load(std::wstring filename)
 	free(bitInfo);
 	CloseHandle(hFile);
 
-	// BITMAPFILEHEADER 
-	// BITMAPINFO
-	//    BITMAPFILEHEADER
-	//    RGB...
-	// PIXELDATA
-
-	/*m_hBitmap = (HBITMAP)LoadImage(
-		g_hInstance,
-		filename.c_str(),
-		IMAGE_BITMAP,
-		0, 0,
-		LR_DEFAULTSIZE | LR_LOADFROMFILE);
-	if (m_hBitmap == NULL) return false;*/
-
-
 	handle_memoryDC_ = CreateCompatibleDC(g_handle_screenDC);
 	SelectObject(handle_memoryDC_, handle_bitmap_);
 

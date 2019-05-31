@@ -103,6 +103,8 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 
 	collision_box_norm_ = scaled_collisionbox_norm;
+	set_collision_box_(collision_box_norm_);
+	P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //Ä³¸¯ÅÍ only
 }
 
 void PCharacter::SetGravity(float gravity)

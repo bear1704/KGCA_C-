@@ -141,8 +141,7 @@ void PSprite::Draw()
 		{
 			bitmap_->Draw(position_.x, position_.y,
 				rect_list[current_played_spriteframe_], SRCCOPY, scale_);
-			//SetROP2(g_handle_off_screenDC, R2_COPYPEN);
-			//Rectangle(g_handle_off_screenDC, 0, 0, 100, 100);
+
 		}
 	}
 }

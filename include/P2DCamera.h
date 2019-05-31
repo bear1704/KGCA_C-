@@ -1,5 +1,5 @@
 #pragma once
-#include "PStd.h"
+#include "PCollision.h"
 
 
 class P2DCamera : public PSingleton<P2DCamera>
@@ -10,26 +10,36 @@ public:
 
 private:
 	friend class PSingleton<P2DCamera>;
-	static RECT center_rect_;
-	static RECT camera_object_rect_;
-	static Vector2 move_dir_vector_;
-	
+	RECT center_rect_;
+	RECT camera_object_rect_;
+	pPoint world_size_;
+	Vector2 move_dir_vector_;
+	RECT* character_collision_rect;
+	PCollision collision_module;
 public:
-	static pPoint WorldToGamescreen(pPoint world_pos);
-	static pPoint GamescreenToWorld(pPoint screen_pos);
-	static void MoveCamera();
+	pPoint WorldToGamescreen(pPoint world_pos);
+	pPoint GamescreenToWorld(pPoint screen_pos);
+	RECT WorldToGamescreenRECT(RECT world_rect);
+	void MoveCamera();
 
-	static RECT get_center_rect_();
-	static void set_center_rect(RECT rect);
-	static RECT get_camera_object_rect_();
-	static void set_camera_object_rect_(RECT rect);
-	static Vector2 get_move_dir_vector_();
-	static void set_move_dir_vector_(Vector2 vec);
+	RECT get_center_rect_();
+	void set_center_rect(RECT rect);
+	RECT get_camera_object_rect_();
+	void set_camera_object_rect_(RECT rect);
+	Vector2 get_move_dir_vector_();
+	void set_move_dir_vector_(Vector2 vec);
+	pPoint get_world_size_();
+	void set_character_collision_rect(RECT* rect);
+	
 
 	bool Init();
 	bool Frame();
 	bool Render();
 	bool Release();	
+	
+private:
+	int center_rect_width = 350;
+	int center_rect_height = 350;
 	
 
 };

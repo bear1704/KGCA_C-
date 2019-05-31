@@ -7,29 +7,29 @@ public:
 	PCollision();
 	~PCollision();
 public:
-	static bool RectInRect(RECT rect1, RECT rect2)
+	static bool RectInRect(RECT collision_box1, RECT collision_box2)
 	{
-		POINT rect1_center;
-		POINT rect2_center;
-		rect1_center.x = (rect1.right + rect1.left) / 2;
-		rect1_center.y = (rect1.bottom + rect1.top) / 2;
-		rect2_center.x = (rect2.right+ rect2.left) / 2;
-		rect2_center.y = (rect2.bottom + rect2.top) / 2;
+		POINT collision_box1_center;
+		POINT collision_box2_center;
+		collision_box1_center.x = (collision_box1.right/2 + collision_box1.left);
+		collision_box1_center.y = (collision_box1.bottom/2 + collision_box1.top);
+		collision_box2_center.x = (collision_box2.right/2 + collision_box2.left);
+		collision_box2_center.y = (collision_box2.bottom/2 + collision_box2.top);
 
-		POINT rect1_radius;
-		POINT rect2_radius;
-		rect1_radius.x = rect1.right - rect1_center.x;
-		rect1_radius.y = rect1.bottom - rect1_center.y;
-		rect2_radius.x = rect2.right - rect2_center.x;
-		rect2_radius.y = rect2.bottom - rect2_center.y;
+		POINT collision_box1_radius;
+		POINT collision_box2_radius;
+		collision_box1_radius.x = collision_box1.right/2;
+		collision_box1_radius.y = collision_box1.bottom/2;
+		collision_box2_radius.x = collision_box2.right/2;
+		collision_box2_radius.y = collision_box2.bottom/2;
 
 		POINT between_rect_distance;
-		between_rect_distance.x = abs(rect2_center.x - rect1_center.x);
-		between_rect_distance.y = abs(rect2_center.y - rect1_center.y);
+		between_rect_distance.x = abs(collision_box2_center.x - collision_box1_center.x);
+		between_rect_distance.y = abs(collision_box2_center.y - collision_box1_center.y);
 
 
-		if (between_rect_distance.x <= (rect1_radius.x + rect2_radius.x) &&
-			between_rect_distance.y <= (rect1_radius.y + rect2_radius.y))
+		if (between_rect_distance.x <= (collision_box1_radius.x + collision_box2_radius.x) &&
+			between_rect_distance.y <= (collision_box1_radius.y + collision_box2_radius.y))
 		{
 			return true;
 		}

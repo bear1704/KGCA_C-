@@ -101,6 +101,11 @@ RECT PRectObject::get_collision_rect_()
 	return collision_box_;
 }
 
+RECT PRectObject::get_collision_rect_norm_()
+{
+	return collision_box_norm_;
+}
+
 //
 //
 //bool PRectObject::Load(std::wstring filename)
@@ -124,8 +129,8 @@ void PRectObject::set_collision_box_(RECT norm_box)
 
 	collision_box_.left = position_.x - half_width;
 	collision_box_.top = position_.y - half_height;
-	collision_box_.right = position_.x + half_width;
-	collision_box_.bottom = position_.y + half_height;
+	collision_box_.right = norm_box.right;
+	collision_box_.bottom = norm_box.bottom;
 
 }
 

@@ -14,6 +14,8 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
+public:
+	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 
 };
 
