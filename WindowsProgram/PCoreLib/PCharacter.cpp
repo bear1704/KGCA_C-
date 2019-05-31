@@ -37,7 +37,7 @@ bool PCharacter::Frame()
 
 bool PCharacter::Render()
 {
-	sprite_.Draw();
+	Spawn();
 	return true;
 }
 
@@ -98,7 +98,11 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 	PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
 	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
 	sprite_.SetPosition(position_.x, position_.y);
+	
+	RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
+	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 
+	collision_box_norm_ = scaled_collisionbox_norm;
 }
 
 void PCharacter::SetGravity(float gravity)

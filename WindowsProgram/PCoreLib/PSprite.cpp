@@ -146,37 +146,7 @@ void PSprite::Draw()
 		}
 	}
 }
-//void  PSprite::Draw(int x, int y)
-//{
-//	if (isDead)
-//		return;
-//
-//	BLENDFUNCTION bf;
-//	bf.BlendOp = AC_SRC_OVER;
-//	bf.BlendFlags = 0;
-//	bf.SourceConstantAlpha = alpha_;
-//	if (bitmap_->bitmap_info.bmBitsPixel == 32) //ARGB 이미지
-//	{
-//		bf.AlphaFormat = AC_SRC_ALPHA;
-//		bitmap_->Draw(x, y,
-//			rect_list[current_played_spriteframe_], bf);
-//	}
-//	else // RGB 이미지
-//	{
-//		bf.AlphaFormat = AC_SRC_OVER;
-//		if (bitmap_mask_ != nullptr)
-//		{
-//			bitmap_mask_->Draw(x, y, rect_list.at(current_played_spriteframe_), SRCAND);
-//			bitmap_->Draw(x, y, rect_list.at(current_played_spriteframe_), SRCINVERT);
-//			bitmap_mask_->Draw(x, y, rect_list.at(current_played_spriteframe_), SRCINVERT);
-//		}
-//		else
-//		{
-//			bitmap_->Draw(x, y,
-//				rect_list[current_played_spriteframe_], SRCCOPY);
-//		}
-//	}
-//}
+
 
 
 bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC, HDC maskDC)
@@ -206,8 +176,10 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colo
 		mask_bitmapDC = NULL;
 
 
-	RECT rectangle_client;
-	GetClientRect(g_hWnd, &rectangle_client);
+	//RECT rectangle_client;
+	//GetClientRect(g_hWnd, &rectangle_client);
+	//RECT rectangle_client_for_idiot;
+	//GetClientRect(g_hWnd, &rectangle_client_for_idiot);
 
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFO));
@@ -332,4 +304,9 @@ vector<RECT> PSprite::get_rect_list_copy()
 	}
 
 	return copyrect;
+}
+
+pPoint PSprite::get_position_()
+{
+	return position_;
 }

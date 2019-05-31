@@ -22,7 +22,7 @@ void PPhysicsModule::Jump(float first_time, pPoint & position, float jump_force,
 	}
 	else if ((last_time - first_time) >= (jump_length - jump_length / 5)&& (last_time - first_time) <= jump_length && isjump == true)
 	{
- 		position.y = position.y;
+   		position.y = position.y;
 	}
 	else 
 	{

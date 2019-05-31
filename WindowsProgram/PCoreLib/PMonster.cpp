@@ -28,7 +28,7 @@ bool PMonster::Frame()
 
 bool PMonster::Render()
 {
-	sprite_.Draw();
+	Spawn();
 	return false;
 }
 

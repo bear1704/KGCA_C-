@@ -19,22 +19,13 @@ bool PRectObject::Init()
 
 bool PRectObject::Frame()
 {
+	
 	return true;
 }
 
 bool PRectObject::Render()
 {
-	/*if (sprite_.bitmap_mask_ != nullptr)
-	{
-		sprite_.bitmap_mask_->Draw(position_.x, position_.y, collision_box_, SRCAND);
-		sprite_.bitmap_->Draw(position_.x, position_.y, collision_box_, SRCINVERT);
-		sprite_.bitmap_mask_->Draw(position_.x, position_.y, collision_box_, SRCINVERT);
-	}
-	else
-	{
-		sprite_.bitmap_->Draw(position_.x, position_.y, collision_box_, SRCCOPY);
-	}
-*/
+	Spawn();
 	return true;
 }
 
@@ -70,6 +61,12 @@ void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, 
 	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
 	sprite_.SetPosition(position_.x, position_.y);
 
+
+	RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
+	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
+
+	collision_box_norm_ = scaled_collisionbox_norm;
+
 }
 
 PBitmap * PRectObject::get_bitmap_()
@@ -92,14 +89,10 @@ pPoint PRectObject::get_position_()
 	return position_;
 }
 
-float * PRectObject::get_position_xy(PXY axis)
+void PRectObject::set_position_(pPoint xy)
 {
-	if (axis == PXY::X)
-		return &position_.x;
-	else if (axis == PXY::Y)
-		return &position_.y;
-
-	return nullptr;
+	position_.x = xy.x;
+	position_.y = xy.y;
 }
 
 
@@ -140,5 +133,14 @@ void PRectObject::set_collision_box_(RECT norm_box)
 float PRectObject::get_scale_()
 {
 	return scale_;
+}
+
+void PRectObject::Spawn()
+{
+	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());
+	pPoint origin_pos = sprite_.get_position_();
+	sprite_.SetPosition(scrpos.x, scrpos.y);
+	sprite_.Draw();
+	sprite_.SetPosition(origin_pos.x, origin_pos.y);
 }
 

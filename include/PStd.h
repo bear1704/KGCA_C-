@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 #pragma comment(lib, "PCoreLib.lib")
 #pragma comment(lib, "msimg32")
 
@@ -17,6 +18,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
  sample.InitWindow(hInstance, title,x, y, w, h);\
  sample.Run();\
 }
+
+
+
 
 typedef std::wstring unicode_string;
 typedef std::basic_string<TCHAR> multibyte_string;
@@ -84,7 +88,7 @@ typedef struct pPoint_
 	pPoint_() {};
 	pPoint_(float fx, float fy) { x = fx; y = fy; }
 
-}pPoint;
+}pPoint, Vector2;
 
 
 extern HWND g_hWnd;
@@ -95,6 +99,7 @@ extern PInputActionMap g_InputActionMap;
 extern HDC g_handle_off_screenDC;
 extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
+extern RECT g_rectangle_client;
 
 
 template <typename T>

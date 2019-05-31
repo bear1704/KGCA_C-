@@ -4,8 +4,7 @@
 #include "PSpriteManager.h"
 #include "PObjectDataManager.h"
 #include "PPhysicsModule.h"
-
-
+#include "P2DCamera.h"
 
 class PRectObject
 {
@@ -21,8 +20,6 @@ protected:
 	float scale_;
 	multibyte_string object_name_;
 	PPhysicsModule physics_;
-private:
-
 
 public:
 	virtual bool Init();
@@ -35,12 +32,12 @@ public:
 	PBitmap* get_bitmap_mask_();
 	PSprite* get_sprite_();
 	pPoint get_position_();
-	float* get_position_xy(PXY axis);
+	void set_position_(pPoint XY);
 	RECT get_collision_rect_();
 	//bool Load(std::wstring filename);
 	void set_collision_box_(RECT norm_box);
 	float get_scale_();
+	void Spawn();
 
 
 };
-

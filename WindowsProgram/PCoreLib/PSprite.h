@@ -60,6 +60,7 @@ public:
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
 	vector<RECT> get_rect_list_copy();
+	pPoint get_position_();
 
 };
 

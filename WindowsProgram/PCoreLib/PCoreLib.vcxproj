@@ -177,6 +177,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="P2DCamera.h" />
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PCharacter.h" />
@@ -198,6 +199,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="P2DCamera.cpp" />
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PCharacter.cpp" />

@@ -19,6 +19,9 @@ public:
 public:
 	PCharacter* player_character_;
 	PMonster* monster_[3];
+	PRectObject* map_;
+	
+	
 	float angle = 0;
 
 

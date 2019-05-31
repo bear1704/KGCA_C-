@@ -3,6 +3,8 @@
 PWindow* myWindow = nullptr;
 HWND g_hWnd;
 HINSTANCE g_hInstance;
+RECT g_rectangle_client;
+//RECT g_world_rect;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -43,6 +45,8 @@ bool PWindow::InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X, int Y, i
 	ShowWindow(hWnd, SW_SHOW);
 	CenterWindow();
 	GetClientRect(hWnd, &rectangle_client);
+	g_rectangle_client = rectangle_client;
+
 
 	return true;
 }
