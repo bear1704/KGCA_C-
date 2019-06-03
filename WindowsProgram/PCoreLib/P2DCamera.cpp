@@ -62,7 +62,7 @@ void P2DCamera::MoveCamera()
 		//OutputDebugString(wstr.c_str());
 
 		
-		std::wstring spf = std::to_wstring(center_rect_.left);
+	/*	std::wstring spf = std::to_wstring(center_rect_.left);
 		spf += L" --> 센터렉트 left \n";
 		std::wstring spf1 = std::to_wstring(move_dir_vector_.x);
 		spf1 += L" --> 이동방향벡터 x \n";
@@ -75,11 +75,10 @@ void P2DCamera::MoveCamera()
 
 
 		OutputDebugString(spf3.c_str());
+*/
 
-
-
-  		center_rect_.left += move_dir_vector_.x * camera_scroll_speed_ * g_SecondPerFrame; //센터렉트에 방향벡터만큼 더해준다.
-		center_rect_.top += move_dir_vector_.y * camera_scroll_speed_ * g_SecondPerFrame;
+			center_rect_.left += move_dir_vector_.x * camera_scroll_speed_ * g_SecondPerFrame; //센터렉트에 방향벡터만큼 더해준다.
+			center_rect_.top += move_dir_vector_.y * camera_scroll_speed_ * g_SecondPerFrame;
 
 
 	}
