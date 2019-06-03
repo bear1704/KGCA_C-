@@ -88,7 +88,18 @@ typedef struct pPoint_
 	pPoint_() {};
 	pPoint_(float fx, float fy) { x = fx; y = fy; }
 
-}pPoint, Vector2;
+
+}pPoint, Vector2, SizeXY;
+
+struct FLOAT_RECT
+{
+	float left;
+	float top;
+	float right;
+	float bottom;
+};
+
+
 
 
 extern HWND g_hWnd;

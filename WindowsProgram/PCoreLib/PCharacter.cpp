@@ -50,21 +50,26 @@ bool PCharacter::Release()
 void PCharacter::Movement()
 {
 
+	float cam_speed = P2DCamera::GetInstance().get_camera_scroll_speed_();
+
 	if (g_InputActionMap.upArrowKey == KEYSTAT::KEY_HOLD)
 	{
-		//Æ÷Å» Å°
+	//	P2DCamera::GetInstance().add_camera_position_(pPoint(0, -cam_speed));
 	}
-	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_PUSH)
+	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
 	{
-
+		//P2DCamera::GetInstance().add_camera_position_(pPoint(0, cam_speed));
+		position_.y += move_speed_ * g_SecondPerFrame;
 
 	}if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x -= move_speed_ * g_SecondPerFrame;
+		//P2DCamera::GetInstance().add_camera_position_(pPoint(-cam_speed, 0));
 	}
 	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x += move_speed_ * g_SecondPerFrame;
+		//P2DCamera::GetInstance().add_camera_position_(pPoint(cam_speed , 0));
 	}
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
