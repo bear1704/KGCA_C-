@@ -88,9 +88,22 @@ typedef struct pPoint_
 	pPoint_() {};
 	pPoint_(float fx, float fy) { x = fx; y = fy; }
 
+<<<<<<< HEAD
 
 }pPoint, Vector2, SizeXY;
 
+struct FLOAT_RECT
+{
+	float left;
+	float top;
+	float right;
+	float bottom;
+};
+
+
+=======
+}pPoint, Vector2;
+>>>>>>> parent of a57dcb4... RECT float화하기 전 백업
 
 
 extern HWND g_hWnd;
