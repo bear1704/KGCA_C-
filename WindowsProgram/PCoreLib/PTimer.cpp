@@ -27,7 +27,7 @@ bool PTimer::Frame()
 		frameCount = 0;
 		frameTime -= 1.0f;
 
-		_stprintf_s(csBuffer, _T("\nTimer:[%10.4f], FPS:[%d]"),
+		_stprintf_s(csBuffer, _T("Timer:[%10.4f], FPS:[%d]"),
 			accumulationTime, FPS);
 		OutputDebugString(csBuffer);
 	}
