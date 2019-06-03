@@ -110,7 +110,7 @@ extern PInputActionMap g_InputActionMap;
 extern HDC g_handle_off_screenDC;
 extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
-extern RECT g_rectangle_client;
+extern FLOAT_RECT g_rectangle_client;
 
 
 template <typename T>
