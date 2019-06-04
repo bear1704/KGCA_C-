@@ -1,12 +1,13 @@
 #pragma once
 #include "PStd.h"
+#include "PWallAndPlatform.h"
 #include <assert.h>
 
 struct ObjectInfo
 {
 	multibyte_string object_name_;
 	float move_speed_;
-	RECT collision_box_;
+	FLOAT_RECT collision_box_;
 	float alpha_;
 	float scale_;
 	multibyte_string sprite_path;

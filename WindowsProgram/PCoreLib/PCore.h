@@ -4,10 +4,10 @@
 #include "PTimer.h"
 #include "PSoundMgr.h"
 #include "P2DCamera.h"
+#include "PWallAndPlatform.h"
 
 
-class PCore :
-	public PWindow
+class PCore : public PWindow
 {
 public:
 	PCore();

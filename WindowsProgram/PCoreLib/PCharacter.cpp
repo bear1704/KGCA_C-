@@ -7,11 +7,6 @@ PCharacter::PCharacter()
 
 }
 
-PCharacter::PCharacter(float x, float y, multibyte_string character_name)
-{
-
-}
-
 PCharacter::~PCharacter()
 {
 }
@@ -27,10 +22,7 @@ bool PCharacter::Frame()
 {
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
-	Movement();
-	physics_.Gravity(position_, gravity_);
-	physics_.Jump(physics_.jump_init_time, position_, 600, 0.2f);
-
+	PlatformWallCollision();
 
 	return true;
 }
@@ -50,41 +42,6 @@ bool PCharacter::Release()
 void PCharacter::Movement()
 {
 
-	float cam_speed = P2DCamera::GetInstance().get_camera_scroll_speed_();
-
-	if (g_InputActionMap.upArrowKey == KEYSTAT::KEY_HOLD)
-	{
-	//	P2DCamera::GetInstance().add_camera_position_(pPoint(0, -cam_speed));
-	}
-	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
-	{
-		//P2DCamera::GetInstance().add_camera_position_(pPoint(0, cam_speed));
-		position_.y += move_speed_ * g_SecondPerFrame;
-
-	}if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
-	{
-		position_.x -= move_speed_ * g_SecondPerFrame;
-		//P2DCamera::GetInstance().add_camera_position_(pPoint(-cam_speed, 0));
-	}
-	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
-	{
-		position_.x += move_speed_ * g_SecondPerFrame;
-		//P2DCamera::GetInstance().add_camera_position_(pPoint(cam_speed , 0));
-	}
-	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
-	{
-		physics_.StartJump();
-	}
-
-
-	float aaaa = g_fGameTimer;
-	
-
-
-
-
-
-	sprite_.SetPosition(position_.x, position_.y);
 }
 
 void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
@@ -104,16 +61,62 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
 	sprite_.SetPosition(position_.x, position_.y);
 	
-	RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
+	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
-	P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //캐릭터 only
+	
 }
 
 void PCharacter::SetGravity(float gravity)
 {
 	gravity_ = gravity;
+}
+
+void PCharacter::set_collision_box_(FLOAT_RECT norm_box)
+{
+	float half_width = norm_box.right / 2;
+	float half_height = norm_box.bottom / 2;
+
+	collision_box_.left = position_.x - half_width;
+	collision_box_.top = position_.y - half_height;
+	collision_box_.right = norm_box.right;
+	collision_box_.bottom = norm_box.bottom;
+
+	foot_plane_.left = collision_box_.left;
+	foot_plane_.top = collision_box_.top + collision_box_.bottom - 5.0f;
+	foot_plane_.right = collision_box_.right;
+	foot_plane_.bottom = 5.0f;
+}
+
+FLOAT_RECT PCharacter::get_foot_plane_box()
+{
+	return foot_plane_;
+}
+
+void PCharacter::PlatformWallCollision()
+{
+	const std::vector<FLOAT_RECT>& platform_list = PWallAndPlatform::GetInstance().get_platform_list_();
+	const std::vector<FLOAT_RECT>& wall_list = PWallAndPlatform::GetInstance().get_wall_list_();
+	FLOAT_RECT current_collision_rect;
+	float correction_ylength = 0.0f;
+
+
+	for (auto it : platform_list)
+	{
+		if (PCollision::GetInstance().RectInRect(it, foot_plane_, correction_ylength) && !physics_.get_isjump())
+		{	
+			position_.y = it.top - collision_box_.bottom / 2;
+		}
+	}
+
+	for (auto it : wall_list)
+	{
+		if (PCollision::GetInstance().RectInRect(it, collision_box_))
+		{
+			OutputDebugString(L"뭐든 벽에 충돌 중!\n");
+		}
+	}
 }
 

@@ -1,9 +1,10 @@
 #pragma once
 #include "PCore.h"
-#include "PCharacter.h"
 #include "PMonster.h"
+#include "PPlayerCharacter.h"
 #include "PCollision.h"
 #include "PObjectRotateUtil.h"
+#include "PWallAndPlatform.h"
 
 class Sample : public PCore
 {
@@ -17,9 +18,10 @@ public:
 	bool Render();
 	bool Release();
 public:
-	PCharacter* player_character_;
+	PPlayerCharacter* player_character_;
 	PMonster* monster_[3];
 	PRectObject* map_;
+	void draw_test_rect(FLOAT_RECT rect);
 	
 	
 	float angle = 0;

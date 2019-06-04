@@ -88,6 +88,12 @@
     <ClInclude Include="P2DCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PPlayerCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PWallAndPlatform.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCore.cpp">
@@ -145,6 +151,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="P2DCamera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PPlayerCharacter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PWallAndPlatform.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

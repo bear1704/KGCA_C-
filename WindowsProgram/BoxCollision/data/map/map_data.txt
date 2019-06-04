@@ -1,2 +1,2 @@
 #DATA 1
-map1 0.0 0 0 1499 749 1.0 1.0 data/map/sprite/map_coord.txt map1
+map1 0.0 0 0 1499 749 1.0 1.0 data/map/sprite/map_coord.txt map1 data/map/map1_collision.txt

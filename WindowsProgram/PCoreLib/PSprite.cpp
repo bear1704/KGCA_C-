@@ -175,9 +175,9 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colo
 		mask_bitmapDC = NULL;
 
 
-	//RECT rectangle_client;
+	//FLOAT_RECT rectangle_client;
 	//GetClientRect(g_hWnd, &rectangle_client);
-	//RECT rectangle_client_for_idiot;
+	//FLOAT_RECT rectangle_client_for_idiot;
 	//GetClientRect(g_hWnd, &rectangle_client_for_idiot);
 
 	BITMAPINFO bmi;
@@ -218,7 +218,7 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colo
 
 	StretchBlt(bitmap_offscreen_dc, 0, 0, stretched_width, stretched_height, g_handle_off_screenDC,
 		sprite.position_.x - half_width, sprite.position_.y - half_height, stretched_width, stretched_height, SRCCOPY);
-	//배경은 늘어난 크기만큼 잘라와 줘야 한다. 또한 센터 출력이므로 센터 - RECT/2만큼의 위치부터 가져와야 한다. 
+	//배경은 늘어난 크기만큼 잘라와 줘야 한다. 또한 센터 출력이므로 센터 - FLOAT_RECT/2만큼의 위치부터 가져와야 한다. 
 	DeleteDC(bitmap_offscreen_dc);
 
 	for (int y = 0; y < stretched_height; y++)
@@ -292,9 +292,9 @@ PBitmap * PSprite::get_bitmap_mask_()
 	return bitmap_mask_;
 }
 
-vector<RECT> PSprite::get_rect_list_copy()
+vector<FLOAT_RECT> PSprite::get_rect_list_copy()
 {
-	vector<RECT> copyrect;
+	vector<FLOAT_RECT> copyrect;
 	copyrect.resize(rect_list.size());
 
 	for (int i = 0; i < rect_list.size(); i++)

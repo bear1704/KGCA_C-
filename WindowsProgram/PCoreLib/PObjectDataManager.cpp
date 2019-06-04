@@ -55,6 +55,8 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	TCHAR temp_buffer[256] = { 0, };
 	TCHAR sprite_path_buffer[256] = { 0, };
 	TCHAR sprite_name_buffer[64] = { 0, };
+	TCHAR map_data_buffer[256] = { 0, }; //맵 로드일 경우, 맵의 콜리전 정보(있으면)
+
 	int number_of_data = -1;
 
 	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(캐릭터 데이터 갯수)
@@ -64,18 +66,28 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	{
 	
 		ObjectInfo* status = new ObjectInfo();
-		RECT collision_box;
+		FLOAT_RECT collision_box;
 		float move_speed;
 		float alpha; float scale;
 
 		_fgetts(buffer, _countof(buffer), fp);
-		_stscanf_s(buffer, _T("%s%f%d%d%d%d%f%f%s%s"), temp_buffer, _countof(temp_buffer),
+		_stscanf_s(buffer, _T("%s%f%f%f%f%f%f%f%s%s%s"), temp_buffer, _countof(temp_buffer),
 			&move_speed ,&collision_box.left, &collision_box.top, &collision_box.right, &collision_box.bottom, &alpha, &scale, 
-			sprite_path_buffer, _countof(sprite_path_buffer), sprite_name_buffer, _countof(sprite_name_buffer));
+			sprite_path_buffer, _countof(sprite_path_buffer), sprite_name_buffer, _countof(sprite_name_buffer),
+			map_data_buffer, _countof(map_data_buffer));
 		
+
 		std::wstring character_name(temp_buffer);
 		std::wstring path(sprite_path_buffer);
 		std::wstring sprite_name(sprite_name_buffer);
+		std::wstring map_data(map_data_buffer);
+
+		if (map_data.compare(L"") != 0) //Map data가 있다는 의미
+		{
+			PWallAndPlatform::GetInstance().set_data_path_(map_data);
+			PWallAndPlatform::GetInstance().Set();
+		}
+
 
 		status->collision_box_ = collision_box;
 		status->move_speed_ = move_speed;

@@ -188,6 +188,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PMonster.h" />
     <ClInclude Include="PObjectRotateUtil.h" />
     <ClInclude Include="PPhysicsModule.h" />
+    <ClInclude Include="PPlayerCharacter.h" />
     <ClInclude Include="PPlayerController.h" />
     <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PSound.h" />
@@ -196,6 +197,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PSpriteManager.h" />
     <ClInclude Include="PStd.h" />
     <ClInclude Include="PTimer.h" />
+    <ClInclude Include="PWallAndPlatform.h" />
     <ClInclude Include="PWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +212,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PMonster.cpp" />
     <ClCompile Include="PObjectRotateUtil.cpp" />
     <ClCompile Include="PPhysicsModule.cpp" />
+    <ClCompile Include="PPlayerCharacter.cpp" />
     <ClCompile Include="PPlayerController.cpp" />
     <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PSound.cpp" />
@@ -217,6 +220,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PSprite.cpp" />
     <ClCompile Include="PSpriteManager.cpp" />
     <ClCompile Include="PTimer.cpp" />
+    <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

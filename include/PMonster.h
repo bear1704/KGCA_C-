@@ -16,6 +16,7 @@ public:
 	bool Release();
 public:
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
+	void MonsterWallCollision();
 
 };
 

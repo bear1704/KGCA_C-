@@ -68,6 +68,8 @@ bool PCore::PCoreInit()
 	PInput::GetInstance().Init();
 	PSoundMgr::GetInstance().Init();
 	P2DCamera::GetInstance().Init();
+	PCollision::GetInstance().Init();
+	PWallAndPlatform::GetInstance().Init();
 	return Init();
 }
 
