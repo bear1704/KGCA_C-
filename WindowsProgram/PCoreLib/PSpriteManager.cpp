@@ -63,7 +63,7 @@ void PSpriteManager::LoadDataFromScript(multibyte_string filepath)
 	for (int sprite = 0; sprite < number_of_sprites; sprite++)
 	{
 		//PSprite* sprite_instance = new PSprite(); //rect_list에 대한 소유권은 sprite 객체에 있다!
-		vector<FLOAT_RECT> load_rect_list;
+		vector<DOUBLE_RECT> load_rect_list;
 		SpriteDataInfo* sprite_data_info = new SpriteDataInfo();
 
 		_fgetts(buffer, _countof(buffer), fp);
@@ -80,7 +80,7 @@ void PSpriteManager::LoadDataFromScript(multibyte_string filepath)
 		int iCount = -1;
 		for (int i = 0; i < number_of_max_frames; i++)
 		{
-			FLOAT_RECT rt;
+			DOUBLE_RECT rt;
 			
 			_fgetts(buffer, _countof(buffer), fp);
 			_stscanf_s(buffer, _T("%d%f%f%f%f"), &iCount,&rt.left,

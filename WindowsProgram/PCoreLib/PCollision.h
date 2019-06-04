@@ -7,7 +7,7 @@ public:
 	PCollision();
 	~PCollision();
 public:
-	static bool RectInRect(FLOAT_RECT collision_box1, FLOAT_RECT collision_box2)
+	static bool RectInRect(DOUBLE_RECT collision_box1, DOUBLE_RECT collision_box2)
 	{
 		pPoint collision_box1_center;
 		pPoint collision_box2_center;

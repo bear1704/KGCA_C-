@@ -12,7 +12,7 @@ public:
 	HINSTANCE hInstance;
 	HWND hWnd;
 	LPCWSTR className;
-	FLOAT_RECT rectangle_client;
+	DOUBLE_RECT rectangle_client;
 
 
 public:

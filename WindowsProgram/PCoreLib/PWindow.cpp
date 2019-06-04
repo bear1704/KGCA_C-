@@ -3,8 +3,8 @@
 PWindow* myWindow = nullptr;
 HWND g_hWnd;
 HINSTANCE g_hInstance;
-FLOAT_RECT g_rectangle_client;
-//FLOAT_RECT g_world_rect;
+DOUBLE_RECT g_rectangle_client;
+//DOUBLE_RECT g_world_rect;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -83,7 +83,7 @@ bool PWindow::MyRegisterClass()
 void PWindow::CenterWindow()
 {
 	RECT rtWindow_;
-	FLOAT_RECT rtWindow;
+	DOUBLE_RECT rtWindow;
 	GetWindowRect(hWnd, &rtWindow_);
 	rtWindow = { (float)rtWindow_.left, (float)rtWindow_.top, (float)rtWindow_.right, (float)rtWindow_.bottom};
 

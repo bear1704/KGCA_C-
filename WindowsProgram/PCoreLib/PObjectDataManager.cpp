@@ -64,7 +64,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	{
 	
 		ObjectInfo* status = new ObjectInfo();
-		FLOAT_RECT collision_box;
+		DOUBLE_RECT collision_box;
 		float move_speed;
 		float alpha; float scale;
 

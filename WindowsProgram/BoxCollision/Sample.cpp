@@ -65,15 +65,15 @@ bool  Sample::Render()
 	monster_[1]->Render();
 
 	//충돌 테스트 코드(콜리전박스 확인용) 
-	FLOAT_RECT player_collision_rect = player_character_->get_collision_rect_();
-	FLOAT_RECT pc1 = P2DCamera::GetInstance().WorldToGamescreenRECT(player_collision_rect);
+	DOUBLE_RECT player_collision_rect = player_character_->get_collision_rect_();
+	DOUBLE_RECT pc1 = P2DCamera::GetInstance().WorldToGamescreenRECT(player_collision_rect);
 	SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
 	int prevMode = Rectangle(g_handle_off_screenDC, pc1.left, pc1.top, pc1.left + pc1.right, pc1.top + pc1.bottom);
 	SetROP2(handle_off_screenDC, prevMode);
 
-	FLOAT_RECT cam_center_pos_rect = P2DCamera::GetInstance().get_center_rect_();
+	DOUBLE_RECT cam_center_pos_rect = P2DCamera::GetInstance().get_center_rect_();
 	SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
-	FLOAT_RECT colrect = P2DCamera::GetInstance().WorldToGamescreenRECT(cam_center_pos_rect);
+	DOUBLE_RECT colrect = P2DCamera::GetInstance().WorldToGamescreenRECT(cam_center_pos_rect);
 	int prevMode1 = Rectangle(g_handle_off_screenDC, colrect.left, colrect.top,
 		colrect.left+colrect.right, colrect.top+colrect.bottom);
 	SetROP2(handle_off_screenDC, prevMode1);

@@ -27,14 +27,14 @@ pPoint P2DCamera::GamescreenToWorld(pPoint screen_pos)
 	return world_pos;
 }
 
-FLOAT_RECT P2DCamera::WorldToGamescreenRECT(FLOAT_RECT world_rect)
+DOUBLE_RECT P2DCamera::WorldToGamescreenRECT(DOUBLE_RECT world_rect)
 {
-	FLOAT_RECT game_screen_rect;
+	DOUBLE_RECT game_screen_rect;
 	game_screen_rect.left = world_rect.left - camera_object_rect_.left;
 	game_screen_rect.top = world_rect.top - camera_object_rect_.top;
 	game_screen_rect.right = world_rect.right;
 	game_screen_rect.bottom = world_rect.bottom;
-	//right,bottom은 FLOAT_RECT에선 단순 width,height이므로 건드리면 안 됨!
+	//right,bottom은 DOUBLE_RECT에선 단순 width,height이므로 건드리면 안 됨!
 	return game_screen_rect;
 }
 
@@ -84,22 +84,22 @@ void P2DCamera::MoveCamera()
 	}
 }
 
-FLOAT_RECT P2DCamera::get_center_rect_()
+DOUBLE_RECT P2DCamera::get_center_rect_()
 {
 	return center_rect_;
 }
 
-void P2DCamera::set_center_rect(FLOAT_RECT rect)
+void P2DCamera::set_center_rect(DOUBLE_RECT rect)
 {
 	center_rect_ = rect;
 }
 
-FLOAT_RECT P2DCamera::get_camera_object_rect_()
+DOUBLE_RECT P2DCamera::get_camera_object_rect_()
 {
 	return camera_object_rect_;
 }
 
-void P2DCamera::set_camera_object_rect_(FLOAT_RECT rect)
+void P2DCamera::set_camera_object_rect_(DOUBLE_RECT rect)
 {
 	camera_object_rect_ = rect;
 }
@@ -126,7 +126,7 @@ pPoint P2DCamera::get_world_size_()
 	return world_size_;
 }
 
-void P2DCamera::set_character_collision_rect(FLOAT_RECT * rect)
+void P2DCamera::set_character_collision_rect(DOUBLE_RECT * rect)
 {
 	character_collision_rect = rect;
 }
