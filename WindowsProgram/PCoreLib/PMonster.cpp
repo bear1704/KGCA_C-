@@ -55,7 +55,7 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
 	sprite_.SetPosition(position_.x, position_.y);
 
-	DOUBLE_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
+	RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 
 	collision_box_norm_ = scaled_collisionbox_norm;

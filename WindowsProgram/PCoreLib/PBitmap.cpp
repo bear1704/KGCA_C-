@@ -77,7 +77,7 @@ bool PBitmap::Load(std::wstring filename)
 	return true;
 }
 
-bool PBitmap::Draw(float x, float y, DOUBLE_RECT rect, DWORD draw_mode, float scale)
+bool PBitmap::Draw(float x, float y, RECT rect, DWORD draw_mode, float scale)
 {
 	float half_width = abs((rect.right * scale) / 2);
 	float half_height = abs((rect.bottom * scale) / 2);
@@ -91,7 +91,7 @@ bool PBitmap::Draw(float x, float y, DOUBLE_RECT rect, DWORD draw_mode, float sc
 	return true;
 }
 
-bool PBitmap::Draw(float x, float y, DOUBLE_RECT rect, BLENDFUNCTION bf, float scale)
+bool PBitmap::Draw(float x, float y, RECT rect, BLENDFUNCTION bf, float scale)
 {
 	float half_width = abs((rect.right * scale) / 2);
 	float half_height = abs((rect.bottom * scale) / 2);
@@ -103,7 +103,7 @@ bool PBitmap::Draw(float x, float y, DOUBLE_RECT rect, BLENDFUNCTION bf, float s
 	return true;
 }
 
-bool PBitmap::DrawColorKey(float x, float y, DOUBLE_RECT rect, COLORREF key_color)
+bool PBitmap::DrawColorKey(float x, float y, RECT rect, COLORREF key_color)
 {
 	TransparentBlt(
 		g_handle_off_screenDC, x, y, rect.right, rect.bottom, handle_memoryDC_, rect.left, rect.top,

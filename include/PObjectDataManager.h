@@ -6,7 +6,7 @@ struct ObjectInfo
 {
 	multibyte_string object_name_;
 	float move_speed_;
-	DOUBLE_RECT collision_box_;
+	RECT collision_box_;
 	float alpha_;
 	float scale_;
 	multibyte_string sprite_path;

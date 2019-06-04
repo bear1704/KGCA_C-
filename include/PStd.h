@@ -91,12 +91,12 @@ typedef struct pPoint_
 
 }pPoint, Vector2, SizeXY;
 
-struct DOUBLE_RECT
+struct FLOAT_RECT
 {
-	double left;
-	double top;
-	double right;
-	double bottom;
+	float left;
+	float top;
+	float right;
+	float bottom;
 };
 
 
@@ -110,7 +110,7 @@ extern PInputActionMap g_InputActionMap;
 extern HDC g_handle_off_screenDC;
 extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
-extern DOUBLE_RECT g_rectangle_client;
+extern RECT g_rectangle_client;
 
 
 template <typename T>

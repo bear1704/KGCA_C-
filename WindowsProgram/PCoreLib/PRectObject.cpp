@@ -62,7 +62,7 @@ void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, 
 	sprite_.SetPosition(position_.x, position_.y);
 
 
-	DOUBLE_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
+	RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 
 	collision_box_norm_ = scaled_collisionbox_norm;
@@ -96,12 +96,12 @@ void PRectObject::set_position_(pPoint xy)
 }
 
 
-DOUBLE_RECT PRectObject::get_collision_rect_()
+RECT PRectObject::get_collision_rect_()
 {
 	return collision_box_;
 }
 
-DOUBLE_RECT PRectObject::get_collision_rect_norm_()
+RECT PRectObject::get_collision_rect_norm_()
 {
 	return collision_box_norm_;
 }
@@ -121,7 +121,7 @@ DOUBLE_RECT PRectObject::get_collision_rect_norm_()
 //	return true;
 //}
 
-void PRectObject::set_collision_box_(DOUBLE_RECT norm_box)
+void PRectObject::set_collision_box_(RECT norm_box)
 {
 
 	float half_width = norm_box.right / 2;

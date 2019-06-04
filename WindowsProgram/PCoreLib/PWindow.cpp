@@ -3,8 +3,8 @@
 PWindow* myWindow = nullptr;
 HWND g_hWnd;
 HINSTANCE g_hInstance;
-DOUBLE_RECT g_rectangle_client;
-//DOUBLE_RECT g_world_rect;
+RECT g_rectangle_client;
+//RECT g_world_rect;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -44,9 +44,7 @@ bool PWindow::InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X, int Y, i
 
 	ShowWindow(hWnd, SW_SHOW);
 	CenterWindow();
-	RECT rectangle_client_;
-	GetClientRect(hWnd, &rectangle_client_);
-	rectangle_client = { (float)rectangle_client_.left, (float)rectangle_client_.top, (float)rectangle_client_.right, (float)rectangle_client_.bottom };
+	GetClientRect(hWnd, &rectangle_client);
 	g_rectangle_client = rectangle_client;
 
 
@@ -82,11 +80,8 @@ bool PWindow::MyRegisterClass()
 
 void PWindow::CenterWindow()
 {
-	RECT rtWindow_;
-	DOUBLE_RECT rtWindow;
-	GetWindowRect(hWnd, &rtWindow_);
-	rtWindow = { (float)rtWindow_.left, (float)rtWindow_.top, (float)rtWindow_.right, (float)rtWindow_.bottom};
-
+	RECT rtWindow;
+	GetWindowRect(hWnd, &rtWindow);
 
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);

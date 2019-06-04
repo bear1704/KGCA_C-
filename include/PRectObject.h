@@ -14,8 +14,8 @@ public:
 protected:
 	PSprite sprite_;
 	pPoint position_;
-	DOUBLE_RECT collision_box_;
-	DOUBLE_RECT collision_box_norm_;
+	RECT collision_box_;
+	RECT collision_box_norm_;
 	float alpha_;
 	float scale_;
 	multibyte_string object_name_;
@@ -33,10 +33,10 @@ public:
 	PSprite* get_sprite_();
 	pPoint get_position_();
 	void set_position_(pPoint XY);
-	DOUBLE_RECT get_collision_rect_();
-	DOUBLE_RECT get_collision_rect_norm_();
+	RECT get_collision_rect_();
+	RECT get_collision_rect_norm_();
 	//bool Load(std::wstring filename);
-	void set_collision_box_(DOUBLE_RECT norm_box);
+	void set_collision_box_(RECT norm_box);
 	float get_scale_();
 	void Spawn();
 

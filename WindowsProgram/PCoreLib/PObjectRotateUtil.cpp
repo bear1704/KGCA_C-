@@ -65,7 +65,7 @@ void PObjectRotateUtil::GetRotationBitmap(PSprite* one_frame_sprite, HDC& colorD
 	HDC srcDC = one_frame_sprite->bitmap_->handle_memoryDC_;
 	HDC destDC = CreateCompatibleDC(NULL);
 
-	DOUBLE_RECT sprite_rect = one_frame_sprite->get_rect_list_copy()[0];
+	RECT sprite_rect = one_frame_sprite->get_rect_list_copy()[0];
 
 		int rotate_direction = 1;
 
@@ -118,6 +118,6 @@ void PObjectRotateUtil::GetRotationBitmap(PSprite* one_frame_sprite, HDC& colorD
 
 		DeleteObject(bitmap);
 
-	//DOUBLE_RECT 회전방법 정의
+	//RECT 회전방법 정의
 
 }

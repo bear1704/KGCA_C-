@@ -64,12 +64,12 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	{
 	
 		ObjectInfo* status = new ObjectInfo();
-		DOUBLE_RECT collision_box;
+		RECT collision_box;
 		float move_speed;
 		float alpha; float scale;
 
 		_fgetts(buffer, _countof(buffer), fp);
-		_stscanf_s(buffer, _T("%s%f%f%f%f%f%f%f%s%s"), temp_buffer, _countof(temp_buffer),
+		_stscanf_s(buffer, _T("%s%f%d%d%d%d%f%f%s%s"), temp_buffer, _countof(temp_buffer),
 			&move_speed ,&collision_box.left, &collision_box.top, &collision_box.right, &collision_box.bottom, &alpha, &scale, 
 			sprite_path_buffer, _countof(sprite_path_buffer), sprite_name_buffer, _countof(sprite_name_buffer));
 		

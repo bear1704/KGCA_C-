@@ -4,7 +4,7 @@
 
 struct SpriteDataInfo
 {
-	std::vector<DOUBLE_RECT> rect_list;
+	std::vector<RECT> rect_list;
 	std::wstring bitmap_path;
 	int max_frame;
 	float lifetime;
@@ -29,7 +29,7 @@ public:
 
 private:
 
-	vector<DOUBLE_RECT> rect_list;
+	vector<RECT> rect_list;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
 	float lifetime_;
@@ -59,7 +59,7 @@ public:
 	void set_alpha_(float alpha);
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
-	vector<DOUBLE_RECT> get_rect_list_copy();
+	vector<RECT> get_rect_list_copy();
 	pPoint get_position_();
 
 };

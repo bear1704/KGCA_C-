@@ -1,3 +1,0 @@
-#SPRITE 1
-map1 1 777 1 data/map/sprite/map.bmp
-0 0 0 1499 895
