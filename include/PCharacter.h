@@ -18,6 +18,8 @@ protected:
 	FLOAT_RECT foot_plane_;
 	float move_speed_;	
 	float gravity_;
+	pPoint prev_position_;
+	bool is_ground;
 public:
 	void Movement();
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
@@ -25,5 +27,6 @@ public:
 	void set_collision_box_(FLOAT_RECT norm_box);
 	FLOAT_RECT get_foot_plane_box();
 	void PlatformWallCollision();
+	void SavePrevPosition();
 
 };

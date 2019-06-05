@@ -22,8 +22,10 @@ bool Sample::Init()
 	player_character_->SetGravity(450.f);
 	monster_[0] = new PMonster();
 	monster_[0]->Set(L"data/character/character_data.txt", L"orange_mushroom_normal", pPoint(1400, 500));
+	monster_[0]->SetGravity(450.f);
 	monster_[1] = new PMonster();
 	monster_[1]->Set(L"data/character/character_data.txt", L"orange_mushroom_other", pPoint(1000, 300));
+	monster_[1]->SetGravity(450.f);
 	map_ = new PRectObject();
 	map_->Set(L"data/map/map_data.txt", L"map1", pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2));
 	

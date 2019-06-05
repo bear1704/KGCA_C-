@@ -20,6 +20,7 @@ bool PPlayerCharacter::Init()
 
 bool PPlayerCharacter::Frame()
 {
+	SavePrevPosition();
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
 	Movement();
@@ -54,17 +55,18 @@ void PPlayerCharacter::Movement()
 	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		//P2DCamera::GetInstance().add_camera_position_(pPoint(0, cam_speed));
-		position_.y += move_speed_ * g_SecondPerFrame;
+		//position_.y += move_speed_ * g_SecondPerFrame;
+	
 
 	}if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x -= move_speed_ * g_SecondPerFrame;
-		//P2DCamera::GetInstance().add_camera_position_(pPoint(-cam_speed, 0));
+		
 	}
 	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x += move_speed_ * g_SecondPerFrame;
-		//P2DCamera::GetInstance().add_camera_position_(pPoint(cam_speed , 0));
+	
 	}
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{

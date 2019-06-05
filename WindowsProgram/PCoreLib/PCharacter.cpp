@@ -101,22 +101,40 @@ void PCharacter::PlatformWallCollision()
 	const std::vector<FLOAT_RECT>& wall_list = PWallAndPlatform::GetInstance().get_wall_list_();
 	FLOAT_RECT current_collision_rect;
 	float correction_ylength = 0.0f;
+	bool ground_collision_checked = false;
 
-
-	for (auto it : platform_list)
+	for (auto& it : platform_list)
 	{
 		if (PCollision::GetInstance().RectInRect(it, foot_plane_, correction_ylength) && !physics_.get_isjump())
-		{	
+		{
 			position_.y = it.top - collision_box_.bottom / 2;
+	
 		}
 	}
 
-	for (auto it : wall_list)
+	for (auto& it : wall_list)
 	{
 		if (PCollision::GetInstance().RectInRect(it, collision_box_))
 		{
-			OutputDebugString(L"뭐든 벽에 충돌 중!\n");
+			if (it.left - collision_box_.left < 0 && position_.x  < prev_position_.x) // 왼쪽 벽 충돌
+			{
+				position_.x = it.left + it.right + collision_box_.right / 2;
+				//position_.x = prev_position_.x;
+				OutputDebugString(L"Leftside\n");
+			}
+			else if(it.left - collision_box_.left > 0 && position_.x > prev_position_.x) //오른쪽 벽 충돌
+			{
+				position_.x = it.left - collision_box_.right / 2;
+				//position_.x = prev_position_.x;
+				OutputDebugString(L"RightSide\n");
+			}
+			
 		}
 	}
+}
+
+void PCharacter::SavePrevPosition()
+{
+	prev_position_ = position_;
 }
 

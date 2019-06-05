@@ -20,8 +20,11 @@ bool PMonster::Init()
 
 bool PMonster::Frame()
 {
+	SavePrevPosition();
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
+	Movement();
+	physics_.Gravity(position_, gravity_);
 	PlatformWallCollision();
 	return false;
 }
@@ -61,4 +64,9 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
 	//몬스터는 카메라를 붙이지 않음.
+}
+
+void PMonster::Movement()
+{
+	sprite_.SetPosition(position_.x, position_.y);
 }
