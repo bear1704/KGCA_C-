@@ -1,6 +1,31 @@
-#SPRITE 1
+#SPRITE 6
+cashshopbutton 4 777 777 data/UI/sprite/cashshopbutton.bmp
+0 0 0 32 32
+1 67 0 32 32
+2 34 0 32 32
+3 0 0 32 32
+eventbutton 4 777 777 data/UI/sprite/eventbutton.bmp
+0 0 0 32 32
+1 67 0 32 32
+2 34 0 32 32
+3 0 0 32 32
+characterbutton 4 777 777 data/UI/sprite/characterbutton.bmp
+0 0 0 32 32
+1 67 0 32 32
+2 34 0 32 32
+3 0 0 32 32
+communitybutton 4 777 777 data/UI/sprite/communitybutton.bmp
+0 0 0 32 32
+1 67 0 32 32
+2 34 0 32 32
+3 0 0 32 32
 optionbutton 4 777 777 data/UI/sprite/optionbutton.bmp
-0 0 0 33 34
-1 35 0 33 34
-2 0 0 33 34
-3 0 0 33 34
+0 0 0 32 32
+1 67 0 32 32
+2 34 0 32 32
+3 0 0 32 32
+menubutton 4 777 777 data/UI/sprite/menubutton.bmp
+0 0 0 32 32
+1 67 0 32 32
+2 34 0 32 32
+3 0 0 32 32

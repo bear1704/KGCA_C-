@@ -101,3 +101,4 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	}
 	fclose(fp);
 }
+

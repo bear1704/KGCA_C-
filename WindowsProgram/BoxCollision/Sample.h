@@ -6,6 +6,7 @@
 #include "PObjectRotateUtil.h"
 #include "PWallAndPlatform.h"
 #include "PButtonControl.h"
+#include "PImageControl.h"
 
 class Sample : public PCore
 {
@@ -18,13 +19,14 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
+	bool InitDataLoad();
 public:
 	PPlayerCharacter* player_character_;
 	PMonster* monster_[3];
 	PRectObject* map_;
-	PUIComponent comp_;
+	PUIComponent ui_componentset_list;
 	void draw_test_rect(FLOAT_RECT rect);
-	
+	void LoadUIDataFromScript(multibyte_string filepath);
 	
 	//버튼테스트
 	PButtonControl* button1;

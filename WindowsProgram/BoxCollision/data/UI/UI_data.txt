@@ -1,2 +1,7 @@
-#DATA 1
-optionbutton 0 0 0 40 45 1.0 1.0 data/UI/sprite/UI_sprite.txt optionbutton
+#DATA 6
+cashshopbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt cashshopbutton
+eventbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt eventbutton
+characterbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt characterbutton
+communitybutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt communitybutton
+optionbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt optionbutton
+menubutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt menubutton

@@ -2,11 +2,7 @@
 
 Sample::Sample()
 {
-	//player_character_ = new PCharacter(300,300, L"player");
-	//monster_ = new PMonster(pPoint(340,500), L"player2");
-	//tester_ = new PMonster(pPoint(500, 100), L"orange_mushroom_normal");
-	//tester2_ = new PMonster(pPoint(600, 100), L"orange_mushroom_normal");
-	//other_side_tester_ = new PMonster(pPoint(700, 100), L"orange_mushroom_other");
+
 }
 
 
@@ -17,30 +13,11 @@ Sample::~Sample()
 bool Sample::Init()
 {
 	
-	player_character_ = new PPlayerCharacter();
-	player_character_->Set(L"data/character/character_data.txt", L"player", pPoint(500, 600));
-	player_character_->SetGravity(450.f);
-	monster_[0] = new PMonster();
-	monster_[0]->Set(L"data/character/character_data.txt", L"orange_mushroom_normal", pPoint(1400, 500));
-	monster_[0]->SetGravity(450.f);
-	monster_[1] = new PMonster();
-	monster_[1]->Set(L"data/character/character_data.txt", L"orange_mushroom_other", pPoint(1000, 300));
-	monster_[1]->SetGravity(450.f);
-	map_ = new PRectObject();
-	map_->Set(L"data/map/map_data.txt", L"map1", pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2));
 	
-
+	InitDataLoad();
 	//버튼 테스트
-	PButtonControl* button2 = new PButtonControl();
-	button2->Set(L"D:/SC/C_C++/Git/WindowsProgram/Button/data/UI/UI_data.txt", L"optionbutton", pPoint(500, 500));
-	PUIComponent* button = (PButtonControl*)button2->Clone();
 
-	button1 = (PButtonControl*)button;
-
-	comp_.component_list.push_back(button1);
-
-
-	
+	ui_componentset_list.Init();
 	return true;
 }
 
@@ -51,9 +28,8 @@ bool Sample::Frame()
 	monster_[0]->Frame();
 	monster_[1]->Frame();
 	map_->Frame();
+	ui_componentset_list.Frame();
 	
-	//버튼 테스트
-	comp_.Frame();
 
 	return true;
 }
@@ -103,9 +79,7 @@ bool  Sample::Render()
 
 
 	//버튼 테스트
-	comp_.Draw();
-	draw_test_rect(comp_.get_collision_rect_());
-
+	ui_componentset_list.Render();
 	return true;
 }
 
@@ -115,6 +89,7 @@ bool Sample::Release()
 	monster_[0]->Release();
 	monster_[1]->Release();
 	map_->Release();
+	ui_componentset_list.Release();
 	return true;
 }
 
@@ -128,5 +103,88 @@ void Sample::draw_test_rect(FLOAT_RECT rect)
 	SetROP2(handle_off_screenDC, prevMode2);
 }
 
-PCORE_RUN(L"BoxCollision", 0, 0, 1024,768);
+bool Sample::InitDataLoad()
+{
+	player_character_ = new PPlayerCharacter();
+	player_character_->Set(L"data/character/character_data.txt", L"player", pPoint(500, 500));
+	player_character_->SetGravity(450.f);
+	monster_[0] = new PMonster();
+	monster_[0]->Set(L"data/character/character_data.txt", L"orange_mushroom_normal", pPoint(1400, 500));
+	monster_[0]->SetGravity(450.f);
+	monster_[1] = new PMonster();
+	monster_[1]->Set(L"data/character/character_data.txt", L"orange_mushroom_other", pPoint(1000, 300));
+	monster_[1]->SetGravity(450.f);
+	map_ = new PRectObject();
+	map_->Set(L"data/map/map_data.txt", L"map1", pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2));
+	
+	LoadUIDataFromScript(L"data/UI/UI_composition_list.txt");
+
+
+	return true;
+}
+
+void Sample::LoadUIDataFromScript(multibyte_string filepath)
+{
+	//#LIST 리스트갯수
+	//리스트이름 종속요소갯수 리스트포지션x 리스트포지션y
+	//객체이름 상대포지션x 상대포지션y 객체타입(버튼,이미지)
+
+	const std::wstring const path = L"data/UI/UI_data.txt";
+
+	FILE* fp = nullptr;
+
+	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
+	assert(fp != nullptr);
+
+	TCHAR buffer[256] = { 0, };
+	TCHAR temp_buffer[256] = { 0, };
+	TCHAR type_buffer[25] = { 0, };
+
+
+	int number_of_data = -1;
+
+	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(캐릭터 데이터 갯수)
+	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
+
+	for (int index_data = 0; index_data < number_of_data; index_data++)
+	{
+		int numberof_uiobject;
+		pPoint composition_pos;
+
+		_fgetts(buffer, _countof(buffer), fp);
+		_stscanf_s(buffer, _T("%s%d%f%f"), temp_buffer, _countof(temp_buffer),
+			&numberof_uiobject, &composition_pos.x, &composition_pos.y);
+
+		std::wstring UIcomposition_name(temp_buffer);
+
+		for (int i = 0; i < numberof_uiobject; i++)
+		{
+			pPoint relative_pos;
+			//ZeroMemory(type_buffer, sizeof(TCHAR) * 25);
+			_fgetts(buffer, _countof(buffer), fp);
+			_stscanf_s(buffer, _T("%s%f%f%s"), temp_buffer, _countof(temp_buffer),
+				&relative_pos.x, &relative_pos.y , type_buffer, _countof(type_buffer));
+
+			std::wstring type(type_buffer);
+			std::wstring uiobject_name(temp_buffer);
+
+			PUIComponent* uicomponent = new PUIComponent();
+			
+			if (type.compare(L"BUTTON") == 0)
+				uicomponent = (PButtonControl*) new PButtonControl();
+			else if (type.compare(L"IMAGE"))
+				uicomponent = (PImageControl*) new PImageControl();
+
+			uicomponent->Set(path, uiobject_name, pPoint(composition_pos.x + relative_pos.x, composition_pos.y + relative_pos.y));
+			ui_componentset_list.Add(uicomponent);
+
+		}
+
+		ui_componentset_list.set_position_(composition_pos);
+	}
+	fclose(fp);
+}
+
+
+PCORE_RUN(L"BoxCollision", 0, 0, 1024, 768);
 

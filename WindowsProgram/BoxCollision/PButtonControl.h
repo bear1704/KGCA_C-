@@ -19,10 +19,12 @@ public:
 public:
 	bool is_collision;
 	bool is_select;
-	void Draw() override;
 	//bool Set(TObjectInfo info, int id, int mask);
+	bool Init();
 	bool  Frame();
+	bool Render();
 	bool  Release();
+
 	PUIComponent* Clone();
 protected:
 	int current_sprite_rect;
