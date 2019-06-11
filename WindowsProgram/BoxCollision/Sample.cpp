@@ -18,7 +18,7 @@ bool Sample::Init()
 {
 	
 	player_character_ = new PPlayerCharacter();
-	player_character_->Set(L"data/character/character_data.txt", L"player", pPoint(500,600));
+	player_character_->Set(L"data/character/character_data.txt", L"player", pPoint(500, 600));
 	player_character_->SetGravity(450.f);
 	monster_[0] = new PMonster();
 	monster_[0]->Set(L"data/character/character_data.txt", L"orange_mushroom_normal", pPoint(1400, 500));
@@ -29,6 +29,17 @@ bool Sample::Init()
 	map_ = new PRectObject();
 	map_->Set(L"data/map/map_data.txt", L"map1", pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2));
 	
+
+	//버튼 테스트
+	PButtonControl* button2 = new PButtonControl();
+	button2->Set(L"D:/SC/C_C++/Git/WindowsProgram/Button/data/UI/UI_data.txt", L"optionbutton", pPoint(500, 500));
+	PUIComponent* button = (PButtonControl*)button2->Clone();
+
+	button1 = (PButtonControl*)button;
+
+	comp_.component_list.push_back(button1);
+
+
 	
 	return true;
 }
@@ -40,6 +51,9 @@ bool Sample::Frame()
 	monster_[0]->Frame();
 	monster_[1]->Frame();
 	map_->Frame();
+	
+	//버튼 테스트
+	comp_.Frame();
 
 	return true;
 }
@@ -85,6 +99,12 @@ bool  Sample::Render()
 	//PObjectRotateUtil::RotateAndDraw(monster_[1]->get_sprite_(), 0, 300, 200, angle, 1.0f, 4.0f, true);
 	//PObjectRotateUtil::RotateAndDraw(player_character_->get_sprite_(), 0,600, 200, angle, 0.3f, 2.0f,  false);
 	angle += 0.1f  * g_SecondPerFrame * 600.f;
+
+
+
+	//버튼 테스트
+	comp_.Draw();
+	draw_test_rect(comp_.get_collision_rect_());
 
 	return true;
 }

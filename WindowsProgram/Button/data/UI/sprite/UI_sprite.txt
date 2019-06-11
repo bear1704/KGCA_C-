@@ -1,0 +1,6 @@
+#SPRITE 1
+optionbutton 4 777 1 data/UI/sprite/optionbutton.bmp
+0 0 0 33 34
+1 35 0 33 34
+2 0 0 33 34
+3 0 0 33 34

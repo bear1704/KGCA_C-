@@ -24,6 +24,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 typedef std::wstring unicode_string;
 typedef std::basic_string<TCHAR> multibyte_string;
+using strkey = std::wstring;
 
 static std::wstring multibyte_to_unicode_str(std::string str)
 {
@@ -103,7 +104,9 @@ struct PVertex
 {
 	pPoint my_pos;
 	pPoint src_pos;
-	PVertex(){}
+
+	PVertex() {}
+
 	PVertex(float my_x, float my_y, float src_x, float src_y)
 	{
 		my_pos.x = my_x; my_pos.y = my_y;

@@ -45,6 +45,8 @@ bool PWindow::InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X, int Y, i
 	ShowWindow(hWnd, SW_SHOW);
 	CenterWindow();
 	RECT rectangle_client_int;
+	
+	g_hWnd = hWnd;
 	GetClientRect(hWnd, &rectangle_client_int);
 	rectangle_client = { (float)rectangle_client_int.left, (float)rectangle_client_int.top, (float)rectangle_client_int.right, (float)rectangle_client_int.bottom };
 	g_rectangle_client = rectangle_client;

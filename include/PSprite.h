@@ -61,6 +61,7 @@ public:
 	PBitmap* get_bitmap_mask_();
 	vector<FLOAT_RECT> get_rect_list_copy();
 	pPoint get_position_();
+	void set_current_played_spriteframe_(int current);
 
 };
 

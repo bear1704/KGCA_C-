@@ -40,12 +40,12 @@ bool PTimer::Frame()
 
 bool PTimer::Render()
 {
-	HDC hdc = GetDC(g_hWnd);
-	SetBkColor(hdc, RGB(255, 0, 0));
-	SetTextColor(hdc, RGB(0, 0, 255));
+	//HDC hdc = GetDC(g_hWnd);
+	SetBkColor(g_handle_off_screenDC, RGB(255, 0, 0));
+	SetTextColor(g_handle_off_screenDC, RGB(0, 0, 255));
 	//SetBkMode(hdc, TRANSPARENT);
-	TextOut(hdc, 0, 0, csBuffer, _tcslen(csBuffer));
-	ReleaseDC(g_hWnd, hdc);
+	TextOut(g_handle_off_screenDC, 0, 0, csBuffer, _tcslen(csBuffer));
+	//ReleaseDC(g_hWnd, hdc);
 	return true;
 }
 

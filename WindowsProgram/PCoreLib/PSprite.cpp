@@ -85,11 +85,16 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	rect_list = info.rect_list;
 
 	if (info.lifetime == 777)
+	{
 		remain_lifetime_ = 999999999.5f;
+		lifetime_ = 999999999.5f;
+	}
 	else
+	{
 		remain_lifetime_ = info.lifetime;
-
-	lifetime_ = info.lifetime;
+		lifetime_ = info.lifetime;
+	}
+	
 	position_.x = info.posX;
 	position_.y = info.posY;
 	number_of_max_spriteframe_ = info.max_frame;
@@ -308,4 +313,9 @@ vector<FLOAT_RECT> PSprite::get_rect_list_copy()
 pPoint PSprite::get_position_()
 {
 	return position_;
+}
+
+void PSprite::set_current_played_spriteframe_(int current)
+{
+	current_played_spriteframe_ = current;
 }

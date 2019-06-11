@@ -1,7 +1,7 @@
 #include "PInput.h"
 #include <iostream>
 
-POINT g_mousePos;
+POINT g_MousePos;
 PInputActionMap g_InputActionMap;
 
 
@@ -35,7 +35,7 @@ bool PInput::Frame()
 
 	GetCursorPos(&mousePos);
 	ScreenToClient(g_hWnd, &mousePos);
-	g_mousePos = mousePos;
+	g_MousePos = mousePos;
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -52,10 +52,6 @@ bool PInput::Frame()
 	g_InputActionMap.middleClick = mouseKeyState[1];
 	g_InputActionMap.rightClick = mouseKeyState[2];
 
-	if (g_InputActionMap.leftClick == KEYSTAT::KEY_PUSH)
-	{
-		OutputDebugStringW(L"aaaa");
-	}
 
 	return true;
 }

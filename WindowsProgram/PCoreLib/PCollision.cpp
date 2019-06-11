@@ -75,6 +75,32 @@ bool PCollision::RectInRect(FLOAT_RECT collision_box1, FLOAT_RECT collision_box2
 
 }
 
+bool PCollision::RectInPoint(FLOAT_RECT collision_box, pPoint point)
+{
+	if (collision_box.left <= point.x && collision_box.right >= point.x)
+	{
+		if (collision_box.top <= point.y && collision_box.bottom >= point.y)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool PCollision::RectInPoint(FLOAT_RECT collision_box, POINT point)
+{
+	if (collision_box.left <= point.x && collision_box.left + collision_box.right >= point.x)
+	{
+		if (collision_box.top <= point.y &&  collision_box.top + collision_box.bottom >= point.y)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 
 bool PCollision::Init()
 {

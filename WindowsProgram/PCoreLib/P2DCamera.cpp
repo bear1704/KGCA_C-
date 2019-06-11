@@ -40,6 +40,9 @@ FLOAT_RECT P2DCamera::WorldToGamescreenRECT(FLOAT_RECT world_rect)
 
 void P2DCamera::MoveCamera()
 {
+	if (this->character_collision_rect == nullptr)
+		return;
+
 	pPoint center_rect_center = pPoint(center_rect_.left + center_rect_.right / 2, center_rect_.top + center_rect_.bottom / 2);
 	pPoint character_rect_center = pPoint(character_collision_rect->left + character_collision_rect->right / 2,
 		character_collision_rect->top + character_collision_rect->bottom / 2);
@@ -134,6 +137,7 @@ float P2DCamera::get_camera_scroll_speed_()
 
 void P2DCamera::camera_correction()
 {
+
 	if (camera_object_rect_.left < 0)
 		camera_object_rect_.left = 0;
 	if(camera_object_rect_.top < 0)
