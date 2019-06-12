@@ -33,5 +33,6 @@ public:
 
 	ObjectInfo* get_object_info_list_from_map(std::wstring key);
 	void LoadDataFromScript(multibyte_string filepath);
+	void LoadDataFromScript(multibyte_string filepath);
 };
 

@@ -128,12 +128,14 @@
     <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PUIComponent.h" />
+    <ClInclude Include="PUIDataManager.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PUIComponent.cpp" />
+    <ClCompile Include="PUIDataManager.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
