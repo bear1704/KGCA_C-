@@ -1,0 +1,10 @@
+#CHARLIST 1
+MUSHROOMLAND 6 
+orange_mushroom_normal 0 50 MONSTER
+orange_mushroom_other 40 50 MONSTER
+orange_mushroom_normal 600 550 MONSTER
+orange_mushroom_normal 20 150 MONSTER
+orange_mushroom_normal 200 950 MONSTER
+orange_mushroom_normal 50 70 MONSTER
+nina 300 70 NPC
+player 500 500 PLAYER

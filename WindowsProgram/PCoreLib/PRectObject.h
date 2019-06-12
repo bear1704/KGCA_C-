@@ -20,6 +20,7 @@ protected:
 	float scale_;
 	multibyte_string object_name_;
 	PPhysicsModule physics_;
+	float move_speed_;
 
 public:
 	virtual bool Init();

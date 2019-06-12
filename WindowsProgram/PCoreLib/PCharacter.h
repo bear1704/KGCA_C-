@@ -16,7 +16,6 @@ public:
 protected:
 	multibyte_string character_name_;
 	FLOAT_RECT foot_plane_;
-	float move_speed_;	
 	float gravity_;
 	pPoint prev_position_;
 	bool is_ground;

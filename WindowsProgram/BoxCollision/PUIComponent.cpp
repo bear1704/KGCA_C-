@@ -12,7 +12,7 @@ PUIComponent::~PUIComponent()
 }
 bool PUIComponent::Init()
 {
-	for (auto iter : component_list_)
+	for (auto &iter : component_list_)
 	{
 		iter->Init();
 	}
@@ -20,7 +20,7 @@ bool PUIComponent::Init()
 }
 bool PUIComponent::Frame()
 {
-	for (auto iter : component_list_)
+	for (auto &iter : component_list_)
 	{
 		iter->Frame();
 	}
@@ -29,7 +29,7 @@ bool PUIComponent::Frame()
 
 bool PUIComponent::Render()
 {
-	for (auto iter : component_list_)
+	for (auto &iter : component_list_)
 	{
 		iter->Render();
 	}
@@ -38,7 +38,7 @@ bool PUIComponent::Render()
 
 bool PUIComponent::Release()
 {
-	for (auto iter : component_list_)
+	for (auto &iter : component_list_)
 	{
 		iter->Release();
 	}
@@ -56,7 +56,7 @@ void PUIComponent::Set(multibyte_string data_path, multibyte_string object_name,
 {
 
 		PObjectDataManager::GetInstance().LoadDataFromScript(data_path);
-		ObjectInfo info = *(PObjectDataManager::GetInstance().get_object_info_list_from_map(object_name));
+		ObjectInfo info = *(PObjectDataManager::GetInstance().get_rectobject_list_from_map(object_name));
 
 		object_name_ = info.object_name_;
 		position_ = position;
