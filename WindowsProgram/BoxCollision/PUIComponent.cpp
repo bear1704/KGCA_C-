@@ -76,4 +76,3 @@ void PUIComponent::Set(multibyte_string data_path, multibyte_string object_name,
 
 
 }
-

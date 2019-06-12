@@ -17,7 +17,7 @@ bool Sample::Init()
 	InitDataLoad();
 	//버튼 테스트
 
-	uicomp_settingbar->Init();
+	ui_componentset_list.Init();
 	return true;
 }
 
@@ -28,7 +28,7 @@ bool Sample::Frame()
 	monster_[0]->Frame();
 	monster_[1]->Frame();
 	map_->Frame();
-	uicomp_settingbar->Frame();
+	ui_componentset_list.Frame();
 	
 
 	return true;
@@ -79,7 +79,7 @@ bool  Sample::Render()
 
 
 	//버튼 테스트
-	uicomp_settingbar->Render();
+	ui_componentset_list.Render();
 	return true;
 }
 
@@ -89,7 +89,7 @@ bool Sample::Release()
 	monster_[0]->Release();
 	monster_[1]->Release();
 	map_->Release();
-	uicomp_settingbar->Release();
+	ui_componentset_list.Release();
 	return true;
 }
 
@@ -117,12 +117,73 @@ bool Sample::InitDataLoad()
 	map_ = new PRectObject();
 	map_->Set(L"data/map/map_data.txt", L"map1", pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2));
 	
-	PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
-	uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"CASHSHOPONLY");
+	LoadUIDataFromScript(L"data/UI/UI_composition_list.txt");
+
 
 	return true;
 }
 
+void Sample::LoadUIDataFromScript(multibyte_string filepath)
+{
+	//#LIST 리스트갯수
+	//리스트이름 종속요소갯수 리스트포지션x 리스트포지션y
+	//객체이름 상대포지션x 상대포지션y 객체타입(버튼,이미지)
+
+	const std::wstring const path = L"data/UI/UI_data.txt";
+
+	FILE* fp = nullptr;
+
+	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
+	assert(fp != nullptr);
+
+	TCHAR buffer[256] = { 0, };
+	TCHAR temp_buffer[256] = { 0, };
+	TCHAR type_buffer[25] = { 0, };
+
+
+	int number_of_data = -1;
+
+	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(캐릭터 데이터 갯수)
+	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
+
+	for (int index_data = 0; index_data < number_of_data; index_data++)
+	{
+		int numberof_uiobject;
+		pPoint composition_pos;
+
+		_fgetts(buffer, _countof(buffer), fp);
+		_stscanf_s(buffer, _T("%s%d%f%f"), temp_buffer, _countof(temp_buffer),
+			&numberof_uiobject, &composition_pos.x, &composition_pos.y);
+
+		std::wstring UIcomposition_name(temp_buffer);
+
+		for (int i = 0; i < numberof_uiobject; i++)
+		{
+			pPoint relative_pos;
+			//ZeroMemory(type_buffer, sizeof(TCHAR) * 25);
+			_fgetts(buffer, _countof(buffer), fp);
+			_stscanf_s(buffer, _T("%s%f%f%s"), temp_buffer, _countof(temp_buffer),
+				&relative_pos.x, &relative_pos.y , type_buffer, _countof(type_buffer));
+
+			std::wstring type(type_buffer);
+			std::wstring uiobject_name(temp_buffer);
+
+			PUIComponent* uicomponent = new PUIComponent();
+			
+			if (type.compare(L"BUTTON") == 0)
+				uicomponent = (PButtonControl*) new PButtonControl();
+			else if (type.compare(L"IMAGE"))
+				uicomponent = (PImageControl*) new PImageControl();
+
+			uicomponent->Set(path, uiobject_name, pPoint(composition_pos.x + relative_pos.x, composition_pos.y + relative_pos.y));
+			ui_componentset_list.Add(uicomponent);
+
+		}
+
+		ui_componentset_list.set_position_(composition_pos);
+	}
+	fclose(fp);
+}
 
 
 PCORE_RUN(L"BoxCollision", 0, 0, 1024, 768);

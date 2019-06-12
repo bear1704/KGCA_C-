@@ -41,7 +41,6 @@ private:
 	float alpha_;
 	float scale_;
 	pPoint position_;
-	multibyte_string sprite_name;
 
 public:
 	PBitmap* bitmap_;

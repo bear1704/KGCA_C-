@@ -22,5 +22,6 @@ public:
 	virtual bool Release() override;
 	void Add(PUIComponent* component);
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
+
 };
 
