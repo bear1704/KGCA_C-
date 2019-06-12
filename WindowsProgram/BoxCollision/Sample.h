@@ -5,8 +5,7 @@
 #include "PCollision.h"
 #include "PObjectRotateUtil.h"
 #include "PWallAndPlatform.h"
-#include "PButtonControl.h"
-#include "PImageControl.h"
+#include "PUIDataManager.h"
 
 class Sample : public PCore
 {
@@ -24,9 +23,9 @@ public:
 	PPlayerCharacter* player_character_;
 	PMonster* monster_[3];
 	PRectObject* map_;
-	PUIComponent ui_componentset_list;
+	PUIComponent* uicomp_settingbar;
 	void draw_test_rect(FLOAT_RECT rect);
-	void LoadUIDataFromScript(multibyte_string filepath);
+	
 	
 	//버튼테스트
 	PButtonControl* button1;
