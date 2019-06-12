@@ -56,7 +56,7 @@ void PUIComponent::Set(multibyte_string data_path, multibyte_string object_name,
 {
 
 		PObjectDataManager::GetInstance().LoadDataFromScript(data_path);
-		ObjectInfo info = *(PObjectDataManager::GetInstance().get_rectobject_list_from_map(object_name));
+		ObjectInfo info = *(PObjectDataManager::GetInstance().get_object_info_list_from_map(object_name));
 
 		object_name_ = info.object_name_;
 		position_ = position;

@@ -31,7 +31,7 @@ bool PObjectDataManager::Release()
 	return false;
 }
 
-ObjectInfo* PObjectDataManager::get_rectobject_list_from_map(std::wstring key)
+ObjectInfo* PObjectDataManager::get_object_info_list_from_map(std::wstring key)
 {
 	auto iter = rectobject_list.find(key);
 	if (iter != rectobject_list.end())
