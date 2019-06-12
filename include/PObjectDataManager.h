@@ -15,14 +15,14 @@ struct ObjectInfo
 };
 
 
-class PObjectDataManager : public PSingleton<PObjectDataManager>
+class PObjectInfoManager : public PSingleton<PObjectInfoManager>
 {//name(key) movespeed collisionboxsize alpha scale 
 public:
-	PObjectDataManager();
-	~PObjectDataManager();
+	PObjectInfoManager();
+	~PObjectInfoManager();
 
 private:
-	friend class PSingleton<PObjectDataManager>;
+	friend class PSingleton<PObjectInfoManager>;
 	std::map<std::wstring, ObjectInfo*> object_info_list;
 public:
 	bool Init() override;

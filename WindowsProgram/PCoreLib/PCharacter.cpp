@@ -13,7 +13,7 @@ PCharacter::~PCharacter()
 
 bool PCharacter::Init()
 {
-
+	HP_ = 930.0f;
 
 	return true;
 }
@@ -46,8 +46,8 @@ void PCharacter::Movement()
 
 void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
-	PObjectDataManager::GetInstance().LoadDataFromScript(data_path);
-	ObjectInfo info = *(PObjectDataManager::GetInstance().get_object_info_list_from_map(object_name));
+	PObjectInfoManager::GetInstance().LoadDataFromScript(data_path);
+	ObjectInfo info = *(PObjectInfoManager::GetInstance().get_object_info_list_from_map(object_name));
 
 	character_name_ = info.object_name_;
 	object_name_ = info.object_name_;
@@ -69,10 +69,7 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 	
 }
 
-void PCharacter::SetGravity(float gravity)
-{
-	gravity_ = gravity;
-}
+
 
 void PCharacter::set_collision_box_(FLOAT_RECT norm_box)
 {

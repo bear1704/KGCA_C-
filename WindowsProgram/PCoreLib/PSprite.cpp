@@ -319,3 +319,11 @@ void PSprite::set_current_played_spriteframe_(int current)
 {
 	current_played_spriteframe_ = current;
 }
+
+void PSprite::set_rect_list_size(FLOAT_RECT size)
+{
+	for (int i = 0; i < rect_list.size(); i++)
+	{
+		rect_list[i] = size;
+	}
+}

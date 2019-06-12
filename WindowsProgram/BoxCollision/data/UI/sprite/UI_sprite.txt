@@ -1,4 +1,4 @@
-#SPRITE 6
+#SPRITE 11
 cashshopbutton 4 777 777 data/UI/sprite/cashshopbutton.bmp
 0 0 0 32 32
 1 67 0 32 32
@@ -29,3 +29,13 @@ menubutton 4 777 777 data/UI/sprite/menubutton.bmp
 1 67 0 32 32
 2 34 0 32 32
 3 0 0 32 32
+hpbar 1 777 777 data/UI/sprite/hpbar.bmp
+0 0 0 170 12
+mpbar 1 777 777 data/UI/sprite/mpbar.bmp
+0 0 0 170 12
+guage 1 777 777 data/UI/sprite/guage.bmp
+0 0 0 204 70
+guage_background 1 777 777 data/UI/sprite/guage_background.bmp
+0 0 0 198 37
+quickslot 1 777 777 data/UI/sprite/quickslot.bmp
+0 0 0 158 79

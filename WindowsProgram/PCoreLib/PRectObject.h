@@ -2,9 +2,19 @@
 #include "PBitmap.h"
 #include "PCollision.h"
 #include "PSpriteManager.h"
-#include "PObjectDataManager.h"
+#include "PObjectInfoManager.h"
 #include "PPhysicsModule.h"
 #include "P2DCamera.h"
+
+enum class Type
+{
+	PLAYER,
+	MONSTER,
+	NPC,
+	MAP,
+
+};
+
 
 class PRectObject
 {
@@ -20,7 +30,8 @@ protected:
 	float scale_;
 	multibyte_string object_name_;
 	PPhysicsModule physics_;
-
+	float gravity_;
+	Type type_;
 public:
 	virtual bool Init();
 	virtual bool Frame();
@@ -39,6 +50,9 @@ public:
 	void set_collision_box_(FLOAT_RECT norm_box);
 	float get_scale_();
 	void Spawn();
+	void set_gravity_(float gravity);
+	void set_type_(Type type);
+	Type get_type_();
 
 
 };

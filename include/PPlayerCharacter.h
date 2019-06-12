@@ -7,7 +7,10 @@ public:
 	~PPlayerCharacter();
 private:
 	multibyte_string player_character_name_;
-
+protected:
+	int level_;
+	int HP_;
+	int MP_;
 public:
 	bool Init();
 	bool Frame();

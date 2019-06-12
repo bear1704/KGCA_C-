@@ -19,7 +19,6 @@ bool PRectObject::Init()
 
 bool PRectObject::Frame()
 {
-	
 	return true;
 }
 
@@ -48,8 +47,8 @@ bool PRectObject::Release()
 
 void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
-	PObjectDataManager::GetInstance().LoadDataFromScript(data_path);
-	ObjectInfo info = *(PObjectDataManager::GetInstance().get_object_info_list_from_map(object_name));
+	PObjectInfoManager::GetInstance().LoadDataFromScript(data_path);
+	ObjectInfo info = *(PObjectInfoManager::GetInstance().get_object_info_list_from_map(object_name));
 
 	object_name_ = info.object_name_;
 	position_ = position;
@@ -149,3 +148,17 @@ void PRectObject::Spawn()
 	sprite_.SetPosition(origin_pos.x, origin_pos.y);
 }
 
+void PRectObject::set_gravity_(float gravity)
+{
+	gravity_ = gravity;
+}
+
+void PRectObject::set_type_(Type type)
+{
+	type_ = type;
+}
+
+Type PRectObject::get_type_()
+{
+	return type_;
+}

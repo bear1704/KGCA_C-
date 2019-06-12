@@ -91,11 +91,11 @@ void PUIDataManager::LoadDataFromScript(multibyte_string filepath)
 			std::wstring type(type_buffer);
 			std::wstring uiobject_name(temp_buffer);
 
-			PUIComponent* uicomponent = new PUIComponent();
+			PUIComponent* uicomponent = nullptr;
 
 			if (type.compare(L"BUTTON") == 0)
 				uicomponent = (PButtonControl*) new PButtonControl();
-			else if (type.compare(L"IMAGE"))
+			else if (type.compare(L"IMAGE") == 0)
 				uicomponent = (PImageControl*) new PImageControl();
 
 			uicomponent->Set(path, uiobject_name, pPoint(composition_pos.x + relative_pos.x, composition_pos.y + relative_pos.y));

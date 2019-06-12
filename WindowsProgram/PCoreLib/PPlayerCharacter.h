@@ -8,6 +8,8 @@ public:
 private:
 	multibyte_string player_character_name_;
 
+protected:
+
 public:
 	bool Init();
 	bool Frame();

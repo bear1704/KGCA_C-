@@ -63,6 +63,7 @@ public:
 	vector<FLOAT_RECT> get_rect_list_copy();
 	pPoint get_position_();
 	void set_current_played_spriteframe_(int current);
+	void set_rect_list_size(FLOAT_RECT size);
 
 };
 

@@ -181,7 +181,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PCharacter.h" />
-    <ClInclude Include="PObjectDataManager.h" />
+    <ClInclude Include="PObjectInfoManager.h" />
     <ClInclude Include="PCollision.h" />
     <ClInclude Include="PCore.h" />
     <ClInclude Include="PInput.h" />
@@ -205,7 +205,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PCharacter.cpp" />
-    <ClCompile Include="PObjectDataManager.cpp" />
+    <ClCompile Include="PObjectInfoManager.cpp" />
     <ClCompile Include="PCollision.cpp" />
     <ClCompile Include="PCore.cpp" />
     <ClCompile Include="PInput.cpp" />
