@@ -39,6 +39,10 @@ bool PCharacter::Release()
 	return true;
 }
 
+void PCharacter::StatusSet(multibyte_string status_path, multibyte_string object_name)
+{
+}
+
 void PCharacter::Movement()
 {
 

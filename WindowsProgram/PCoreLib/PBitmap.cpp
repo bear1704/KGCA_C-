@@ -96,12 +96,26 @@ bool PBitmap::Draw(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float sc
 	float half_width = abs((rect.right * scale) / 2);
 	float half_height = abs((rect.bottom * scale) / 2);
 
+	//HDC reversal_DC = CreateCompatibleDC(handle_memoryDC_);
+
 	AlphaBlend(g_handle_off_screenDC, x - half_width , y - half_height ,
+		rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
+		bf);
+
+
+	return true;
+}
+
+bool PBitmap::DrawNotCenter(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float scale)
+{
+
+	AlphaBlend(g_handle_off_screenDC, x, y,
 		rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
 		bf);
 
 	return true;
 }
+
 
 bool PBitmap::DrawColorKey(float x, float y, FLOAT_RECT rect, COLORREF key_color)
 {

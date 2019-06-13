@@ -37,6 +37,7 @@ public:
 	virtual bool Frame();
 	virtual bool Render();
 	virtual bool Release();
+	virtual void StatusSet(multibyte_string status_path, multibyte_string object_name);
 
 	virtual void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	PBitmap* get_bitmap_();
@@ -53,6 +54,7 @@ public:
 	void set_gravity_(float gravity);
 	void set_type_(Type type);
 	Type get_type_();
+	multibyte_string get_object_name();
 
 
 };

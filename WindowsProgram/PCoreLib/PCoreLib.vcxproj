@@ -180,7 +180,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="P2DCamera.h" />
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
+    <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PCharacter.h" />
+    <ClInclude Include="PImageControl.h" />
+    <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
     <ClInclude Include="PCollision.h" />
     <ClInclude Include="PCore.h" />
@@ -190,6 +193,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PPhysicsModule.h" />
     <ClInclude Include="PPlayerCharacter.h" />
     <ClInclude Include="PPlayerController.h" />
+    <ClInclude Include="PPlayerStatus.h" />
     <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
@@ -197,6 +201,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PSpriteManager.h" />
     <ClInclude Include="PStd.h" />
     <ClInclude Include="PTimer.h" />
+    <ClInclude Include="PUIComponent.h" />
+    <ClInclude Include="PUIDataManager.h" />
     <ClInclude Include="PWallAndPlatform.h" />
     <ClInclude Include="PWindow.h" />
   </ItemGroup>
@@ -204,7 +210,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="P2DCamera.cpp" />
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />
+    <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PCharacter.cpp" />
+    <ClCompile Include="PImageControl.cpp" />
+    <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />
     <ClCompile Include="PCollision.cpp" />
     <ClCompile Include="PCore.cpp" />
@@ -214,12 +223,15 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PPhysicsModule.cpp" />
     <ClCompile Include="PPlayerCharacter.cpp" />
     <ClCompile Include="PPlayerController.cpp" />
+    <ClCompile Include="PPlayerStatus.cpp" />
     <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
     <ClCompile Include="PSprite.cpp" />
     <ClCompile Include="PSpriteManager.cpp" />
     <ClCompile Include="PTimer.cpp" />
+    <ClCompile Include="PUIComponent.cpp" />
+    <ClCompile Include="PUIDataManager.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />
   </ItemGroup>

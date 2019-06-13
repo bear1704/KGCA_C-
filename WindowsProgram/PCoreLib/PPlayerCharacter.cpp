@@ -9,12 +9,12 @@ PPlayerCharacter::PPlayerCharacter()
 
 PPlayerCharacter::~PPlayerCharacter()
 {
+	
 }
 
 bool PPlayerCharacter::Init()
 {
-
-
+	status.Init();
 	return true;
 }
 
@@ -27,19 +27,21 @@ bool PPlayerCharacter::Frame()
 	physics_.Gravity(position_, gravity_);
 	physics_.Jump(physics_.jump_init_time, position_, 600, 0.2f);
 	PlatformWallCollision();
-
+	status.Frame();
 	return true;
 }
 
 bool PPlayerCharacter::Render()
 {
 	Spawn();
+	status.Render();
 	return true;
 }
 
 bool PPlayerCharacter::Release()
 {
 	sprite_.Release();
+	status.Release();
 	return true;
 }
 
@@ -48,17 +50,17 @@ void PPlayerCharacter::Movement()
 
 	float cam_speed = P2DCamera::GetInstance().get_camera_scroll_speed_();
 
-	if (g_InputActionMap.upArrowKey == KEYSTAT::KEY_HOLD)
+	if (g_InputActionMap.upArrowKey == KEYSTAT::KEY_PUSH)
 	{
 		//	P2DCamera::GetInstance().add_camera_position_(pPoint(0, -cam_speed));
+		
 	}
-	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
+	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_PUSH)
 	{
 		//P2DCamera::GetInstance().add_camera_position_(pPoint(0, cam_speed));
 		//position_.y += move_speed_ * g_SecondPerFrame;
-	
-
-	}if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+	}
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x -= move_speed_ * g_SecondPerFrame;
 		
@@ -71,6 +73,29 @@ void PPlayerCharacter::Movement()
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
 		physics_.StartJump();
+	}
+	if (g_InputActionMap.qKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyHP(240);
+	}
+	if (g_InputActionMap.wKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyHP(1930);
+	}
+	if (g_InputActionMap.aKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyMP(10);
+	}
+	if (g_InputActionMap.sKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyMP(300);
+	}
+	if (g_InputActionMap.dKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyEXP(30);
+	}if (g_InputActionMap.fKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyEXP(10000);
 	}
 
 	sprite_.SetPosition(position_.x, position_.y);
@@ -100,4 +125,14 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 	set_collision_box_(collision_box_norm_);
 
 	P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //Ä³¸¯ÅÍ only
+}
+
+PPlayerStatus& PPlayerCharacter::get_status()
+{
+	return status;
+}
+
+void PPlayerCharacter::StatusSet(multibyte_string status_path, multibyte_string object_name)
+{
+	status.StatusSet(status_path,object_name);
 }

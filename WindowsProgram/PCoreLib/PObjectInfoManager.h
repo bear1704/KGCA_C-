@@ -14,6 +14,14 @@ struct ObjectInfo
 	multibyte_string sprite_name;
 };
 
+struct ObjectStatus
+{
+	int level_;
+	float max_hp_;	float max_mp_;	float current_hp_;	float current_mp_;
+	int current_exp_;
+	int str_;	int dex_;	int reward_exp_;	int monster_damage_;
+
+};
 
 class PObjectInfoManager : public PSingleton<PObjectInfoManager>
 {//name(key) movespeed collisionboxsize alpha scale 
@@ -24,6 +32,7 @@ public:
 private:
 	friend class PSingleton<PObjectInfoManager>;
 	std::map<std::wstring, ObjectInfo*> object_info_list;
+	std::map<std::wstring, ObjectStatus*> object_status_list;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -31,6 +40,8 @@ public:
 	bool Release() override;
 
 	ObjectInfo* get_object_info_list_from_map(std::wstring key);
+	ObjectStatus* get_object_status_from_map(std::wstring key);
 	void LoadDataFromScript(multibyte_string filepath);
+	void LoadStatusDataFromScript(multibyte_string filepath);
 };
 

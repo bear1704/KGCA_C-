@@ -118,6 +118,24 @@
     <ClInclude Include="PObjectInfoManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="PButtonControl.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PImageControl.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PUIComponent.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PUIDataManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PObjectDataManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PPlayerStatus.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PPlayerController.cpp">
@@ -182,6 +200,24 @@
     </ClCompile>
     <ClCompile Include="PObjectInfoManager.cpp">
       <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PButtonControl.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PImageControl.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PUIComponent.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PUIDataManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PObjectDataManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PPlayerStatus.cpp">
+      <Filter>소스 파일\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

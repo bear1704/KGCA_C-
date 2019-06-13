@@ -87,16 +87,14 @@ bool Sample::InitDataLoad()
 	PScene *scene1 = new PScene();
 	PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
 	PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"MYSETTINGBTN");
-	PUIComponent* uicomp_hpmp_guage = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"HPMP_GUAGE");
+	//PUIComponent* uicomp_hpmp_guage = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"ENERGY_GUAGE");
 	PObjectDataManager::GetInstance().LoadDataFromScript(L"data/character/character_composition_list.txt");
 	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"MUSHROOMLAND");
 	scene1->InsertObject(uicomp_settingbar);
 	scene1->InsertObject(game_objects_);
-	scene1->InsertObject(uicomp_hpmp_guage);
+	//scene1->InsertObject(uicomp_hpmp_guage);
 	
 	current_scene_ = scene1;
-
-	
 
 	return true;
 }

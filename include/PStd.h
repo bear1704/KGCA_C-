@@ -60,10 +60,12 @@ enum class PXY
 
 struct PInputActionMap
 {
-	KEYSTAT wKey;
-	KEYSTAT sKey;
 	KEYSTAT aKey;
+	KEYSTAT sKey;
 	KEYSTAT dKey;
+	KEYSTAT fKey;
+	KEYSTAT qKey;
+	KEYSTAT wKey;
 	KEYSTAT leftClick;
 	KEYSTAT rightClick;
 	KEYSTAT middleClick;

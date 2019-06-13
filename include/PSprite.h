@@ -1,6 +1,7 @@
 #pragma once
 #include "PBitmapManager.h"
 #include "PStd.h"
+#include <assert.h>
 
 struct SpriteDataInfo
 {
@@ -30,6 +31,7 @@ public:
 private:
 
 	vector<FLOAT_RECT> rect_list;
+	vector<FLOAT_RECT> original_size_list;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
 	float lifetime_;
@@ -57,6 +59,7 @@ public:
 	void Draw();
 	//void Draw(int x, int y);
 	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
+	void AlphaDrawNotCenter();
 	void set_alpha_(float alpha);
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
@@ -64,6 +67,7 @@ public:
 	pPoint get_position_();
 	void set_current_played_spriteframe_(int current);
 	void set_rect_list_size(FLOAT_RECT size);
-
+	vector<FLOAT_RECT>& get_original_size_list();
+	
 };
 

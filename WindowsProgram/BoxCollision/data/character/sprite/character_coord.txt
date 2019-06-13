@@ -1,8 +1,6 @@
-#SPRITE 5
+#SPRITE 3
 playerCharacter 1 777 1 data/character/sprite/character.bmp
 0 266 119 53 77
-player2 1 777 1 data/character/sprite/character.bmp
-0 24 18 50 67
 orange_mushroom_normal 5 777 0.5 data/character/sprite/mushroom.bmp
 0 5 3 64 59
 1 71 3 65 59
@@ -12,5 +10,3 @@ orange_mushroom_normal 5 777 0.5 data/character/sprite/mushroom.bmp
 orange_mushroom_other 2 777 0.5 data/character/sprite/mushroom.bmp
 0 4 139 66 68
 1 140 220 61 47
-tester 1 777 1 data/character/sprite/bbbb.bmp
-0 1 1 33 36

@@ -83,7 +83,7 @@ bool PSprite::Load(std::wstring filename)
 bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 {
 	rect_list = info.rect_list;
-
+	original_size_list = info.rect_list;
 	if (info.lifetime == 777)
 	{
 		remain_lifetime_ = 999999999.5f;
@@ -104,6 +104,7 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 
 	Load(info.bitmap_path);
 
+	
 	return true;
 }
 
@@ -149,6 +150,25 @@ void PSprite::Draw()
 
 		}
 	}
+}
+
+void PSprite::AlphaDrawNotCenter()
+{
+	if (isDead)
+		return;
+
+	assert(bitmap_->bitmap_info.bmBitsPixel == 32); //32비트 알파채널이 있는 이미지가 아니면 사용할 수 없음!(UI전용)
+
+	BLENDFUNCTION bf;
+	bf.BlendOp = AC_SRC_OVER;
+	bf.BlendFlags = 0;
+	bf.SourceConstantAlpha = alpha_ * 255.f;
+
+		bf.AlphaFormat = AC_SRC_ALPHA;
+		bitmap_->DrawNotCenter(position_.x, position_.y,
+			rect_list[current_played_spriteframe_], bf, scale_);
+
+
 }
 
 
@@ -281,6 +301,7 @@ bool PSprite::Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colo
 	return true;
 }
 
+
 void PSprite::set_alpha_(float alpha)
 {
 	alpha_ = alpha;
@@ -326,4 +347,9 @@ void PSprite::set_rect_list_size(FLOAT_RECT size)
 	{
 		rect_list[i] = size;
 	}
+}
+
+vector<FLOAT_RECT>& PSprite::get_original_size_list()
+{
+	return original_size_list;
 }

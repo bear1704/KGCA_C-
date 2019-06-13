@@ -21,6 +21,7 @@ public:
 	virtual bool Load(std::wstring filename);
 	bool Draw(float x, float y, FLOAT_RECT rect, DWORD draw_mode, float scale = 1.0f);
 	bool Draw(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float scale = 1.0f);
+	bool DrawNotCenter(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float scale = 1.0f);
 	bool DrawColorKey(float x, float y, FLOAT_RECT rect, COLORREF key_color);
 
 

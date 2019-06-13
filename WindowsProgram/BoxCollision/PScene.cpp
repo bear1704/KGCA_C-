@@ -14,6 +14,33 @@ PScene::~PScene()
 
 bool PScene::Init()
 {
+	for (int i = 0; i < game_objects_.size(); i++)
+	{
+		if (game_objects_[i]->get_type_() == Type::PLAYER)
+		{
+			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
+			player->Init();
+		}
+		else if (game_objects_[i]->get_type_() == Type::MONSTER)
+		{
+			PMonster* monster = (PMonster*)game_objects_[i];
+			monster->Init();
+		}
+		else if (game_objects_[i]->get_type_() == Type::NPC)
+		{
+			PRectObject* npc = (PRectObject*)game_objects_[i];
+			npc->Init();
+		}
+		else if (game_objects_[i]->get_type_() == Type::MAP)
+		{
+			PRectObject* map = (PRectObject*)game_objects_[i];
+			map->Init();
+		}
+	}
+	for (int i = 0; i < ui_compositions_.size(); i++)
+	{
+		ui_compositions_[i]->Init();
+	}
 	return true;
 }
 

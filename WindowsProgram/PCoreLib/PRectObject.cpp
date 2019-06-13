@@ -44,6 +44,10 @@ bool PRectObject::Release()
 	return true;
 }
 
+void PRectObject::StatusSet(multibyte_string status_path, multibyte_string object_name)
+{
+}
+
 
 void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
@@ -161,4 +165,9 @@ void PRectObject::set_type_(Type type)
 Type PRectObject::get_type_()
 {
 	return type_;
+}
+
+multibyte_string PRectObject::get_object_name()
+{
+	return object_name_;
 }

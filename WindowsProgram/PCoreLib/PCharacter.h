@@ -13,6 +13,7 @@ public:
 	virtual bool Frame();
 	virtual bool Render();
 	virtual bool Release();
+	virtual void StatusSet(multibyte_string status_path, multibyte_string object_name);
 protected:
 	multibyte_string character_name_;
 	FLOAT_RECT foot_plane_;
