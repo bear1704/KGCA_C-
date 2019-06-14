@@ -20,10 +20,8 @@ protected:
 	float move_speed_;	
 	pPoint prev_position_;
 	bool is_ground;
+	bool is_reversal;
 
-	int level_;
-	float HP_;
-	float MP_;
 public:
 	void Movement();
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
