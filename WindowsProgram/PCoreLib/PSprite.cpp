@@ -101,6 +101,7 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	allocatetime_for_onesprite = info.once_playtime / info.max_frame;
 	alpha_ = alpha;
 	scale_ = scale;
+	current_played_spriteframe_ = 0;
 
 	Load(info.bitmap_path);
 
@@ -121,7 +122,7 @@ void PSprite::Play()
 	remain_lifetime_ = lifetime_;
 }
 
-void PSprite::Draw()
+void PSprite::Draw(bool is_reversal)
 {
 	if (isDead)
 		return;
@@ -134,7 +135,7 @@ void PSprite::Draw()
 	{
 		bf.AlphaFormat = AC_SRC_ALPHA;
 		bitmap_->Draw(position_.x, position_.y,
-			rect_list[current_played_spriteframe_], bf, scale_);
+			rect_list[current_played_spriteframe_], bf, scale_, is_reversal);
 	}
 	else // RGB ÀÌ¹ÌÁö
 	{

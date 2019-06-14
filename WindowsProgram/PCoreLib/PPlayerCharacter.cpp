@@ -60,16 +60,41 @@ void PPlayerCharacter::Movement()
 		//P2DCamera::GetInstance().add_camera_position_(pPoint(0, cam_speed));
 		//position_.y += move_speed_ * g_SecondPerFrame;
 	}
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_PUSH)
+	{
+		position_.x -= move_speed_ * g_SecondPerFrame;
+		is_reversal_ = false;
+		sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"pc_move"), alpha_, scale_);
+		sprite_.SetPosition(position_.x, position_.y);
+	}
+	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_PUSH)
+	{
+		position_.x += move_speed_ * g_SecondPerFrame;
+		is_reversal_ = true;
+		sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"pc_move"), alpha_, scale_);
+		sprite_.SetPosition(position_.x, position_.y);
+	}
 	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x -= move_speed_ * g_SecondPerFrame;
-		
+		sprite_.SetPosition(position_.x, position_.y);
 	}
 	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
 	{
 		position_.x += move_speed_ * g_SecondPerFrame;
-	
+		sprite_.SetPosition(position_.x, position_.y);
 	}
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_UP)
+	{
+		sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"pc_idle"), alpha_, scale_);
+		sprite_.SetPosition(position_.x, position_.y);
+	}
+	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_UP)
+	{
+		sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(L"pc_idle"), alpha_, scale_);
+		sprite_.SetPosition(position_.x, position_.y);
+	}
+
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
 		physics_.StartJump();

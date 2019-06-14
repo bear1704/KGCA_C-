@@ -1,7 +1,6 @@
 #CHARLIST 1
-MUSHROOMLAND 8
+MUSHROOMLAND 7
 orange_mushroom_normal 1400 500 MONSTER
-orange_mushroom_other 1200 500 MONSTER
 orange_mushroom_normal 500 200 MONSTER
 orange_mushroom_normal 200 150 MONSTER
 orange_mushroom_normal 300 200 MONSTER

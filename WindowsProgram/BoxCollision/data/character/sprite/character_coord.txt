@@ -1,6 +1,11 @@
-#SPRITE 3
-playerCharacter 1 777 1 data/character/sprite/character.bmp
+#SPRITE 4
+pc_idle 1 777 777 data/character/sprite/character.bmp
 0 266 119 53 77
+pc_move 4 777 0.7 data/character/sprite/character.bmp
+0 31 323 66 69
+1 103 320 66 69
+2 171 318 66 70
+3 236 344 65 69
 orange_mushroom_normal 5 777 0.5 data/character/sprite/mushroom.bmp
 0 5 3 64 59
 1 71 3 65 59

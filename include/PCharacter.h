@@ -20,7 +20,6 @@ protected:
 	float move_speed_;	
 	pPoint prev_position_;
 	bool is_ground;
-	bool is_reversal;
 
 public:
 	void Movement();

@@ -43,15 +43,29 @@ std::vector<PRectObject*> PObjectDataManager::get_object_list_from_map(std::wstr
 	
 }
 
+std::vector<PSprite*> PObjectDataManager::get_animation_list_from_map(std::wstring key)
+{
+	auto iter = object_animation_list_.find(key);
+	if (iter != object_animation_list_.end())
+	{
+		std::vector<PSprite*>& data = (*iter).second;
+		return data;
+	}
+}
+
 void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 {
 	//#CHARLIST 리스트갯수
 	//리스트이름 요소갯수
 	//객체이름 절대포지션x 절대포지션y 객체타입(몬스터, NPC, 캐릭터, MAP)
-
+	
 	const std::wstring path = L"data/character/character_data.txt";
 	const std::wstring map_path = L"data/map/map_data.txt";
 	const std::wstring status_path = L"data/character/character_status_data.txt";
+	const std::wstring animation_path = L"data/character/sprite/animation_list.txt";
+
+
+
 	pPoint map_pos = pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2);
 	
 	FILE* fp = nullptr;
@@ -100,6 +114,8 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 				component->set_gravity_(450.0f);
 				component->set_type_(Type::PLAYER);
 				component->StatusSet(status_path ,component->get_object_name());
+				LoadAnimationDataFromScript(animation_path);
+				component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(object_name)); //애니메이션 순서는 어차피 FSM정의순서를 따름!
 				object_list.push_back(component);
 			}
 			else if (type.compare(L"MONSTER") == 0)
@@ -135,5 +151,54 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 		object_composition_list_.insert(std::make_pair(object_composition_name, object_list));
 	}
 	fclose(fp);
+
+}
+
+void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
+{
+
+	FILE* fp = nullptr;
+
+	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
+	assert(fp != nullptr);
+
+	TCHAR buffer[256] = { 0, };
+	TCHAR temp_buffer[256] = { 0, };
+	TCHAR name_buffer[256] = { 0, };
+
+	int number_of_data = -1;
+
+	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(애니 데이터 갯수)
+	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
+
+	std::vector<PSprite*> vec;
+
+	for (int index_data = 0; index_data < number_of_data; index_data++)
+	{
+
+		int number_of_sprite = -1;
+		_fgetts(buffer, _countof(buffer), fp);
+		_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer),
+			&number_of_sprite);
+
+		std::wstring object_name(temp_buffer);
+
+		for (int index_data = 0; index_data < number_of_sprite; index_data++)
+		{
+			_fgetts(buffer, _countof(buffer), fp);
+			_stscanf_s(buffer, _T("%s"), temp_buffer, _countof(temp_buffer));
+
+			std::wstring sprite_name(temp_buffer);
+
+			PSprite* t = new PSprite();
+			t->Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(sprite_name), 1.0f, 1.0f);
+			
+			vec.push_back(t);
+		}
+
+		
+		object_animation_list_.insert(std::make_pair(object_name, vec));
+
+	}
 
 }

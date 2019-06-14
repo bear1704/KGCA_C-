@@ -87,6 +87,11 @@ PSprite * PRectObject::get_sprite_()
 	return &sprite_;
 }
 
+void PRectObject::set_sprite_(PSprite & sprite)
+{
+	sprite_ = sprite;
+}
+
 pPoint PRectObject::get_position_()
 {
 	return position_;
@@ -148,7 +153,7 @@ void PRectObject::Spawn()
 	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());
 	pPoint origin_pos = sprite_.get_position_();
 	sprite_.SetPosition(scrpos.x, scrpos.y);
-	sprite_.Draw();
+	sprite_.Draw(is_reversal_);
 	sprite_.SetPosition(origin_pos.x, origin_pos.y);
 }
 
@@ -170,4 +175,9 @@ Type PRectObject::get_type_()
 multibyte_string PRectObject::get_object_name()
 {
 	return object_name_;
+}
+
+void PRectObject::set_animation_list_(std::vector<PSprite*> list)
+{
+	animation_list_ = list;
 }

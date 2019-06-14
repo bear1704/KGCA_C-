@@ -1,6 +1,7 @@
 #pragma once
 #include "PStd.h"
 #include "PWallAndPlatform.h"
+#include "PSprite.h"
 #include <assert.h>
 
 struct ObjectInfo

@@ -23,6 +23,7 @@ public:
 	virtual ~PRectObject();
 protected:
 	PSprite sprite_;
+	std::vector<PSprite*> animation_list_;
 	pPoint position_;
 	FLOAT_RECT collision_box_;
 	FLOAT_RECT collision_box_norm_;
@@ -32,6 +33,8 @@ protected:
 	PPhysicsModule physics_;
 	float gravity_;
 	Type type_;
+	bool is_reversal_;
+
 public:
 	virtual bool Init();
 	virtual bool Frame();
@@ -43,6 +46,7 @@ public:
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
 	PSprite* get_sprite_();
+	void set_sprite_(PSprite& sprite);
 	pPoint get_position_();
 	void set_position_(pPoint XY);
 	FLOAT_RECT get_collision_rect_();
@@ -55,6 +59,7 @@ public:
 	void set_type_(Type type);
 	Type get_type_();
 	multibyte_string get_object_name();
+	void set_animation_list_(std::vector<PSprite*> list);
 
 
 };

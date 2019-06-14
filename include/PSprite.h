@@ -45,6 +45,7 @@ private:
 	pPoint position_;
 	multibyte_string sprite_name;
 
+
 public:
 	PBitmap* bitmap_;
 	PBitmap* bitmap_mask_;
@@ -56,7 +57,7 @@ public:
 	bool Set(SpriteDataInfo info, float alpha, float scale);
 	bool SetPosition(float x, float y);
 	void Play();
-	void Draw();
+	void Draw(bool is_reversal);
 	//void Draw(int x, int y);
 	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
 	void AlphaDrawNotCenter();

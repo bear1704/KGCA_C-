@@ -13,7 +13,7 @@ PCharacter::~PCharacter()
 
 bool PCharacter::Init()
 {
-	is_reversal = false;
+	is_reversal_ = false;
 
 	return true;
 }
@@ -70,7 +70,7 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
-	is_reversal = false;
+	is_reversal_ = false;
 
 }
 

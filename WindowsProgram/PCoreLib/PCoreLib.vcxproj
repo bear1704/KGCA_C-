@@ -182,6 +182,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PCharacter.h" />
+    <ClInclude Include="PFiniteState.h" />
+    <ClInclude Include="PFsm.h" />
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
@@ -195,6 +197,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PPlayerController.h" />
     <ClInclude Include="PPlayerStatus.h" />
     <ClInclude Include="PRectObject.h" />
+    <ClInclude Include="PScene.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
     <ClInclude Include="PSprite.h" />
@@ -212,6 +215,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PCharacter.cpp" />
+    <ClCompile Include="PFiniteState.cpp" />
+    <ClCompile Include="PFsm.cpp" />
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />
@@ -225,6 +230,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PPlayerController.cpp" />
     <ClCompile Include="PPlayerStatus.cpp" />
     <ClCompile Include="PRectObject.cpp" />
+    <ClCompile Include="PScene.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
     <ClCompile Include="PSprite.cpp" />

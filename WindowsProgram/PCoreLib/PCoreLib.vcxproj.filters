@@ -31,11 +31,14 @@
     <Filter Include="소스 파일\System">
       <UniqueIdentifier>{7d916c23-fcd3-46c0-92a4-64159b2e2ad9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Bitmap, Sprite">
-      <UniqueIdentifier>{b9f57aed-cd74-4a47-8f57-83900a7f369e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\UI">
       <UniqueIdentifier>{d47f25d8-46ba-4249-97d7-43d28c95d1d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{8e40e6bc-ea3c-4f3d-aef5-5025d9bd2989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FSM">
+      <UniqueIdentifier>{46f3b941-fe8e-4c68-a55e-d24fd0a7694c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +139,15 @@
     <ClInclude Include="PPlayerStatus.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
+    <ClInclude Include="PScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PFsm.h">
+      <Filter>소스 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="PFiniteState.h">
+      <Filter>소스 파일\FSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PPlayerController.cpp">
@@ -218,6 +230,15 @@
     </ClCompile>
     <ClCompile Include="PPlayerStatus.cpp">
       <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="PScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PFiniteState.cpp">
+      <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="PFsm.cpp">
+      <Filter>소스 파일\FSM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
