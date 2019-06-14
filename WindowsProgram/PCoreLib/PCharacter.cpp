@@ -13,7 +13,7 @@ PCharacter::~PCharacter()
 
 bool PCharacter::Init()
 {
-	HP_ = 930.0f;
+	is_reversal = false;
 
 	return true;
 }
@@ -70,7 +70,8 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
-	
+	is_reversal = false;
+
 }
 
 
@@ -102,14 +103,12 @@ void PCharacter::PlatformWallCollision()
 	const std::vector<FLOAT_RECT>& wall_list = PWallAndPlatform::GetInstance().get_wall_list_();
 	FLOAT_RECT current_collision_rect;
 	float correction_ylength = 0.0f;
-	bool ground_collision_checked = false;
 
 	for (auto& it : platform_list)
 	{
 		if (PCollision::GetInstance().RectInRect(it, foot_plane_, correction_ylength) && !physics_.get_isjump())
 		{
-			position_.y = it.top - collision_box_.bottom / 2;
-	
+			position_.y = it.top - collision_box_norm_.bottom / 2;
 		}
 	}
 

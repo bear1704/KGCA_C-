@@ -91,18 +91,39 @@ bool PBitmap::Draw(float x, float y, FLOAT_RECT rect, DWORD draw_mode, float sca
 	return true;
 }
 
-bool PBitmap::Draw(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float scale)
+bool PBitmap::Draw(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float scale, bool is_reversal)
 {
 	float half_width = abs((rect.right * scale) / 2);
 	float half_height = abs((rect.bottom * scale) / 2);
 
-	//HDC reversal_DC = CreateCompatibleDC(handle_memoryDC_);
 
-	AlphaBlend(g_handle_off_screenDC, x - half_width , y - half_height ,
-		rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
-		bf);
+	HDC reversal_DC = CreateCompatibleDC(handle_memoryDC_);
+	HBITMAP bitmap = CreateCompatibleBitmap(handle_memoryDC_, rect.right, rect.bottom);
+	SelectObject(reversal_DC, bitmap);
+
+	if (is_reversal)
+	{
+		StretchBlt(reversal_DC, rect.right, 0,
+			-rect.right, rect.bottom, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
+			SRCCOPY);
+
+		AlphaBlend(g_handle_off_screenDC, x - half_width, y - half_height,
+			rect.right * scale, rect.bottom* scale, reversal_DC, 0, 0, rect.right, rect.bottom,
+			bf);
+
+	}
+	else
+	{
+
+		AlphaBlend(g_handle_off_screenDC, x - half_width, y - half_height,
+			rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
+			bf); //기존 알파블렌딩 코드
+	}
 
 
+
+	DeleteObject(bitmap);
+	DeleteDC(reversal_DC);
 	return true;
 }
 

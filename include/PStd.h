@@ -51,6 +51,12 @@ enum class PLoadMode
 	BITMAPMASK,
 };
 
+enum class SIDE
+{
+	LEFT,
+	RIGHT,
+};
+
 enum class PXY
 {
 	X,
@@ -76,8 +82,6 @@ struct PInputActionMap
 	KEYSTAT upArrowKey;
 	KEYSTAT downArrowKey;
 	
-
-
 };
 
 
