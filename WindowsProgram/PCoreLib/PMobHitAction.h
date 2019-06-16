@@ -4,7 +4,7 @@ class PMobHitAction :
 	public PMobState
 {
 public:
-	PMobHitAction();
+	PMobHitAction(PMonster* parent);
 	~PMobHitAction();
 };
 

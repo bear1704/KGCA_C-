@@ -202,7 +202,8 @@ PSprite * PRectObject::find_sprite_by_type(ANIMATIONTYPE type)
 	});
 	return *iter;*/
 
-	std::mt19937 engine((unsigned int)time(NULL));
+	std::random_device r;
+	std::mt19937 engine(r());
 	std::uniform_int_distribution<int> distribution(0, 2);
 	auto generator = std::bind(distribution, engine);
 

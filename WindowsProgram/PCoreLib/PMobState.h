@@ -1,4 +1,7 @@
 #pragma once
+#include <random>
+#include <functional>
+#include <ctime>
 
 class PMonster;
 

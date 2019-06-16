@@ -1,4 +1,4 @@
-#ANIMATION 1
+#ANIMATION 2
 player 6
 pc_idle IDLE
 pc_move MOVE
@@ -6,3 +6,6 @@ pc_jump JUMP
 pc_slash ATTACK
 pc_swing ATTACK
 pc_pierce ATTACK
+orange_mushroom 2
+orange_mushroom_idle IDLE
+orange_mushroom_move MOVE

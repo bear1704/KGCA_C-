@@ -190,6 +190,13 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PIdleAction.h" />
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PJumpAction.h" />
+    <ClInclude Include="PMobAttackAction.h" />
+    <ClInclude Include="PMobDeadAction.h" />
+    <ClInclude Include="PMobHitAction.h" />
+    <ClInclude Include="PMobIdleAction.h" />
+    <ClInclude Include="PMobJumpAction.h" />
+    <ClInclude Include="PMobMoveAction.h" />
+    <ClInclude Include="PMobState.h" />
     <ClInclude Include="PMoveAction.h" />
     <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
@@ -229,6 +236,13 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PIdleAction.cpp" />
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PJumpAction.cpp" />
+    <ClCompile Include="PMobAttackAction.cpp" />
+    <ClCompile Include="PMobDeadAction.cpp" />
+    <ClCompile Include="PMobHitAction.cpp" />
+    <ClCompile Include="PMobIdleAction.cpp" />
+    <ClCompile Include="PMobJumpAction.cpp" />
+    <ClCompile Include="PMobMoveAction.cpp" />
+    <ClCompile Include="PMobState.cpp" />
     <ClCompile Include="PMoveAction.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />

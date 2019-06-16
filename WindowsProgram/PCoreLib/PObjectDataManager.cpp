@@ -133,7 +133,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 				component->set_gravity_(450.0f);
 				component->set_type_(Type::MONSTER);
 				component->StatusSet(status_path, component->get_object_name()); //아마 아직 미구현
-				//component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(object_name));
+				component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(object_name));
 				component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 				object_list.push_back(component);
 
@@ -184,10 +184,12 @@ void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
 	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(애니 데이터 갯수)
 	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
 
-	std::vector<PSprite*> vec;
+	
 
 	for (int index_data = 0; index_data < number_of_data; index_data++)
 	{
+
+		std::vector<PSprite*> vec;
 
 		int number_of_sprite = -1;
 		_fgetts(buffer, _countof(buffer), fp);

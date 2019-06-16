@@ -65,7 +65,7 @@ public:
 	Type get_type_();
 	multibyte_string get_object_name();
 	void set_animation_list_(std::vector<PSprite*> list);
-	PSprite* find_sprite_by_type(ANIMATIONTYPE type);
+	virtual PSprite* find_sprite_by_type(ANIMATIONTYPE type);
 	bool& get_is_reversal_();
 	PPhysicsModule& get_physics_();
 	void set_alpha_and_scale_(float alpha, float scale);

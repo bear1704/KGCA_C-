@@ -1,4 +1,4 @@
-#SPRITE 8
+#SPRITE 9
 pc_idle 1 777 777 data/character/sprite/character.bmp
 0 266 119 53 77
 pc_move 4 777 0.7 data/character/sprite/character.bmp
@@ -30,12 +30,13 @@ pc_pierce 5 1.0 1.0 data/character/sprite/character.bmp
 2 813 46 96 72
 3 690 42 118 73
 4 690 42 118 73
-orange_mushroom_normal 5 777 0.5 data/character/sprite/mushroom.bmp
-0 5 3 64 59
-1 71 3 65 59
-2 5 72 65 61
-3 72 72 63 65
-4 138 77 63 56
+orange_mushroom_idle 2 777 0.5 data/character/sprite/mushroom.bmp
+0 6 4 62 60
+1 72 3 63 59
+orange_mushroom_move 3 777 0.5 data/character/sprite/mushroom.bmp
+0 6 73 64 60
+1 73 72 63 65
+2 139 76 62 57
 orange_mushroom_other 2 777 0.5 data/character/sprite/mushroom.bmp
 0 4 139 66 68
 1 140 220 61 47

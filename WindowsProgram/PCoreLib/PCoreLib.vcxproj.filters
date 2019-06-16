@@ -40,6 +40,9 @@
     <Filter Include="소스 파일\PlayerState">
       <UniqueIdentifier>{fd8e75a8-5064-4952-aa7f-cbeb0fcb30a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\MonsterState">
+      <UniqueIdentifier>{adf4c6d5-d7ca-4638-b24a-c726105f432d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PCoreLib.rc">
@@ -166,6 +169,27 @@
     <ClInclude Include="PHitAction.h">
       <Filter>소스 파일\PlayerState</Filter>
     </ClInclude>
+    <ClInclude Include="PMobState.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMobAttackAction.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMobMoveAction.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMobIdleAction.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMobJumpAction.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMobDeadAction.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMobHitAction.h">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSprite.cpp">
@@ -275,6 +299,27 @@
     </ClCompile>
     <ClCompile Include="PHitAction.cpp">
       <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobState.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobAttackAction.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobMoveAction.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobJumpAction.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobIdleAction.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobHitAction.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMobDeadAction.cpp">
+      <Filter>소스 파일\MonsterState</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,10 @@
 #include "PMonster.h"
-
+#include "PMobIdleAction.h"
+#include "PMobAttackAction.h"
+#include "PMobMoveAction.h"
+#include "PMobJumpAction.h"
+#include "PMobDeadAction.h"
+#include "PMobHitAction.h"
 
 
 PMonster::PMonster()
@@ -14,6 +19,17 @@ PMonster::~PMonster()
 
 bool PMonster::Init()
 {
+	
+
+	action_list_.insert((std::make_pair(FSM_State::IDLE, new PMobIdleAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::MOVE, new PMobMoveAction(this))));
+
+	current_monster_action_ = action_list_[FSM_State::IDLE];
+	current_monster_state_ = FSM_State::IDLE;
+
+	monster_fsm_.Add(FSM_State::IDLE, FSM_Event::MOB_TIME_OUT, FSM_State::MOVE);
+	monster_fsm_.Add(FSM_State::MOVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
+
 
 	return false;
 }
@@ -23,6 +39,7 @@ bool PMonster::Frame()
 	SavePrevPosition();
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
+	ProcessAction();
 	Movement();
 	physics_.Gravity(position_, gravity_);
 	PlatformWallCollision();
@@ -63,10 +80,38 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
+
+	direction_side_ = SIDE::RIGHT;
 	//몬스터는 카메라를 붙이지 않음.
 }
 
 void PMonster::Movement()
 {
 	sprite_.SetPosition(position_.x, position_.y);
+}
+
+SIDE PMonster::get_direction_side_()
+{
+	return direction_side_;
+}
+
+void PMonster::set_direction_side_(SIDE side)
+{
+	direction_side_ = side;
+}
+
+void PMonster::SetTransition(FSM_Event event)
+{
+	PFiniteState* state = monster_fsm_.get_state(current_monster_state_); //FSM공간에서 플레이어의 현재 스테이트를 가져온다.
+	if (!state) return; //현재 스테이트가 없으면 에러 
+
+	FSM_State next = state->get_next_state(event); //현재 스테이트에서 이벤트로 트랜지션되는 다음 스테이트 가져오기
+	current_monster_action_ = action_list_[next]; //그 다음 스테이트에 맞게 액션 가져오기.(스테이트 전환)
+	current_monster_state_ = next;  //현재 스테이트 변수도 다음스테이트를 가리키게 전환
+
+}
+
+void PMonster::ProcessAction()
+{
+	current_monster_action_->Process();
 }
