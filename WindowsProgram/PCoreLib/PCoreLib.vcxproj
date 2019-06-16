@@ -178,13 +178,19 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="P2DCamera.h" />
+    <ClInclude Include="PAttackAction.h" />
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PCharacter.h" />
+    <ClInclude Include="PDeadAction.h" />
     <ClInclude Include="PFiniteState.h" />
     <ClInclude Include="PFsm.h" />
+    <ClInclude Include="PHitAction.h" />
+    <ClInclude Include="PIdleAction.h" />
     <ClInclude Include="PImageControl.h" />
+    <ClInclude Include="PJumpAction.h" />
+    <ClInclude Include="PMoveAction.h" />
     <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
     <ClInclude Include="PCollision.h" />
@@ -194,7 +200,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PObjectRotateUtil.h" />
     <ClInclude Include="PPhysicsModule.h" />
     <ClInclude Include="PPlayerCharacter.h" />
-    <ClInclude Include="PPlayerController.h" />
+    <ClInclude Include="PPlayerState.h" />
     <ClInclude Include="PPlayerStatus.h" />
     <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PScene.h" />
@@ -211,13 +217,19 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="P2DCamera.cpp" />
+    <ClCompile Include="PAttackAction.cpp" />
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PCharacter.cpp" />
+    <ClCompile Include="PDeadAction.cpp" />
     <ClCompile Include="PFiniteState.cpp" />
     <ClCompile Include="PFsm.cpp" />
+    <ClCompile Include="PHitAction.cpp" />
+    <ClCompile Include="PIdleAction.cpp" />
     <ClCompile Include="PImageControl.cpp" />
+    <ClCompile Include="PJumpAction.cpp" />
+    <ClCompile Include="PMoveAction.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />
     <ClCompile Include="PCollision.cpp" />
@@ -227,7 +239,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PObjectRotateUtil.cpp" />
     <ClCompile Include="PPhysicsModule.cpp" />
     <ClCompile Include="PPlayerCharacter.cpp" />
-    <ClCompile Include="PPlayerController.cpp" />
+    <ClCompile Include="PPlayerState.cpp" />
     <ClCompile Include="PPlayerStatus.cpp" />
     <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PScene.cpp" />

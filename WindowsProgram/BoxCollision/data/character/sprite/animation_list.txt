@@ -1,4 +1,8 @@
 #ANIMATION 1
-player 2
-pc_idle
-pc_move
+player 6
+pc_idle IDLE
+pc_move MOVE
+pc_jump JUMP
+pc_slash ATTACK
+pc_swing ATTACK
+pc_pierce ATTACK

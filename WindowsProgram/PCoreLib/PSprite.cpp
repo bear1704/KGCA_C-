@@ -308,6 +308,11 @@ void PSprite::set_alpha_(float alpha)
 	alpha_ = alpha;
 }
 
+void PSprite::set_scale_(float scale)
+{
+	scale_ = scale;
+}
+
 
 PBitmap * PSprite::get_bitmap_()
 {
@@ -332,6 +337,11 @@ vector<FLOAT_RECT> PSprite::get_rect_list_copy()
 	return copyrect;
 }
 
+bool PSprite::get_is_dead_()
+{
+	return isDead;
+}
+
 pPoint PSprite::get_position_()
 {
 	return position_;
@@ -353,4 +363,14 @@ void PSprite::set_rect_list_size(FLOAT_RECT size)
 vector<FLOAT_RECT>& PSprite::get_original_size_list()
 {
 	return original_size_list;
+}
+
+void PSprite::set_animation_type_(ANIMATIONTYPE type)
+{
+	animation_type_ = type;
+}
+
+ANIMATIONTYPE PSprite::get_animation_type_()
+{
+	return animation_type_;
 }

@@ -138,3 +138,8 @@ void PCharacter::SavePrevPosition()
 	prev_position_ = position_;
 }
 
+float PCharacter::get_move_speed_()
+{
+	return move_speed_;
+}
+

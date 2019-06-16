@@ -64,6 +64,23 @@ enum class PXY
 
 };
 
+
+enum class FSM_State { IDLE, MOVE, ATTACK, JUMP, HIT, DEAD };
+enum class FSM_Event { INPUT_NONE, INPUT_MOVE, INPUT_ATTACK, INPUT_JUMP, HIT };
+
+
+enum class ANIMATIONTYPE
+{
+	IDLE,
+	MOVE,
+	ATTACK,
+	JUMP,
+	HIT,
+	DEAD,
+	ERROR_OCCUR,
+
+};
+
 struct PInputActionMap
 {
 	KEYSTAT aKey;
@@ -81,6 +98,7 @@ struct PInputActionMap
 	KEYSTAT rightArrowKey;
 	KEYSTAT upArrowKey;
 	KEYSTAT downArrowKey;
+	KEYSTAT attackKey;
 	
 };
 
@@ -125,6 +143,25 @@ struct PVertex
 	}
 
 };
+
+static ANIMATIONTYPE WstringToAnimationtype(std::wstring wstr)
+{
+	if (wstr.compare(L"IDLE") == 0)
+		return ANIMATIONTYPE::IDLE;
+	else if (wstr.compare(L"MOVE") == 0)
+		return ANIMATIONTYPE::MOVE;
+	else if (wstr.compare(L"ATTACK") == 0)
+		return ANIMATIONTYPE::ATTACK;
+	else if (wstr.compare(L"JUMP") == 0)
+		return ANIMATIONTYPE::JUMP;
+	else if (wstr.compare(L"HIT") == 0)
+		return ANIMATIONTYPE::HIT;
+	else if (wstr.compare(L"DEAD") == 0)
+		return ANIMATIONTYPE::DEAD;
+
+	return ANIMATIONTYPE::ERROR_OCCUR;
+}
+
 
 
 extern HWND g_hWnd;

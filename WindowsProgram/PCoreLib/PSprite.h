@@ -37,13 +37,12 @@ private:
 	float lifetime_;
 	float remain_lifetime_;
 	float allocatetime_for_onesprite;
-	int sprite_id_;
 	float time_after_spriteopen_;
 	bool isDead;
 	float alpha_;
 	float scale_;
 	pPoint position_;
-	multibyte_string sprite_name;
+	ANIMATIONTYPE animation_type_;
 
 
 public:
@@ -61,14 +60,18 @@ public:
 	//void Draw(int x, int y);
 	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
 	void AlphaDrawNotCenter();
-	void set_alpha_(float alpha);
 	PBitmap* get_bitmap_();
 	PBitmap* get_bitmap_mask_();
-	vector<FLOAT_RECT> get_rect_list_copy();
 	pPoint get_position_();
+	vector<FLOAT_RECT> get_rect_list_copy();
+	bool get_is_dead_();
+	void set_alpha_(float alpha);
+	void set_scale_(float scale);
 	void set_current_played_spriteframe_(int current);
 	void set_rect_list_size(FLOAT_RECT size);
+	void set_animation_type_(ANIMATIONTYPE type);
 	vector<FLOAT_RECT>& get_original_size_list();
+	ANIMATIONTYPE get_animation_type_();
 	
 };
 

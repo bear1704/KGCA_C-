@@ -28,5 +28,7 @@ public:
 	FLOAT_RECT get_foot_plane_box();
 	void PlatformWallCollision();
 	void SavePrevPosition();
+	float get_move_speed_();
+
 
 };

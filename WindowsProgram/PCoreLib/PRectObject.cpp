@@ -1,4 +1,7 @@
 #include "PRectObject.h"
+#include <random>
+#include <ctime>
+#include <functional>
 
 
 PRectObject::PRectObject()
@@ -92,7 +95,8 @@ void PRectObject::set_sprite_(PSprite & sprite)
 	sprite_ = sprite;
 }
 
-pPoint PRectObject::get_position_()
+
+pPoint& PRectObject::get_position_()
 {
 	return position_;
 }
@@ -148,6 +152,11 @@ float PRectObject::get_scale_()
 	return scale_;
 }
 
+float PRectObject::get_alpha_()
+{
+	return alpha_;
+}
+
 void PRectObject::Spawn()
 {
 	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());
@@ -180,4 +189,74 @@ multibyte_string PRectObject::get_object_name()
 void PRectObject::set_animation_list_(std::vector<PSprite*> list)
 {
 	animation_list_ = list;
+}
+
+
+
+///스프라이트를 Type값으로 찾아준다. 첫번째 시도에서 type가 없으면, 그냥 IDLE 리턴
+PSprite * PRectObject::find_sprite_by_type(ANIMATIONTYPE type)
+{
+	/*auto iter = std::find_if(animation_list_.begin(), animation_list_.end(), 
+		[type](PSprite* element) {
+		return element->get_animation_type_() == type;
+	});
+	return *iter;*/
+
+	std::mt19937 engine((unsigned int)time(NULL));
+	std::uniform_int_distribution<int> distribution(0, 2);
+	auto generator = std::bind(distribution, engine);
+
+	int number = generator();
+
+	if (type == ANIMATIONTYPE::ATTACK) // ATTACK일 때 3가지 중 하나 고르는 부분
+	{
+		for (auto& iter : animation_list_)
+		{
+			if (iter->get_animation_type_() == type)
+			{
+				if (number > 0)
+				{
+					number--;
+					continue;
+				}
+				else
+					return iter;
+			}
+		}
+	}
+	else
+	{
+		for (auto& iter : animation_list_)
+		{
+			if (iter->get_animation_type_() == type)
+				return iter;
+		}
+	}
+
+
+	for (auto& iter : animation_list_) 
+	{
+		if (iter->get_animation_type_() == ANIMATIONTYPE::IDLE)
+			return iter;
+	}
+
+}
+
+bool& PRectObject::get_is_reversal_()
+{
+	return is_reversal_;
+}
+
+PPhysicsModule & PRectObject::get_physics_()
+{
+	return physics_;
+}
+
+void PRectObject::set_alpha_and_scale_(float alpha, float scale)
+{
+	for (PSprite* sprite : animation_list_)
+	{
+		sprite->set_alpha_(alpha);
+		sprite->set_scale_(scale);
+	}
 }

@@ -5,6 +5,7 @@
 #include "PObjectInfoManager.h"
 #include "PPhysicsModule.h"
 #include "P2DCamera.h"
+#include "PFsm.h"
 
 enum class Type
 {
@@ -35,6 +36,8 @@ protected:
 	Type type_;
 	bool is_reversal_;
 
+	
+
 public:
 	virtual bool Init();
 	virtual bool Frame();
@@ -47,19 +50,25 @@ public:
 	PBitmap* get_bitmap_mask_();
 	PSprite* get_sprite_();
 	void set_sprite_(PSprite& sprite);
-	pPoint get_position_();
+	
+	pPoint& get_position_();
 	void set_position_(pPoint XY);
 	FLOAT_RECT get_collision_rect_();
 	FLOAT_RECT get_collision_rect_norm_();
 	//bool Load(std::wstring filename);
 	void set_collision_box_(FLOAT_RECT norm_box);
 	float get_scale_();
+	float get_alpha_();
 	void Spawn();
 	void set_gravity_(float gravity);
 	void set_type_(Type type);
 	Type get_type_();
 	multibyte_string get_object_name();
 	void set_animation_list_(std::vector<PSprite*> list);
+	PSprite* find_sprite_by_type(ANIMATIONTYPE type);
+	bool& get_is_reversal_();
+	PPhysicsModule& get_physics_();
+	void set_alpha_and_scale_(float alpha, float scale);
 
 
 };

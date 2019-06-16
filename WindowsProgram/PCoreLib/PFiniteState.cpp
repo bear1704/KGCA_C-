@@ -2,10 +2,10 @@
 #include "assert.h"
 
 
-State PFiniteState::get_next_state(Event key)
+FSM_State PFiniteState::get_next_state(FSM_Event key)
 {
 	auto iter = next_state_list_.find(key);
-	assert(iter == next_state_list_.end());
+	assert(iter != next_state_list_.end());
 	return iter->second;
 }
 

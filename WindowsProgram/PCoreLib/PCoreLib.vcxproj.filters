@@ -22,9 +22,6 @@
     <Filter Include="소스 파일\Bitmap, Sprite">
       <UniqueIdentifier>{21569d14-979f-4fe1-a59f-a2c94634485b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Sound">
-      <UniqueIdentifier>{51ee043d-b63a-49a3-b284-a5e0fb812e20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Util">
       <UniqueIdentifier>{f03dc2ec-3e7b-4291-ba95-2484785640a0}</UniqueIdentifier>
     </Filter>
@@ -34,11 +31,14 @@
     <Filter Include="소스 파일\UI">
       <UniqueIdentifier>{d47f25d8-46ba-4249-97d7-43d28c95d1d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\FSM">
+      <UniqueIdentifier>{46f3b941-fe8e-4c68-a55e-d24fd0a7694c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="소스 파일\Scene">
       <UniqueIdentifier>{8e40e6bc-ea3c-4f3d-aef5-5025d9bd2989}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\FSM">
-      <UniqueIdentifier>{46f3b941-fe8e-4c68-a55e-d24fd0a7694c}</UniqueIdentifier>
+    <Filter Include="소스 파일\PlayerState">
+      <UniqueIdentifier>{fd8e75a8-5064-4952-aa7f-cbeb0fcb30a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,9 +55,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PPlayerController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PBitmap.h">
       <Filter>소스 파일\Bitmap, Sprite</Filter>
     </ClInclude>
@@ -148,11 +145,29 @@
     <ClInclude Include="PFiniteState.h">
       <Filter>소스 파일\FSM</Filter>
     </ClInclude>
+    <ClInclude Include="PAttackAction.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PIdleAction.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PMoveAction.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PPlayerState.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PJumpAction.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PDeadAction.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PHitAction.h">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PPlayerController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PSprite.cpp">
       <Filter>소스 파일\Bitmap, Sprite</Filter>
     </ClCompile>
@@ -176,9 +191,6 @@
     </ClCompile>
     <ClCompile Include="PSoundMgr.cpp">
       <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="PSound.cpp">
-      <Filter>소스 파일\Sound</Filter>
     </ClCompile>
     <ClCompile Include="PObjectRotateUtil.cpp">
       <Filter>소스 파일\Util</Filter>
@@ -239,6 +251,30 @@
     </ClCompile>
     <ClCompile Include="PFsm.cpp">
       <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="PSound.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="PPlayerState.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PIdleAction.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PMoveAction.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PAttackAction.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PJumpAction.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PDeadAction.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="PHitAction.cpp">
+      <Filter>소스 파일\PlayerState</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

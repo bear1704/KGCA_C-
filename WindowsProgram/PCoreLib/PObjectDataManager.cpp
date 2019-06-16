@@ -45,12 +45,16 @@ std::vector<PRectObject*> PObjectDataManager::get_object_list_from_map(std::wstr
 
 std::vector<PSprite*> PObjectDataManager::get_animation_list_from_map(std::wstring key)
 {
+	std::vector<PSprite*> null_vec;
+
 	auto iter = object_animation_list_.find(key);
 	if (iter != object_animation_list_.end())
 	{
 		std::vector<PSprite*>& data = (*iter).second;
 		return data;
 	}
+	assert(iter != object_animation_list_.end()); //테스트 전에 잘못된 코드가 들어가는지 확인용. 지울예정
+	return null_vec;
 }
 
 void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
@@ -94,6 +98,8 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 
 		std::wstring object_composition_name(temp_buffer);
 
+		
+
 		for (int i = 0; i < numberof_objectlist; i++)
 		{
 			pPoint absolute_pos;
@@ -111,27 +117,33 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 			{
 				component = (PPlayerCharacter*) new PPlayerCharacter();
 				component->Set(path, object_name, pPoint(absolute_pos.x, absolute_pos.y));
+				LoadAnimationDataFromScript(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
 				component->set_gravity_(450.0f);
 				component->set_type_(Type::PLAYER);
 				component->StatusSet(status_path ,component->get_object_name());
-				LoadAnimationDataFromScript(animation_path);
-				component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(object_name)); //애니메이션 순서는 어차피 FSM정의순서를 따름!
+				component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(object_name));
+				component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 				object_list.push_back(component);
 			}
 			else if (type.compare(L"MONSTER") == 0)
 			{
 				component = (PMonster*) new PMonster();
 				component->Set(path, object_name, pPoint( absolute_pos.x, absolute_pos.y));
+				LoadAnimationDataFromScript(animation_path); //이후 캐릭터/몬스터 스프라이트 경로를 분할한다면, 애니메이션 경로도 분할해야 함 
 				component->set_gravity_(450.0f);
 				component->set_type_(Type::MONSTER);
-				object_list.push_back(component);
 				component->StatusSet(status_path, component->get_object_name()); //아마 아직 미구현
+				//component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(object_name));
+				component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
+				object_list.push_back(component);
+
 			}
 			else if (type.compare(L"NPC") == 0)
 			{
 				component = (PMonster*) new PRectObject();//아직 NPC객체가 없음
 				component->Set(path, object_name, pPoint(absolute_pos.x, absolute_pos.y));
 				component->set_type_(Type::NPC);
+				component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 				object_list.push_back(component);
 			}
 			else if (type.compare(L"MAP") == 0)
@@ -139,6 +151,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 				component =  new PRectObject();
 				component->Set(map_path, object_name, pPoint(map_pos.x, map_pos.y));
 				component->set_type_(Type::MAP);
+				component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 				object_list.insert(object_list.begin(), component); //map은 가장 먼저 렌더되도록 제일 앞에 위치.
 			}
 			
@@ -164,7 +177,7 @@ void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
 
 	TCHAR buffer[256] = { 0, };
 	TCHAR temp_buffer[256] = { 0, };
-	TCHAR name_buffer[256] = { 0, };
+	TCHAR type_buffer[32] = { 0, };
 
 	int number_of_data = -1;
 
@@ -186,13 +199,16 @@ void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
 		for (int index_data = 0; index_data < number_of_sprite; index_data++)
 		{
 			_fgetts(buffer, _countof(buffer), fp);
-			_stscanf_s(buffer, _T("%s"), temp_buffer, _countof(temp_buffer));
+			_stscanf_s(buffer, _T("%s%s"), temp_buffer, _countof(temp_buffer), type_buffer, _countof(type_buffer));
 
 			std::wstring sprite_name(temp_buffer);
+			std::wstring sprite_type(type_buffer);
 
 			PSprite* t = new PSprite();
 			t->Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(sprite_name), 1.0f, 1.0f);
+			t->set_animation_type_(WstringToAnimationtype(sprite_type));
 			
+
 			vec.push_back(t);
 		}
 

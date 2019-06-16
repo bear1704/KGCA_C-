@@ -1,18 +1,17 @@
 #pragma once
 #include "PFiniteState.h"
 
-class PFsm : public PSingleton<PFsm>
+class PFsm
 {
 public:
 	PFsm();
 	~PFsm();
 private:
-	friend class PSingleton<PFsm>;
-	std::map<State, shared_ptr<PFiniteState>> state_space_;
+	std::map<FSM_State, shared_ptr<PFiniteState>> state_space_;
 
 public:
-	void Add(State key_inputstate, Event event, State key_outputstate);
-	PFiniteState* get_state(State key);
+	void Add(FSM_State key_inputstate, FSM_Event event, FSM_State key_outputstate);
+	PFiniteState* get_state(FSM_State key);
 
 
 };

@@ -5,5 +5,5 @@ orange_mushroom_normal 500 200 MONSTER
 orange_mushroom_normal 200 150 MONSTER
 orange_mushroom_normal 300 200 MONSTER
 orange_mushroom_normal 1450 70 MONSTER
-player 500 500 PLAYER
+player 500 300 PLAYER
 map1 0 0 MAP

@@ -10,7 +10,7 @@ PFsm::~PFsm()
 {
 }
 
-void PFsm::Add(State key_inputstate, Event event, State key_outputstate)
+void PFsm::Add(FSM_State key_inputstate, FSM_Event event, FSM_State key_outputstate)
 {
 	auto iter = state_space_.find(key_inputstate);
 
@@ -30,7 +30,7 @@ void PFsm::Add(State key_inputstate, Event event, State key_outputstate)
 
 }
 
-PFiniteState * PFsm::get_state(State key)
+PFiniteState * PFsm::get_state(FSM_State key)
 {
 	auto iter = state_space_.find(key);
 	if (iter == state_space_.end()) return nullptr;

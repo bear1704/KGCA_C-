@@ -30,6 +30,7 @@ bool PInput::Frame()
 	g_InputActionMap.downArrowKey = KeyCheck(VK_DOWN);
 	g_InputActionMap.leftArrowKey = KeyCheck(VK_LEFT);
 	g_InputActionMap.rightArrowKey = KeyCheck(VK_RIGHT);
+	g_InputActionMap.attackKey = KeyCheck(VK_CONTROL);
 	
 
 	g_InputActionMap.exitKey = KeyCheck(VK_ESCAPE);

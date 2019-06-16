@@ -94,7 +94,8 @@ bool PScene::Render()
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Render();
-			draw_test_rect(player->get_foot_plane_box());
+			//draw_test_rect(player->get_foot_plane_box());
+			draw_test_rect(player->get_collision_rect_());
 		}
 		else if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{
