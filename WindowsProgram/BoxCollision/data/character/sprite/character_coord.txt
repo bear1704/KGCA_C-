@@ -1,4 +1,4 @@
-#SPRITE 10
+#SPRITE 12
 pc_idle 1 777 777 data/character/sprite/character.bmp
 0 266 119 53 77
 pc_move 4 777 0.7 data/character/sprite/character.bmp
@@ -8,13 +8,13 @@ pc_move 4 777 0.7 data/character/sprite/character.bmp
 3 236 344 65 69
 pc_jump 1 777 777 data/character/sprite/character.bmp
 0 69 21 65 69
-pc_slash 5 1.0 1.0 data/character/sprite/character.bmp
+pc_slash 5 0.8 0.8 data/character/sprite/character.bmp
 0 629 358 67 69
 1 629 358 67 69
 2 520 360 67 69
 3 395 361 90 68
 4 395 361 90 68
-pc_swing 9 1.0 1.0 data/character/sprite/character.bmp
+pc_swing 9 0.8 0.8 data/character/sprite/character.bmp
 0 853 355 65 67
 1 853 355 65 67
 2 853 355 65 67
@@ -24,7 +24,7 @@ pc_swing 9 1.0 1.0 data/character/sprite/character.bmp
 6 629 358 67 69
 7 629 358 67 69
 8 629 358 67 69
-pc_pierce 5 1.0 1.0 data/character/sprite/character.bmp
+pc_pierce 5 0.8 0.8 data/character/sprite/character.bmp
 0 813 46 96 72
 1 813 46 96 72
 2 813 46 96 72
@@ -39,6 +39,12 @@ orange_mushroom_move 3 777 0.5 data/character/sprite/mushroom.bmp
 2 139 76 62 57
 orange_mushroom_jump 1 777 777 data/character/sprite/mushroom.bmp
 0 73 72 63 65
+orange_mushroom_hit 1 777 777 data/character/sprite/mushroom.bmp
+0 8 142 61 65
+orange_mushroom_die 3 1.0 1.0 data/character/sprite/mushroom.bmp
+0 9 214 60 61
+1 75 215 60 55
+2 141 222 60 45
 orange_mushroom_other 2 777 0.5 data/character/sprite/mushroom.bmp
 0 4 139 66 68
 1 140 220 61 47

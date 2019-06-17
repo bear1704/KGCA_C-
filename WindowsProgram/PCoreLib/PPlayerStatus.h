@@ -45,6 +45,9 @@ public:
 	void ModifyHP(int hp);
 	void ModifyMP(int mp);
 	void ModifyEXP(int exp);
+	void DecreaseHP(int minus);
+	void DecreaseMP(int minus);
+	void DecreaseEXP(int minus);
 	virtual bool Init();
 	virtual bool Frame();
 	virtual bool Render();

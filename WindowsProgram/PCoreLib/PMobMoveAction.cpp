@@ -11,13 +11,18 @@ PMobMoveAction::~PMobMoveAction()
 {
 }
 
-void PMobMoveAction::Process()
+void PMobMoveAction::Process(PPlayerCharacter* target)
 {
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::MOVE)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::MOVE));
 	}
 
+	if (owner_->get_ishit_())
+	{
+		owner_->set_ishit_(false);
+		owner_->SetTransition(FSM_Event::HIT);
+	}
 
 	progress_time_ += g_SecondPerFrame;
 	direction_change_progress_time_ += g_SecondPerFrame;

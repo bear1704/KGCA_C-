@@ -53,8 +53,14 @@ void PAttackAction::AttackProcess()
 				if (monster->check_hit(owner_->get_attack_collision_box_()))
 				{
 					int hp = monster->get_status().get_hp_();
-					monster->get_status().ModifyHP(hp - damage);  //제일 처음 히트된 몬스터 타격
+					monster->get_status().DecreaseHP(damage);  //제일 처음 히트된 몬스터 타격
 					monster->set_ishit_(true); //몬스터 한대 맞았다고 알려주기 
+
+					SIDE mob_to_player_side = 
+						(owner_->get_collision_rect_().left - monster->get_collision_rect_().left) > 0 ? SIDE::RIGHT : SIDE::LEFT;
+
+					monster->set_enemy_to_direction_side_(mob_to_player_side);
+
 					break;
 				}
 			}

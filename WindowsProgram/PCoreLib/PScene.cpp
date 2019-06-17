@@ -14,16 +14,23 @@ PScene::~PScene()
 
 bool PScene::Init()
 {
+	target = nullptr;
+
 	for (int i = 0; i < game_objects_.size(); i++)
 	{
 		if (game_objects_[i]->get_type_() == Type::PLAYER)
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
+			target = player;
 			player->Init();
 		}
-		else if (game_objects_[i]->get_type_() == Type::MONSTER)
+	}
+	for (int i = 0; i < game_objects_.size(); i++)
+	{
+		if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{
 			PMonster* monster = (PMonster*)game_objects_[i];
+			monster->set_target_player_(target);
 			monster->Init();
 		}
 		else if (game_objects_[i]->get_type_() == Type::NPC)
@@ -37,6 +44,7 @@ bool PScene::Init()
 			map->Init();
 		}
 	}
+
 	for (int i = 0; i < ui_compositions_.size(); i++)
 	{
 		ui_compositions_[i]->Init();
@@ -46,18 +54,22 @@ bool PScene::Init()
 
 bool PScene::Frame()
 {
-
-
 	for (int i = 0; i < game_objects_.size(); i++)
 	{
 		if (game_objects_[i]->get_type_() == Type::PLAYER)
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Frame();
+			target = player;
 		}
-		else if (game_objects_[i]->get_type_() == Type::MONSTER)
+	}
+
+	for (int i = 0; i < game_objects_.size(); i++)
+	{
+		if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{
 			PMonster* monster = (PMonster*)game_objects_[i];
+			monster->set_target_player_(target);
 			monster->Frame();
 		}
 		else if (game_objects_[i]->get_type_() == Type::NPC)

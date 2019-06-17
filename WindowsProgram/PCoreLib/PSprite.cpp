@@ -384,3 +384,8 @@ float PSprite::get_lifetime_()
 {
 	return lifetime_;
 }
+
+float PSprite::get_alpha_()
+{
+	return alpha_;
+}

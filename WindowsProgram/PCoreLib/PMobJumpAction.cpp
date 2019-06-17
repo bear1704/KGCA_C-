@@ -11,7 +11,7 @@ PMobJumpAction::~PMobJumpAction()
 {
 }
 
-void PMobJumpAction::Process()
+void PMobJumpAction::Process(PPlayerCharacter* target)
 {
 
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::JUMP)
@@ -19,7 +19,12 @@ void PMobJumpAction::Process()
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::JUMP));
 		owner_->get_physics_().StartJump();
 	}
-
+	
+	if (owner_->get_ishit_())
+	{
+		owner_->set_ishit_(false);
+		owner_->SetTransition(FSM_Event::HIT);
+	}
 
 	if (owner_->get_physics_().get_isjump() == false)
 	{

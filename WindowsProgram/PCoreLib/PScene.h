@@ -15,6 +15,7 @@ private:
 	std::vector<PUIComponent*> ui_compositions_;
 	std::vector<PRectObject*> game_objects_;
 	std::wstring scene_name_;
+	PPlayerCharacter* target;
 public:
 	bool Init();
 	bool Frame();

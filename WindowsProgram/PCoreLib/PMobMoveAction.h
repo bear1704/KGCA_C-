@@ -14,6 +14,6 @@ public:
 	float change_time_ = 6.0f;
 
 public:
-	void Process() override;
+	void Process(PPlayerCharacter* target) override;
 };
 

@@ -24,16 +24,33 @@ bool PMonster::Init()
 	action_list_.insert((std::make_pair(FSM_State::IDLE, new PMobIdleAction(this))));
 	action_list_.insert((std::make_pair(FSM_State::MOVE, new PMobMoveAction(this))));
 	action_list_.insert((std::make_pair(FSM_State::JUMP, new PMobJumpAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::HIT, new PMobHitAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::ATTACK, new PMobAttackAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::DEAD, new PMobDeadAction(this))));
 
 	current_monster_action_ = action_list_[FSM_State::IDLE];
 	current_monster_state_ = FSM_State::IDLE;
 
+
+	//MOVE
 	monster_fsm_.Add(FSM_State::IDLE, FSM_Event::MOB_TIME_OUT, FSM_State::MOVE);
 	monster_fsm_.Add(FSM_State::MOVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
+	
+	//JUMP
 	monster_fsm_.Add(FSM_State::IDLE, FSM_Event::MOB_JUMP_TIME_OUT, FSM_State::JUMP);
 	monster_fsm_.Add(FSM_State::MOVE, FSM_Event::MOB_JUMP_TIME_OUT, FSM_State::JUMP);
 	monster_fsm_.Add(FSM_State::JUMP, FSM_Event::JUMP_END, FSM_State::MOVE);
 
+	//HIT
+	monster_fsm_.Add(FSM_State::IDLE, FSM_Event::HIT, FSM_State::HIT);
+	monster_fsm_.Add(FSM_State::MOVE, FSM_Event::HIT, FSM_State::HIT);
+	monster_fsm_.Add(FSM_State::JUMP, FSM_Event::HIT, FSM_State::HIT);
+	monster_fsm_.Add(FSM_State::HIT, FSM_Event::MOB_CHASE, FSM_State::ATTACK);
+	monster_fsm_.Add(FSM_State::HIT, FSM_Event::HPEMPTY, FSM_State::DEAD);
+
+	//ATTACK
+	monster_fsm_.Add(FSM_State::ATTACK, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
+	monster_fsm_.Add(FSM_State::ATTACK, FSM_Event::HIT, FSM_State::HIT);
 
 	return false;
 }
@@ -43,7 +60,7 @@ bool PMonster::Frame()
 	SavePrevPosition();
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
-	ProcessAction();
+	ProcessAction(target_player_);
 	Movement();
 	physics_.Gravity(position_, gravity_);
 	physics_.Jump(physics_.jump_init_time, position_, 650, 0.25f);
@@ -87,7 +104,7 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
 
-	direction_side_ = SIDE::RIGHT;
+	my_direction_side_ = SIDE::RIGHT;
 	//몬스터는 카메라를 붙이지 않음.
 }
 
@@ -100,14 +117,14 @@ void PMonster::MonsterWallCollision()
 	{
 		if (PCollision::GetInstance().RectInRect(it, collision_box_))
 		{
-			if (direction_side_ == SIDE::LEFT)
+			if (my_direction_side_ == SIDE::LEFT)
 			{
-				direction_side_ = SIDE::RIGHT;
+				my_direction_side_ = SIDE::RIGHT;
 				position_.x = it.left + it.right + collision_box_.right / 2 + 1.0f; //1.0f =  가중치
 			}
 			else
 			{
-				direction_side_ = SIDE::LEFT;
+				my_direction_side_ = SIDE::LEFT;
 				position_.x = it.left -  collision_box_.right / 2  - 1.0f;
 			}
 		}
@@ -121,12 +138,17 @@ void PMonster::Movement()
 
 SIDE PMonster::get_direction_side_()
 {
-	return direction_side_;
+	return my_direction_side_;
 }
 
 void PMonster::set_direction_side_(SIDE side)
 {
-	direction_side_ = side;
+	my_direction_side_ = side;
+}
+
+void PMonster::set_target_player_(PPlayerCharacter * player)
+{
+	target_player_ = player;
 }
 
 void PMonster::SetTransition(FSM_Event event)
@@ -140,9 +162,9 @@ void PMonster::SetTransition(FSM_Event event)
 
 }
 
-void PMonster::ProcessAction()
+void PMonster::ProcessAction(PPlayerCharacter* target)
 {
-	current_monster_action_->Process();
+	current_monster_action_->Process(target);
 }
 
 bool PMonster::check_hit(FLOAT_RECT player_attack_col)
@@ -156,4 +178,19 @@ bool PMonster::check_hit(FLOAT_RECT player_attack_col)
 void PMonster::set_ishit_(bool hit)
 {
 	ishit_ = hit;
+}
+
+bool PMonster::get_ishit_()
+{
+	return ishit_;
+}
+
+void PMonster::set_enemy_to_direction_side_(SIDE side)
+{
+	enemy_to_direction_side_ = side;
+}
+
+SIDE PMonster::get_enemy_to_direction_side_()
+{
+	return enemy_to_direction_side_;
 }

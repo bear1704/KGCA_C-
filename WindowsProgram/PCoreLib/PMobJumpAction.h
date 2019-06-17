@@ -7,6 +7,6 @@ public:
 	PMobJumpAction(PMonster* parent);
 	~PMobJumpAction();
 public:
-	void Process();
+	void Process(PPlayerCharacter* target);
 };
 

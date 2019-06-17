@@ -6,5 +6,7 @@ class PMobDeadAction :
 public:
 	PMobDeadAction(PMonster* parent);
 	~PMobDeadAction();
+public:
+	void Process(PPlayerCharacter* target);
 };
 

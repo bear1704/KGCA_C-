@@ -6,5 +6,11 @@ class PMobHitAction :
 public:
 	PMobHitAction(PMonster* parent);
 	~PMobHitAction();
+	float progress_time_ = 0.0f;
+	float knockback_distance_ = 35.0f;
+	float knockback_speed_ = 150.0f;
+public:
+	void Process(PPlayerCharacter* target);
+	void KnockBack();
 };
 

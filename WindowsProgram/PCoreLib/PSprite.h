@@ -74,6 +74,7 @@ public:
 	ANIMATIONTYPE get_animation_type_();
 	float get_remain_lifetime_();
 	float get_lifetime_();
+	float get_alpha_();
 	
 };
 

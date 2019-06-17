@@ -2,7 +2,7 @@
 #include <random>
 #include <functional>
 #include <ctime>
-
+#include "PPlayerCharacter.h"
 class PMonster;
 
 class PMobState
@@ -13,6 +13,6 @@ public:
 	PMobState(PMonster* parent) : owner_(parent) {}
 	virtual ~PMobState();
 public:
-	virtual void Process() = 0;
+	virtual void Process(PPlayerCharacter* target) = 0;
 };
 

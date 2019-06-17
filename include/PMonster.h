@@ -1,5 +1,5 @@
 #pragma once
-#include "PCharacter.h"
+#include "PPlayerCharacter.h"
 #include "PMobState.h"
 #include "PFsm.h"
 
@@ -10,8 +10,10 @@ public:
 	~PMonster();
 private:
 	multibyte_string monster_name_;
-	SIDE direction_side_;
+	SIDE my_direction_side_;
+	SIDE enemy_to_direction_side_;
 	bool ishit_;
+	PPlayerCharacter* target_player_;
 public:
 	bool Init();
 	bool Frame();
@@ -23,6 +25,7 @@ public:
 	void Movement();
 	SIDE get_direction_side_();
 	void set_direction_side_(SIDE side);
+	void set_target_player_(PPlayerCharacter* player);
 
 
 	PFsm monster_fsm_;
@@ -30,9 +33,12 @@ public:
 	std::map<FSM_State, PMobState*> action_list_;
 	FSM_State current_monster_state_;
 	void SetTransition(FSM_Event event);
-	void ProcessAction();
+	void ProcessAction(PPlayerCharacter* target);
 	bool check_hit(FLOAT_RECT player_attack_col);
 	void set_ishit_(bool hit);
+	bool get_ishit_();
+	void set_enemy_to_direction_side_(SIDE side);
+	SIDE get_enemy_to_direction_side_();
 
 };
 

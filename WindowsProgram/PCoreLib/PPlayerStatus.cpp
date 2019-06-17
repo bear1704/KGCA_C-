@@ -14,7 +14,7 @@ PPlayerStatus::~PPlayerStatus()
 void PPlayerStatus::ModifyHP(int hp)
 {
 	int hp_revised = min(hp, max_hp_);
-	hp_revised = max(hp_revised, 0);
+	hp_revised = max(hp_revised, -0.1f);
 
 	if (abs(past_hp_ - hp_) < 0.1f)
 	{
@@ -56,6 +56,18 @@ void PPlayerStatus::ModifyEXP(int exp)
 	{
 		exp_ = exp_revised;
 	}
+}
+void PPlayerStatus::DecreaseHP(int minus)
+{
+	hp_ -= minus;
+}
+void PPlayerStatus::DecreaseMP(int minus)
+{
+	mp_ -= minus;
+}
+void PPlayerStatus::DecreaseEXP(int minus)
+{
+	exp_ -= minus;
 }
 bool PPlayerStatus::Init()
 {
