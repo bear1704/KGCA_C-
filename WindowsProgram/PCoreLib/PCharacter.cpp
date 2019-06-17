@@ -143,13 +143,11 @@ void PCharacter::PlatformWallCollision()
 			{
 				position_.x = it.left + it.right + collision_box_.right / 2;
 				//position_.x = prev_position_.x;
-				OutputDebugString(L"Leftside\n");
 			}
 			else if(it.left - collision_box_.left > 0 && position_.x > prev_position_.x) //오른쪽 벽 충돌
 			{
 				position_.x = it.left - collision_box_.right / 2;
 				//position_.x = prev_position_.x;
-				OutputDebugString(L"RightSide\n");
 			}
 			
 		}

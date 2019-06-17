@@ -17,6 +17,8 @@ void PMobHitAction::Process(PPlayerCharacter* target)
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::HIT)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::HIT));
+		owner_->dmg_comp->hit_world_pos = pPoint(owner_->get_position_().x, owner_->get_position_().y - 55.0f);
+		owner_->dmg_comp->ResetDmgPresent();
 	}
 
 

@@ -77,20 +77,45 @@ void PUIComponent::Set(multibyte_string data_path, multibyte_string object_name,
 
 }
 
-void PUIComponent::ReviseAllComponentPosition(pPoint worldpos)
+void PUIComponent::ReviseAllComponentPosition(pPoint& worldpos)
 {
-	position_ = worldpos;
+	worldpos.y -= g_SecondPerFrame * 10.0f;
+	position_ = P2DCamera::GetInstance().WorldToGamescreen(worldpos);
+
+	int accumulation_gap = 0.0f;
+
+	accumtime += g_SecondPerFrame;
+
+	if (accumtime >= 8.0f)
+	{
+		accumtime = 0.0f;
+		
+		for (auto& iter : component_list_)
+		{
+			iter->get_sprite_()->set_alpha_(0.0f);
+		}
+	}
 
 	for (auto& iter : component_list_)
 	{
-		pPoint posi = pPoint(iter->position_.x + worldpos.x, iter->position_.y + worldpos.y);
+		pPoint posi = pPoint(position_.x + accumulation_gap, position_.y);
 		iter->position_ = posi;
 		iter->get_sprite_()->SetPosition(posi.x, posi.y);
+		accumulation_gap += gap;
 	}
 }
 
 std::vector<PUIComponent*>& PUIComponent::get_component_list_()
 {
 	return component_list_;
+}
+
+
+void PUIComponent::ResetDmgPresent()
+{
+	for (auto& iter : component_list_)
+	{
+		iter->get_sprite_()->set_alpha_(1.0f);
+	}
 }
 

@@ -59,8 +59,9 @@ bool PMonster::Init()
 	//REVIVE
 	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
 
-	damage_effect = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"DMG_FONT");
-
+	PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+	dmg_comp = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"DMGPRESENT");
+	
 	
 
 	return false;
@@ -77,19 +78,19 @@ bool PMonster::Frame()
 	physics_.Jump(physics_.jump_init_time, position_, 650, 0.25f);
 	PlatformWallCollision();
 	MonsterWallCollision();
+	dmg_comp->ReviseAllComponentPosition(dmg_comp->hit_world_pos);
 	return false;
 }
 
 bool PMonster::Render()
 {
 	Spawn();
-
+	dmg_comp->Render();
 	return false;
 }
 
 bool PMonster::Release()
 {
-	damage_effect->Release();
 	sprite_.Release();
 	return false;
 }
@@ -120,6 +121,7 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	spawn_position_ = position;
 
 	my_direction_side_ = SIDE::RIGHT;
+	
 	//몬스터는 카메라를 붙이지 않음.
 }
 
@@ -220,21 +222,7 @@ int PMonster::get_be_received_damage()
 	return be_received_damage_;
 }
 
-void PMonster::SetDamageEffect(float height, pPoint& pos, int& length)
-{
-	pos = pPoint(position_.x, position_.y - height);
-	std::string dmgstr = std::to_string(be_received_damage_);
-	length = dmgstr.length();
-	//damage_effect->ReviseAllComponentPosition(pos);
 
-	for (int i = 0; i < dmgstr.length(); i++)
-	{
-		int num = dmgstr[i] - '0';
-		damage_effect->get_component_list_()[i]->get_sprite_()->set_current_played_spriteframe_(num);
-
-	}
-	
-}
 
 
 

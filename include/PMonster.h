@@ -15,13 +15,14 @@ private:
 	bool ishit_;
 	PPlayerCharacter* target_player_;
 	int be_received_damage_;
-	PUIComponent* damage_effect;
-
+	
+	
 public:
 	bool Init() override;
 	bool Frame() override;
 	bool Render() override;
 	bool Release() override;
+	PUIComponent* dmg_comp;
 public:
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	void MonsterWallCollision();
@@ -36,8 +37,6 @@ public:
 	SIDE get_enemy_to_direction_side_();
 	void set_be_received_damage_(int damage);
 	int get_be_received_damage();
-	void SetDamageEffect(float height, pPoint& pos, int& length);
-	PUIComponent* get_damage_effect_();
 
 
 

@@ -14,3 +14,7 @@ guage_slot 390 18 IMAGE
 expbar_background 0 88 IMAGE
 expbar 15 90 IMAGE
 expbar_separate 100 90 IMAGE
+DMGPRESENT 3 130 30
+dmg_font 35 0 IMAGE
+dmg_font 70 0 IMAGE
+dmg_font 105 0 IMAGE

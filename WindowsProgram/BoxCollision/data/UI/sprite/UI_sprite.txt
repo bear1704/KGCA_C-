@@ -1,4 +1,4 @@
-#SPRITE 14
+#SPRITE 15
 cashshopbutton 4 777 777 data/UI/sprite/cashshopbutton.bmp
 0 0 0 32 32
 1 67 0 32 32
@@ -45,3 +45,14 @@ expbar 1 777 777 data/UI/sprite/expbar_exp.bmp
 0 0 0 1008 7
 expbar_separate 1 777 777 data/UI/sprite/expbar_separatebar.bmp
 0 0 0 810 7
+dmg_font 10 777 777 data/UI/sprite/dmgfont.bmp
+0 7 4 33 36
+1 45 4 35 36
+2 83 4 35 36
+3 124 5 35 36
+4 162 6 35 36
+5 203 5 35 36
+6 246 6 35 36
+7 4 50 35 36
+8 44 51 35 36
+9 84 50 35 36

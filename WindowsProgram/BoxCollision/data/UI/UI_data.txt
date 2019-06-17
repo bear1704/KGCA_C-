@@ -1,4 +1,4 @@
-#DATA 14
+#DATA 15
 cashshopbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt cashshopbutton
 eventbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt eventbutton
 characterbutton 0 0 0 32 33 1.0 1.0 data/UI/sprite/UI_sprite.txt characterbutton
@@ -13,3 +13,4 @@ quickslot 0 0 0 150 70 1.0 1.0 data/UI/sprite/UI_sprite.txt quickSlot
 expbar_background 0 0 0 1024 10 1.0 1.0 data/UI/sprite/UI_sprite.txt expbar_background
 expbar 0 0 0 1008 7 1.0 1.0 data/UI/sprite/UI_sprite.txt expbar
 expbar_separate 0 0 0 810 7 1.0 1.0 data/UI/sprite/UI_sprite.txt expbar_separate
+dmg_font 0 0 0 35 36 1.0 1.0 data/UI/sprite/UI_sprite.txt dmg_font
