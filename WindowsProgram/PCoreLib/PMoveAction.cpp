@@ -22,7 +22,10 @@ void PMoveAction::Process()
 	{
 		owner_->SetTransition(FSM_Event::INPUT_JUMP);
 	}
-
+	if (owner_->get_hit_() && owner_->get_invisible_() == false)
+	{
+		owner_->SetTransition(FSM_Event::HIT);
+	}
 
 	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
 	{

@@ -10,6 +10,9 @@ public:
 	~PPlayerCharacter();
 private:
 	multibyte_string player_character_name_;
+	bool hit_;
+	float flickering_rate;
+	float invincible_rate;
 protected:
 
 public:
@@ -26,6 +29,9 @@ public:
 	FSM_State current_player_state_;
 	void SetTransition(FSM_Event event);
 	void ProcessAction();
+	void set_hit_(bool hit);
+	bool get_hit_();
+	void InvincibleProgress();
 
 
 

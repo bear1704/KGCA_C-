@@ -1,4 +1,5 @@
 #pragma once
+#include "PSoundMgr.h"
 
 class PPlayerCharacter;
 

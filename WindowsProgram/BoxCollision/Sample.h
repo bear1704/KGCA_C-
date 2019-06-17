@@ -25,6 +25,8 @@ public:
 	bool InitDataLoad();
 public:
 	void draw_test_rect(FLOAT_RECT rect);
+	float timer;
+	bool sound_flag;
 private:
 	
 	

@@ -58,6 +58,7 @@ bool PMonster::Init()
 	monster_fsm_.Add(FSM_State::DEAD, FSM_Event::MOB_TIME_OUT, FSM_State::REVIVE);
 	//REVIVE
 	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
+	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::HIT, FSM_State::HIT);
 
 	PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
 	dmg_comp = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"DMGPRESENT");
@@ -221,6 +222,8 @@ int PMonster::get_be_received_damage()
 {
 	return be_received_damage_;
 }
+
+
 
 
 

@@ -40,6 +40,7 @@ public:
 
 
 
+
 	PFsm monster_fsm_;
 	PMobState* current_monster_action_;
 	std::map<FSM_State, PMobState*> action_list_;

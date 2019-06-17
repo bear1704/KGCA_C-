@@ -11,7 +11,7 @@ public:
 
 private:
 	std::vector<PUIComponent*> component_list_; //polymorphism
-	float gap = 23.0f;
+	float gap = 33.0f;
 	float accumtime = 0.0f;
 public:
 	virtual PUIComponent* Clone() { return nullptr; }
@@ -31,5 +31,6 @@ public:
 public:
 	pPoint hit_world_pos;
 	void ResetDmgPresent();
+	void DamageToSprite(int damage);
 };
 

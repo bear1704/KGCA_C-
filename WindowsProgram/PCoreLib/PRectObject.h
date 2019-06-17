@@ -36,7 +36,7 @@ protected:
 	float gravity_;
 	Type type_;
 	bool is_reversal_;
-
+	bool invisible_;
 	
 
 public:
@@ -60,6 +60,8 @@ public:
 	void set_collision_box_(FLOAT_RECT norm_box);
 	float get_scale_();
 	float get_alpha_();
+	bool get_invisible_();
+	void set_invisible_(bool invisible);
 	void Spawn();
 	void set_gravity_(float gravity);
 	void set_type_(Type type);
@@ -72,6 +74,7 @@ public:
 	void set_alpha_and_scale_(float alpha, float scale);
 
 	pPoint get_spawn_position_();
+	
 
 
 };

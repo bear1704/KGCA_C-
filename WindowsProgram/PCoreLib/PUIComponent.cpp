@@ -116,6 +116,21 @@ void PUIComponent::ResetDmgPresent()
 	for (auto& iter : component_list_)
 	{
 		iter->get_sprite_()->set_alpha_(1.0f);
+		iter->get_sprite_()->set_scale_(1.3f);
 	}
+}
+
+void PUIComponent::DamageToSprite(int damage)
+{
+	std::string dmgstr = std::to_string(damage);
+
+	for (int i = 0; i < dmgstr.length(); i++)
+	{
+		int number = dmgstr[i] - '0';
+		component_list_[i]->get_sprite_()->set_current_played_spriteframe_(number);
+
+	}
+
+
 }
 

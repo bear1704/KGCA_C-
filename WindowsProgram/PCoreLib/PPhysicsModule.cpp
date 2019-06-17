@@ -74,8 +74,12 @@ bool PPhysicsModule::get_is_downphase_()
 
 void PPhysicsModule::Gravity(pPoint & position, float gravity)
 {
+	float deltatime = g_SecondPerFrame;
+	if (deltatime > 0.1f)
+		deltatime = 0.0f;
+
 	if (is_downphase_ == true)
-		position.y += gravity * g_SecondPerFrame;
+		position.y += gravity * deltatime;
 }
 
 bool PPhysicsModule::HitCalc()

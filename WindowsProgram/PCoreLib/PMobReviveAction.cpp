@@ -21,6 +21,12 @@ void PMobReviveAction::Process(PPlayerCharacter * target)
 		owner_->get_status().ModifyHP(owner_->get_status().get_max_hp());
 	}
 
+	if (PCollision::GetInstance().RectInRect(target->get_collision_rect_(), owner_->get_collision_rect_()) && progress_time > 3.0f)
+	{  //플레이어와의 충돌 체크 
+		target->set_hit_(true);
+	}
+
+
 	float current_alpha = owner_->get_sprite_()->get_alpha_();
 	current_alpha += g_SecondPerFrame * 1.0f;
 	owner_->get_sprite_()->set_alpha_(current_alpha);
@@ -31,6 +37,12 @@ void PMobReviveAction::Process(PPlayerCharacter * target)
 	}
 
 	progress_time += g_SecondPerFrame;
+
+	if (owner_->get_ishit_())
+	{
+		owner_->set_ishit_(false);
+		owner_->SetTransition(FSM_Event::HIT);
+	}
 
 	if (progress_time > 7.0f)
 	{

@@ -2,7 +2,8 @@
 
 Sample::Sample()
 {
-
+	timer = 0.0f;
+	sound_flag = false;
 }
 
 
@@ -29,6 +30,13 @@ bool Sample::Frame()
 		g_current_scene_->Frame();
 
 	
+	timer += g_SecondPerFrame;
+	if (timer > 3.0f && !sound_flag)
+	{
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/map.mp3"));
+		PSoundMgr::GetInstance().GetPtr(PSoundMgr::GetInstance().Load(L"data/sound/map.mp3"))->SetMode(2);
+		sound_flag = true;
+	}
 	return true;
 }
 
@@ -95,6 +103,13 @@ bool Sample::InitDataLoad()
 	scene1->set_scene_name_(L"MUSHROOMLAND");
 	
 	g_current_scene_ = scene1;
+
+
+
+	
+	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree.mp3"));
+	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree_die.mp3"));
+
 
 	return true;
 }

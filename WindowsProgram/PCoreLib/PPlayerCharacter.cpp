@@ -8,6 +8,8 @@
 
 PPlayerCharacter::PPlayerCharacter()
 {
+	flickering_rate = 0.0f;
+	invincible_rate = 0.0f;
 }
 
 
@@ -23,8 +25,9 @@ bool PPlayerCharacter::Init()
 	action_list_.insert(std::make_pair(FSM_State::MOVE, new PMoveAction(this)));
 	action_list_.insert(std::make_pair(FSM_State::JUMP, new PJumpAction(this)));
 	action_list_.insert(std::make_pair(FSM_State::ATTACK, new PAttackAction(this)));
+	action_list_.insert(std::make_pair(FSM_State::HIT, new PHitAction(this)));
 	//action_list_.insert(std::make_pair(FSM_State::DEAD, new PDeadAction(this)));
-	//action_list_.insert(std::make_pair(FSM_State::HIT, new PHitAction(this)));
+
 	current_player_action_ = action_list_[FSM_State::IDLE];
 	current_player_state_ = FSM_State::IDLE;
 	
@@ -41,6 +44,14 @@ bool PPlayerCharacter::Init()
 	player_fsm_.Add(FSM_State::JUMP, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
 	player_fsm_.Add(FSM_State::ATTACK, FSM_Event::ATTACK_END, FSM_State::IDLE);//MOVE, JUMP는 공격시에 불가능함. 오직 IDLE로만 회귀
 
+	//HIT
+	player_fsm_.Add(FSM_State::IDLE, FSM_Event::HIT, FSM_State::HIT);
+	player_fsm_.Add(FSM_State::MOVE, FSM_Event::HIT, FSM_State::HIT);
+	player_fsm_.Add(FSM_State::JUMP, FSM_Event::HIT, FSM_State::HIT);
+	player_fsm_.Add(FSM_State::ATTACK, FSM_Event::HIT, FSM_State::HIT);
+	player_fsm_.Add(FSM_State::HIT, FSM_Event::TIME_OUT, FSM_State::IDLE);
+
+
 	status.ModifyHP(1930);
 	status.ModifyMP(1930);
 	status.ModifyEXP(0);
@@ -52,14 +63,15 @@ bool PPlayerCharacter::Init()
 bool PPlayerCharacter::Frame()
 {
 	SavePrevPosition();
+	ProcessAction();
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
 	Movement();
-	ProcessAction();
 	physics_.Jump(physics_.jump_init_time, position_, 800, 0.2f);
 	physics_.Gravity(position_, gravity_);
 	PlatformWallCollision();
 	status.Frame();
+	InvincibleProgress();
 	return true;
 }
 
@@ -165,4 +177,43 @@ void PPlayerCharacter::SetTransition(FSM_Event event)
 void PPlayerCharacter::ProcessAction()
 {
 	current_player_action_->Process();
+}
+
+void PPlayerCharacter::set_hit_(bool hit)
+{
+	hit_ = hit;
+}
+
+bool PPlayerCharacter::get_hit_()
+{
+	return hit_;
+}
+
+void PPlayerCharacter::InvincibleProgress()
+{
+	if (get_invisible_() == true)
+	{
+		if (invincible_rate > 3.0f)
+		{
+			set_invisible_(false);
+			invincible_rate = 0.0f;
+		}
+			
+
+		if (flickering_rate < 0.15f)
+		{
+			sprite_.set_alpha_(0.5f);
+		}
+		else if (flickering_rate < 0.3f)
+		{
+			sprite_.set_alpha_(1.0f);
+		}
+		else
+		{
+			flickering_rate = 0.0f;
+		}
+
+		flickering_rate += g_SecondPerFrame;
+		invincible_rate += g_SecondPerFrame;
+	}
 }

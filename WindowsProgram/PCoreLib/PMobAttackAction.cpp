@@ -26,6 +26,10 @@ void PMobAttackAction::Process(PPlayerCharacter* target)
 		first_hit = false;
 	}
 
+	if (PCollision::GetInstance().RectInRect(target->get_collision_rect_(), owner_->get_collision_rect_()))
+	{  //플레이어와의 충돌 체크 
+			target->set_hit_(true);
+	}
 
 	if (!first_hit) //처음 1회 히트시
 	{
@@ -66,3 +70,4 @@ void PMobAttackAction::Process(PPlayerCharacter* target)
 
 
 }
+

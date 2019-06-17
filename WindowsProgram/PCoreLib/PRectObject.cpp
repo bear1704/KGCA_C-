@@ -159,6 +159,16 @@ float PRectObject::get_alpha_()
 	return alpha_;
 }
 
+bool PRectObject::get_invisible_()
+{
+	return invisible_;
+}
+
+void PRectObject::set_invisible_(bool invisible)
+{
+	invisible_ = invisible;
+}
+
 void PRectObject::Spawn()
 {
 	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());

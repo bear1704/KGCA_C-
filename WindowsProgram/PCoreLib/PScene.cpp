@@ -49,6 +49,9 @@ bool PScene::Init()
 	{
 		ui_compositions_[i]->Init();
 	}
+
+
+
 	return true;
 }
 
@@ -61,6 +64,10 @@ bool PScene::Frame()
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Frame();
 			target = player;
+			/*if (target->get_status().get_exp_() > target->get_status().get_max_exp() && scene_number_ == 1)
+			{
+				SceneChange();
+			}*/
 		}
 	}
 
@@ -218,4 +225,14 @@ void PScene::draw_test_rect(FLOAT_RECT rect)
 	int prevMode2 = Rectangle(g_handle_off_screenDC, arect.left, arect.top,
 		arect.left + arect.right, arect.top + arect.bottom);
 	SetROP2(g_handle_off_screenDC, prevMode2);
+}
+
+void PScene::SceneChange()
+{
+	PScene* scene2 = new PScene();
+	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"END");
+	scene2->InsertObject(game_objects_);
+	g_current_scene_ = scene2;
+	scene_number_ = 2;
+	
 }

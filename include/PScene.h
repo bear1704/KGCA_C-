@@ -1,5 +1,6 @@
 #pragma once
 #include "PUIComponent.h"
+#include "PObjectDataManager.h"
 #include "PPlayerCharacter.h"
 #include "PMonster.h"
 #include "PCore.h"
@@ -16,6 +17,7 @@ private:
 	std::vector<PRectObject*> game_objects_;
 	std::wstring scene_name_;
 	PPlayerCharacter* target;
+	int scene_number_ = 1;
 public:
 	bool Init();
 	bool Frame();
@@ -26,5 +28,6 @@ public:
 	void set_scene_name_(std::wstring name);
 	std::wstring get_scene_name_();
 	void draw_test_rect(FLOAT_RECT rect);
+	void SceneChange();
 };
 

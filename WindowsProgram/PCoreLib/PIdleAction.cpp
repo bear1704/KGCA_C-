@@ -18,6 +18,11 @@ void PIdleAction::Process()
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
 	}
 
+	if (owner_->get_hit_() && owner_->get_invisible_() == false)
+	{
+		owner_->SetTransition(FSM_Event::HIT);
+	}
+
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
 		owner_->SetTransition(FSM_Event::INPUT_JUMP);
