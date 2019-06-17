@@ -2,9 +2,7 @@
 
 
 
-PUIDataManager::PUIDataManager()
-{
-}
+
 
 
 PUIDataManager::~PUIDataManager()

@@ -374,3 +374,13 @@ ANIMATIONTYPE PSprite::get_animation_type_()
 {
 	return animation_type_;
 }
+
+float PSprite::get_remain_lifetime_()
+{
+	return remain_lifetime_;
+}
+
+float PSprite::get_lifetime_()
+{
+	return lifetime_;
+}

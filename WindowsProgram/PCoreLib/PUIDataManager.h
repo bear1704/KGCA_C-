@@ -6,7 +6,6 @@
 class PUIDataManager : public PSingleton<PUIDataManager>
 {
 public:
-	PUIDataManager();
 	virtual ~PUIDataManager();
 private:
 	friend class PSingleton<PUIDataManager>;

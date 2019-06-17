@@ -144,3 +144,16 @@ void PMonster::ProcessAction()
 {
 	current_monster_action_->Process();
 }
+
+bool PMonster::check_hit(FLOAT_RECT player_attack_col)
+{
+	if (PCollision::GetInstance().RectInRect(player_attack_col, collision_box_))
+		return true;
+
+	return false;
+}
+
+void PMonster::set_ishit_(bool hit)
+{
+	ishit_ = hit;
+}

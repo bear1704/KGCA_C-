@@ -50,7 +50,7 @@ public:
 	virtual bool Render();
 	virtual bool Release();
 	void StatusSet(multibyte_string status_path, multibyte_string object_name);
-
+	
 
 
 
@@ -62,6 +62,8 @@ public:
 	int get_max_hp();
 	int get_max_exp();
 	int get_max_mp();
+	int get_damage();
+	bool is_dead();
 };
 
 

@@ -72,6 +72,8 @@ public:
 	void set_animation_type_(ANIMATIONTYPE type);
 	vector<FLOAT_RECT>& get_original_size_list();
 	ANIMATIONTYPE get_animation_type_();
+	float get_remain_lifetime_();
+	float get_lifetime_();
 	
 };
 

@@ -7,7 +7,6 @@
 class PSpriteManager : public PSingleton<PSpriteManager>
 {//name maxframe lifetime once_playtime path
 public:
-	PSpriteManager();
 	~PSpriteManager();
 private:
 	friend class PSingleton<PSpriteManager>;

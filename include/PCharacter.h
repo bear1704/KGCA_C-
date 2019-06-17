@@ -1,5 +1,6 @@
-#include "PRectObject.h"
 #pragma once
+#include "PRectObject.h"
+#include "PPlayerStatus.h"
 
 
 class PCharacter : public PRectObject
@@ -13,13 +14,14 @@ public:
 	virtual bool Frame();
 	virtual bool Render();
 	virtual bool Release();
-	virtual void StatusSet(multibyte_string status_path, multibyte_string object_name);
 protected:
 	multibyte_string character_name_;
 	FLOAT_RECT foot_plane_;
 	float move_speed_;	
 	pPoint prev_position_;
 	FLOAT_RECT attack_collision_box_;
+	PPlayerStatus status;
+
 
 public:
 	void Movement();
@@ -30,6 +32,8 @@ public:
 	void PlatformWallCollision();
 	void SavePrevPosition();
 	float get_move_speed_();
+	void StatusSet(multibyte_string status_path, multibyte_string object_name);
+	PPlayerStatus& get_status();
 
 
 };

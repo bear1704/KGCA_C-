@@ -2,10 +2,6 @@
 
 
 
-PSpriteManager::PSpriteManager()
-{
-}
-
 
 PSpriteManager::~PSpriteManager()
 {

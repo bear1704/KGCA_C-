@@ -188,6 +188,16 @@ void PScene::InsertObject(std::vector<PRectObject*>& list_component)
 	game_objects_ = list_component;
 }
 
+void PScene::set_scene_name_(std::wstring name)
+{
+	scene_name_ = name;
+}
+
+std::wstring PScene::get_scene_name_()
+{
+	return scene_name_;
+}
+
 void PScene::draw_test_rect(FLOAT_RECT rect)
 {
 

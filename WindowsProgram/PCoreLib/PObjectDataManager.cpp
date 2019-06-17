@@ -2,9 +2,6 @@
 
 
 
-PObjectDataManager::PObjectDataManager()
-{
-}
 
 
 PObjectDataManager::~PObjectDataManager()

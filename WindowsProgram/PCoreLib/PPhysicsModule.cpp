@@ -27,7 +27,7 @@ void PPhysicsModule::Jump(float first_time, pPoint & position, float jump_force,
 	}
 	else if(isjump)
 	{
-		is_downphase_ = true;
+  		is_downphase_ = true;
 		
 		if (is_ground_)
 			isjump = false;

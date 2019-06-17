@@ -190,6 +190,9 @@
     <ClInclude Include="PMobHitAction.h">
       <Filter>소스 파일\MonsterState</Filter>
     </ClInclude>
+    <ClInclude Include="PComponentStorage.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSprite.cpp">
@@ -320,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="PMobDeadAction.cpp">
       <Filter>소스 파일\MonsterState</Filter>
+    </ClCompile>
+    <ClCompile Include="PComponentStorage.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

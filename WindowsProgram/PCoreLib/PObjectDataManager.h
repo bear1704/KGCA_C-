@@ -8,7 +8,6 @@
 class PObjectDataManager : public PSingleton<PObjectDataManager>
 {
 public:
-	PObjectDataManager();
 	~PObjectDataManager();
 
 

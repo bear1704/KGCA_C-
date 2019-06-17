@@ -1,13 +1,15 @@
 #pragma once
 #include "PCore.h"
 #include "PMonster.h"
-#include "PPlayerCharacter.h"
 #include "PCollision.h"
 #include "PObjectRotateUtil.h"
 #include "PWallAndPlatform.h"
 #include "PUIDataManager.h"
 #include "PObjectDataManager.h"
 #include "PScene.h"
+
+PScene* g_current_scene_;
+
 
 class Sample : public PCore
 {
@@ -24,7 +26,7 @@ public:
 public:
 	void draw_test_rect(FLOAT_RECT rect);
 private:
-	PScene* current_scene_;
+	
 	
 	float angle = 0;
 

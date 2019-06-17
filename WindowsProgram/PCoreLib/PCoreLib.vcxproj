@@ -183,6 +183,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PCharacter.h" />
+    <ClInclude Include="PComponentStorage.h" />
     <ClInclude Include="PDeadAction.h" />
     <ClInclude Include="PFiniteState.h" />
     <ClInclude Include="PFsm.h" />
@@ -229,6 +230,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PCharacter.cpp" />
+    <ClCompile Include="PComponentStorage.cpp" />
     <ClCompile Include="PDeadAction.cpp" />
     <ClCompile Include="PFiniteState.cpp" />
     <ClCompile Include="PFsm.cpp" />

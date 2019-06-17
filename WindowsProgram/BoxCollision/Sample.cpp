@@ -16,8 +16,8 @@ bool Sample::Init()
 	InitDataLoad();
 	
 	
-	if (current_scene_)
-		current_scene_->Init();
+	if (g_current_scene_)
+		g_current_scene_->Init();
 
 	return true;
 }
@@ -25,8 +25,8 @@ bool Sample::Init()
 bool Sample::Frame()
 {	
 
-	if (current_scene_)
-		current_scene_->Frame();
+	if (g_current_scene_)
+		g_current_scene_->Frame();
 
 	
 	return true;
@@ -51,8 +51,8 @@ bool  Sample::Render()
 	//PObjectRotateUtil::RotateAndDraw(player_character_->get_sprite_(), 0,600, 200, angle, 0.3f, 2.0f,  false);
 	angle += 0.1f  * g_SecondPerFrame * 600.f;
 
-	if (current_scene_)
-		current_scene_->Render();
+	if (g_current_scene_)
+		g_current_scene_->Render();
 
 	
 
@@ -64,8 +64,8 @@ bool  Sample::Render()
 bool Sample::Release()
 {
 
-	if(current_scene_)
-		current_scene_->Release();
+	if(g_current_scene_)
+		g_current_scene_->Release();
 
 	
 
@@ -92,9 +92,9 @@ bool Sample::InitDataLoad()
 	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"MUSHROOMLAND");
 	scene1->InsertObject(uicomp_settingbar);
 	scene1->InsertObject(game_objects_);
-	//scene1->InsertObject(uicomp_hpmp_guage);
+	scene1->set_scene_name_(L"MUSHROOMLAND");
 	
-	current_scene_ = scene1;
+	g_current_scene_ = scene1;
 
 	return true;
 }

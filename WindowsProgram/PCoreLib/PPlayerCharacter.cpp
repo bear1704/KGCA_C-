@@ -149,15 +149,6 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 	P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //Ä³¸¯ÅÍ only
 }
 
-PPlayerStatus& PPlayerCharacter::get_status()
-{
-	return status;
-}
-
-void PPlayerCharacter::StatusSet(multibyte_string status_path, multibyte_string object_name)
-{
-	status.StatusSet(status_path,object_name);
-}
 
 void PPlayerCharacter::SetTransition(FSM_Event event)
 {

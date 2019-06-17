@@ -230,3 +230,17 @@ int PPlayerStatus::get_max_mp()
 	return max_mp_;
 }
 
+int PPlayerStatus::get_damage()
+{
+	int damage = (str_ * 2 + dex_ + 1);
+	return damage;
+}
+
+bool PPlayerStatus::is_dead()
+{
+	if (hp_ < 0)
+		return true;
+
+	return false;
+}
+
