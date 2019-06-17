@@ -23,12 +23,16 @@ bool PMonster::Init()
 
 	action_list_.insert((std::make_pair(FSM_State::IDLE, new PMobIdleAction(this))));
 	action_list_.insert((std::make_pair(FSM_State::MOVE, new PMobMoveAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::JUMP, new PMobJumpAction(this))));
 
 	current_monster_action_ = action_list_[FSM_State::IDLE];
 	current_monster_state_ = FSM_State::IDLE;
 
 	monster_fsm_.Add(FSM_State::IDLE, FSM_Event::MOB_TIME_OUT, FSM_State::MOVE);
 	monster_fsm_.Add(FSM_State::MOVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
+	monster_fsm_.Add(FSM_State::IDLE, FSM_Event::MOB_JUMP_TIME_OUT, FSM_State::JUMP);
+	monster_fsm_.Add(FSM_State::MOVE, FSM_Event::MOB_JUMP_TIME_OUT, FSM_State::JUMP);
+	monster_fsm_.Add(FSM_State::JUMP, FSM_Event::JUMP_END, FSM_State::MOVE);
 
 
 	return false;
@@ -42,7 +46,9 @@ bool PMonster::Frame()
 	ProcessAction();
 	Movement();
 	physics_.Gravity(position_, gravity_);
+	physics_.Jump(physics_.jump_init_time, position_, 650, 0.25f);
 	PlatformWallCollision();
+	MonsterWallCollision();
 	return false;
 }
 
@@ -83,6 +89,29 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 
 	direction_side_ = SIDE::RIGHT;
 	//몬스터는 카메라를 붙이지 않음.
+}
+
+void PMonster::MonsterWallCollision()
+{
+
+	const std::vector<FLOAT_RECT>& monster_wall_list = PWallAndPlatform::GetInstance().get_monster_wall_list_();
+
+	for (auto& it : monster_wall_list)
+	{
+		if (PCollision::GetInstance().RectInRect(it, collision_box_))
+		{
+			if (direction_side_ == SIDE::LEFT)
+			{
+				direction_side_ = SIDE::RIGHT;
+				position_.x = it.left + it.right + collision_box_.right / 2 + 1.0f; //1.0f =  가중치
+			}
+			else
+			{
+				direction_side_ = SIDE::LEFT;
+				position_.x = it.left -  collision_box_.right / 2  - 1.0f;
+			}
+		}
+	}
 }
 
 void PMonster::Movement()

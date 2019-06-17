@@ -90,11 +90,27 @@ void PCharacter::set_collision_box_(FLOAT_RECT norm_box)
 	foot_plane_.top = collision_box_.top + collision_box_.bottom - 5.0f;
 	foot_plane_.right = collision_box_.right;
 	foot_plane_.bottom = 5.0f;
+
+	if (get_is_reversal_())
+	{
+		attack_collision_box_.left = collision_box_.left + collision_box_.right;
+		attack_collision_box_.top = collision_box_.top;
+	}
+	else
+	{
+		attack_collision_box_.left = collision_box_.left - attack_collision_box_.right;
+		attack_collision_box_.top = collision_box_.top;
+	}
 }
 
 FLOAT_RECT PCharacter::get_foot_plane_box()
 {
 	return foot_plane_;
+}
+
+FLOAT_RECT PCharacter::get_attack_collision_box_()
+{
+	return attack_collision_box_;
 }
 
 void PCharacter::PlatformWallCollision()
@@ -106,8 +122,9 @@ void PCharacter::PlatformWallCollision()
 
 	for (auto& it : platform_list)
 	{
-		if (PCollision::GetInstance().RectInRect(it, foot_plane_, correction_ylength) && !physics_.get_isjump())
+		if (PCollision::GetInstance().RectInRect(it, foot_plane_, correction_ylength) && physics_.get_is_downphase_())
 		{
+			physics_.set_is_ground_(true);
 			position_.y = it.top - collision_box_norm_.bottom / 2;
 		}
 	}

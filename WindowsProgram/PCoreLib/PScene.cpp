@@ -96,6 +96,7 @@ bool PScene::Render()
 			player->Render();
 			//draw_test_rect(player->get_foot_plane_box());
 			draw_test_rect(player->get_collision_rect_());
+			draw_test_rect(player->get_attack_collision_box_());
 		}
 		else if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{

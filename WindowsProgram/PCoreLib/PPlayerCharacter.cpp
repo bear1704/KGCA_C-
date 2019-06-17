@@ -34,13 +34,12 @@ bool PPlayerCharacter::Init()
 	//JUMP
 	player_fsm_.Add(FSM_State::IDLE, FSM_Event::INPUT_JUMP, FSM_State::JUMP);
 	player_fsm_.Add(FSM_State::MOVE, FSM_Event::INPUT_JUMP, FSM_State::JUMP);
-	player_fsm_.Add(FSM_State::JUMP, FSM_Event::INPUT_MOVE, FSM_State::MOVE);
-	player_fsm_.Add(FSM_State::JUMP, FSM_Event::INPUT_NONE, FSM_State::IDLE);
+	player_fsm_.Add(FSM_State::JUMP, FSM_Event::JUMP_END, FSM_State::MOVE);
 	//ATTACK
 	player_fsm_.Add(FSM_State::IDLE, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
 	player_fsm_.Add(FSM_State::MOVE, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
 	player_fsm_.Add(FSM_State::JUMP, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
-	player_fsm_.Add(FSM_State::ATTACK, FSM_Event::INPUT_NONE, FSM_State::IDLE);//MOVE, JUMP는 공격시에 불가능함. 오직 IDLE로만 회귀
+	player_fsm_.Add(FSM_State::ATTACK, FSM_Event::ATTACK_END, FSM_State::IDLE);//MOVE, JUMP는 공격시에 불가능함. 오직 IDLE로만 회귀
 
 
 
@@ -54,11 +53,10 @@ bool PPlayerCharacter::Frame()
 	SavePrevPosition();
 	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
-	physics_.Jump(physics_.jump_init_time,position_, 600, 0.2f);
 	Movement();
 	ProcessAction();
+	physics_.Jump(physics_.jump_init_time, position_, 800, 0.2f);
 	physics_.Gravity(position_, gravity_);
-	//physics_.Jump(physics_.jump_init_time, position_, 600, 0.2f);
 	PlatformWallCollision();
 	status.Frame();
 	return true;
@@ -145,6 +143,8 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
+
+	attack_collision_box_ = { 0, 0, 40, 100 }; //임시로 position,크기 지정 
 
 	P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //캐릭터 only
 }

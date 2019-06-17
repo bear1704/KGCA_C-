@@ -6,5 +6,7 @@ class PMobJumpAction :
 public:
 	PMobJumpAction(PMonster* parent);
 	~PMobJumpAction();
+public:
+	void Process();
 };
 

@@ -16,8 +16,8 @@ void PJumpAction::Process()
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::JUMP)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::JUMP));
-	}
 
+	}
 
 	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
 	{
@@ -34,14 +34,15 @@ void PJumpAction::Process()
 
 	if (!(owner_->get_physics_().get_isjump()))
 	{
-		if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE && g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE)//점프 끝
-		{
-			owner_->SetTransition(FSM_Event::INPUT_NONE);
-		}
-		else
-		{
-			owner_->SetTransition(FSM_Event::INPUT_MOVE);
-		}
+		//if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE && g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE)//점프 끝
+		//{
+		//	owner_->SetTransition(FSM_Event::INPUT_NONE);
+		//}
+		//else
+		//{
+		//	owner_->SetTransition(FSM_Event::INPUT_MOVE);
+		//}
+		owner_->SetTransition(FSM_Event::JUMP_END);
 	}
 	if (g_InputActionMap.attackKey== KEYSTAT::KEY_PUSH)
 	{

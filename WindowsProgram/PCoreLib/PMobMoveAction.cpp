@@ -28,12 +28,12 @@ void PMobMoveAction::Process()
 	{
 		std::random_device r;
 		std::mt19937 engine(r());
-		std::uniform_int_distribution<int> distribution(0, 1);
+		std::uniform_int_distribution<int> distribution(0, 4);
 		auto generator = std::bind(distribution, engine);
 		int random = generator();
 
 		//if (owner_->get_direction_side_() == SIDE::LEFT)
-		if(random == 0)
+		if(random < 2)
 		{
 			owner_->set_direction_side_(SIDE::RIGHT);
 			direction_change_progress_time_ = 0.0f;
@@ -51,21 +51,20 @@ void PMobMoveAction::Process()
 	{
 		std::random_device r;
 		std::mt19937 engine(r());
-		std::uniform_int_distribution<int> distribution(0, 1);
+		std::uniform_int_distribution<int> distribution(0, 4);
 		auto generator = std::bind(distribution, engine);
 		int random = generator();
 
-		if (random == 0)
+		if (random < 2)
 		{
 			owner_->SetTransition(FSM_Event::MOB_TIME_OUT);
 		}
 		else
 		{
-			owner_->SetTransition(FSM_Event::MOB_TIME_OUT);
-			//owner_->SetTransition(FSM_Event::MOB_JUMP_TIME_OUT); //Jump
+			owner_->SetTransition(FSM_Event::MOB_JUMP_TIME_OUT);
 		}
 		progress_time_ = 0.0f;
-		change_time_ = random + 5;
+		change_time_ = random + 2;
 	}
 
 	if (owner_->get_direction_side_() == SIDE::LEFT)
