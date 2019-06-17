@@ -71,6 +71,8 @@ void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, 
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 
+	spawn_position_ = position;
+
 	collision_box_norm_ = scaled_collisionbox_norm;
 
 }
@@ -260,4 +262,9 @@ void PRectObject::set_alpha_and_scale_(float alpha, float scale)
 		sprite->set_alpha_(alpha);
 		sprite->set_scale_(scale);
 	}
+}
+
+pPoint PRectObject::get_spawn_position_()
+{
+	return spawn_position_;
 }

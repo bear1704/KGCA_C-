@@ -26,4 +26,12 @@ void PMobDeadAction::Process(PPlayerCharacter * target)
 	{
 		owner_->get_sprite_()->set_alpha_(0.0f);
 	}
+
+	progress_time += g_SecondPerFrame;
+
+	if (progress_time > 15.0f)
+	{
+		progress_time = 0.0f;
+		owner_->SetTransition(FSM_Event::MOB_TIME_OUT);
+	}
 }

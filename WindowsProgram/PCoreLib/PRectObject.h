@@ -28,6 +28,7 @@ protected:
 	pPoint position_;
 	FLOAT_RECT collision_box_;
 	FLOAT_RECT collision_box_norm_;
+	pPoint spawn_position_;
 	float alpha_;
 	float scale_;
 	multibyte_string object_name_;
@@ -69,6 +70,8 @@ public:
 	bool& get_is_reversal_();
 	PPhysicsModule& get_physics_();
 	void set_alpha_and_scale_(float alpha, float scale);
+
+	pPoint get_spawn_position_();
 
 
 };

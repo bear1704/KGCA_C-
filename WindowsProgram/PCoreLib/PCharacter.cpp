@@ -73,7 +73,7 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 	
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
-
+	spawn_position_ = position;
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
 	is_reversal_ = false;

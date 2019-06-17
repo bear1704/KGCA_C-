@@ -38,6 +38,9 @@ void PAttackAction::Process()
 void PAttackAction::AttackProcess()
 {
 	int damage = owner_->get_status().get_damage();
+	
+	
+
 
 	if (g_current_scene_)
 	{
@@ -50,6 +53,10 @@ void PAttackAction::AttackProcess()
 			if (game_objects[i]->get_type_() == Type::MONSTER)
 			{
 				PMonster* monster = (PMonster*) game_objects[i];
+				
+				if (monster->get_current_monster_state_() == FSM_State::DEAD)
+					continue;   //죽은 몬스터는 히트판정 X
+
 				if (monster->check_hit(owner_->get_attack_collision_box_()))
 				{
 					int hp = monster->get_status().get_hp_();

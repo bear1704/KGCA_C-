@@ -39,6 +39,7 @@ public:
 	bool get_ishit_();
 	void set_enemy_to_direction_side_(SIDE side);
 	SIDE get_enemy_to_direction_side_();
+	FSM_State get_current_monster_state_();
 
 };
 

@@ -27,11 +27,11 @@ public:
 	void set_direction_side_(SIDE side);
 	void set_target_player_(PPlayerCharacter* player);
 
-
 	PFsm monster_fsm_;
 	PMobState* current_monster_action_;
 	std::map<FSM_State, PMobState*> action_list_;
 	FSM_State current_monster_state_;
+
 	void SetTransition(FSM_Event event);
 	void ProcessAction(PPlayerCharacter* target);
 	bool check_hit(FLOAT_RECT player_attack_col);
@@ -39,6 +39,7 @@ public:
 	bool get_ishit_();
 	void set_enemy_to_direction_side_(SIDE side);
 	SIDE get_enemy_to_direction_side_();
+	FSM_State get_current_monster_state_();
 
 };
 

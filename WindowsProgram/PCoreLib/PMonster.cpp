@@ -5,6 +5,7 @@
 #include "PMobJumpAction.h"
 #include "PMobDeadAction.h"
 #include "PMobHitAction.h"
+#include "PMobReviveAction.h"
 
 
 PMonster::PMonster()
@@ -27,6 +28,7 @@ bool PMonster::Init()
 	action_list_.insert((std::make_pair(FSM_State::HIT, new PMobHitAction(this))));
 	action_list_.insert((std::make_pair(FSM_State::ATTACK, new PMobAttackAction(this))));
 	action_list_.insert((std::make_pair(FSM_State::DEAD, new PMobDeadAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::REVIVE, new PMobReviveAction(this))));
 
 	current_monster_action_ = action_list_[FSM_State::IDLE];
 	current_monster_state_ = FSM_State::IDLE;
@@ -51,6 +53,11 @@ bool PMonster::Init()
 	//ATTACK
 	monster_fsm_.Add(FSM_State::ATTACK, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
 	monster_fsm_.Add(FSM_State::ATTACK, FSM_Event::HIT, FSM_State::HIT);
+
+	//DEAD
+	monster_fsm_.Add(FSM_State::DEAD, FSM_Event::MOB_TIME_OUT, FSM_State::REVIVE);
+	//REVIVE
+	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
 
 	return false;
 }
@@ -104,6 +111,8 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	collision_box_norm_ = scaled_collisionbox_norm;
 	set_collision_box_(collision_box_norm_);
 
+	spawn_position_ = position;
+
 	my_direction_side_ = SIDE::RIGHT;
 	//몬스터는 카메라를 붙이지 않음.
 }
@@ -154,7 +163,7 @@ void PMonster::set_target_player_(PPlayerCharacter * player)
 void PMonster::SetTransition(FSM_Event event)
 {
 	PFiniteState* state = monster_fsm_.get_state(current_monster_state_); //FSM공간에서 플레이어의 현재 스테이트를 가져온다.
-	if (!state) return; //현재 스테이트가 없으면 에러 
+	if (!state) assert(!state); //현재 스테이트가 없으면 에러 
 
 	FSM_State next = state->get_next_state(event); //현재 스테이트에서 이벤트로 트랜지션되는 다음 스테이트 가져오기
 	current_monster_action_ = action_list_[next]; //그 다음 스테이트에 맞게 액션 가져오기.(스테이트 전환)
@@ -193,4 +202,9 @@ void PMonster::set_enemy_to_direction_side_(SIDE side)
 SIDE PMonster::get_enemy_to_direction_side_()
 {
 	return enemy_to_direction_side_;
+}
+
+FSM_State PMonster::get_current_monster_state_()
+{
+	return current_monster_state_;
 }

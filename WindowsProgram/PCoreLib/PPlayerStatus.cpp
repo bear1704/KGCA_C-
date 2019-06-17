@@ -1,6 +1,6 @@
 #include "PPlayerStatus.h"
-
-
+#include <random>
+#include <functional>
 
 PPlayerStatus::PPlayerStatus()
 {
@@ -245,6 +245,14 @@ int PPlayerStatus::get_max_mp()
 int PPlayerStatus::get_damage()
 {
 	int damage = (str_ * 2 + dex_ + 1);
+
+	std::random_device r;
+	std::mt19937 engine(r());
+	std::uniform_int_distribution<int> distribution(-10, 10);
+	auto generator = std::bind(distribution, engine); //데미지 난수화 
+	int random = generator();
+	damage += random;
+	
 	return damage;
 }
 

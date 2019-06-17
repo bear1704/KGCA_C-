@@ -197,6 +197,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PMobIdleAction.h" />
     <ClInclude Include="PMobJumpAction.h" />
     <ClInclude Include="PMobMoveAction.h" />
+    <ClInclude Include="PMobReviveAction.h" />
     <ClInclude Include="PMobState.h" />
     <ClInclude Include="PMoveAction.h" />
     <ClInclude Include="PObjectDataManager.h" />
@@ -244,6 +245,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PMobIdleAction.cpp" />
     <ClCompile Include="PMobJumpAction.cpp" />
     <ClCompile Include="PMobMoveAction.cpp" />
+    <ClCompile Include="PMobReviveAction.cpp" />
     <ClCompile Include="PMobState.cpp" />
     <ClCompile Include="PMoveAction.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />

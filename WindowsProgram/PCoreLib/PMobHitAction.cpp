@@ -19,7 +19,7 @@ void PMobHitAction::Process(PPlayerCharacter* target)
 
 	}
 	
-	if (owner_->get_status().get_hp_() == 0)
+	if (owner_->get_status().get_hp_() <= 0)
 	{
 		owner_->SetTransition(FSM_Event::HPEMPTY);
 		knockback_distance_ = 35.0f;
