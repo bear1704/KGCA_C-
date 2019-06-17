@@ -1,4 +1,4 @@
-#SPRITE 12
+#SPRITE 11
 pc_idle 1 777 777 data/character/sprite/character.bmp
 0 266 119 53 77
 pc_move 4 777 0.7 data/character/sprite/character.bmp
@@ -45,6 +45,3 @@ orange_mushroom_die 3 1.0 1.0 data/character/sprite/mushroom.bmp
 0 9 214 60 61
 1 75 215 60 55
 2 141 222 60 45
-orange_mushroom_other 2 777 0.5 data/character/sprite/mushroom.bmp
-0 4 139 66 68
-1 140 220 61 47

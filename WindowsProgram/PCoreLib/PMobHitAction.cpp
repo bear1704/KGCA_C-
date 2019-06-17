@@ -13,12 +13,13 @@ PMobHitAction::~PMobHitAction()
 
 void PMobHitAction::Process(PPlayerCharacter* target)
 {
+
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::HIT)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::HIT));
-
 	}
-	
+
+
 	if (owner_->get_status().get_hp_() <= 0)
 	{
 		owner_->SetTransition(FSM_Event::HPEMPTY);

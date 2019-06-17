@@ -59,6 +59,10 @@ bool PMonster::Init()
 	//REVIVE
 	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
 
+	damage_effect = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"DMG_FONT");
+
+	
+
 	return false;
 }
 
@@ -79,11 +83,13 @@ bool PMonster::Frame()
 bool PMonster::Render()
 {
 	Spawn();
+
 	return false;
 }
 
 bool PMonster::Release()
 {
+	damage_effect->Release();
 	sprite_.Release();
 	return false;
 }
@@ -203,6 +209,34 @@ SIDE PMonster::get_enemy_to_direction_side_()
 {
 	return enemy_to_direction_side_;
 }
+
+void PMonster::set_be_received_damage_(int damage)
+{
+	be_received_damage_ = damage;
+}
+
+int PMonster::get_be_received_damage()
+{
+	return be_received_damage_;
+}
+
+void PMonster::SetDamageEffect(float height, pPoint& pos, int& length)
+{
+	pos = pPoint(position_.x, position_.y - height);
+	std::string dmgstr = std::to_string(be_received_damage_);
+	length = dmgstr.length();
+	//damage_effect->ReviseAllComponentPosition(pos);
+
+	for (int i = 0; i < dmgstr.length(); i++)
+	{
+		int num = dmgstr[i] - '0';
+		damage_effect->get_component_list_()[i]->get_sprite_()->set_current_played_spriteframe_(num);
+
+	}
+	
+}
+
+
 
 FSM_State PMonster::get_current_monster_state_()
 {

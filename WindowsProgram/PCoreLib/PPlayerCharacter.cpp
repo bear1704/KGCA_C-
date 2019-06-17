@@ -41,8 +41,9 @@ bool PPlayerCharacter::Init()
 	player_fsm_.Add(FSM_State::JUMP, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
 	player_fsm_.Add(FSM_State::ATTACK, FSM_Event::ATTACK_END, FSM_State::IDLE);//MOVE, JUMP는 공격시에 불가능함. 오직 IDLE로만 회귀
 
-
-
+	status.ModifyHP(1930);
+	status.ModifyMP(1930);
+	status.ModifyEXP(0);
 
 
 	return true;

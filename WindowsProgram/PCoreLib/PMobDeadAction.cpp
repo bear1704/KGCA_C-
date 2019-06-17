@@ -16,6 +16,7 @@ void PMobDeadAction::Process(PPlayerCharacter * target)
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::DEAD)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::DEAD));
+		target->get_status().IncreaseEXP(owner_->get_status().get_reward_exp());
 	}
 
 	float current_alpha = owner_->get_sprite_()->get_alpha_();

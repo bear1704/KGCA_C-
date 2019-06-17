@@ -77,6 +77,18 @@ void PUIComponent::Set(multibyte_string data_path, multibyte_string object_name,
 
 }
 
+void PUIComponent::ReviseAllComponentPosition(pPoint worldpos)
+{
+	position_ = worldpos;
+
+	for (auto& iter : component_list_)
+	{
+		pPoint posi = pPoint(iter->position_.x + worldpos.x, iter->position_.y + worldpos.y);
+		iter->position_ = posi;
+		iter->get_sprite_()->SetPosition(posi.x, posi.y);
+	}
+}
+
 std::vector<PUIComponent*>& PUIComponent::get_component_list_()
 {
 	return component_list_;

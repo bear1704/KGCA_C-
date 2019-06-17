@@ -1,4 +1,4 @@
-#LIST 2
+#LIST 3
 MYSETTINGBTN 6 620 700
 cashshopbutton 0 0 BUTTON
 eventbutton 36 0 BUTTON

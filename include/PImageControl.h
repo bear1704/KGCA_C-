@@ -17,5 +17,6 @@ public:
 	void SetRectListSize(FLOAT_RECT size);
 	void set_max_rect_size(FLOAT_RECT size);
 	FLOAT_RECT& get_max_rect_size();
+	void Draw() override;
 };
 

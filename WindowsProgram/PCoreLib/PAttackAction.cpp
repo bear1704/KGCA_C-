@@ -38,8 +38,6 @@ void PAttackAction::Process()
 void PAttackAction::AttackProcess()
 {
 	int damage = owner_->get_status().get_damage();
-	
-	
 
 
 	if (g_current_scene_)
@@ -62,6 +60,7 @@ void PAttackAction::AttackProcess()
 					int hp = monster->get_status().get_hp_();
 					monster->get_status().DecreaseHP(damage);  //제일 처음 히트된 몬스터 타격
 					monster->set_ishit_(true); //몬스터 한대 맞았다고 알려주기 
+					monster->set_be_received_damage_(damage);
 
 					SIDE mob_to_player_side = 
 						(owner_->get_collision_rect_().left - monster->get_collision_rect_().left) > 0 ? SIDE::RIGHT : SIDE::LEFT;

@@ -28,6 +28,8 @@ private:
 	float past_hp_;
 	float past_mp_;
 	float past_exp_;
+	float reward_exp_mob;
+	float damage_mob;
 
 	float hp_increase_speed_;
 	float mp_increase_speed_;
@@ -48,6 +50,9 @@ public:
 	void DecreaseHP(int minus);
 	void DecreaseMP(int minus);
 	void DecreaseEXP(int minus);
+	void IncreaseHP(int plus);
+	void IncreaseMP(int plus);
+	void IncreaseEXP(int plus);
 	virtual bool Init();
 	virtual bool Frame();
 	virtual bool Render();
@@ -66,6 +71,8 @@ public:
 	int get_max_exp();
 	int get_max_mp();
 	int get_damage();
+	int get_reward_exp();
+	int mob_damage();
 	bool is_dead();
 };
 

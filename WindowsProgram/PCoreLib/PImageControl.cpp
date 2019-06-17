@@ -51,3 +51,8 @@ FLOAT_RECT & PImageControl::get_max_rect_size()
 {
 	return max_rect_size;
 }
+
+void PImageControl::Draw()
+{
+	Spawn();
+}

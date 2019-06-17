@@ -69,6 +69,18 @@ void PPlayerStatus::DecreaseEXP(int minus)
 {
 	exp_ -= minus;
 }
+void PPlayerStatus::IncreaseHP(int plus)
+{
+	hp_ += plus;
+}
+void PPlayerStatus::IncreaseMP(int plus)
+{
+	mp_ += plus;
+}
+void PPlayerStatus::IncreaseEXP(int plus)
+{
+	exp_ += plus;
+}
 bool PPlayerStatus::Init()
 {
 	hp_increase_speed_ = 500.0f;
@@ -179,6 +191,8 @@ void PPlayerStatus::StatusSet(multibyte_string status_path, multibyte_string obj
 	past_hp_ = hp_;
 	past_mp_ = mp_;
 	past_exp_ = exp_;
+	reward_exp_mob = status->reward_exp_;
+	damage_mob = status->monster_damage_;
 
 
 	 player_ui_component = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"ENERGY_GUAGE");
@@ -254,6 +268,16 @@ int PPlayerStatus::get_damage()
 	damage += random;
 	
 	return damage;
+}
+
+int PPlayerStatus::get_reward_exp()
+{
+	return reward_exp_mob;
+}
+
+int PPlayerStatus::mob_damage()
+{
+	return damage_mob;
 }
 
 bool PPlayerStatus::is_dead()
