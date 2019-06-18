@@ -389,3 +389,13 @@ float PSprite::get_alpha_()
 {
 	return alpha_;
 }
+
+int PSprite::get_max_sprite_number()
+{
+	return number_of_max_spriteframe_;
+}
+
+int PSprite::get_current_played_frame()
+{
+	return current_played_spriteframe_;
+}

@@ -35,8 +35,9 @@ void PAttackAction::Process()
 
 	if (owner_->get_sprite_()->get_is_dead_())
 	{
-		AttackProcess();
 		owner_->SetTransition(FSM_Event::ATTACK_END);
+		AttackProcess();
+
 	}
 
 }

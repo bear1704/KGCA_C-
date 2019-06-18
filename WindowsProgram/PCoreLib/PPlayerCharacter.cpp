@@ -129,7 +129,7 @@ void PPlayerCharacter::Movement()
 		status.ModifyEXP(30);
 	}if (g_InputActionMap.fKey == KEYSTAT::KEY_PUSH)
 	{
-		status.ModifyEXP(10000);
+		status.ModifyEXP(10030);
 	}
 
 }

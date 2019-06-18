@@ -38,14 +38,6 @@ void PJumpAction::Process()
 
 	if (!(owner_->get_physics_().get_isjump()))
 	{
-		//if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE && g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE)//Á¡ÇÁ ³¡
-		//{
-		//	owner_->SetTransition(FSM_Event::INPUT_NONE);
-		//}
-		//else
-		//{
-		//	owner_->SetTransition(FSM_Event::INPUT_MOVE);
-		//}
 		owner_->SetTransition(FSM_Event::JUMP_END);
 	}
 	if (g_InputActionMap.attackKey== KEYSTAT::KEY_PUSH)

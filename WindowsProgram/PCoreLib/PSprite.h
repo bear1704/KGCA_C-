@@ -75,6 +75,8 @@ public:
 	float get_remain_lifetime_();
 	float get_lifetime_();
 	float get_alpha_();
+	int get_max_sprite_number();
+	int get_current_played_frame();
 	
 };
 

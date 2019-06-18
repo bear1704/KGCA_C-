@@ -28,6 +28,6 @@ public:
 	void set_scene_name_(std::wstring name);
 	std::wstring get_scene_name_();
 	void draw_test_rect(FLOAT_RECT rect);
-	void SceneChange();
+	void SceneChange(int scene_number);
 };
 

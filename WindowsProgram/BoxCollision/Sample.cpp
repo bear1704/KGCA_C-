@@ -31,10 +31,12 @@ bool Sample::Frame()
 
 	
 	timer += g_SecondPerFrame;
-	if (timer > 3.0f && !sound_flag)
+	if (timer > 0.1f && !sound_flag)
 	{
-		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/map.mp3"));
-		PSoundMgr::GetInstance().GetPtr(PSoundMgr::GetInstance().Load(L"data/sound/map.mp3"))->SetMode(2);
+		PSoundMgr::GetInstance().Load(L"data/sound/map.mp3");
+		PSoundMgr::GetInstance().GetPtr(0)->SetMode(2);
+		PSound* bgm = PSoundMgr::GetInstance().GetPtr(0);
+		bgm->Play();
 		sound_flag = true;
 	}
 	return true;

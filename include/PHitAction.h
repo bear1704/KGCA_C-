@@ -9,8 +9,8 @@ public:
 	PHitAction(PPlayerCharacter* parent);
 	~PHitAction();
 private:
-	float knockback_distance_ = 55.0f;
-	float knockback_speed_ = 250.0f;
+	float knockback_distance_ = 45.0f;
+	float knockback_speed_ = 200.0f;
 	SIDE player_to_mob_side;
 	bool invisible;
 public:

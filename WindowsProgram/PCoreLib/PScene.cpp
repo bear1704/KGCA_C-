@@ -64,10 +64,14 @@ bool PScene::Frame()
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Frame();
 			target = player;
-			/*if (target->get_status().get_exp_() > target->get_status().get_max_exp() && scene_number_ == 1)
+			if (target->get_status().get_exp_() >= target->get_status().get_max_exp() && scene_number_ == 1)
 			{
-				SceneChange();
-			}*/
+				SceneChange(2);
+			}
+			if (target->get_status().get_hp_() <= 0)
+			{
+				SceneChange(3);
+			}
 		}
 	}
 
@@ -114,8 +118,8 @@ bool PScene::Render()
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Render();
 			//draw_test_rect(player->get_foot_plane_box());
-			draw_test_rect(player->get_collision_rect_());
-			draw_test_rect(player->get_attack_collision_box_());
+			//draw_test_rect(player->get_collision_rect_());
+			//draw_test_rect(player->get_attack_collision_box_());
 		}
 		else if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{
@@ -135,26 +139,26 @@ bool PScene::Render()
 
 
 	FLOAT_RECT cam_center_pos_rect = P2DCamera::GetInstance().get_center_rect_();
-	draw_test_rect(cam_center_pos_rect);
+	//draw_test_rect(cam_center_pos_rect);
 
 	int platform_size = PWallAndPlatform::GetInstance().get_platform_list_().size();
 	int monsterwall_size = PWallAndPlatform::GetInstance().get_monster_wall_list_().size();
 	int wall_size = PWallAndPlatform::GetInstance().get_wall_list_().size();
 
 
-	for (int i = 0; i < platform_size; i++)
-	{
-		draw_test_rect(PWallAndPlatform::GetInstance().get_platform_list_().at(i));
-	}
-	for (int i = 0; i < monsterwall_size; i++)
-	{
-		draw_test_rect(PWallAndPlatform::GetInstance().get_monster_wall_list_().
-			at(i));
-	}
-	for (int i = 0; i < wall_size; i++)
-	{
-		draw_test_rect(PWallAndPlatform::GetInstance().get_wall_list_().at(i));
-	}
+	//for (int i = 0; i < platform_size; i++)
+	//{
+	//	draw_test_rect(PWallAndPlatform::GetInstance().get_platform_list_().at(i));
+	//}
+	//for (int i = 0; i < monsterwall_size; i++)
+	//{
+	//	draw_test_rect(PWallAndPlatform::GetInstance().get_monster_wall_list_().
+	//		at(i));
+	//}
+	//for (int i = 0; i < wall_size; i++)
+	//{
+	//	draw_test_rect(PWallAndPlatform::GetInstance().get_wall_list_().at(i));
+	//}
 
 
 
@@ -227,12 +231,34 @@ void PScene::draw_test_rect(FLOAT_RECT rect)
 	SetROP2(g_handle_off_screenDC, prevMode2);
 }
 
-void PScene::SceneChange()
+void PScene::SceneChange(int scene_number)
 {
-	PScene* scene2 = new PScene();
-	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"END");
-	scene2->InsertObject(game_objects_);
-	g_current_scene_ = scene2;
-	scene_number_ = 2;
-	
+	if (scene_number == 2)
+	{
+		PScene* scene2 = new PScene();
+		PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+		PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"END");
+		scene2->InsertObject(uicomp_settingbar);
+		g_current_scene_ = scene2;
+		scene_number_ = 2;
+		PSound* bgm = PSoundMgr::GetInstance().GetPtr(0);
+		bgm->Stop();
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/end.mp3"));
+	}
+	else if (scene_number == 3)
+	{
+		PScene* scene3 = new PScene();
+		PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+		PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"GAMEOVER");
+		scene3->InsertObject(uicomp_settingbar);
+		g_current_scene_ = scene3;
+		scene_number_ = 3;
+		PSound* bgm = PSoundMgr::GetInstance().GetPtr(0);
+		bgm->Stop();
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/gameover.mp3"));
+	}
+
+
+
+
 }

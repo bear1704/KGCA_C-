@@ -1,0 +1,15 @@
+#ANIMATION 2
+player 6
+pc_idle IDLE
+pc_move MOVE
+pc_jump JUMP
+pc_slash ATTACK
+pc_swing ATTACK
+pc_pierce ATTACK
+orange_mushroom 6
+orange_mushroom_idle IDLE
+orange_mushroom_move MOVE
+orange_mushroom_jump JUMP
+orange_mushroom_hit HIT
+orange_mushroom_move ATTACK
+orange_mushroom_die DEAD

@@ -26,10 +26,11 @@ void PHitAction::Process() //날아가는대로 바로 스테이트 체인지, 무적과 히트상태 
 	{
 		owner_->SetTransition(FSM_Event::TIME_OUT);
 		owner_->set_hit_(false);
-		knockback_distance_ = 65.0f;
+		knockback_distance_ = 45.0f;
 	}
-	KnockBack();
 	CollisionCheck();
+	KnockBack();
+
 
 
 
