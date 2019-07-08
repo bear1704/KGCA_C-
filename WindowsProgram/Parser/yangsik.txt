@@ -1,0 +1,33 @@
+﻿<!--korean comment can't write this text-->
+<composition_list>
+	<spawn>
+		<name>          mushroom           </name>
+		<posx>12     00</posx>
+		<posy>  5   00</posy>
+		<type>monster    </type>
+	</spawn>
+
+	<spawn>
+		<name>mushroom</name>
+		<posx>    1600</posx>
+		<posy>   500</posy>
+		<type>monster    </type>
+	</spawn> <!-- spawn data end (comment)-->
+</composition_list>
+
+
+
+<character_data_>
+	<character>
+		<name> player </name>
+		<movespeed> 200.0 </movespeed>
+		<collision_box> 0,0,53,74 </collision_box>
+		<alpha> 1.0 </alpha>
+		<scale> 1.5 </scale>
+		<init_sprite_info> data/character/sprite/character_coord.txt,pc_idle </init_sprite_info>
+	</character><!-- CoMMent-->
+	<character>
+		<name> orange_mushroom </name>
+	</character>
+
+</character_data_>

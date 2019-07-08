@@ -18,9 +18,20 @@ bool PCore::Init()
 	return true;
 }
 
+bool PCore::PreFrame()
+{
+	
+	return true;
+}
+
 bool PCore::Frame()
 {
 
+	return true;
+}
+
+bool PCore::PostFrame()
+{
 	return true;
 }
 
@@ -75,11 +86,13 @@ bool PCore::PCoreInit()
 
 bool PCore::PCoreFrame()
 {
+	PreFrame();
 	timer.Frame();
 	PInput::GetInstance().Frame();
 	PSoundMgr::GetInstance().Frame();
 	P2DCamera::GetInstance().Frame();
-	return Frame();
+	Frame();
+	return PostFrame();
 }
 
 bool PCore::PCoreRender()

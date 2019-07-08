@@ -34,7 +34,6 @@ FLOAT_RECT P2DCamera::WorldToGamescreenRECT(FLOAT_RECT world_rect)
 	game_screen_rect.top = world_rect.top - camera_object_rect_.top;
 	game_screen_rect.right = world_rect.right;
 	game_screen_rect.bottom = world_rect.bottom;
-	//right,bottom은 FLOAT_RECT에선 단순 width,height이므로 건드리면 안 됨!
 	return game_screen_rect;
 }
 
@@ -57,7 +56,7 @@ void P2DCamera::MoveCamera()
 			+ std::pow(character_rect_center.y - center_rect_center.y, 2));
 		
 		move_dir_vector_ = pPoint((character_rect_center.x - center_rect_center.x) / vector_size, 
-			(character_rect_center.y - center_rect_center.y) / vector_size); //Normalized 방향벡터
+			(character_rect_center.y - center_rect_center.y) / vector_size); //Normalized 
 
 		center_rect_.left += move_dir_vector_.x * camera_scroll_speed_ * g_SecondPerFrame; //센터렉트에 방향벡터만큼 더해준다.
 		center_rect_.top += move_dir_vector_.y * camera_scroll_speed_ * g_SecondPerFrame;

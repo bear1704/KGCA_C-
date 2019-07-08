@@ -20,7 +20,6 @@ void PHitAction::Process() //날아가는대로 바로 스테이트 체인지, 무적과 히트상태 
 		//owner_->set_invisible_(true);
 	}
 
-	
 
 	if (knockback_distance_ <= 0)
 	{

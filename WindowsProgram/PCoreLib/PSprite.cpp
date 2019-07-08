@@ -153,6 +153,27 @@ void PSprite::Draw(bool is_reversal)
 	}
 }
 
+void PSprite::Clone(PSprite* sprite, float alpha, float scale)
+{
+	rect_list.assign(sprite->get_rect_list_copy().begin(), sprite->get_rect_list_copy().end());
+	original_size_list = rect_list;
+	remain_lifetime_ = sprite->get_remain_lifetime_();
+	lifetime_ = sprite->get_lifetime_();
+	position_.x = sprite->get_position_().x;
+	position_.y = sprite->get_position_().y;
+	number_of_max_spriteframe_ = sprite->get_max_sprite_number();
+	allocatetime_for_onesprite = get_allocatetime_for_onesprite();
+	alpha_ = alpha;
+	scale_ = scale;
+	current_played_spriteframe_ = 0;
+	bitmap_ = sprite->get_bitmap_();
+	
+	if (sprite->get_bitmap_mask_() != nullptr)
+		bitmap_mask_ = get_bitmap_mask_();
+
+	
+}
+
 void PSprite::AlphaDrawNotCenter()
 {
 	if (isDead)
@@ -398,4 +419,9 @@ int PSprite::get_max_sprite_number()
 int PSprite::get_current_played_frame()
 {
 	return current_played_spriteframe_;
+}
+
+float PSprite::get_allocatetime_for_onesprite()
+{
+	return allocatetime_for_onesprite;
 }

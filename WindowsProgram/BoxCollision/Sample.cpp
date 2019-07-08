@@ -118,5 +118,5 @@ bool Sample::InitDataLoad()
 
 
 
-PCORE_RUN(L"BoxCollision", 0, 0, 1024, 768);
+PCORE_RUN(L"MapleStory", 0, 0, 1024, 768);
 

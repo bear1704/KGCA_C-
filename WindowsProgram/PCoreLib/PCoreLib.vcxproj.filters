@@ -43,6 +43,9 @@
     <Filter Include="소스 파일\MonsterState">
       <UniqueIdentifier>{adf4c6d5-d7ca-4638-b24a-c726105f432d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Parser">
+      <UniqueIdentifier>{cbe7f7f7-5328-4831-8ac5-2a767b28fc68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PCoreLib.rc">
@@ -196,6 +199,9 @@
     <ClInclude Include="PMobReviveAction.h">
       <Filter>소스 파일\MonsterState</Filter>
     </ClInclude>
+    <ClInclude Include="PParser.h">
+      <Filter>소스 파일\Parser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSprite.cpp">
@@ -333,5 +339,11 @@
     <ClCompile Include="PMobReviveAction.cpp">
       <Filter>소스 파일\MonsterState</Filter>
     </ClCompile>
+    <ClCompile Include="PParser.cpp">
+      <Filter>소스 파일\Parser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

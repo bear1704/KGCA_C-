@@ -39,6 +39,17 @@ SpriteDataInfo * PSpriteManager::get_sprite_data_list_from_map(std::wstring key)
 	return nullptr;
 }
 
+PSprite* PSpriteManager::get_sprite_from_map_ex(std::wstring key)
+{
+	auto iter = sprite_list_.find(key);
+	if (iter != sprite_list_.end())
+	{
+		PSprite* data = (*iter).second;
+		return data;
+	}
+	return nullptr;
+}
+
 void PSpriteManager::LoadDataFromScript(multibyte_string filepath)
 {
 	FILE* fp = nullptr;
@@ -90,6 +101,59 @@ void PSpriteManager::LoadDataFromScript(multibyte_string filepath)
 		sprite_data_list_.insert(std::make_pair(rect_name , sprite_data_info));
 	}
 	fclose(fp);
+
+}
+
+void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath)
+{
+	PParser parser;
+	std::vector<std::pair<string, string>> ret_parse;
+	std::string str;
+	str.assign(filepath.begin(), filepath.end());
+	parser.XmlParse(str, &ret_parse);
+
+	for (auto iter = ret_parse.begin() ; iter != ret_parse.end() ; iter++)
+	{
+		
+		if (iter->second.compare("sprite") == 0)
+		{
+			SpriteDataInfo info;
+			std::wstring sprite_name;
+
+			while (true)
+			{
+				iter++;
+				if (iter->first.compare("name") == 0)
+					sprite_name.assign(iter->second.begin(), iter->second.end());
+				else if (iter->first.compare("max_frame") == 0)
+					info.max_frame = std::atoi(iter->second.c_str());
+				else if (iter->first.compare("lifetime") == 0)
+					info.lifetime = std::atoi(iter->second.c_str());
+				else if (iter->first.compare("once_playtime") == 0)
+					info.lifetime = std::atoi(iter->second.c_str());
+				else if (iter->first.compare("path") == 0)
+					info.bitmap_path.assign(iter->second.begin(), iter->second.end());
+				else if (iter->first.compare("coord") == 0)
+				{
+					FLOAT_RECT rt;
+					std::vector<string> coord_vec = parser.SplitString(iter->second, ',');
+					rt.left = std::atof(coord_vec[0].c_str());
+					rt.top = std::atof(coord_vec[0].c_str());
+					rt.right = std::atof(coord_vec[0].c_str());
+					rt.bottom = std::atof(coord_vec[0].c_str());
+					info.rect_list.push_back(rt);
+				}
+				else if (iter->first.compare("END") == 0)
+					break;
+			}
+
+			PSprite* sprite = new PSprite();
+			sprite->Set(info, 1.0, 1.0);
+			sprite_list_.insert(std::make_pair(sprite_name, sprite));
+
+		}
+		
+	}
 
 }
 

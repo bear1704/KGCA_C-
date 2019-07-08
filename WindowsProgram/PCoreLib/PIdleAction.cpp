@@ -31,7 +31,7 @@ void PIdleAction::Process()
 
 	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD || g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
 	{
-		owner_->SetTransition(FSM_Event::INPUT_MOVE); //sprite setpositionÇÊ¿ä
+		owner_->SetTransition(FSM_Event::INPUT_MOVE); 
 	}
 
 

@@ -57,6 +57,7 @@ public:
 	bool SetPosition(float x, float y);
 	void Play();
 	void Draw(bool is_reversal);
+	void Clone(PSprite* sprite, float alpha, float scale);
 	//void Draw(int x, int y);
 	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
 	void AlphaDrawNotCenter();
@@ -77,6 +78,7 @@ public:
 	float get_alpha_();
 	int get_max_sprite_number();
 	int get_current_played_frame();
+	float get_allocatetime_for_onesprite();
 	
 };
 

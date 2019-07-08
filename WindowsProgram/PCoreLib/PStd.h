@@ -1,9 +1,12 @@
 #pragma once
-#include <Windows.h>
+#include <windows.h>
 #include <tchar.h>
 #include <string>
 #include <map>
 #include <vector>
+#include <list>
+#include <memory>
+#include <cmath>
 
 class PScene;
 
@@ -26,8 +29,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 typedef std::wstring unicode_string;
 typedef std::basic_string<TCHAR> multibyte_string;
+typedef std::basic_string<char> c_string;
 using strkey = std::wstring;
 
+template<typename T>
+using Sptr = std::shared_ptr<T>;
+template<typename T>
+using Uptr = std::unique_ptr<T>;
 static std::wstring multibyte_to_unicode_str(std::string str)
 {
 	std::wstring ret = std::wstring(str.begin(), str.end());

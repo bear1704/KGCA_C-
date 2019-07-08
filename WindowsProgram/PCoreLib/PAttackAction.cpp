@@ -18,11 +18,7 @@ void PAttackAction::Process()
 		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/sword.mp3"));
 	}
 
-	if (owner_->get_hit_() && owner_->get_invisible_() == false)
-	{
-		owner_->SetTransition(FSM_Event::HIT);
-	}
-
+	
 	if (g_InputActionMap.attackKey == KEYSTAT::KEY_HOLD && owner_->get_sprite_()->get_is_dead_()) //공격버튼을 꾹 누르고 있을 경우
 	{
 		AttackProcess();
@@ -38,6 +34,13 @@ void PAttackAction::Process()
 		owner_->SetTransition(FSM_Event::ATTACK_END);
 		AttackProcess();
 
+	}
+	if (owner_->get_hit_() && owner_->get_invisible_() == false)
+	{
+		if (owner_->get_sprite_()->get_is_dead_() == true)
+		{
+			owner_->SetTransition(FSM_Event::HIT);
+		}
 	}
 
 }
