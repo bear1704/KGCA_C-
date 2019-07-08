@@ -128,9 +128,9 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath)
 				else if (iter->first.compare("max_frame") == 0)
 					info.max_frame = std::atoi(iter->second.c_str());
 				else if (iter->first.compare("lifetime") == 0)
-					info.lifetime = std::atoi(iter->second.c_str());
+					info.lifetime = std::atof(iter->second.c_str());
 				else if (iter->first.compare("once_playtime") == 0)
-					info.lifetime = std::atoi(iter->second.c_str());
+					info.once_playtime = std::atof(iter->second.c_str());
 				else if (iter->first.compare("path") == 0)
 					info.bitmap_path.assign(iter->second.begin(), iter->second.end());
 				else if (iter->first.compare("coord") == 0)
@@ -138,9 +138,9 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath)
 					FLOAT_RECT rt;
 					std::vector<string> coord_vec = parser.SplitString(iter->second, ',');
 					rt.left = std::atof(coord_vec[0].c_str());
-					rt.top = std::atof(coord_vec[0].c_str());
-					rt.right = std::atof(coord_vec[0].c_str());
-					rt.bottom = std::atof(coord_vec[0].c_str());
+					rt.top = std::atof(coord_vec[1].c_str());
+					rt.right = std::atof(coord_vec[2].c_str());
+					rt.bottom = std::atof(coord_vec[3].c_str());
 					info.rect_list.push_back(rt);
 				}
 				else if (iter->first.compare("END") == 0)

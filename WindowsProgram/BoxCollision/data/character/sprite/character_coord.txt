@@ -36,7 +36,7 @@
 	<coord>629,358,67,69</coord>
 	<coord>520,360,67,69</coord>
 	<coord>395,361,90,68</coord>
-	<coord>395.361.90.68</coord>
+	<coord>395,361,90,68</coord>
 </sprite>
 <sprite>
 	<name> pc_swing </name>

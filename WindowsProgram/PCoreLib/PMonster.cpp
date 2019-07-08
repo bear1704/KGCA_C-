@@ -109,8 +109,11 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	scale_ = info.scale_;
 	move_speed_ = info.move_speed_;
 
-	PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
-	sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
+	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
+	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path);
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(info.sprite_name), alpha_, scale_);
+	
 	sprite_.SetPosition(position_.x, position_.y);
 
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,

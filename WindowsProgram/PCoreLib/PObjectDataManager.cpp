@@ -204,7 +204,8 @@ void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
 			std::wstring sprite_type(type_buffer);
 
 			PSprite* t = new PSprite();
-			t->Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(sprite_name), 1.0f, 1.0f);
+			//t->Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(sprite_name), 1.0f, 1.0f);
+			t->Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f,1.0f);
 			t->set_animation_type_(WstringToAnimationtype(sprite_type));
 			
 

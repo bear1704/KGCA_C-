@@ -155,14 +155,15 @@ void PSprite::Draw(bool is_reversal)
 
 void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 {
-	rect_list.assign(sprite->get_rect_list_copy().begin(), sprite->get_rect_list_copy().end());
+	//rect_list.reserve(sprite->get_rect_list_copy().size());
+	rect_list = sprite->get_rect_list_copy();
 	original_size_list = rect_list;
 	remain_lifetime_ = sprite->get_remain_lifetime_();
 	lifetime_ = sprite->get_lifetime_();
 	position_.x = sprite->get_position_().x;
 	position_.y = sprite->get_position_().y;
 	number_of_max_spriteframe_ = sprite->get_max_sprite_number();
-	allocatetime_for_onesprite = get_allocatetime_for_onesprite();
+	allocatetime_for_onesprite = sprite->get_allocatetime_for_onesprite();
 	alpha_ = alpha;
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
