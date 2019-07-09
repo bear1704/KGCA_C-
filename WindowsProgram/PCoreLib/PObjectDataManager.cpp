@@ -52,6 +52,7 @@ std::vector<PSprite*> PObjectDataManager::get_animation_list_from_map(std::wstri
 	}
 	assert(iter != object_animation_list_.end()); //테스트 전에 잘못된 코드가 들어가는지 확인용. 지울예정
 	return null_vec;
+	
 }
 
 void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
@@ -114,7 +115,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 			{
 				component = (PPlayerCharacter*) new PPlayerCharacter();
 				component->Set(path, object_name, pPoint(absolute_pos.x, absolute_pos.y));
-				LoadAnimationDataFromScript(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
+				LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
 				component->set_gravity_(450.0f);
 				component->set_type_(Type::PLAYER);
 				component->StatusSet(status_path ,component->get_object_name());
@@ -126,7 +127,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 			{
 				component = (PMonster*) new PMonster();
 				component->Set(path, object_name, pPoint( absolute_pos.x, absolute_pos.y));
-				LoadAnimationDataFromScript(animation_path); //이후 캐릭터/몬스터 스프라이트 경로를 분할한다면, 애니메이션 경로도 분할해야 함 
+				LoadAnimationDataFromScriptEx(animation_path); //이후 캐릭터/몬스터 스프라이트 경로를 분할한다면, 애니메이션 경로도 분할해야 함 
 				component->set_gravity_(450.0f);
 				component->set_type_(Type::MONSTER);
 				component->StatusSet(status_path, component->get_object_name()); //아마 아직 미구현
@@ -163,57 +164,105 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	fclose(fp);
 
 }
+//
+//void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
+//{
+//
+//	FILE* fp = nullptr;
+//
+//	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
+//	assert(fp != nullptr);
+//
+//	TCHAR buffer[256] = { 0, };
+//	TCHAR temp_buffer[256] = { 0, };
+//	TCHAR type_buffer[32] = { 0, };
+//
+//	int number_of_data = -1;
+//
+//	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(애니 데이터 갯수)
+//	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
+//
+//	
+//
+//	for (int index_data = 0; index_data < number_of_data; index_data++)
+//	{
+//
+//		std::vector<PSprite*> vec;
+//
+//		int number_of_sprite = -1;
+//		_fgetts(buffer, _countof(buffer), fp);
+//		_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer),
+//			&number_of_sprite);
+//
+//		std::wstring object_name(temp_buffer);
+//
+//		for (int index_data = 0; index_data < number_of_sprite; index_data++)
+//		{
+//			_fgetts(buffer, _countof(buffer), fp);
+//			_stscanf_s(buffer, _T("%s%s"), temp_buffer, _countof(temp_buffer), type_buffer, _countof(type_buffer));
+//
+//			std::wstring sprite_name(temp_buffer);
+//			std::wstring sprite_type(type_buffer);
+//
+//			PSprite* t = new PSprite();
+//			//t->Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(sprite_name), 1.0f, 1.0f);
+//			t->Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f,1.0f);
+//			t->set_animation_type_(WstringToAnimationtype(sprite_type));
+//			
+//
+//			vec.push_back(t);
+//		}
+//
+//		
+//		object_animation_list_.insert(std::make_pair(object_name, vec));
+//
+//	}
+//
+//}
 
-void PObjectDataManager::LoadAnimationDataFromScript(multibyte_string filepath)
+void PObjectDataManager::LoadAnimationDataFromScriptEx(multibyte_string filepath)
 {
 
-	FILE* fp = nullptr;
+	std::vector<PSprite*> vec;
 
-	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
-	assert(fp != nullptr);
+	PParser parser;
+	std::vector<std::pair<string, string>> ret_parse;
+	std::string path;
+	path.assign(filepath.begin(), filepath.end());
+	parser.XmlParse(path, &ret_parse);
 
-	TCHAR buffer[256] = { 0, };
-	TCHAR temp_buffer[256] = { 0, };
-	TCHAR type_buffer[32] = { 0, };
-
-	int number_of_data = -1;
-
-	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(애니 데이터 갯수)
-	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
-
-	
-
-	for (int index_data = 0; index_data < number_of_data; index_data++)
+	for (auto iter = ret_parse.begin(); iter != ret_parse.end(); iter++)
 	{
 
-		std::vector<PSprite*> vec;
-
-		int number_of_sprite = -1;
-		_fgetts(buffer, _countof(buffer), fp);
-		_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer),
-			&number_of_sprite);
-
-		std::wstring object_name(temp_buffer);
-
-		for (int index_data = 0; index_data < number_of_sprite; index_data++)
+		if (iter->second.compare("list") == 0)
 		{
-			_fgetts(buffer, _countof(buffer), fp);
-			_stscanf_s(buffer, _T("%s%s"), temp_buffer, _countof(temp_buffer), type_buffer, _countof(type_buffer));
+			std::vector<PSprite*> vec;
+			std::wstring player_name;
+			std::wstring animation_type;
+			std::wstring animation_name;
 
-			std::wstring sprite_name(temp_buffer);
-			std::wstring sprite_type(type_buffer);
+			while (true)
+			{
+				iter++;
+				if (iter->first.compare("name") == 0)
+					player_name.assign(iter->second.begin(), iter->second.end());
+				else if (iter->first.compare("END") == 0)
+					break;
+				else
+				{
+					animation_type.assign(iter->first.begin(), iter->first.end());
+					std::transform(animation_type.begin(), animation_type.end(), animation_type.begin(), ::toupper); //대문자로
+					animation_name.assign(iter->second.begin(), iter->second.end());
+					PSprite* sprite = new PSprite();
+					sprite->Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(animation_name), 1.0f, 1.0f);
+					sprite->set_animation_type_(WstringToAnimationtype(animation_type));
+					vec.push_back(sprite);
+				}
 
-			PSprite* t = new PSprite();
-			//t->Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(sprite_name), 1.0f, 1.0f);
-			t->Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f,1.0f);
-			t->set_animation_type_(WstringToAnimationtype(sprite_type));
-			
+			}		
 
-			vec.push_back(t);
+			object_animation_list_.insert(std::make_pair(player_name, vec));
 		}
-
-		
-		object_animation_list_.insert(std::make_pair(object_name, vec));
 
 	}
 

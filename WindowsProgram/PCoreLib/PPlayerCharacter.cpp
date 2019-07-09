@@ -199,12 +199,13 @@ void PPlayerCharacter::InvincibleProgress()
 		{
 			set_invisible_(false);
 			invincible_rate = 0.0f;
+			sprite_.set_alpha_(1.0f);
 		}
 			
 
 		if (flickering_rate < 0.15f)
 		{
-			sprite_.set_alpha_(0.5f);
+			sprite_.set_alpha_(0.2f);
 		}
 		else if (flickering_rate < 0.3f)
 		{

@@ -4,8 +4,6 @@
 #include <iostream>
 
 
-
-#define TEST
 #ifdef TEST
 
 std::unique_ptr<int> func()

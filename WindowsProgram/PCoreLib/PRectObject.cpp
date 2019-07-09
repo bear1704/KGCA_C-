@@ -274,6 +274,8 @@ void PRectObject::set_alpha_and_scale_(float alpha, float scale)
 		sprite->set_alpha_(alpha);
 		sprite->set_scale_(scale);
 	}
+	sprite_.set_alpha_(alpha);
+	sprite_.set_scale_(scale);
 }
 
 pPoint PRectObject::get_spawn_position_()

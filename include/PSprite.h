@@ -66,6 +66,7 @@ public:
 	pPoint get_position_();
 	vector<FLOAT_RECT> get_rect_list_copy();
 	bool get_is_dead_();
+	float get_scale();
 	void set_alpha_(float alpha);
 	void set_scale_(float scale);
 	void set_current_played_spriteframe_(int current);

@@ -1,0 +1,17 @@
+<list>
+	<name> player </name>
+	<idle> pc_idle </idle>
+	<move> pc_move </move>
+	<jump> pc_jump </jump>
+	<attack> pc_attack </attaci>
+	<attack> pc_swing </attack>
+	<attack> pc_pierce <attack>
+</list>
+<list>
+	<idle> orange_mushroom </idle>
+	<move> orange_mushroom_move </move>
+	<jump> orange_mushroom_jump </jump>
+	<hit> orange_mushroom_hit </hit>
+	<attack> orange_mushroom_move </attack>
+	<dead> orange_mushroom_die </dead> <!-- 각각의 애니메이션 리스트 컴포넌트를 입력 -->
+</list>

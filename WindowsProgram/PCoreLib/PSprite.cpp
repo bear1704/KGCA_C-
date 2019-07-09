@@ -167,7 +167,8 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	alpha_ = alpha;
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
-	bitmap_ = sprite->get_bitmap_();
+	if(sprite->get_bitmap_() != nullptr)
+		bitmap_ = sprite->get_bitmap_();
 	
 	if (sprite->get_bitmap_mask_() != nullptr)
 		bitmap_mask_ = get_bitmap_mask_();
@@ -362,6 +363,11 @@ vector<FLOAT_RECT> PSprite::get_rect_list_copy()
 bool PSprite::get_is_dead_()
 {
 	return isDead;
+}
+
+float PSprite::get_scale()
+{
+	return scale_;
 }
 
 pPoint PSprite::get_position_()

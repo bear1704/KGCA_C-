@@ -71,7 +71,7 @@ public:
 	virtual PSprite* find_sprite_by_type(ANIMATIONTYPE type);
 	bool& get_is_reversal_();
 	PPhysicsModule& get_physics_();
-	void set_alpha_and_scale_(float alpha, float scale);
+	void set_alpha_and_scale_(float alpha, float scale); //주의! 같은 애니메이션 리스트를 사용하는 모든 개체가 변환이 적용되는 문제가 있음.
 
 	pPoint get_spawn_position_();
 	

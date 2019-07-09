@@ -3,7 +3,7 @@
 #include <numeric>
 #include <iterator>
 
-
+#define MYSTRING
 #ifdef MYSTRING
 class MyString
 {
@@ -18,12 +18,11 @@ public:
 	~MyString();
 	MyString(const char* str);
 	//복사 생성자
-	MyString(const MyString& str);
+//	MyString(const MyString& str);
 	MyString(MyString&& str) noexcept;
 
 	void reserve(int size);
 	MyString operator+(const MyString& s);
-
 	int length() const;
 
 	void print();
@@ -52,15 +51,16 @@ MyString::MyString(const char* str)
 	string_content_[strlen(str)] = '\0';
 }
 
-MyString::MyString(const MyString& str)
-{
-	std::cout << "복사 생성자 호출! \n" << std::endl;
-	string_length_ = str.string_length_;
-	string_content_ = new char[string_length_ + 1];
-
-	for (int i = 0;  i < string_length_; i++)  string_content_[i] = str.string_content_[i];
-	string_content_[string_length_] = '\0';
-}
+//MyString::MyString(const MyString& str)
+//{
+//	std::cout << "복사 생성자 호출! \n" << std::endl;
+//	string_length_ = str.string_length_;
+//	string_content_ = new char[string_length_ + 1];
+//
+//	for (int i = 0;  i < string_length_; i++)  string_content_[i] = str.string_content_[i];
+//	string_content_[string_length_] = '\0';
+//}
+//
 
 MyString::MyString(MyString&& str) noexcept
 {
@@ -127,10 +127,12 @@ void MyString::println ()
 int main()
 {
 	MyString str1("abc");
-	MyString str2("def");
+	MyString str2(str1);
 	std::cout << "------------" << std::endl;
 	//MyString str3 = str1 + str2;
-	MyString&& str3 = str1 + str2;
+	//MyString&& str3 = str1 + str2;
+	MyString str4 = str1;
+	str4 = str1;
 	//str3.println();
 	
 	//std::vector<MyString> vec;

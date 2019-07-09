@@ -25,7 +25,8 @@ public:
 	std::vector<PRectObject*> get_object_list_from_map(std::wstring key);
 	std::vector<PSprite*> get_animation_list_from_map(std::wstring key);
 	void LoadDataFromScript(multibyte_string filepath);  
-	void LoadAnimationDataFromScript(multibyte_string filepath);
+	void LoadAnimationDataFromScriptEx(multibyte_string filepath);
+	//void LoadAnimationDataFromScript(multibyte_string filepath);
 
 
 };

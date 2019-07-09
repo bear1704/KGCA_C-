@@ -98,6 +98,7 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 		std::cout << "파일 읽기 오류" << std::endl;
 	}
 
+	in_stream.close();
 	return 0;
 
 }
