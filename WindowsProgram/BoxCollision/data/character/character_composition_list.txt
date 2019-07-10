@@ -1,13 +1,25 @@
-#CHARLIST 1
-MUSHROOMLAND 11
-orange_mushroom 1200 500 MONSTER
-orange_mushroom 500 50 MONSTER
-orange_mushroom 680 650 MONSTER
-orange_mushroom 830 620 MONSTER
-orange_mushroom 700 70 MONSTER
-orange_mushroom 500 600 MONSTER
-orange_mushroom 200 70 MONSTER
-orange_mushroom 300 680 MONSTER
-orange_mushroom 1460 750 MONSTER
-player 500 300 PLAYER
-map1 0 0 MAP
+<CHARLIST>
+	<name> MUSHROOMLAND </name>
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 1200,500 </COORD>
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 500,50 </COORD>
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 680,650 </COORD>	
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 830,620 </COORD>	
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 700,70 </COORD>	
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 500,600 </COORD>	
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 200,70 </COORD>	
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 300,680 </COORD>		
+	<MONSTER> orange_mushroom </MONSTER>
+		<COORD> 1460,750 </COORD>	
+	<PLAYER> player </PLAYER>
+		<COORD> 500,300 </COORD>
+	<MAP> map1 </MAP>
+		<COORD> 0,0 </COORD>
+</CHARLIST>

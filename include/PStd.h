@@ -47,6 +47,18 @@ static std::string unicode_to_multibyte_str(std::wstring str)
 	return ret;
 }
 
+static std::string multibyte_to_string(multibyte_string mstr)
+{
+	std::string ret = std::string(mstr.begin(), mstr.end());
+	return ret;
+}
+
+static multibyte_string string_to_multibyte(std::string str)
+{
+	multibyte_string ret = multibyte_string(str.begin(), str.end());
+	return ret;
+}
+
 enum class KEYSTAT
 {
 	KEY_FREE,

@@ -195,13 +195,7 @@ void PPlayerCharacter::InvincibleProgress()
 {
 	if (get_invisible_() == true)
 	{
-		if (invincible_rate > 3.0f)
-		{
-			set_invisible_(false);
-			invincible_rate = 0.0f;
-			sprite_.set_alpha_(1.0f);
-		}
-			
+	
 
 		if (flickering_rate < 0.15f)
 		{
@@ -218,5 +212,15 @@ void PPlayerCharacter::InvincibleProgress()
 
 		flickering_rate += g_SecondPerFrame;
 		invincible_rate += g_SecondPerFrame;
+
+		if (invincible_rate > 3.0f)
+		{
+			set_invisible_(false);
+			invincible_rate = 0.0f;
+			flickering_rate = 0.0f;
+			sprite_.set_alpha_(1.0f);
+
+		}
+
 	}
 }
