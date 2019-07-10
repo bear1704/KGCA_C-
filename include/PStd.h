@@ -7,6 +7,7 @@
 #include <list>
 #include <memory>
 #include <cmath>
+#include "PParser.h"
 
 class PScene;
 
@@ -55,7 +56,8 @@ static std::string multibyte_to_string(multibyte_string mstr)
 
 static multibyte_string string_to_multibyte(std::string str)
 {
-	multibyte_string ret = multibyte_string(str.begin(), str.end());
+	multibyte_string ret;
+	ret.assign(str.begin(), str.end());
 	return ret;
 }
 
@@ -71,6 +73,14 @@ enum class PLoadMode
 {
 	BITMAP,
 	BITMAPMASK,
+};
+
+enum class ObjectLoadType
+{
+	CHARACTER,
+	UI,
+	MAP,
+	OBJECT,
 };
 
 enum class SIDE

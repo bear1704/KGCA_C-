@@ -16,6 +16,7 @@ private:
 	std::map<std::wstring, std::vector<PRectObject*>> object_composition_list_;
 	std::map<std::wstring, std::vector<PSprite*>> object_animation_list_;
 	int index_;
+	bool need_load_data_;
 public:
 	bool Init() override;
 	bool Frame() override;

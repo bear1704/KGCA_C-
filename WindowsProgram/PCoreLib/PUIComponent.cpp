@@ -55,7 +55,7 @@ void PUIComponent::Add(PUIComponent* component)
 void PUIComponent::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
 
-		PObjectInfoManager::GetInstance().LoadDataFromScript(data_path);
+		PObjectInfoManager::GetInstance().LoadDataFromScript(data_path, ObjectLoadType::UI); //UI도 뼈대는 RectObject이므로 이걸로 세팅하는게 맞긴 한데.. 좀 께름칙하네
 		ObjectInfo info = *(PObjectInfoManager::GetInstance().get_object_info_list_from_map(object_name));
 
 		object_name_ = info.object_name_;

@@ -1,4 +1,4 @@
-<CHARLIST>
+<CHARLIST> <!-- CHARLIST와 같이 구분자 역할을 하는 요소는 second에 들어감! first는 START/END -->
 	<name> MUSHROOMLAND </name>
 	<MONSTER> orange_mushroom </MONSTER>
 		<COORD> 1200,500 </COORD>

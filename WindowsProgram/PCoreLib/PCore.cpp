@@ -81,6 +81,8 @@ bool PCore::PCoreInit()
 	P2DCamera::GetInstance().Init();
 	PCollision::GetInstance().Init();
 	PWallAndPlatform::GetInstance().Init();
+	PObjectInfoManager::GetInstance().Init();
+	PObjectDataManager::GetInstance().Init();
 	return Init();
 }
 

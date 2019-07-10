@@ -1,3 +1,18 @@
-#DATA 2
-player 200.0 0 0 53 77 1.0 1.25 data/character/sprite/character_coord.txt pc_idle
-orange_mushroom  210.0 0 0 59 56 1.0 1.5 data/character/sprite/character_coord.txt orange_mushroom_idle
+<character_data>
+	<name> player </name>
+	<movespeed> 200 </movespeed>
+	<collision_box> 0,0,53,77 </collision_box>
+	<alpha> 1.0 </alpha>
+	<scale> 1.25 </scale>
+	<init_sprite> pc_idle </init_sprite>
+	<sprite_path> data/character/sprite/character_coord.txt </sprite_path>
+</character_data>
+<character_data>
+	<name> orange_mushroom </name>
+	<movespeed> 210 </movespeed>
+	<collision_box> 0,0,59,56 </collision_box>
+	<alpha> 1.0 </alpha>
+	<scale> 1.5 </scale>
+	<init_sprite> orange_mushroom_idle </init_sprite>
+	<sprite_path> data/character/sprite/character_coord.txt </sprite_path>
+</character_data>

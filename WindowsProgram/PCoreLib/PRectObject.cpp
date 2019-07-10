@@ -54,7 +54,8 @@ void PRectObject::StatusSet(multibyte_string status_path, multibyte_string objec
 
 void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
-	PObjectInfoManager::GetInstance().LoadDataFromScript(data_path);
+	PObjectInfoManager::GetInstance().LoadDataFromScript(data_path, ObjectLoadType::MAP);
+	//지금은 MAP이지만 다른 오브젝트의 확장성을 만족하기 위해 맵 등의 오브젝트를 모아놓은 통합txt를 만들어야 한다.
 	ObjectInfo info = *(PObjectInfoManager::GetInstance().get_object_info_list_from_map(object_name));
 
 	object_name_ = info.object_name_;

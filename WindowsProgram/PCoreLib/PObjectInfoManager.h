@@ -26,7 +26,7 @@ struct ObjectStatus
 
 class PObjectInfoManager : public PSingleton<PObjectInfoManager>
 {//name(key) movespeed collisionboxsize alpha scale 
-public:
+private:
 	PObjectInfoManager();
 	~PObjectInfoManager();
 
@@ -34,6 +34,10 @@ private:
 	friend class PSingleton<PObjectInfoManager>;
 	std::map<std::wstring, ObjectInfo*> object_info_list;
 	std::map<std::wstring, ObjectStatus*> object_status_list;
+	bool need_load_character_data_;
+	bool need_load_UI_data_;
+	bool need_load_map_data_;
+	bool need_load_status_data_;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -42,7 +46,7 @@ public:
 
 	ObjectInfo* get_object_info_list_from_map(std::wstring key);
 	ObjectStatus* get_object_status_from_map(std::wstring key);
-	void LoadDataFromScript(multibyte_string filepath);
+	void LoadDataFromScript(multibyte_string filepath, ObjectLoadType type);
 	void LoadStatusDataFromScript(multibyte_string filepath);
 };
 

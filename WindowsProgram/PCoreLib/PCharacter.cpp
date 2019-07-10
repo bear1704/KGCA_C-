@@ -56,7 +56,7 @@ void PCharacter::Movement()
 
 void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {
-	PObjectInfoManager::GetInstance().LoadDataFromScript(data_path);
+	PObjectInfoManager::GetInstance().LoadDataFromScript(data_path, ObjectLoadType::CHARACTER);
 	ObjectInfo info = *(PObjectInfoManager::GetInstance().get_object_info_list_from_map(object_name));
 
 	character_name_ = info.object_name_;

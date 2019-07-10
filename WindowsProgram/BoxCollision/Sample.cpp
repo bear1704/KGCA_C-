@@ -94,19 +94,22 @@ void Sample::draw_test_rect(FLOAT_RECT rect)
 
 bool Sample::InitDataLoad()
 {
-	PScene *scene1 = new PScene();
+	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/UI/UI_data.txt", ObjectLoadType::UI);
+	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/character/character_data.txt", ObjectLoadType::CHARACTER);
+	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/map/map_data.txt", ObjectLoadType::MAP);
+	//실험용 초기화 -> 지연로드와 미리 로드의 속도차이 확인, 확장성있는 지연로드를 위하여
+	
 	PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+	PObjectDataManager::GetInstance().LoadDataFromScript(L"data/character/character_composition_list.txt");
+	PScene *scene1 = new PScene();
 	PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"MYSETTINGBTN");
 	//PUIComponent* uicomp_hpmp_guage = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"ENERGY_GUAGE");
-	PObjectDataManager::GetInstance().LoadDataFromScript(L"data/character/character_composition_list.txt");
 	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"MUSHROOMLAND");
 	scene1->InsertObject(uicomp_settingbar);
 	scene1->InsertObject(game_objects_);
 	scene1->set_scene_name_(L"MUSHROOMLAND");
 	
 	g_current_scene_ = scene1;
-
-
 
 	
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree.mp3"));
