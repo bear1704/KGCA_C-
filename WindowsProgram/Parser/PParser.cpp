@@ -30,14 +30,15 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 				continue;
 			
 			std::regex type_start("<[a-zA-Z_]*>");
-			std::regex type_end("<\/[a-zA-Z_]*>");
+			std::regex type_end("<[\/]+[a-zA-Z_]*>");
 			std::regex comment("<!--[a-zA-Z0-9-_\.\:\!\?\\s\(\)\']*-->");
+			std::regex whitespace("[\n\r]+");
 
 			std::sregex_iterator it_start(str.begin(), str.end(), type_start);
 			std::sregex_iterator end;
 			std::sregex_iterator it_end(str.begin(), str.end(), type_end);
 			std::sregex_iterator it_comment(str.begin(), str.end(), comment);
-
+			std::sregex_iterator it_whitespace(str.begin(), str.end(), whitespace);
 		
 			while (it_comment != end && it_start == end && it_end == end) //라인 주석검사
 			{
@@ -49,6 +50,9 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 				is_comment_line = false;
 				continue;
 			}
+
+			if (it_whitespace != end) //공백 감지
+				continue;
 
 
 			while(it_start != end)

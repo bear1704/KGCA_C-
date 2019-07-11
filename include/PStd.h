@@ -75,13 +75,14 @@ enum class PLoadMode
 	BITMAPMASK,
 };
 
-enum class ObjectLoadType
+enum class ObjectLoadType //로드 시 중복방지
 {
 	CHARACTER,
 	UI,
 	MAP,
 	OBJECT,
 };
+
 
 enum class SIDE
 {
@@ -114,6 +115,16 @@ enum class ANIMATIONTYPE
 	ERROR_OCCUR,
 
 };
+
+enum class ObjectType
+{
+	PLAYER_CHARACTER,
+	MONSTER,
+	NPC,
+	ITEM,
+	ERROR_OCCUR,
+};
+
 
 struct PInputActionMap
 {
@@ -196,6 +207,20 @@ static ANIMATIONTYPE WstringToAnimationtype(std::wstring wstr)
 	return ANIMATIONTYPE::ERROR_OCCUR;
 }
 
+static ObjectType StringToObjectType(std::string str)
+{
+	if (str.compare("player") == 0)
+		return ObjectType::PLAYER_CHARACTER;
+	else if (str.compare("monster") == 0)
+		return ObjectType::MONSTER;
+	else if (str.compare("item") == 0)
+		return ObjectType::ITEM;
+	else if (str.compare("npc") == 0)
+		return ObjectType::NPC;
+
+	return ObjectType::ERROR_OCCUR;
+
+}
 
 
 extern HWND g_hWnd;

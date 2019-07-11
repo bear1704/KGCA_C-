@@ -5,12 +5,15 @@
 
 class PUIDataManager : public PSingleton<PUIDataManager>
 {
+private:
+	PUIDataManager();
 public:
 	virtual ~PUIDataManager();
 private:
 	friend class PSingleton<PUIDataManager>;
 	std::map<std::wstring, PUIComponent*> ui_composition_list_;
 	int index_;
+	bool need_load_data_;
 public:
 	bool Init() override;
 	bool Frame() override;

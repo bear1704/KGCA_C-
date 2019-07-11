@@ -17,7 +17,7 @@ struct ObjectInfo
 
 struct ObjectStatus
 {
-	int level_;
+	int level_; ObjectType type_;  std::string name_;
 	float max_hp_;	float max_mp_;	float current_hp_;	float current_mp_;
 	int current_exp_;
 	int str_;	int dex_;	int reward_exp_;	int monster_damage_;

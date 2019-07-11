@@ -225,52 +225,49 @@ void PObjectInfoManager::LoadStatusDataFromScript(multibyte_string filepath)
 	parse.XmlParse(std::string(filepath.begin(), filepath.end()), &ret_parse);
 
 
-	FILE* fp = nullptr;
-
-	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
-	assert(fp != nullptr);
-
-	TCHAR buffer[256] = { 0, };
-	TCHAR temp_buffer[256] = { 0, };
-
-	int number_of_data = -1;
-
-	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(스테이터스 데이터 갯수)
-	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
-
-	for (int index_data = 0; index_data < number_of_data; index_data++)
+	for (auto iter = ret_parse.begin(); iter != ret_parse.end(); iter++)
 	{
-
-		ObjectStatus* status = new ObjectStatus();
 		
-		int level;
-		float max_hp;	float max_mp;	float current_hp;	float current_mp;
-		int current_exp;
-		int str;	int dex;	int reward_exp;	int monster_damage;
+		if (iter->second == "status")
+		{
+			ObjectStatus* status = new ObjectStatus();
+			while (1)
+			{
+				iter++;
 
+				if (iter->first == "END")
+					break;
 
-		_fgetts(buffer, _countof(buffer), fp);
-		_stscanf_s(buffer, _T("%s%d%f%f%f%f%d%d%d%d%d"), temp_buffer, _countof(temp_buffer),
-			&level, &max_hp, &max_mp, &current_hp, &current_mp, &current_exp, 
-			&str, &dex, &reward_exp, &monster_damage);
+				if (iter->first == "name")
+					status->name_ = iter->second;
+				else if (iter->first == "type")
+					status->type_ = StringToObjectType(iter->second);
+				else if (iter->first == "level")
+					status->level_ = std::stoi(iter->second);
+				else if (iter->first == "max_hp")
+					status->max_hp_ = std::stof(iter->second);
+				else if (iter->first == "max_mp")
+					status->max_mp_ = std::stof(iter->second);
+				else if (iter->first == "current_hp")
+					status->current_hp_ = std::stof(iter->second);
+				else if (iter->first == "current_mp")
+					status->current_mp_ = std::stof(iter->second);
+				else if (iter->first == "str")
+					status->str_ = std::stoi(iter->second);
+				else if (iter->first == "dex")
+					status->dex_ = std::stoi(iter->second);
+				else if (iter->first == "reward_exp")
+					status->reward_exp_ = std::stoi(iter->second);
+				else if (iter->first == "body_dmg")
+					status->monster_damage_ = std::stoi(iter->second);
 
-		std::wstring character_name(temp_buffer);
-
-		status->level_ = level;
-		status->max_hp_ = max_hp;
-		status->max_mp_ = max_mp;
-		status->current_hp_ = current_hp;
-		status->current_mp_ = current_mp;
-		status->current_exp_ = current_exp;
-		status->str_ = str;
-		status->dex_ = dex;
-		status->reward_exp_ = reward_exp;
-		status->monster_damage_ = monster_damage;
-
-
-		object_status_list.insert(std::make_pair(character_name, status));
+			}
+			object_status_list.insert(std::make_pair(multibyte_to_unicode_str(status->name_), status));
+		}
+		
 	}
-	fclose(fp);
+
 	need_load_status_data_ = false;
+
 }
 

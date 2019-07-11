@@ -7,6 +7,7 @@
 #include "PUIDataManager.h"
 #include "PObjectDataManager.h"
 #include "PScene.h"
+#include "PParser.h"
 
 PScene* g_current_scene_;
 

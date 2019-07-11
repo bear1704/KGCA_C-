@@ -4,6 +4,7 @@
 
 PWallAndPlatform::PWallAndPlatform()
 {
+	need_load_data_ = true;
 }
 
 
@@ -59,47 +60,51 @@ std::vector<FLOAT_RECT>& PWallAndPlatform::get_wall_list_()
 
 void PWallAndPlatform::LoadPlatformData(multibyte_string filepath)
 {
+	if (!need_load_data_)
+		return;
 
-	FILE* fp = nullptr;
+	PParser parser;
+	std::vector<std::pair<string, string>> ret_parse;
+	std::string path;
+	path.assign(filepath.begin(), filepath.end());
+	parser.XmlParse(path, &ret_parse);
 
-	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
-	assert(fp != nullptr);
-
-	TCHAR buffer[256] = { 0, };
-	TCHAR temp_buffer[32] = { 0, }; //type
-	int number_of_platform_data = -1;
-
-	_fgetts(buffer, _countof(buffer), fp); //콜리전, 콜리전 갯수 받아오기
-	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_platform_data);
-
-	int number_of_max_frames;
-	for (int data_count = 0; data_count < number_of_platform_data; data_count++)
+	for (auto iter = ret_parse.begin(); iter != ret_parse.end(); iter++)
 	{
-		FLOAT_RECT load_rect_list;
 
-		_fgetts(buffer, _countof(buffer), fp);
-		_stscanf_s(buffer, _T("%f%f%f%f%s"),
-			&load_rect_list.left, &load_rect_list.top, &load_rect_list.right, &load_rect_list.bottom,
-			temp_buffer, _countof(temp_buffer));
-
-		std::wstring object_type = temp_buffer;
-
-		if (object_type.compare(L"PLATFORM") == 0)
+		if (iter->second.compare("wall_and_platform") == 0)
 		{
-			platform_list_.push_back(load_rect_list);
-		}
-		else if (object_type.compare(L"MONSTERWALL") == 0)
-		{
-			monster_wall_list_.push_back(load_rect_list);
+			std::vector<string> coord;
+			while (true)
+			{
+				FLOAT_RECT rect;
+
+				iter++;
+
+				if (iter->first.compare("END") == 0)
+					break;
+				else if (iter->first.compare("START") == 0) {}
+				else
+				{
+					coord = parser.SplitString(iter->second, ',');
+					rect.left = std::stof(coord[0]);  rect.top = std::stof(coord[1]);
+					rect.right = std::stof(coord[2]); rect.bottom = std::stof(coord[3]);
+
+					if (iter->first == "platform")
+						platform_list_.push_back(rect);
+					else if (iter->first == "wall")
+						wall_list_.push_back(rect);
+					else if (iter->first == "monsterwall")
+						monster_wall_list_.push_back(rect);
+				}
+
+			}
 
 		}
-		else if (object_type.compare(L"WALL") == 0)
-		{
-			wall_list_.push_back(load_rect_list);
-		}
-
 	}
-	fclose(fp);
+
+	if (need_load_data_)
+		need_load_data_ = false;
 }
 
 

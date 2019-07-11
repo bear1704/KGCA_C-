@@ -5,6 +5,11 @@
 
 
 
+PUIDataManager::PUIDataManager()
+{
+	need_load_data_ = true;
+}
+
 PUIDataManager::~PUIDataManager()
 {
 }
@@ -48,63 +53,71 @@ void PUIDataManager::LoadDataFromScript(multibyte_string filepath)
 	//리스트이름 종속요소갯수 리스트포지션x 리스트포지션y
 	//객체이름 상대포지션x 상대포지션y 객체타입(버튼,이미지)
 	
-	const std::wstring path = L"data/UI/UI_data.txt";
 
-	FILE* fp = nullptr;
+	if (!need_load_data_)
+		return;
 
+	const std::wstring ui_path = L"data/UI/UI_data.txt";
 
-	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
-	assert(fp != nullptr);
-
-	TCHAR buffer[256] = { 0, };
-	TCHAR temp_buffer[256] = { 0, };
-	TCHAR type_buffer[25] = { 0, };
-
-
-	int number_of_data = -1;
-
-	_fgetts(buffer, _countof(buffer), fp); //한줄 받아오기(캐릭터 데이터 갯수)
-	_stscanf_s(buffer, _T("%s%d"), temp_buffer, _countof(temp_buffer), &number_of_data);
-
-	for (int index_data = 0; index_data < number_of_data; index_data++)
+	PParser parser;
+	std::vector<std::pair<string, string>> ret_parse;
+	std::string path;
+	path.assign(filepath.begin(), filepath.end());
+	parser.XmlParse(path, &ret_parse);
+	
+	//
+	for (auto iter = ret_parse.begin(); iter != ret_parse.end(); iter++)
 	{
-		int numberof_uiobject;
-		pPoint composition_pos;
-		PUIComponent* component_list = new PUIComponent();
 
-		_fgetts(buffer, _countof(buffer), fp);
-		_stscanf_s(buffer, _T("%s%d%f%f"), temp_buffer, _countof(temp_buffer),
-			&numberof_uiobject, &composition_pos.x, &composition_pos.y);
-
-		std::wstring UIcomposition_name(temp_buffer);
-
-		for (int i = 0; i < numberof_uiobject; i++)
+		if (iter->second.compare("composition") == 0)
 		{
-			pPoint relative_pos;
-			//ZeroMemory(type_buffer, sizeof(TCHAR) * 25);
-			_fgetts(buffer, _countof(buffer), fp);
-			_stscanf_s(buffer, _T("%s%f%f%s"), temp_buffer, _countof(temp_buffer),
-				&relative_pos.x, &relative_pos.y, type_buffer, _countof(type_buffer));
-
-			std::wstring type(type_buffer);
-			std::wstring uiobject_name(temp_buffer);
-
+			std::string composition_name;
+			pPoint composition_pos;
 			PUIComponent* uicomponent = nullptr;
+			PUIComponent* component_list = new PUIComponent();
 
-			if (type.compare(L"BUTTON") == 0)
-				uicomponent = (PButtonControl*) new PButtonControl();
-			else if (type.compare(L"IMAGE") == 0)
-				uicomponent = (PImageControl*) new PImageControl();
+			while (true)
+			{
+				iter++;
 
-			uicomponent->Set(path, uiobject_name, pPoint(composition_pos.x + relative_pos.x, composition_pos.y + relative_pos.y));
-			component_list->Add(uicomponent);
+				if (iter->first.compare("END") == 0)
+					break;
+				else if (iter->first == "name")
+				{
+					composition_name = iter->second;
+					iter++;
+					std::vector<string> vec = parser.SplitString(iter->second, ',');
+					composition_pos = { std::stof(vec[0]), std::stof(vec[1]) };
+				}
+				else
+				{
+					std::string comp_type = iter->first;
+					std::string comp_name = iter->second; //각각의 오브젝트(btn,image) 이름
+					iter++; //coord로 이동
+					std::vector<string> vec = parser.SplitString(iter->second, ',');
+					pPoint pos = { std::stof(vec[0]), std::stof(vec[1]) };
+					
+					if (comp_type == "button")
+						uicomponent = (PButtonControl*) new PButtonControl();
+					else if (comp_type == "image")
+						uicomponent = (PImageControl*) new PImageControl();
+
+					uicomponent->Set(ui_path,multibyte_to_unicode_str(comp_name), pPoint(pos.x + composition_pos.x , pos.y + composition_pos.y));
+					component_list->Add(uicomponent);
+
+
+				}
+
+			}
+
+			component_list->set_position_(composition_pos);
+			ui_composition_list_.insert(std::make_pair(multibyte_to_unicode_str(composition_name), component_list));
 
 		}
-
-		component_list->set_position_(composition_pos);
-		ui_composition_list_.insert(std::make_pair(UIcomposition_name, component_list));
 	}
-	fclose(fp);
+
+	if (need_load_data_)
+		need_load_data_ = false;
 
 
 }

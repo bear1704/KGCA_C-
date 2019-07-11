@@ -86,6 +86,14 @@ bool PPlayerStatus::Init()
 	hp_increase_speed_ = 500.0f;
 	mp_increase_speed_ = 100.0f;
 	exp_increase_speed_ = 500.0f;
+
+
+	FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
+	FLOAT_RECT current_guage_rect = { 0,0,0,0 };
+	current_guage_rect.right = exp_rect.right * exp_ / max_exp_;
+	current_guage_rect.bottom = exp_rect.bottom;
+	exp_image->SetRectListSize(current_guage_rect);
+
 	return true;
 }
 
@@ -100,8 +108,8 @@ bool PPlayerStatus::Render()
 	float past_hp_rate = past_hp_ / max_hp_;
 	float current_hp_rate = hp_ / max_hp_;
 
-	float past_mp_rate = past_mp_ / max_mp_;
-	float current_mp_rate = mp_ / max_mp_;
+	float past_mp_rate = past_mp_ / std::max<float>(max_mp_, 1.0f);
+	float current_mp_rate = mp_ / std::max<float>(max_mp_, 1.0f);
 
 	float past_exp_rate = past_exp_ / max_exp_;
 	float current_exp_rate = exp_ / max_exp_;

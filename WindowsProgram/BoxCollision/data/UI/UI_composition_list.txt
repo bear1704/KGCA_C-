@@ -1,23 +1,71 @@
-#LIST 5
-MYSETTINGBTN 6 620 700
-cashshopbutton 0 0 BUTTON
-eventbutton 36 0 BUTTON
-characterbutton 72 0 BUTTON
-communitybutton 108 0 BUTTON
-optionbutton 144 0 BUTTON
-menubutton 180 0 BUTTON
-ENERGY_GUAGE 7 1 632
-guage_slot_background 390 40 IMAGE
-hpbar 415 48 IMAGE
-mpbar 415 63 IMAGE
-guage_slot 390 18 IMAGE
-expbar_background 0 88 IMAGE
-expbar 15 90 IMAGE
-expbar_separate 100 90 IMAGE
-DMGPRESENT 2 130 30
-dmg_font 35 0 IMAGE
-dmg_font 70 0 IMAGE
-END 1 0 0
-end_illust 0 0 IMAGE
-GAMEOVER 1 0 0
-gameover_illust 0 0 IMAGE
+<ui_composition_list> 
+	<composition>
+		<name> MYSETTINGBTN </name>
+			<coord> 620,700 </coord> <!-- 여기의 coord는 UI컴포지션 전체 절대 좌표 -->
+		<button> cashshopbutton </button>
+			<coord> 0,0 </coord> <!-- coord : 상대좌표 -->
+		<button> eventbutton </button>
+			<coord> 36,0 </coord>
+		<button> characterbutton </button>
+			<coord> 72,0 </coord>
+		<button> communitybutton </button>
+			<coord> 108,0 </coord>
+		<button> optionbutton </button>
+			<coord> 144,0 </coord>
+		<button> menubutton </button>
+			<coord> 180,0 </coord>
+	</composition>
+	
+	<composition>
+		<name> ENERGY_GUAGE  </name>
+			<coord> 1,632 </coord>
+		<image> guage_slot_background  </image>
+			<coord> 390,40 </coord>
+		<image> hpbar </image>
+			<coord> 415,48 </coord>
+		<image> mpbar  </image>
+			<coord> 415,63 </coord>
+		<image> guage_slot  </image>
+			<coord> 390,18 </coord>
+		<image> expbar_background  </image>
+			<coord> 0,88 </coord>
+		<image> expbar  </image>
+			<coord> 15,90 </coord>
+		<image> expbar_separate   </image>
+			<coord> 100,90 </coord>
+	</composition>
+	
+	<composition>
+		<name> DMGPRESENT  </name>
+			<coord> 130,30 </coord>
+		<image> dmg_font   </image>
+			<coord> 35,0 </coord>
+		<image> dmg_font  </image>
+			<coord> 70,0 </coord>
+	</composition>
+	
+	<composition>
+		<name> END  </name>
+			<coord> 0,0 </coord>
+		<image> end_illust   </image>
+			<coord> 0,0 </coord>
+	</composition>
+	
+	<composition>
+		<name> GAMEOVER  </name>
+			<coord> 0,0 </coord>
+		<image> gameover_illust   </image>
+			<coord> 0,0 </coord>
+	</composition>
+
+</ui_composition_list>
+
+
+
+
+
+
+
+
+
+
