@@ -4,6 +4,7 @@ Sample::Sample()
 {
 	timer = 0.0f;
 	sound_flag = false;
+	
 }
 
 
@@ -94,6 +95,8 @@ void Sample::draw_test_rect(FLOAT_RECT rect)
 
 bool Sample::InitDataLoad()
 {
+
+
 	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/UI/UI_data.txt", ObjectLoadType::UI);
 	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/character/character_data.txt", ObjectLoadType::CHARACTER);
 	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/map/map_data.txt", ObjectLoadType::MAP);

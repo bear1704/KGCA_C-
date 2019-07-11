@@ -69,7 +69,7 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 
 	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
 	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
-	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path, ObjectLoadType::CHARACTER);
 	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(info.sprite_name), alpha_, scale_);
 	sprite_.SetPosition(position_.x, position_.y);
 	

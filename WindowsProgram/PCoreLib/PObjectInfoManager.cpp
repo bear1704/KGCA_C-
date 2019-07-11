@@ -218,6 +218,13 @@ void PObjectInfoManager::LoadStatusDataFromScript(multibyte_string filepath)
 	if (!need_load_status_data_)
 		return;
 
+
+
+	PParser parse;
+	std::vector<std::pair<string, string>> ret_parse;
+	parse.XmlParse(std::string(filepath.begin(), filepath.end()), &ret_parse);
+
+
 	FILE* fp = nullptr;
 
 	_wfopen_s(&fp, filepath.c_str(), _T("rt"));

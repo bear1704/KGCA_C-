@@ -76,9 +76,6 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 
 	pPoint map_pos = pPoint(P2DCamera::GetInstance().get_world_size_().x / 2, P2DCamera::GetInstance().get_world_size_().y / 2);
 
-	FILE* fp = nullptr;
-	_wfopen_s(&fp, filepath.c_str(), _T("rt"));
-	assert(fp != nullptr);
 
 	std::vector<std::pair<std::string, std::string>> ret_parse;  //데이터 컴포지션
 	std::string str;

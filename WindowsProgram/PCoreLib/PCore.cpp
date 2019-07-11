@@ -83,6 +83,7 @@ bool PCore::PCoreInit()
 	PWallAndPlatform::GetInstance().Init();
 	PObjectInfoManager::GetInstance().Init();
 	PObjectDataManager::GetInstance().Init();
+	PSpriteManager::GetInstance().Init();
 	return Init();
 }
 
