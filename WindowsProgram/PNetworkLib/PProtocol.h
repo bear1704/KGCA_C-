@@ -1,6 +1,7 @@
 #pragma once
 #define PACKET_HEADER_SIZE 4
 #define PACKET_MAX_DATA_SIZE 2048
+#include <cassert>
 
 #pragma pack( push, 1)
 	typedef struct
@@ -11,33 +12,19 @@
 	typedef struct {
 		PACKET_HEADER ph;
 		char          msg[PACKET_MAX_DATA_SIZE];
-	}UPACKET;
+	}PACKET;
 
-	#define PACKET_CHAR_MSG				 1000 // DATA
-	#define PACKET_SC_CHAR_NAME_REQ		 1001 // DATA
-	#define PACKET_CS_CHAR_NAME_ACK		 1002 // DATA
-	#define PACKET_SC_JOIN_SIGNIN		 1003 // x
-	#define PACKET_SC_JOIN_USER			 1004 // DATA
-	#define PACKET_CS_DROP_REQ			 1005 // x
-	#define PACKET_SC_DROP_ACK			 1006 // x
-	#define PACKET_SC_BROADCAST_DROPUSER	 1007 // DATA
+#define PACKET_SC_SAY_HI 600
 
 
-	#define USER_BASE_SIZE 24
-	#define USER_NAME_SIZE 20
+	typedef struct{
+		char username[30];
+		int user_id;
+	}User;
+
 	typedef struct {
-		int   index;
-		char  user_name[USER_NAME_SIZE];
-	}USER_NAME_ACK, USER_BASE;
-	
-	typedef struct	{
-		USER_BASE user_base;
-		char  msg[30];
-	}USER_NAME_REQ;
-
-	typedef struct	{
-		char  user_name[USER_NAME_SIZE];
-		char  msg[PACKET_MAX_DATA_SIZE-USER_NAME_SIZE];// 메세지 실제 크기
-	}USER_CHAT_MSG;
+		User user;
+		PACKET packet;
+	}USER_PACKET;
 
 #pragma pack(pop)

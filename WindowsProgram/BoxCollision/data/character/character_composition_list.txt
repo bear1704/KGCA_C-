@@ -17,7 +17,7 @@
 	<MONSTER> orange_mushroom </MONSTER>
 		<COORD> 300,680 </COORD>		
 	<MONSTER> orange_mushroom </MONSTER>
-		<COORD> 1460,750 </COORD>	
+		<COORD> 1460,750 </COORD>		
 	<PLAYER> player </PLAYER>
 		<COORD> 500,300 </COORD>
 	<MAP> map1 </MAP>

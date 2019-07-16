@@ -1,3 +1,4 @@
+#include "..\PNetworkLib\Sample.h"
 #include "Sample.h"
 #include "PNormalSelect.h"
 
@@ -43,6 +44,8 @@ bool Sample::PostRender()
 {
 	return false;
 }
+
+
 
 bool Sample::Release()
 {

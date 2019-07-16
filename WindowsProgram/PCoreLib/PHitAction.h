@@ -2,6 +2,9 @@
 #include "PPlayerState.h"
 #include "PObjectDataManager.h"
 #include "PScene.h"
+
+
+
 class PHitAction :
 	public PPlayerState
 {

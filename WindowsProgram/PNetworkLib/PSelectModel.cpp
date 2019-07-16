@@ -1,75 +1,75 @@
 #include "PSelectModel.h"
 #include "PNetwork.h"
-bool PSelectModel::RecvPacket()
-{
-	UPACKET* packet = nullptr;
-	while (1)
-	{ 
-		if (recv_bytes_ < PACKET_HEADER_SIZE)
-		{
-			int once_recv = recv(socket_, &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
-			if (once_recv == 0)
-			{
-				return false;
-			}
-
-			if (once_recv == SOCKET_ERROR)
-			{
-				if (WSAGetLastError() == WSAEWOULDBLOCK) {}
-				else
-				{
-					E_MSG("recv error");
-					return false;
-				}
-			}
-			else
-			{
-				recv_bytes_ += once_recv;
-				if(recv_bytes_ == PACKET_HEADER_SIZE)
-					packet = (UPACKET*)recv_buffer; //헤더로 일단 패킷을 만들어 둔다.
-
-				if (packet->ph.len == recv_bytes_)
-				{
-					PNetwork::get_recv_pool().push_back(*packet);
-					recv_bytes_ = 0;
-					return true;
-				}
-
-			}
-		}
-		else
-		{
-			//packet = (UPACKET*)recv_buffer;
-			int once_recv = recv(socket_, &recv_buffer[recv_bytes_], 
-				packet->ph.len - recv_bytes_, 0);
-
-			if (once_recv == 0)
-				return false;
-			if (once_recv == SOCKET_ERROR)
-			{
-				if (WSAGetLastError() == WSAEWOULDBLOCK)
-				{ }
-				else
-				{
-					E_MSG("recv");
-					return false;
-				}
-			}
-
-			recv_bytes_ += once_recv;
-
-			if (packet->ph.len == recv_bytes_)
-			{
-				PNetwork::get_recv_pool().push_back(*packet);
-				recv_bytes_ = 0;
-				return true;
-			}
-
-		}
-	}
-	
-	return true;
-}
+//bool PSelectModel::RecvPacket()
+//{
+//	PACKET* packet = nullptr;
+//	while (1)
+//	{ 
+//		if (recv_bytes_ < PACKET_HEADER_SIZE)
+//		{
+//			int once_recv = recv(socket_, &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
+//			if (once_recv == 0)
+//			{
+//				return false;
+//			}
+//
+//			if (once_recv == SOCKET_ERROR)
+//			{
+//				if (WSAGetLastError() == WSAEWOULDBLOCK) {}
+//				else
+//				{
+//					E_MSG("recv error");
+//					return false;
+//				}
+//			}
+//			else
+//			{
+//				recv_bytes_ += once_recv;
+//				if(recv_bytes_ == PACKET_HEADER_SIZE)
+//					packet = (PACKET*)recv_buffer; //헤더로 일단 패킷을 만들어 둔다.
+//
+//				if (packet->ph.len == recv_bytes_)
+//				{
+//					PNetwork::get_recv_pool().push_back(*packet);
+//					recv_bytes_ = 0;
+//					return true;
+//				}
+//
+//			}
+//		}
+//		else
+//		{
+//			//packet = (UPACKET*)recv_buffer;
+//			int once_recv = recv(socket_, &recv_buffer[recv_bytes_], 
+//				packet->ph.len - recv_bytes_, 0);
+//
+//			if (once_recv == 0)
+//				return false;
+//			if (once_recv == SOCKET_ERROR)
+//			{
+//				if (WSAGetLastError() == WSAEWOULDBLOCK)
+//				{ }
+//				else
+//				{
+//					E_MSG("recv");
+//					return false;
+//				}
+//			}
+//
+//			recv_bytes_ += once_recv;
+//
+//			if (packet->ph.len == recv_bytes_)
+//			{
+//				PNetwork::get_recv_pool().push_back(*packet);
+//				recv_bytes_ = 0;
+//				return true;
+//			}
+//
+//		}
+//	}
+//	
+//	return true;
+//}
 
 bool PSelectModel::RecvMsg(SOCKET sock, char* buffer, int data_bytes)
 {
@@ -95,8 +95,8 @@ bool PSelectModel::RecvMsg(SOCKET sock, char* buffer, int data_bytes)
 bool PSelectModel::SendMsg(SOCKET sock, int packet_type, char* data, int datasize)
 {
 
-	UPACKET packet;
-	ZeroMemory(&packet, sizeof(UPACKET));
+	PACKET packet;
+	ZeroMemory(&packet, sizeof(PACKET));
 	packet.ph.type = packet_type;
 	packet.ph.len = PACKET_HEADER_SIZE + datasize;
 
@@ -118,7 +118,7 @@ bool PSelectModel::SendMsg(SOCKET sock, int packet_type, char* data, int datasiz
 	return true;
 }
 
-bool PSelectModel::SendMsg(UPACKET& packet)
+bool PSelectModel::SendMsg(PACKET& packet) //패킷을 
 {
 	int send_bytes = 0;
 	do
@@ -158,10 +158,14 @@ void PSelectModel::set_socket(SOCKET socket)
 }
 
 
+PSelectModel::PSelectModel()
+{
+}
+
 PSelectModel::PSelectModel(SOCKET sock)
 {
 	socket_ = sock;
-	recv_bytes_ = 0;
+	//recv_bytes_ = 0;
 }
 
 PSelectModel::~PSelectModel()

@@ -16,6 +16,7 @@ public:
 	bool Release() override;
 	bool PacketProcessFromRecvPool();
 
+	PScene* g_current_scene;
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:

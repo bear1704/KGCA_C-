@@ -15,23 +15,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PSelect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PSelectModel.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="PNetwork.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PNormalSelect.cpp">
+    <ClCompile Include="PPacketManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PEventSelect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PSelect.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PSelectModel.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -44,7 +44,13 @@
     <ClInclude Include="PNetwork.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PNormalSelect.h">
+    <ClInclude Include="PPacketManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PEventSelect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

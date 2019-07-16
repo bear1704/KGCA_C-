@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -82,15 +82,17 @@
       <AdditionalIncludeDirectories>../../include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>PCoreLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../lib</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <OutputFile>PNetworkLib.lib</OutputFile>
       <AdditionalLibraryDirectories>../../lib;</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h" "../../include/PNetworkLib"
-copy "PNetworkLib.lib" "../../lib/"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -135,17 +137,19 @@ copy "PNetworkLib.lib" "../../lib/"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PEventSelect.cpp" />
     <ClCompile Include="PNetwork.cpp" />
-    <ClCompile Include="PNormalSelect.cpp" />
-    <ClCompile Include="PSelect.cpp" />
+    <ClCompile Include="PPacketManager.cpp" />
     <ClCompile Include="PSelectModel.cpp" />
+    <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PEventSelect.h" />
     <ClInclude Include="PNetwork.h" />
-    <ClInclude Include="PNormalSelect.h" />
+    <ClInclude Include="PPacketManager.h" />
     <ClInclude Include="PProtocol.h" />
-    <ClInclude Include="PSelect.h" />
     <ClInclude Include="PSelectModel.h" />
+    <ClInclude Include="Sample.h" />
     <ClInclude Include="TServerStd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
