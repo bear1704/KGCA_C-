@@ -153,7 +153,7 @@ bool PPacketManager::RunRecvThread(SOCKET* socket)
 bool PPacketManager::RunPacketProcess(SOCKET* socket)
 {
 	DWORD exitcode;
-	GetExitCodeThread(process_thread_, &exitcode);  //혹시 여기서 널에러 나나?
+	GetExitCodeThread(process_thread_, &exitcode);  
 	if (exitcode == STILL_ACTIVE)
 		return true;
 
