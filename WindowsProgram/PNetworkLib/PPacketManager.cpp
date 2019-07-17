@@ -4,6 +4,9 @@ bool PPacketManager::is_both_pool_empty_ = false;
 std::mutex PPacketManager::mutex_;
 std::mutex PPacketManager::process_mutex_;
 std::mutex PPacketManager::recv_mutex_;
+std::condition_variable PPacketManager::recv_event_;
+std::condition_variable PPacketManager::send_event_;
+std::condition_variable PPacketManager::process_event_;
 
 
 
@@ -19,8 +22,9 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 	
 	while (1)
 	{
+		
 		std::unique_lock<std::mutex> recv_lock(PPacketManager::recv_mutex_);  //Lock(mutex)을 얻는다.
-		recv_event.wait(recv_lock, []()
+		PPacketManager::recv_event_.wait(recv_lock, []()
 		//	{return false; });
 		//MessageBox(g_hWnd, L"falseeeeee", L"hi", MB_OK);
 		{return PPacketManager::GetInstance().recv_notify_request_count_ > 0; });
@@ -128,7 +132,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 	{
 		PPacketManager::is_both_pool_empty_ = (recv_packet_pool->size() == 0 && send_packet_pool->size() == 0) ? true : false; //풀 방법이 없음!
 		std::unique_lock<std::mutex> process_lock(PPacketManager::process_mutex_);
-		process_event.wait(process_lock, []() {return !PPacketManager::is_both_pool_empty_; });
+		PPacketManager::process_event_.wait(process_lock, []() {return !PPacketManager::is_both_pool_empty_; });
 		
 
 
@@ -197,7 +201,7 @@ bool PPacketManager::NotifyReceiveEvent()
 		std::lock_guard<std::mutex> lock_guard(PPacketManager::recv_mutex_);
 		recv_notify_request_count_ += 1;
 	}
-		recv_event.notify_all();
+	PPacketManager::recv_event_.notify_all();
 
 	return true;
 }
@@ -209,7 +213,7 @@ bool PPacketManager::NotifyProcessEvent()
 		std::lock_guard<std::mutex> lock_guard(PPacketManager::process_mutex_);
 		PPacketManager::is_both_pool_empty_ = false;
 	}
-		process_event.notify_all();
+	PPacketManager::process_event_.notify_all();
 	return false;
 }
 

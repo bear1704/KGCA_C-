@@ -4,9 +4,6 @@
 #include <process.h>
 
 
-static std::condition_variable recv_event;
-static std::condition_variable send_event;
-static std::condition_variable process_event;
 
 
 enum class PushType
@@ -58,6 +55,9 @@ public:
 	int recv_notify_request_count_;
 	int send_notify_request_count_;
 
+	static std::condition_variable recv_event_;
+	static std::condition_variable send_event_;
+	static std::condition_variable process_event_;
 
 
 public:
