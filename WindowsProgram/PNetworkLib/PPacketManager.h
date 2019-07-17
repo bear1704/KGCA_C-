@@ -3,7 +3,11 @@
 #include "PProtocol.h"
 #include <process.h>
 
-static HANDLE mutex_;
+
+static std::condition_variable recv_event;
+static std::condition_variable send_event;
+static std::condition_variable process_event;
+
 
 enum class PushType
 {
@@ -16,6 +20,8 @@ struct ThreadParamSet
 	std::list<PACKET>* send_packet_pool;
 	std::list<PACKET>* recv_packet_pool;
 	SOCKET* socket;
+	int* recv_notify_request_count;
+	int* send_notify_request_count;
 
 };
 
@@ -32,15 +38,29 @@ private:
 	HANDLE receive_thread_;
 	HANDLE process_thread_;
 	ThreadParamSet param_set_;
+	std::condition_variable recv_event;
+	std::condition_variable send_event;
+
+
+
 public:
 	//void Process();
 	void PushPacket(PushType type, PACKET packet);
-	bool RunRecvThread(SOCKET* socket);
-	bool RunPacketProcess(SOCKET* socket);
+	bool NotifyReceiveEvent();
+	bool NotifyProcessEvent();
 	bool Init();
 	bool Frame();
 	bool Render();
 	bool Release();
+	void ThreadInit(SOCKET* socket);
+	static bool is_both_pool_empty_;
+	static std::mutex mutex_;
+	static std::mutex process_mutex_;
+	static std::mutex recv_mutex_;
+	int recv_notify_request_count_;
+	int send_notify_request_count_;
+
+
 
 public:
 	~PPacketManager();

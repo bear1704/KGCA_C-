@@ -12,6 +12,10 @@ typedef struct
 typedef struct {
 	PACKET_HEADER ph;
 	char          msg[PACKET_MAX_DATA_SIZE];
+
+	
+
+
 }PACKET;
 
 #define PACKET_SC_SAY_HI				600		//Á¢¼Ó ½Ã Hello

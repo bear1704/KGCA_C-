@@ -28,6 +28,7 @@ bool Sample::Init()
 	m_hList = CreateWindow(L"listbox", NULL, style,
 		10, 10, 400, 500, hWnd, (HMENU)300,
 		hInstance, NULL);
+
 	SendMessage(m_hList, LB_ADDSTRING, 0, (LPARAM)L"채팅시작합니다.");
 	// 1)초기화
 

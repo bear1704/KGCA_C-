@@ -12,10 +12,9 @@ public:
 	virtual bool Init() { return true; }
 	virtual bool Frame() { return true; }
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) { return 1; }
-	//bool RecvPacket(); //origin:RecvData
-	bool RecvMsg(SOCKET sock, char* buffer, int data_bytes);
+	//bool RecvMsg(SOCKET sock, char* buffer, int data_bytes);
 	bool SendMsg(SOCKET sock, int packet_type, char* data, int datasize);
-	bool SendMsg(PACKET& packet);
+	//bool SendMsg(PACKET& packet);
 
 public:
 	void set_hwnd(HWND hwnd);

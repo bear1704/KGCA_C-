@@ -11,6 +11,9 @@ bool PEventSelect::Init()
 	{
 		E_MSG("event_select");
 	}
+
+	PPacketManager::GetInstance().ThreadInit(&socket_); //쓰레드 초기화 및 생성
+
 	return true;
 }
 
@@ -41,8 +44,7 @@ bool PEventSelect::Frame()
 		{
 			return false;
 		}
-	PPacketManager::GetInstance().RunRecvThread(&socket_); //thread에서 리시브하게 명령
-
+	PPacketManager::GetInstance().NotifyReceiveEvent(); //thread에서 리시브하게 명령
 	}
 
 	if (networkevent.lNetworkEvents & FD_WRITE) //Write이벤트 (미구현)
@@ -68,6 +70,8 @@ bool PEventSelect::Frame()
 PEventSelect::PEventSelect(SOCKET sock)
 {
 	socket_ = sock;
+
+
 	
 }
 
