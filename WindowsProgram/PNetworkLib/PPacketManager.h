@@ -38,8 +38,6 @@ private:
 	HANDLE receive_thread_;
 	HANDLE process_thread_;
 	ThreadParamSet param_set_;
-	std::condition_variable recv_event;
-	std::condition_variable send_event;
 
 
 

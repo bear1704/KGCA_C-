@@ -24,7 +24,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 		//	{return false; });
 		//MessageBox(g_hWnd, L"falseeeeee", L"hi", MB_OK);
 		{return PPacketManager::GetInstance().recv_notify_request_count_ > 0; });
-		param_set->recv_notify_request_count -= 1;
+		*param_set->recv_notify_request_count -= 1;
 		recv_lock.unlock();
 		//lock은 return()의 조건을 보호하기 위함 
 		//wait앞에서 대기, notify가 콜되면 인수의 조건을 체크하여, false면 recv_lock을 풀고(쓰레드가 대기할 수 있도록)
@@ -194,7 +194,7 @@ bool PPacketManager::NotifyReceiveEvent()
 {
 
 	{
-		//std::lock_guard<std::mutex> lock_guard(PPacketManager::recv_mutex_);
+		std::lock_guard<std::mutex> lock_guard(PPacketManager::recv_mutex_);
 		recv_notify_request_count_ += 1;
 	}
 		recv_event.notify_all();
