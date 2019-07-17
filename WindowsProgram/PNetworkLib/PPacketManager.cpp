@@ -25,14 +25,18 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 		if (recv_bytes_ < PACKET_HEADER_SIZE)
 		{
 			int once_recv = recv(*(param_set->socket), &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
+			
 			if (once_recv == 0)
 			{
-				return false;
+				return true;
 			}
 
 			if (once_recv == SOCKET_ERROR)
 			{
-				if (WSAGetLastError() == WSAEWOULDBLOCK) {}
+				if (WSAGetLastError() == WSAEWOULDBLOCK)
+				{
+					return true; //받을 데이터 없음
+				}
 				else
 				{
 					E_MSG("recv error");
@@ -48,8 +52,9 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 				if (packet->ph.len == recv_bytes_)
 				{
 					(param_set->recv_packet_pool)->push_back(*packet);
+					PPacketManager::GetInstance().RunPacketProcess((param_set->socket));
 					recv_bytes_ = 0;
-					return true;
+					//return true; //리턴하면 안 되는게, 또 recv해서 0이 될 때 까지..
 				}
 
 			}
@@ -61,11 +66,14 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 				packet->ph.len - recv_bytes_, 0);
 
 			if (once_recv == 0)
-				return false;
+			{
+				return true; //정상종료
+			}
 			if (once_recv == SOCKET_ERROR)
 			{
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
 				{
+					return true; //받을 데이터 없음
 				}
 				else
 				{
@@ -80,7 +88,8 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 			{
 				(param_set->recv_packet_pool)->push_back(*packet);
 				recv_bytes_ = 0;
-				return true;
+				PPacketManager::GetInstance().RunPacketProcess((param_set->socket));
+				//return true;// 리턴하면 안 되는게, 또 recv해서 0이 될 때 까지 받아야 함
 			}
 
 		}
@@ -96,13 +105,14 @@ unsigned __stdcall RecvPacketThread(LPVOID param)
 
 unsigned __stdcall ProcessThread(LPVOID param)
 {
-	
-	while (true)
-	{
-		ThreadParamSet* param_set = (ThreadParamSet*)param;
 
-		std::list<PACKET>* recv_packet_pool = param_set->recv_packet_pool;
-		std::list<PACKET>* send_packet_pool = param_set->send_packet_pool;
+	ThreadParamSet* param_set = (ThreadParamSet*)param;
+
+	std::list<PACKET>* recv_packet_pool = param_set->recv_packet_pool;
+	std::list<PACKET>* send_packet_pool = param_set->send_packet_pool;
+
+	if (recv_packet_pool->size() == 0 && send_packet_pool->size() == 0)
+		return false;
 
 		WaitForSingleObject(mutex_, INFINITE);
 		for (PACKET& packet : *recv_packet_pool)
@@ -119,7 +129,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 		}
 		recv_packet_pool->clear();
 		ReleaseMutex(mutex_);
-	}
+
 	return true;
 }
 
@@ -140,7 +150,10 @@ bool PPacketManager::RunRecvThread(SOCKET* socket)
 	DWORD exitcode;
 	GetExitCodeThread(receive_thread_, &exitcode);  //혹시 여기서 널에러 나나?
 	if (exitcode != STILL_ACTIVE)
-		CloseHandle(receive_thread_);
+		CloseHandle(receive_thread_); //완료된 쓰레드 close
+
+	if (exitcode == STILL_ACTIVE)
+		return false; //이미 recv중인 상태
 
 	param_set_.socket = socket;
 	
@@ -154,9 +167,11 @@ bool PPacketManager::RunPacketProcess(SOCKET* socket)
 {
 	DWORD exitcode;
 	GetExitCodeThread(process_thread_, &exitcode);  
-	if (exitcode == STILL_ACTIVE)
-		return true;
+	if (exitcode != STILL_ACTIVE)
+		CloseHandle(process_thread_); //완료된 쓰레드 close
 
+	if (exitcode == STILL_ACTIVE)
+		return false; //이미 precess중인 상태
 
 	param_set_.socket = socket;
 

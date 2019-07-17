@@ -44,7 +44,7 @@ bool Sample::Init()
 	// 3)¸ðµ¨ ¼±ÅÃ
 	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket()));
 
-	PPacketManager::GetInstance().RunPacketProcess(&(m_Network.get_socket()));
+	//PPacketManager::GetInstance().RunPacketProcess(&(m_Network.get_socket()));
 
 	return true;
 }

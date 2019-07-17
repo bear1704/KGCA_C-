@@ -1,5 +1,6 @@
 #include "Sample.h"
 
+
 Sample::Sample()
 {
 	timer = 0.0f;
@@ -116,6 +117,7 @@ bool Sample::InitDataLoad()
 	
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree.mp3"));
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree_die.mp3"));
+
 
 
 	return true;

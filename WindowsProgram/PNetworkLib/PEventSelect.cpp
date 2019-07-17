@@ -27,7 +27,7 @@ bool PEventSelect::Frame()
 
 	WSANETWORKEVENTS networkevent;
 
-	int ret = WSAEnumNetworkEvents(socket_, event_array[index], &networkevent); //어떤 이벤트인지 확인 , sig->non-sig
+	int ret = WSAEnumNetworkEvents(socket_, event_array[index], &networkevent); //어떤 이벤트인지 확인 , Signal->non-signal
 
 	if (ret == SOCKET_ERROR)
 	{
@@ -35,7 +35,7 @@ bool PEventSelect::Frame()
 	}
 	assert(ret != SOCKET_ERROR);
 
-	if (networkevent.lNetworkEvents & FD_READ)
+	if (networkevent.lNetworkEvents & FD_READ) //Read이벤트 (connect, recv인데 여기선 recv만)
 	{
 		if (networkevent.iErrorCode[FD_READ_BIT] != 0)
 		{
@@ -44,7 +44,8 @@ bool PEventSelect::Frame()
 	PPacketManager::GetInstance().RunRecvThread(&socket_); //thread에서 리시브하게 명령
 
 	}
-	if (networkevent.lNetworkEvents & FD_WRITE)
+
+	if (networkevent.lNetworkEvents & FD_WRITE) //Write이벤트 (미구현)
 	{
 		if (networkevent.iErrorCode[FD_WRITE_BIT] != 0)
 		{

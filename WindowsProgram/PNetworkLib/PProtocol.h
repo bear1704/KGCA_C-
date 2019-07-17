@@ -14,17 +14,19 @@ typedef struct {
 	char          msg[PACKET_MAX_DATA_SIZE];
 }PACKET;
 
-#define PACKET_SC_SAY_HI				600
-#define	PACKET_CHAR_MSG					601
-#define PACKET_CS_LOGIN_SEND_USERNAME	602
-#define PACKET_SC_LOGIN_ACCEPT			603
-#define PACKET_BROADCAST_USERX_MOVEAXIS_AtoB	604
-#define	PACKET_BROADCAST_ATTACK_SUCCESS			605
-#define	PACKET_CS_ATTACK_REQUEST				606
-#define	PACKET_SC_ATTACK_ACK					607
-#define	PACKET_BROADCAST_USERX_JUMP				608
-#define	PACKET_CS_REPORT_MYPOSITION				609
-#define PACKET_BROADCAST_BE_ATTACKED			610
+#define PACKET_SC_SAY_HI				600		//접속 시 Hello
+#define	PACKET_CHAR_MSG					601		//메시지 전송(채팅)
+#define PACKET_CS_LOGIN_SEND_USERNAME	602		//로그인 시 유저이름을 입력받아 전송
+#define PACKET_SC_LOGIN_ACCEPT			603		//로그인 승인
+#define PACKET_BROADCAST_USERX_MOVEAXIS_AtoB	604		//유저들에게 유저X의 이동상태를 재생하라고 보냄.user pos정보 + 방향 + 속도
+#define	PACKET_BROADCAST_ATTACK_SUCCESS			605		//서버가 클라에게 해당 공격이 성공했음을 알림
+#define	PACKET_CS_ATTACK_REQUEST				606		//클라가 서버에게 공격 요청. 공격
+#define	PACKET_SC_ATTACK_ACK					607		//
+#define	PACKET_BROADCAST_USERX_JUMP				608		//유저X의 점프를 유저들에게 알림
+#define	PACKET_CS_REPORT_MYPOSITION				609		//위치보정용 위치전송
+#define PACKET_CS_REPORT_MOVE_STATUS_MYPOSITION 610		//클라가 서버에게 이동중이라 알림. 유저 pos + 이동속도 + 이동방향(데드레커닝 추론용)
+#define PACKET_BROADCAST_BE_ATTACKED			611		//서버가 클라에게 공격받았다 알림  데미지 + 방향
+#define PACKET_BROADCAST_SPAWN_CHARACTER		612		//
 
 
 typedef struct{
