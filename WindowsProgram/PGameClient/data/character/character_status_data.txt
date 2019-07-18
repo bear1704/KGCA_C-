@@ -1,0 +1,23 @@
+<status>
+	<name> player </name>
+	<type> player </type>
+	<level> 10 </level>
+	<max_hp> 930 </max_hp>
+	<max_mp> 120 </max_mp>
+	<current_hp> 930 </current_hp>
+	<current_mp> 120 </current_mp>
+	<current_exp> 12 </current_exp>
+	<str> 10 </str>
+	<dex> 8 </dex>
+</status>
+<status>
+	<name> orange_mushroom </name>
+	<type> monster </type>
+	<level> 8 </level>
+	<max_hp> 65 </max_hp>
+	<max_mp> 0 </max_mp>
+	<current_hp> 65 </current_hp>
+	<current_mp> 0 </current_mp>
+	<reward_exp> 1240 </reward_exp>
+	<body_dmg> 95 </body_dmg>
+</status>

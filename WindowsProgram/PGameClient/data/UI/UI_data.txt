@@ -1,0 +1,155 @@
+<ui_data>
+	<name> cashshopbutton </name>
+	<image_size> 0,0,32,33 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> cashshopbutton </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> eventbutton </name>
+	<image_size> 0,0,32,33 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> eventbutton </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> characterbutton </name>
+	<image_size> 0,0,32,33 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> characterbutton </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> communitybutton  </name>
+	<image_size> 0,0,32,33 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> communitybutton </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> optionbutton  </name>
+	<image_size> 0,0,32,33 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> optionbutton </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> menubutton  </name>
+	<image_size> 0,0,32,33 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> menubutton </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> hpbar  </name>
+	<image_size> 0,0,170,12 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> hpbar </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> mpbar  </name>
+	<image_size> 0,0,170,12 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> mpbar </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> guage_slot  </name>
+	<image_size> 0,0,204,70 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> guage_slot </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> guage_slot_background  </name>
+	<image_size> 0,0,1024,1 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> guage_slot_background </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> quickslot  </name>
+	<image_size> 0,0,150,70 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> quickslot </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> expbar_background  </name>
+	<image_size> 0,0,1024,10 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> expbar_background </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> expbar  </name>
+	<image_size> 0,0,1008,7 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> expbar </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> expbar_separate  </name>
+	<image_size> 0,0,810,7 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> expbar_separate </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> dmg_font  </name>
+	<image_size> 0,0,35,36 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> dmg_font </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> end_illust  </name>
+	<image_size> 0,0,1024,768 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> end_illust </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+<ui_data>
+	<name> gameover_illust  </name>
+	<image_size> 0,0,1024,768 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> gameover_illust </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
+
+
+

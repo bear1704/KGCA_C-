@@ -1,0 +1,5 @@
+이름, 레벨, MHP, MMP, CurHP, CurMP, CurEXP, STR, DEX, 잡힐경우 경험치(몬스터대상), 데미지(몬스터대상)
+
+
+//MEXP = 레벨  * 998
+//DMG = STR*2 + DEX*1

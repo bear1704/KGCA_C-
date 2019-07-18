@@ -61,7 +61,7 @@ bool  Sample::Render()
 
 	//PObjectRotateUtil::RotateAndDraw(monster_[1]->get_sprite_(), 0, 300, 200, angle, 1.0f, 4.0f, true);
 	//PObjectRotateUtil::RotateAndDraw(player_character_->get_sprite_(), 0,600, 200, angle, 0.3f, 2.0f,  false);
-	angle += 0.1f  * g_SecondPerFrame * 600.f;
+	//angle += 0.1f  * g_SecondPerFrame * 600.f;
 
 	if (g_current_scene_)
 		g_current_scene_->Render();
