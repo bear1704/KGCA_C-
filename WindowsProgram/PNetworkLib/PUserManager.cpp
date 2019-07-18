@@ -27,9 +27,24 @@ bool PUserManager::Release()
 void PUserManager::AddUser(PUser* user)
 {
 	std::lock_guard<std::mutex> lock(mutex_);
+
+	std::random_device r;
+	std::mt19937 engine(r());
+	std::uniform_int_distribution<int> distribution(-100000, 100000);
+	auto generator = std::bind(distribution, engine); //데미지 난수화 
+	int random = generator();
+
+
 	user->set_connected(true);
 	user->set_event(WSACreateEvent());
+	user->set_id(random);
+	//user->set_name필요 
+	
 	user_list_.push_back(user);
+
+
+
+	
 
 	printf("\n접속 [%s][%d] , -%d-",
 		inet_ntoa(user->get_client_addr().sin_addr),
@@ -87,6 +102,11 @@ void PUser::set_socket(SOCKET socket)
 	user_socket_ = socket;
 }
 
+void PUser::set_id(int id)
+{
+	unique_id_ = id;
+}
+
 bool PUser::get_connected()
 {
 	return connected_;
@@ -110,4 +130,9 @@ SOCKET& PUser::get_socket()
 SOCKADDR_IN& PUser::get_client_addr()
 {
 	return client_addr_;
+}
+
+int PUser::get_id()
+{
+	return unique_id_;
 }

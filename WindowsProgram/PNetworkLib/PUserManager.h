@@ -4,6 +4,8 @@
 #include "PPacketManager.h"
 #include <string>
 #include <vector>
+#include <random>
+#include <functional>
 
 
 
@@ -14,7 +16,7 @@ private:
 	HANDLE user_event_;
 	bool connected_;
 	std::string name_;
-	std::string unique_id_;
+	int unique_id_;
 	SOCKADDR_IN client_addr_;
 public:
 	PUser();
@@ -26,6 +28,7 @@ public:
 	void set_name(std::string name);
 	void set_event(HANDLE event);
 	void set_socket(SOCKET socket);
+	void set_id(int id);
 	
 	//getter
 
@@ -34,6 +37,7 @@ public:
 	HANDLE& get_event();
 	SOCKET& get_socket();
 	SOCKADDR_IN& get_client_addr();
+	int get_id();
 };
 
 

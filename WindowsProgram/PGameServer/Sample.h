@@ -1,6 +1,7 @@
 #pragma once
 #include "PNetwork.h"
 
+
 class Sample
 {
 	PNetwork		m_Network;
