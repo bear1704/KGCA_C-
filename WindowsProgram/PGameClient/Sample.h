@@ -1,7 +1,14 @@
 #pragma once
 #include "PNetwork.h"
 #include "PCore.h"
+
+
+
+
 PScene* g_current_scene_;
+
+
+
 class Sample : public PCore
 {
 	PNetwork		m_Network;

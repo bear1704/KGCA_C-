@@ -43,9 +43,6 @@ void PUserManager::AddUser(PUser* user)
 	user_list_.push_back(user);
 
 
-
-	
-
 	printf("\nÁ¢¼Ó [%s][%d] , -%d-",
 		inet_ntoa(user->get_client_addr().sin_addr),
 		ntohs(user->get_client_addr().sin_port),
