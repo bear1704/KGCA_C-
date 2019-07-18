@@ -13,36 +13,6 @@ bool PNetwork::CreateSock()
 	return true;
 }
 
-//bool PNetwork::SendFromPacketPool() //패킷풀로부터 패킷을 전송
-//{
-//	if (PNetwork::connect_ == false) return true;
-//	
-//	for (PACKET& packet : PNetwork::send_pool_)
-//	{
-//		if (current_model_->SendMsg(packet) == false)
-//		{
-//			ShutDown();
-//			break;
-//		}
-//	}
-//
-//	PNetwork::send_pool_.clear();
-//	return false;
-//}
-
-//bool PNetwork::SendMsg(int type, char* msg_data, int msg_size)
-//{
-//	PACKET packet;
-//	ZeroMemory(&packet, sizeof(PACKET));
-//	packet.ph.type = type;
-//	packet.ph.len = PACKET_HEADER_SIZE + msg_size;
-//	if (msg_data != nullptr)
-//	{
-//		memcpy(packet.msg, msg_data, msg_size);
-//	}
-//	send_pool_.push_back(packet);
-//	return false;
-//}
 
 bool PNetwork::Connect(const char* ip_address, int port_number, HWND hwnd)
 {
@@ -70,6 +40,39 @@ bool PNetwork::Connect(const char* ip_address, int port_number, HWND hwnd)
 
 }
 
+bool PNetwork::BindListen()
+{
+	WSADATA wsa;
+	WSAStartup(MAKEWORD(2, 2), &wsa);
+	listen_sock_ = socket(AF_INET, SOCK_STREAM, 0);
+	SOCKADDR_IN sa;
+	ZeroMemory(&sa, sizeof(sa));
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(10000);
+	sa.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	int ret = bind(listen_sock_, (SOCKADDR*)& sa, sizeof(sa));
+	if (ret == SOCKET_ERROR)
+	{
+		E_MSG("Server::bind");
+		return false;
+	}
+	printf("\n bind complete");
+
+	ret = listen(listen_sock_, SOMAXCONN);
+	if (ret == SOCKET_ERROR)
+	{
+		E_MSG("SERVER::listen");
+		return false;
+	}
+	printf("\n listen complete");
+	unsigned long blocking_mode = 1;
+	ioctlsocket(listen_sock_, FIONBIO, &blocking_mode);
+
+
+	return true;
+}
+
 bool PNetwork::set_current_model(Sptr<PSelectModel> model)
 {
 	if (model == nullptr) return false;
@@ -77,6 +80,8 @@ bool PNetwork::set_current_model(Sptr<PSelectModel> model)
 	current_model_ = model;
 	current_model_->set_hwnd(hwnd_);
 	current_model_->Init();
+
+
 	return true;
 }
 
@@ -105,23 +110,31 @@ bool PNetwork::Frame()
 
 	if (current_model_ == nullptr) return true;
 
-	if (connect_ == false)
+	if (operate_mode_ == OperateMode::CLIENT)
 	{
-		//재접속
-		if (Connect(ip_adress_.c_str(), port_number_, hwnd_) == false)
-		{
-			ShutDown();
-			return false;
-		}
 
-		current_model_->set_socket(socket_);
-		current_model_->Init();
-	}
+		if (connect_ == false)
+		{
+			//재접속
+			if (Connect(ip_adress_.c_str(), port_number_, hwnd_) == false)
+			{
+				ShutDown();
+				return false;
+			}
+
+			current_model_->set_socket(socket_);
+			current_model_->Init();
+		}
 		if (current_model_->Frame() == false)
 		{
 			ShutDown();
 			return false;
 		}
+	}
+	else
+	{
+		current_model_->Frame();
+	}
 		return true;
 }
 
@@ -139,6 +152,11 @@ bool PNetwork::Release()
 SOCKET& PNetwork::get_socket()
 {
 	return socket_;
+}
+
+SOCKET& PNetwork::get_listen_sock()
+{
+	return listen_sock_;
 }
 
 Sptr<PSelectModel>& PNetwork::get_current_model()
@@ -168,7 +186,3 @@ PNetwork::~PNetwork()
 	WSACleanup();
 }
 
-int main()
-{
-	return 0;
-}

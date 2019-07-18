@@ -9,6 +9,15 @@
 #include <concurrent_queue.h>
 #pragma comment(lib, "ws2_32.lib")
 
+
+enum class OperateMode
+{
+	SERVER,
+	CLIENT,
+};
+
+
+
 static void E_MSG(const char* pMsg)
 {
 	void* lpMsgBuf;

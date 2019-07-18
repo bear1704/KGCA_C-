@@ -43,9 +43,8 @@ bool Sample::Init()
 		return false;
 	}
 	// 3)¸ðµ¨ ¼±ÅÃ
-	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket()));
+	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket(), OperateMode::CLIENT));
 
-	//PPacketManager::GetInstance().RunPacketProcess(&(m_Network.get_socket()));
 
 	return true;
 }

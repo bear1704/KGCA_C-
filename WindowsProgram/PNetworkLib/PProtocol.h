@@ -4,18 +4,14 @@
 #include <cassert>
 
 #pragma pack( push, 1)
-typedef struct
+typedef struct ph
 {
 	WORD len;   // 데이터 길이+헤더길이   WORD : unisgned short
 	WORD type;  // 패킷 타입
 }PACKET_HEADER;
-typedef struct {
+typedef struct pkt{
 	PACKET_HEADER ph;
 	char          msg[PACKET_MAX_DATA_SIZE];
-
-	
-
-
 }PACKET;
 
 #define PACKET_SC_SAY_HI				600		//접속 시 Hello

@@ -13,45 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Common">
+      <UniqueIdentifier>{b48a6f84-4777-4295-846b-0f2a079f2e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server">
+      <UniqueIdentifier>{b01891d2-3334-411f-bd44-e039644ca924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Client">
+      <UniqueIdentifier>{ec1a624a-65a3-42c8-bd3f-dcca103765cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Common\Select">
+      <UniqueIdentifier>{0c198131-b80f-409d-8599-fe5fd946ca7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Common\System">
+      <UniqueIdentifier>{facca377-a2eb-44b3-94e3-9603075655e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Common\Packet">
+      <UniqueIdentifier>{fcb25cfe-b3ab-4ec3-9e93-01cfd7892fc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PEventSelect.cpp">
+      <Filter>소스 파일\Common\Select</Filter>
+    </ClCompile>
     <ClCompile Include="PSelectModel.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Common\Select</Filter>
     </ClCompile>
     <ClCompile Include="PNetwork.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Common\System</Filter>
     </ClCompile>
     <ClCompile Include="PPacketManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Common\Packet</Filter>
     </ClCompile>
-    <ClCompile Include="PEventSelect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Sample.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="PUserManager.cpp">
+      <Filter>소스 파일\Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PSelectModel.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="PProtocol.h">
+      <Filter>소스 파일\Common</Filter>
     </ClInclude>
     <ClInclude Include="TServerStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PProtocol.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PNetwork.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PPacketManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Common</Filter>
     </ClInclude>
     <ClInclude Include="PEventSelect.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Common\Select</Filter>
     </ClInclude>
-    <ClInclude Include="Sample.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="PSelectModel.h">
+      <Filter>소스 파일\Common\Select</Filter>
+    </ClInclude>
+    <ClInclude Include="PNetwork.h">
+      <Filter>소스 파일\Common\System</Filter>
+    </ClInclude>
+    <ClInclude Include="PPacketManager.h">
+      <Filter>소스 파일\Common\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="PUserManager.h">
+      <Filter>소스 파일\Server</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

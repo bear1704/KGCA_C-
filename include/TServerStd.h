@@ -3,8 +3,22 @@
 #include <winsock2.h>
 #include <stdio.h>
 #include "PStd.h"
+#include <condition_variable>
+#include <queue>
+#include <mutex>
+#include <concurrent_queue.h>
 #pragma comment(lib, "ws2_32.lib")
-void E_MSG(const char* pMsg)
+
+
+enum class OperateMode
+{
+	SERVER,
+	CLIENT,
+};
+
+
+
+static void E_MSG(const char* pMsg)
 {
 	void* lpMsgBuf;
 	FormatMessageA(

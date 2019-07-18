@@ -1,43 +1,42 @@
 #pragma once
 #define PACKET_HEADER_SIZE 4
 #define PACKET_MAX_DATA_SIZE 2048
+#include <cassert>
 
 #pragma pack( push, 1)
-	typedef struct
-	{
-		WORD len;   // 데이터 길이+헤더길이   WORD : unisgned short
-		WORD type;  // 패킷 타입
-	}PACKET_HEADER;
-	typedef struct {
-		PACKET_HEADER ph;
-		char          msg[PACKET_MAX_DATA_SIZE];
-	}UPACKET;
+typedef struct ph
+{
+	WORD len;   // 데이터 길이+헤더길이   WORD : unisgned short
+	WORD type;  // 패킷 타입
+}PACKET_HEADER;
+typedef struct pkt{
+	PACKET_HEADER ph;
+	char          msg[PACKET_MAX_DATA_SIZE];
+}PACKET;
 
-	#define PACKET_CHAR_MSG				 1000 // DATA
-	#define PACKET_CHAR_NAME_SC_REQ		 1001 // DATA
-	#define PACKET_CHAR_NAME_CS_ACK		 1002 // DATA
-	#define PACKET_JOIN_SIGNIN_SC		 1003 // x
-	#define PACKET_JOIN_USER_SC			 1004 // DATA
-	#define PACKET_CS_DROP_REQ			 1005 // x
-	#define PACKET_SC_DROP_ACK			 1006 // x
-	#define PACKET_SC_BROAD_DROPUSER	 1007 // DATA
+#define PACKET_SC_SAY_HI				600		//접속 시 Hello
+#define	PACKET_CHAR_MSG					601		//메시지 전송(채팅)
+#define PACKET_CS_LOGIN_SEND_USERNAME	602		//로그인 시 유저이름을 입력받아 전송
+#define PACKET_SC_LOGIN_ACCEPT			603		//로그인 승인
+#define PACKET_BROADCAST_USERX_MOVEAXIS_AtoB	604		//유저들에게 유저X의 이동상태를 재생하라고 보냄.user pos정보 + 방향 + 속도
+#define	PACKET_BROADCAST_ATTACK_SUCCESS			605		//서버가 클라에게 해당 공격이 성공했음을 알림
+#define	PACKET_CS_ATTACK_REQUEST				606		//클라가 서버에게 공격 요청. 공격
+#define	PACKET_SC_ATTACK_ACK					607		//
+#define	PACKET_BROADCAST_USERX_JUMP				608		//유저X의 점프를 유저들에게 알림
+#define	PACKET_CS_REPORT_MYPOSITION				609		//위치보정용 위치전송
+#define PACKET_CS_REPORT_MOVE_STATUS_MYPOSITION 610		//클라가 서버에게 이동중이라 알림. 유저 pos + 이동속도 + 이동방향(데드레커닝 추론용)
+#define PACKET_BROADCAST_BE_ATTACKED			611		//서버가 클라에게 공격받았다 알림  데미지 + 방향
+#define PACKET_BROADCAST_SPAWN_CHARACTER		612		//
 
 
-	#define USER_BASE_SIZE 24
-	#define USER_NAME_SIZE 20
-	typedef struct {
-		int   index;
-		char  user_name[USER_NAME_SIZE];
-	}USER_NAME_ACK, USER_BASE;
-	
-	typedef struct	{
-		USER_BASE user_base;
-		char  msg[30];
-	}USER_NAME_REQ;
+typedef struct{
+	char username[30];
+	int user_id;
+}User;
 
-	typedef struct	{
-		char  user_name[USER_NAME_SIZE];
-		char  msg[PACKET_MAX_DATA_SIZE-USER_NAME_SIZE];// 메세지 실제 크기
-	}USER_CHAT_MSG;
+typedef struct {
+	User user;
+	PACKET packet;
+}USER_PACKET;
 
 #pragma pack(pop)

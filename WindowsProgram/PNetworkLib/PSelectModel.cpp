@@ -1,27 +1,6 @@
 #include "PSelectModel.h"
 #include "PNetwork.h"
 
-//
-//bool PSelectModel::RecvMsg(SOCKET sock, char* buffer, int data_bytes)
-//{
-//	if (data_bytes < 0) return true;
-//
-//	int recv_bytes = 0;
-//
-//	do
-//	{
-//		int once_recv = recv(sock, &buffer[recv_bytes], data_bytes - recv_bytes, 0);
-//		if (once_recv == 0)
-//			return false;
-//		if (once_recv == SOCKET_ERROR)
-//			return false;
-//
-//		recv_bytes += once_recv;
-//	} while (data_bytes > recv_bytes);
-//
-//	return true;
-//
-//}
 
 bool PSelectModel::SendMsg(SOCKET sock, int packet_type, char* data, int datasize)
 {

@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>../../output/PNetworkLib</OutDir>
-    <IntDir>../../output/PNetworkLib</IntDir>
+    <IntDir>../../output/PNetworkLib/Debug</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -91,8 +91,8 @@
       <AdditionalLibraryDirectories>../../lib;</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy "*.h" "../../include"
+copy "PNetworkLib.lib" "../../lib/"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -141,7 +141,7 @@
     <ClCompile Include="PNetwork.cpp" />
     <ClCompile Include="PPacketManager.cpp" />
     <ClCompile Include="PSelectModel.cpp" />
-    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="PUserManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PEventSelect.h" />
@@ -149,7 +149,7 @@
     <ClInclude Include="PPacketManager.h" />
     <ClInclude Include="PProtocol.h" />
     <ClInclude Include="PSelectModel.h" />
-    <ClInclude Include="Sample.h" />
+    <ClInclude Include="PUserManager.h" />
     <ClInclude Include="TServerStd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
