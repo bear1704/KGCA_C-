@@ -27,6 +27,14 @@ bool PScene::Init()
 	}
 	for (int i = 0; i < game_objects_.size(); i++)
 	{
+		if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
+		{
+			PPlayerCharacter* ot_player = (PPlayerCharacter*)game_objects_[i];
+			ot_player->Init();
+		}
+	}
+	for (int i = 0; i < game_objects_.size(); i++)
+	{
 		if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{
 			PMonster* monster = (PMonster*)game_objects_[i];

@@ -11,6 +11,18 @@
 	<dex> 8 </dex>
 </status>
 <status>
+	<name> other_player </name>
+	<type> other_player </type>
+	<level> 10 </level>
+	<max_hp> 930 </max_hp>
+	<max_mp> 120 </max_mp>
+	<current_hp> 930 </current_hp>
+	<current_mp> 120 </current_mp>
+	<current_exp> 12 </current_exp>
+	<str> 10 </str>
+	<dex> 8 </dex>
+</status>
+<status>
 	<name> orange_mushroom </name>
 	<type> monster </type>
 	<level> 8 </level>

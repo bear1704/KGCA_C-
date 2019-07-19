@@ -7,6 +7,15 @@
 	<attack> pc_swing </attack>
 	<attack> pc_pierce </attack>
 </list>
+<list> <!-- 타 플레이어 캐릭터 애니메이션 리스트 -->
+	<name> other_player </name>
+	<idle> other_pc_idle </idle>
+	<move> other_pc_move </move>
+	<jump> other_pc_jump </jump>
+	<attack> other_pc_slash </attack>
+	<attack> other_pc_swing </attack>
+	<attack> other_pc_pierce </attack>
+</list>
 <list> <!-- 주황버섯 애니메이션 리스트 -->
 	<name> orange_mushroom </name>
 	<idle> orange_mushroom_idle </idle>

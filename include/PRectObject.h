@@ -10,6 +10,7 @@
 enum class Type
 {
 	PLAYER,
+	OTHER_PLAYER,
 	MONSTER,
 	NPC,
 	MAP,

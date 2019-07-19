@@ -147,6 +147,9 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 	scale_ = info.scale_;
 	move_speed_ = info.move_speed_;
 
+	if (character_name_ == L"player")
+		client_owner_character_ = true;
+
 	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
 	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path, ObjectLoadType::CHARACTER);
