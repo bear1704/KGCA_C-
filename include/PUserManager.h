@@ -1,10 +1,12 @@
 #pragma once
 #include "TServerStd.h"
 #include "PProtocol.h"
-#include "PPacketManager.h"
 #include <string>
 #include <vector>
+#include <random>
+#include <functional>
 
+class PPacketManager;
 
 
 class PUser
@@ -14,7 +16,7 @@ private:
 	HANDLE user_event_;
 	bool connected_;
 	std::string name_;
-	std::string unique_id_;
+	WORD unique_id_;
 	SOCKADDR_IN client_addr_;
 public:
 	PUser();
@@ -26,14 +28,19 @@ public:
 	void set_name(std::string name);
 	void set_event(HANDLE event);
 	void set_socket(SOCKET socket);
+	void set_id(int id);
 	
 	//getter
 
 	bool get_connected();
-	std::string& get_name();
-	HANDLE& get_event();
-	SOCKET& get_socket();
-	SOCKADDR_IN& get_client_addr();
+	std::string get_name();
+	HANDLE get_event();
+	SOCKET get_socket();
+	HANDLE* get_event_by_ptr();
+	SOCKADDR_IN* get_client_addr_by_ptr();
+	SOCKET* get_socket_by_ptr();
+	SOCKADDR_IN get_client_addr();
+	int get_id();
 };
 
 
@@ -55,6 +62,7 @@ public:
 
 	void AddUser(PUser* user);
 	void DeleteUser(PUser* user);
+	PUser* FindUserById(WORD id);
 
 
 public:

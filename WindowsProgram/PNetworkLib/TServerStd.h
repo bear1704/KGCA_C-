@@ -16,7 +16,7 @@ enum class OperateMode
 	CLIENT,
 };
 
-
+extern OperateMode g_operate_mode;
 
 static void E_MSG(const char* pMsg)
 {

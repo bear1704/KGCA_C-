@@ -132,8 +132,6 @@
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\PNetworkLib\PProtocol.h" />
-    <ClInclude Include="..\PNetworkLib\TServerStd.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

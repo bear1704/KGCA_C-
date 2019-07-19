@@ -25,10 +25,9 @@ class Sample : public PCore
 	HWND			m_hList;
 public:
 	bool		Init();
-	bool		PreFrame();
+	bool		PreFrame() override;
 	bool		Frame();
 	bool		Release();
-	bool		PacketProcess();
 	bool		Render();
 	bool		InitDataLoad();
 

@@ -1,4 +1,5 @@
 #include "PUserManager.h"
+#include "PPacketManager.h"
 
 PUserManager::PUserManager()
 {
@@ -30,10 +31,9 @@ void PUserManager::AddUser(PUser* user)
 
 	std::random_device r;
 	std::mt19937 engine(r());
-	std::uniform_int_distribution<int> distribution(-100000, 100000);
+	std::uniform_int_distribution<int> distribution(15, 9015);
 	auto generator = std::bind(distribution, engine); //데미지 난수화 
-	int random = generator();
-
+	WORD random = generator();
 
 	user->set_connected(true);
 	user->set_event(WSACreateEvent());
@@ -42,6 +42,12 @@ void PUserManager::AddUser(PUser* user)
 	
 	user_list_.push_back(user);
 
+	PACKET id_send_packet;
+	ZeroMemory(&id_send_packet, sizeof(PACKET));
+	id_send_packet.ph.type = PACKET_SC_ID_PROVIDE;
+	PPacketManager::GetInstance().PushPacket(user, PACKET_SC_ID_PROVIDE, (char*)random, sizeof(WORD), PushType::SEND);
+
+	printf("\n유저에게 ID부여 : %hd  ", user->get_id());
 
 	printf("\n접속 [%s][%d] , -%d-",
 		inet_ntoa(user->get_client_addr().sin_addr),
@@ -56,15 +62,25 @@ void PUserManager::DeleteUser(PUser* user)
 	iter = find(user_list_.begin(), user_list_.end(), user);
 	closesocket(user->get_socket());
 	user->set_connected(false);
-	printf("\n접속 종료됨 [%s][%d] , -%d-",
+	printf("\n접속 종료됨 [%s][%d] , -%d-, ID : %hd  ",
 		inet_ntoa(user->get_client_addr().sin_addr),
 		ntohs(user->get_client_addr().sin_port),
-		user_list_.size());
+		user_list_.size(), user->get_id());
 
 	delete* iter;
 	user_list_.erase(iter);
 
 
+}
+
+PUser* PUserManager::FindUserById(WORD id)
+{
+	for (PUser* user : user_list_)
+	{
+		if (user->get_id() == id)
+			return user;
+	}
+	return nullptr;
 }
 
 PUserManager::~PUserManager()
@@ -73,6 +89,7 @@ PUserManager::~PUserManager()
 
 PUser::PUser()
 {
+
 }
 
 PUser::~PUser()
@@ -109,22 +126,37 @@ bool PUser::get_connected()
 	return connected_;
 }
 
-std::string& PUser::get_name()
+std::string PUser::get_name()
 {
 	return name_;
 }
 
-HANDLE& PUser::get_event()
+HANDLE PUser::get_event()
 {
 	return user_event_;
 }
 
-SOCKET& PUser::get_socket()
+SOCKET PUser::get_socket()
 {
 	return user_socket_;
 }
 
-SOCKADDR_IN& PUser::get_client_addr()
+HANDLE* PUser::get_event_by_ptr()
+{
+	return &user_event_;
+}
+
+SOCKADDR_IN* PUser::get_client_addr_by_ptr()
+{
+	return &client_addr_;
+}
+
+SOCKET* PUser::get_socket_by_ptr()
+{
+	return &user_socket_;
+}
+
+SOCKADDR_IN PUser::get_client_addr()
 {
 	return client_addr_;
 }

@@ -41,10 +41,11 @@ bool Sample::Init()
 bool Sample::PreFrame()
 {
 	m_Network.Frame();
-	PacketProcess();
+	//assert(false);
 	return true;
 }
 bool Sample::Frame() {
+	
 	if (g_current_scene_)
 		g_current_scene_->Frame();
 
@@ -81,7 +82,6 @@ bool Sample::Release()
 }
 
 
-bool Sample::PacketProcess(){ return true; }
 
 void Sample::draw_test_rect(FLOAT_RECT rect)
 {
@@ -107,6 +107,7 @@ bool Sample::InitDataLoad()
 	PScene* scene1 = new PScene();
 	PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"MYSETTINGBTN");
 	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"MUSHROOMLAND");
+
 	scene1->InsertObject(uicomp_settingbar);
 	scene1->InsertObject(game_objects_);
 	scene1->set_scene_name_(L"MUSHROOMLAND");

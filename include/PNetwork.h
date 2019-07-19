@@ -3,6 +3,8 @@
 
 #define MAX_PLAYER 8
 
+
+
 class PNetwork //PClient?
 {
 protected:
@@ -12,7 +14,7 @@ protected:
 	HWND				hwnd_;
 	SOCKET				socket_;  //client only
 	SOCKET				listen_sock_; //server only
-	OperateMode operate_mode_;
+	
 
 
 public:

@@ -1,9 +1,12 @@
 #include "PEventSelect.h"
 #include "PNetwork.h"
 
+OperateMode g_operate_mode;
+
+
 bool PEventSelect::Init()
 {
-	if (operate_mode_ == OperateMode::CLIENT)
+	if (g_operate_mode == OperateMode::CLIENT)
 	{
 		event_array_[0] = WSACreateEvent();
 		int ret = WSAEventSelect(socket_, event_array_[0], FD_CONNECT |
@@ -14,7 +17,7 @@ bool PEventSelect::Init()
 			E_MSG("event_select");
 		}
 	}
-	else if (operate_mode_ == OperateMode::SERVER)
+	else if (g_operate_mode == OperateMode::SERVER)
 	{
 		HANDLE listen_event = WSACreateEvent();
 		event_array_[0] = listen_event;
@@ -35,7 +38,7 @@ bool PEventSelect::Init()
 
 bool PEventSelect::Frame()
 {
-	if (operate_mode_ == OperateMode::CLIENT)
+	if (g_operate_mode == OperateMode::CLIENT)
 	{
 		int index = WSAWaitForMultipleEvents(1, event_array_, TRUE, 0, FALSE);
 		assert(index != WSA_WAIT_FAILED);
@@ -82,7 +85,7 @@ bool PEventSelect::Frame()
 		}
 	
 	}
-	else if(operate_mode_ == OperateMode::SERVER)
+	else if(g_operate_mode == OperateMode::SERVER)
 	{
 		std::vector<PUser*>& user_list_ref = PUserManager::GetInstance().user_list_;
 
@@ -110,7 +113,7 @@ bool PEventSelect::Frame()
 				
 				int addr_len = sizeof(SOCKADDR_IN);
 				PUser* user = new PUser;
-				SOCKET clientsock = accept(socket_, (SOCKADDR*)& user->get_client_addr(), &addr_len);
+				SOCKET clientsock = accept(socket_, (SOCKADDR*)user->get_client_addr_by_ptr(), &addr_len);
 
 				if (clientsock == INVALID_SOCKET) { E_MSG("Server:accept"); }
 
@@ -118,17 +121,22 @@ bool PEventSelect::Frame()
 
 				PUserManager::GetInstance().AddUser(user);
 
-				event_array_[user_list_ref.size()] = user->get_event();
-				WSAEventSelect(user->get_socket(), user->get_event(), FD_READ | FD_WRITE | FD_CLOSE);
+				event_array_[user_list_ref.size()] = *(user->get_event_by_ptr());
+				WSAEventSelect(*(user->get_socket_by_ptr()), *(user->get_event_by_ptr()), FD_READ | FD_WRITE | FD_CLOSE);
+
+				PPacketManager::GetInstance().PushPacket(user, PACKET_SC_SAY_HI, nullptr, NULL, PushType::SEND);
+				printf("\n HI보냄");
 			}		
 
 		}
 		
-		for (int i = index - 1; i < user_list_ref.size(); i++)
+		for (int i = index - 1; i < user_list_ref.size(); i++)  //원래 get_event()를 참조로 받던 곳인데, 주의) 문제 생길 수 있음!
 		{		
+			HANDLE* user_event = user_list_ref[i]->get_event_by_ptr();
+
 			INT signal = WSAWaitForMultipleEvents(
 				1,
-				&user_list_ref[i]->get_event(),
+				user_event,
 				TRUE,
 				0, 
 				FALSE);
@@ -153,7 +161,7 @@ bool PEventSelect::Frame()
 				if (networkevent.iErrorCode[FD_WRITE_BIT] != 0) { continue; }
 			
 			}
-			if (networkevent.lNetworkEvents & FD_CLOSE)
+			if (networkevent.lNetworkEvents & FD_CLOSE) //몬가 클로즈 이벤트를 하나씩 놓치는 버그가 있음. 주의요망
 			{
 				if (networkevent.iErrorCode[FD_CLOSE_BIT] == 10053)
 					PUserManager::GetInstance().DeleteUser(user_list_ref[i]);
@@ -172,7 +180,7 @@ bool PEventSelect::Frame()
 PEventSelect::PEventSelect(SOCKET sock, OperateMode mode)
 {
 	socket_ = sock;
-	operate_mode_ = mode;
+	g_operate_mode = mode;
 }
 
 PEventSelect::~PEventSelect()

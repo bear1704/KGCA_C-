@@ -162,7 +162,8 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 	spawn_position_ = position;
 	attack_collision_box_ = { 0, 0, 55, 100 }; //임시로 position,크기 지정 
 
-	P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //캐릭터 only
+	if(get_client_owner_character())
+		P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //캐릭터 only
 }
 
 
@@ -184,6 +185,11 @@ void PPlayerCharacter::ProcessAction()
 void PPlayerCharacter::set_hit_(bool hit)
 {
 	hit_ = hit;
+}
+
+void PPlayerCharacter::set_client_owner_character(bool isowner)
+{
+	client_owner_character_ = isowner;
 }
 
 bool PPlayerCharacter::get_hit_()
@@ -223,4 +229,9 @@ void PPlayerCharacter::InvincibleProgress()
 		}
 
 	}
+}
+
+bool PPlayerCharacter::get_client_owner_character()
+{
+	return client_owner_character_;
 }

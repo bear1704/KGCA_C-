@@ -3,6 +3,8 @@
 #include "PProtocol.h"
 #include <process.h>
 
+class PUserManager;
+class PUser;
 
 
 
@@ -40,6 +42,7 @@ private:
 
 public:
 	void PushPacket(PushType type, PACKET packet);
+	void PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type);
 	bool NotifyReceiveEvent();
 	bool NotifyProcessEvent();
 	bool SendPacketFromPacketPool(SOCKET socket, PACKET packet);

@@ -9,7 +9,6 @@ class PEventSelect :
 	public PSelectModel
 {
 private:
-	OperateMode operate_mode_;
 
 public:
 	HANDLE event_array_[kMaxEventSize];

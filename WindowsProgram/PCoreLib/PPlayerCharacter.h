@@ -13,6 +13,8 @@ private:
 	bool hit_;
 	float flickering_rate;
 	float invincible_rate;
+	bool client_owner_character_;
+	int player_id_;
 protected:
 
 public:
@@ -30,8 +32,11 @@ public:
 	void SetTransition(FSM_Event event);
 	void ProcessAction();
 	void set_hit_(bool hit);
+	void set_client_owner_character(bool isowner);
+
 	bool get_hit_();
 	void InvincibleProgress();
+	bool get_client_owner_character();
 
 
 

@@ -1,4 +1,6 @@
 #include "PPacketManager.h"
+#include "PUserManager.h"
+
 
 bool PPacketManager::is_both_pool_empty_ = false;
 std::mutex PPacketManager::mutex_;
@@ -39,13 +41,13 @@ bool PPacketManager::SendPacketFromPacketPool(SOCKET socket, PACKET packet)
 	return true;
 }
 
-
 unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 스레드
 {
 	int		recv_bytes_ = 0;
 	char	recv_buffer[PACKET_MAX_DATA_SIZE + PACKET_HEADER_SIZE]; //2052
 	ZeroMemory(recv_buffer, sizeof(recv_buffer));
 	PACKET* packet = nullptr;
+	
 
 	ThreadParamSet* param_set = (ThreadParamSet*)param; //소켓, recv_pool, send_pool이 들어가있는 파라미터 세트
 
@@ -165,7 +167,8 @@ unsigned __stdcall ProcessThread(LPVOID param)
 	{
 		PPacketManager::is_both_pool_empty_ = (recv_packet_pool.size() == 0 && send_packet_pool.size() == 0) ? true : false; //풀 방법이 없음!
 		std::unique_lock<std::mutex> process_lock(PPacketManager::process_mutex_);
-		PPacketManager::process_event_.wait(process_lock, []() {return !PPacketManager::is_both_pool_empty_; });
+		PPacketManager::process_event_.wait(process_lock, []()
+			{return !PPacketManager::is_both_pool_empty_; });
 		
 
 			OutputDebugString(L"\nProcess접근");
@@ -177,16 +180,35 @@ unsigned __stdcall ProcessThread(LPVOID param)
 					//assert(false); //패킷 감지시 바로 반응하게
 					OutputDebugString(L"hi전송됨\n");
 					MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
+					printf("\nHI 전송받음");
 					break;
+				case PACKET_SC_ID_PROVIDE:
+					//assert(false); //패킷 감지시 바로 반응하게
+					WORD id = *((WORD*)packet.msg);
+					MessageBox(g_hWnd, std::to_wstring(id).c_str(), L"hi", MB_OK);
+					break;
+
 				}
 
 			}
 			recv_packet_pool.clear(); //clear하지 않고, 그때그때 지워줘야 컨텍스트 스위칭 중 처리 안한 패킷 clear하는 참사가 발생하지 않는다.
 
-
-			for (PACKET& packet : send_packet_pool)
+			if (g_operate_mode == OperateMode::CLIENT)
 			{
-				PPacketManager::GetInstance().SendPacketFromPacketPool(socket_ref_from_parameter, packet);
+
+				for (PACKET& packet : send_packet_pool)
+				{
+					PPacketManager::GetInstance().SendPacketFromPacketPool(socket_ref_from_parameter, packet);
+				}
+			}
+			else if(g_operate_mode == OperateMode::SERVER)
+			{
+				for (PACKET& packet : send_packet_pool)
+				{
+					PUser* user = PUserManager::GetInstance().FindUserById(packet.ph.id);
+
+					PPacketManager::GetInstance().SendPacketFromPacketPool(user->get_socket() , packet);
+				}
 			}
 			send_packet_pool.clear();
 	}
@@ -213,7 +235,35 @@ void PPacketManager::PushPacket(PushType type, PACKET packet)
 		else
 			recv_packet_pool_.push_back(packet);
 	}
+	PPacketManager::GetInstance().NotifyProcessEvent();
 	lock.unlock();
+
+}
+
+void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type)
+{
+	std::lock_guard<std::mutex> lk(mutex_);
+	{
+	PACKET packet;
+	ZeroMemory(&packet, sizeof(PACKET));
+	packet.ph.type = protocol;
+	packet.ph.id = user->get_id();
+	packet.ph.len = data_size + PACKET_HEADER_SIZE;
+
+	if(data != nullptr)
+		memcpy(packet.msg, &data, data_size);
+	
+
+
+	if (type == PushType::SEND)
+		send_packet_pool_.push_back(packet);
+	else
+		recv_packet_pool_.push_back(packet);
+	
+	PPacketManager::GetInstance().NotifyProcessEvent();
+	}
+
+
 
 }
 

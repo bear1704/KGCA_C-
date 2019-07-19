@@ -110,7 +110,7 @@ bool PNetwork::Frame()
 
 	if (current_model_ == nullptr) return true;
 
-	if (operate_mode_ == OperateMode::CLIENT)
+	if (g_operate_mode == OperateMode::CLIENT)
 	{
 
 		if (connect_ == false)
