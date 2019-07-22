@@ -32,6 +32,7 @@ typedef struct pkt{
 #define PACKET_CS_REPORT_MOVE_STATUS_MYPOSITION 707		//클라가 서버에게 이동중이라 알림. 유저 pos + 이동속도 + 이동방향(데드레커닝 추론용)
 #define PACKET_BROADCAST_BE_ATTACKED			708		//서버가 클라에게 공격받았다 알림  데미지 + 방향
 #define PACKET_BROADCAST_SPAWN_CHARACTER		709		//
+#define PACKET_SC_TEST_HPDECREASE				710
 
 
 typedef struct{

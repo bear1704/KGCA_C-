@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -13,14 +9,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
     <Filter Include="소스 파일\Common">
       <UniqueIdentifier>{b48a6f84-4777-4295-846b-0f2a079f2e8c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Server">
-      <UniqueIdentifier>{b01891d2-3334-411f-bd44-e039644ca924}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Client">
-      <UniqueIdentifier>{ec1a624a-65a3-42c8-bd3f-dcca103765cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Common\Select">
       <UniqueIdentifier>{0c198131-b80f-409d-8599-fe5fd946ca7d}</UniqueIdentifier>
@@ -30,6 +24,12 @@
     </Filter>
     <Filter Include="소스 파일\Common\Packet">
       <UniqueIdentifier>{fcb25cfe-b3ab-4ec3-9e93-01cfd7892fc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server">
+      <UniqueIdentifier>{b01891d2-3334-411f-bd44-e039644ca924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Client">
+      <UniqueIdentifier>{ec1a624a-65a3-42c8-bd3f-dcca103765cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="PUserManager.cpp">
       <Filter>소스 파일\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="PInstructionManager.cpp">
+      <Filter>소스 파일\Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="PUserManager.h">
       <Filter>소스 파일\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="PInstructionManager.h">
+      <Filter>소스 파일\Client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -173,26 +173,36 @@ unsigned __stdcall ProcessThread(LPVOID param)
 
 			for (PACKET& packet : recv_packet_pool)
 			{
-				if (g_operate_mode == OperateMode::CLIENT)
+				if (g_operate_mode == OperateMode::CLIENT) // 클라이언트
 				{
 					switch (packet.ph.type)
 					{
 					case PACKET_SC_SAY_HI:
+					{
 						//assert(false); //패킷 감지시 바로 반응하게
 						OutputDebugString(L"hi전송됨\n");
 						MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
 						printf("\nHI 전송받음");
 						break;
+					}
 					case PACKET_SC_ID_PROVIDE:
+					{
 						//assert(false); //패킷 감지시 바로 반응하게
 						WORD id = *((WORD*)packet.msg);
 						MessageBox(g_hWnd, std::to_wstring(id).c_str(), L"hi", MB_OK);
-						
 						break;
+					}
+					case PACKET_SC_TEST_HPDECREASE:
+					{
+						PInstructionManager::GetInstance().AddInstruction(packet);
+
+					}
+
+
 
 					}
 				}
-				else
+				else //서버
 				{
 					switch (packet.ph.type)
 					{

@@ -51,7 +51,7 @@ bool PNetwork::BindListen()
 	sa.sin_port = htons(10000);
 	sa.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	int ret = bind(listen_sock_, (SOCKADDR*)& sa, sizeof(sa));
+	int ret = ::bind(listen_sock_, (SOCKADDR*)& sa, sizeof(sa));
 	if (ret == SOCKET_ERROR)
 	{
 		E_MSG("Server::bind");

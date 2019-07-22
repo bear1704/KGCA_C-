@@ -2,6 +2,7 @@
 #include "TServerStd.h"
 #include "PProtocol.h"
 #include <process.h>
+#include "PInstructionManager.h"
 
 class PUserManager;
 class PUser;

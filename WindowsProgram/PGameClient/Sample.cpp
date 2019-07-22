@@ -28,7 +28,7 @@ bool Sample::Init()
 		return false;
 	}
 	// 2)Á¢¼Ó
-	if (!m_Network.Connect("192.168.0.124", 10000, hWnd))
+	if (!m_Network.Connect("127.0.0.1", 10000, hWnd))
 	{
 		return false;
 	}
