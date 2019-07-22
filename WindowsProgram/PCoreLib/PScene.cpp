@@ -270,3 +270,13 @@ void PScene::SceneChange(int scene_number)
 
 
 }
+
+std::vector<PUIComponent*>* PScene::get_ui_compositions_()
+{
+	return &ui_compositions_;
+}
+
+std::vector<PRectObject*>* PScene::get_game_objects()
+{
+	return &game_objects_;
+}

@@ -29,5 +29,8 @@ public:
 	std::wstring get_scene_name_();
 	void draw_test_rect(FLOAT_RECT rect);
 	void SceneChange(int scene_number);
+	std::vector<PUIComponent*>* get_ui_compositions_();
+	std::vector<PRectObject*>* get_game_objects();
+
 };
 
