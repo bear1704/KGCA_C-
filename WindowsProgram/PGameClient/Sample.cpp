@@ -1,6 +1,7 @@
 #include "Sample.h"
 #include "PEventSelect.h"
 
+
 Sample::Sample()
 {
 	timer = 0.0f;
@@ -9,8 +10,11 @@ Sample::Sample()
 
 Sample::~Sample()
 {
-
+	if(instruction_process_thread_.joinable())
+		instruction_process_thread_.join();
 }
+
+
 
 bool Sample::Init()
 {
@@ -36,6 +40,7 @@ bool Sample::Init()
 	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket(), OperateMode::CLIENT));
 
 
+
 	return true;
 }
 bool Sample::PreFrame()
@@ -46,6 +51,8 @@ bool Sample::PreFrame()
 }
 bool Sample::Frame() {
 	
+
+
 	if (g_current_scene_)
 		g_current_scene_->Frame();
 
@@ -59,6 +66,8 @@ bool Sample::Frame() {
 		bgm->Play();
 		sound_flag = true;
 	}
+
+	PInstructionManager::GetInstance().NotifyProcessEvent();
 	return true;
 }
 
@@ -96,6 +105,7 @@ void Sample::draw_test_rect(FLOAT_RECT rect)
 bool Sample::InitDataLoad()
 {
 
+	
 
 	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/UI/UI_data.txt", ObjectLoadType::UI);
 	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/character/character_data.txt", ObjectLoadType::CHARACTER);
@@ -113,16 +123,21 @@ bool Sample::InitDataLoad()
 	scene1->set_scene_name_(L"MUSHROOMLAND");
 
 	g_current_scene_ = scene1;
-
+	
+	PInstructionProcessor* p = &PInstructionProcessor::GetInstance();
+	instruction_process_thread_ = std::thread([&p]() {p->ProcessInstruction(); });
 
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree.mp3"));
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree_die.mp3"));
 
+	//DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), HWND_DESKTOP, DlgProc);
 
+	//std::thread aaa(PInstructionProcessor::GetInstance().ProcessInstruction);
+
+
+	
 
 	return true;
 }
-
-
 
 PCORE_RUN(L"MapleStory", 0, 0, 1024, 768);

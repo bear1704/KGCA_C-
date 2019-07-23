@@ -268,6 +268,11 @@ PPhysicsModule & PRectObject::get_physics_()
 	return physics_;
 }
 
+const WORD PRectObject::get_id()
+{
+	return id_;
+}
+
 void PRectObject::set_alpha_and_scale_(float alpha, float scale)
 {
 	for (PSprite* sprite : animation_list_)

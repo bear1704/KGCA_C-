@@ -14,7 +14,6 @@ protected:
 	HWND				hwnd_;
 	SOCKET				socket_;  //client only
 	SOCKET				listen_sock_; //server only
-	
 
 
 public:

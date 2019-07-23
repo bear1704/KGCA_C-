@@ -280,3 +280,11 @@ std::vector<PRectObject*>* PScene::get_game_objects()
 {
 	return &game_objects_;
 }
+
+PRectObject* PScene::FindObjectById(WORD id)
+{
+	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
+		[&id](PRectObject* obj) ->bool {return obj->get_id() == id; });
+
+	return *iter;
+}

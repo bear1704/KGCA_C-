@@ -14,7 +14,6 @@ private:
 	float flickering_rate;
 	float invincible_rate;
 	bool client_owner_character_;
-	int player_id_;
 protected:
 
 public:

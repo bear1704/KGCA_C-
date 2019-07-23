@@ -28,7 +28,8 @@ public:
 	void set_name(std::string name);
 	void set_event(HANDLE event);
 	void set_socket(SOCKET socket);
-	void set_id(int id);
+	void set_id(WORD id);
+	void SetUser(bool connect, std::string name, HANDLE event, SOCKET socket, WORD id);
 	
 	//getter
 
@@ -52,6 +53,7 @@ private:
 	PUserManager();
 public:
 	std::vector<PUser*> user_list_;
+	PUser oneself_user_; //자기자신(유저)
 	std::mutex mutex_;
 public:
 	bool Init();

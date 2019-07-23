@@ -43,7 +43,7 @@ private:
 
 public:
 	void PushPacket(PushType type, PACKET packet);
-	void PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type);
+	void PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type, bool ischar);
 	bool NotifyReceiveEvent();
 	bool NotifyProcessEvent();
 	bool SendPacketFromPacketPool(SOCKET socket, PACKET packet);
@@ -52,12 +52,17 @@ public:
 	bool Render();
 	bool Release();
 	void ThreadInit(SOCKET* socket);
+	void ChangeSocketToParam(SOCKET* socket);
 	static bool is_both_pool_empty_;
 	static std::mutex mutex_;
 	static std::mutex process_mutex_;
 	static std::mutex recv_mutex_;
+	std::recursive_mutex push_mutex_;
+	std::mutex notify_mutex_;
+
 	int recv_notify_request_count_;
 	int send_notify_request_count_;
+
 
 	static std::condition_variable recv_event_;
 	static std::condition_variable process_event_;

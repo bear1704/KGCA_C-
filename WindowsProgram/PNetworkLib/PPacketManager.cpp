@@ -68,6 +68,8 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 		//Thread를 block한다. 만약 true면 recv_lock을 걸고(쓰레드 하나만 접근) 블록을 해제한다(코드 진행)
 		//의문 : 1회차는 돌았다. 2회차에서 wait을 만나면 notify가 또 터질때까지 기다릴 것인가, 조건에 맞기만 하면 진행할 것인가?
 		 
+		SOCKET& socket_ref_from_parameter = *(param_set->socket); //소켓 자체를 바꿔버리므로 참조는 단지 원래 소켓자체를 가리킬뿐.
+
 		if (recv_bytes_ < PACKET_HEADER_SIZE)
 		{
 			int once_recv = recv(socket_ref_from_parameter, &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
@@ -86,7 +88,8 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				}
 				else
 				{
-					E_MSG("recv error");
+					int err = WSAGetLastError();
+					E_MSG("recv error 발생!!");
 					return false;
 				}
 			}
@@ -181,15 +184,19 @@ unsigned __stdcall ProcessThread(LPVOID param)
 					{
 						//assert(false); //패킷 감지시 바로 반응하게
 						OutputDebugString(L"hi전송됨\n");
-						MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
-						printf("\nHI 전송받음");
+						//MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
+						//printf("\nHI 전송받음");
 						break;
 					}
 					case PACKET_SC_ID_PROVIDE:
 					{
 						//assert(false); //패킷 감지시 바로 반응하게
-						WORD id = *((WORD*)packet.msg);
-						MessageBox(g_hWnd, std::to_wstring(id).c_str(), L"hi", MB_OK);
+						//WORD id = *((WORD*)packet.msg);
+						//MessageBox(g_hWnd, std::to_wstring(id).c_str(), L"hi", MB_OK);
+						//PUserManager::GetInstance().oneself_user_.set_id(id);
+
+						PInstructionManager::GetInstance().AddInstruction(packet);
+						
 						break;
 					}
 					case PACKET_SC_TEST_HPDECREASE:
@@ -206,13 +213,29 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					switch (packet.ph.type)
 					{
-					case PACKET_SC_SAY_HI:
-						//assert(false); //패킷 감지시 바로 반응하게
-						OutputDebugString(L"hi전송됨\n");
-						MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
-						printf("\nHI 전송받음");
-						break;
+						case PACKET_SC_SAY_HI:
+						{
+							//assert(false); //패킷 감지시 바로 반응하게
+							OutputDebugString(L"hi전송됨\n");
+							MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
+							printf("\nHI 전송받음");
+							break;
+						}
+						case PACKET_CS_LOGIN_SEND_USERNAME:
+						{
+							WORD id = packet.ph.id;
+							PUser* user = PUserManager::GetInstance().FindUserById(id);
+							std::string str(packet.msg);
+							user->set_name(str);
+							
+							printf("\n 플레이어 id %hd 의 이름 %s 전송받음", id, user->get_name().c_str());
 
+							int a = 4;
+							PPacketManager::GetInstance().PushPacket(user, PACKET_SC_TEST_HPDECREASE, (char*)a, sizeof(int),
+								PushType::SEND, false);
+							//PInstructionManager::GetInstance().AddInstruction(packet);
+
+						}
 					}
 				}
 
@@ -254,7 +277,7 @@ PPacketManager::PPacketManager()
 void PPacketManager::PushPacket(PushType type, PACKET packet)
 {
 
-	std::unique_lock<std::mutex> lock(mutex_);
+	std::unique_lock<std::recursive_mutex > lock(push_mutex_);
 	{
 		if (type == PushType::SEND)
 			send_packet_pool_.push_back(packet);
@@ -266,9 +289,10 @@ void PPacketManager::PushPacket(PushType type, PACKET packet)
 
 }
 
-void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type)
+
+void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type, bool ischar)
 {
-	std::lock_guard<std::mutex> lk(mutex_);
+	std::unique_lock<std::recursive_mutex > lock(push_mutex_);
 	{
 	PACKET packet;
 	ZeroMemory(&packet, sizeof(PACKET));
@@ -276,8 +300,14 @@ void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_
 	packet.ph.id = user->get_id();
 	packet.ph.len = data_size + PACKET_HEADER_SIZE;
 
-	if(data != nullptr)
-		memcpy(packet.msg, &data, data_size);
+	if (data != nullptr)
+	{
+		if(ischar) //char 배열을 char*로 가져와서 주소그자체일경우
+			memcpy(packet.msg, data, data_size);
+		else //특정 값을 char*로 가져와서 값을 char*화한 경우
+			memcpy(packet.msg, &data, data_size);
+	}
+		
 	
 
 
@@ -288,18 +318,14 @@ void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_
 	
 	PPacketManager::GetInstance().NotifyProcessEvent();
 	}
-
-
+	lock.unlock();
 
 }
 
 bool PPacketManager::NotifyReceiveEvent()
 {
 
-	{
-		std::lock_guard<std::mutex> lock_guard(PPacketManager::recv_mutex_);
-		recv_notify_request_count_ += 1;  //여유분을 줘야 하나
-	}
+	recv_notify_request_count_ += 1;  //여유분을 줘야 하나
 	PPacketManager::recv_event_.notify_all();
 
 	return true;
@@ -308,10 +334,7 @@ bool PPacketManager::NotifyReceiveEvent()
 bool PPacketManager::NotifyProcessEvent()
 {
 
-	{
-		std::lock_guard<std::mutex> lock_guard(PPacketManager::process_mutex_);
-		PPacketManager::is_both_pool_empty_ = false;
-	}
+	PPacketManager::is_both_pool_empty_ = false;
 	PPacketManager::process_event_.notify_all();
 	return true;
 }
@@ -354,6 +377,13 @@ void PPacketManager::ThreadInit(SOCKET* socket)
 	process_thread_ = (HANDLE)_beginthreadex(NULL, 0, ProcessThread, &param_set_, 0, NULL);
 
 }
+
+void PPacketManager::ChangeSocketToParam(SOCKET* socket)
+{
+	param_set_.socket = socket;
+}
+
+
 
 
 PPacketManager::~PPacketManager()

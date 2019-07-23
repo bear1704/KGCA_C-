@@ -16,6 +16,9 @@ bool PEventSelect::Init()
 		{
 			E_MSG("event_select");
 		}
+
+		PUserManager::GetInstance().oneself_user_.set_event(event_array_[0]);
+		PPacketManager::GetInstance().ThreadInit(&socket_); //쓰레드 초기화 및 생성
 	}
 	else if (g_operate_mode == OperateMode::SERVER)
 	{
@@ -124,7 +127,7 @@ bool PEventSelect::Frame()
 				event_array_[user_list_ref.size()] = *(user->get_event_by_ptr());
 				WSAEventSelect(*(user->get_socket_by_ptr()), *(user->get_event_by_ptr()), FD_READ | FD_WRITE | FD_CLOSE);
 
-				PPacketManager::GetInstance().PushPacket(user, PACKET_SC_SAY_HI, nullptr, NULL, PushType::SEND);
+				PPacketManager::GetInstance().PushPacket(user, PACKET_SC_SAY_HI, nullptr, NULL, PushType::SEND, false);
 				printf("\n HI보냄");
 			}		
 
@@ -154,6 +157,8 @@ bool PEventSelect::Frame()
 			if (networkevent.lNetworkEvents & FD_READ)
 			{
 				if (networkevent.iErrorCode[FD_READ_BIT] != 0) { continue; }
+				//소켓지정
+				PPacketManager::GetInstance().ChangeSocketToParam(user_list_ref[i]->get_socket_by_ptr());
 				PPacketManager::GetInstance().NotifyReceiveEvent();
 			}
 			if (networkevent.lNetworkEvents & FD_WRITE)
@@ -168,6 +173,7 @@ bool PEventSelect::Frame()
 				if (networkevent.iErrorCode[FD_CLOSE_BIT] != 0) 
 				{ continue; }
 			
+				PUserManager::GetInstance().DeleteUser(user_list_ref[i]);
 			}
 
 		}

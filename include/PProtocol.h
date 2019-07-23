@@ -3,7 +3,8 @@
 #define PACKET_MAX_DATA_SIZE 2048
 #include <cassert>
 
-
+template<typename T>
+using PacketMessage = T*;
 
 #pragma pack( push, 1)
 typedef struct ph
@@ -45,5 +46,8 @@ typedef struct {
 	PACKET packet;
 }USER_PACKET;
 
+typedef struct {
+	char text[256];
+}TextMessage;
 
 #pragma pack(pop)

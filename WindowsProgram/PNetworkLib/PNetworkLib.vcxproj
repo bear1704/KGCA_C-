@@ -152,6 +152,7 @@ copy "PNetworkLib.lib" "../../lib/"</Command>
     <ClInclude Include="PProtocol.h" />
     <ClInclude Include="PSelectModel.h" />
     <ClInclude Include="PUserManager.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TServerStd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

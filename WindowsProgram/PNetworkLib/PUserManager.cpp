@@ -28,32 +28,32 @@ bool PUserManager::Release()
 void PUserManager::AddUser(PUser* user)
 {
 	std::lock_guard<std::mutex> lock(mutex_);
+	{
+		std::random_device r;
+		std::mt19937 engine(r());
+		std::uniform_int_distribution<int> distribution(15, 9015);
+		auto generator = std::bind(distribution, engine); //데미지 난수화 
+		WORD random = generator();
 
-	std::random_device r;
-	std::mt19937 engine(r());
-	std::uniform_int_distribution<int> distribution(15, 9015);
-	auto generator = std::bind(distribution, engine); //데미지 난수화 
-	WORD random = generator();
+		user->set_connected(true);
+		user->set_event(WSACreateEvent());
+		user->set_id(random);
+		//user->set_name필요 
 
-	user->set_connected(true);
-	user->set_event(WSACreateEvent());
-	user->set_id(random);
-	//user->set_name필요 
-	
-	user_list_.push_back(user);
+		user_list_.push_back(user);
 
-	PACKET id_send_packet;
-	ZeroMemory(&id_send_packet, sizeof(PACKET));
-	id_send_packet.ph.type = PACKET_SC_ID_PROVIDE;
-	PPacketManager::GetInstance().PushPacket(user, PACKET_SC_ID_PROVIDE, (char*)random, sizeof(WORD), PushType::SEND);
+		PACKET id_send_packet;
+		ZeroMemory(&id_send_packet, sizeof(PACKET));
+		id_send_packet.ph.type = PACKET_SC_ID_PROVIDE;
+		PPacketManager::GetInstance().PushPacket(user, PACKET_SC_ID_PROVIDE, (char*)random, sizeof(WORD), PushType::SEND, false);
 
-	printf("\n유저에게 ID부여 : %hd  ", user->get_id());
+		printf("\n유저에게 ID부여 : %hd  ", user->get_id());
 
-	printf("\n접속 [%s][%d] , -%d-",
-		inet_ntoa(user->get_client_addr().sin_addr),
-		ntohs(user->get_client_addr().sin_port),
-		user_list_.size());
-
+		printf("\n접속 [%s][%d] , -%d-",
+			inet_ntoa(user->get_client_addr().sin_addr),
+			ntohs(user->get_client_addr().sin_port),
+			user_list_.size());
+	}
 }
 
 void PUserManager::DeleteUser(PUser* user)
@@ -116,7 +116,7 @@ void PUser::set_socket(SOCKET socket)
 	user_socket_ = socket;
 }
 
-void PUser::set_id(int id)
+void PUser::set_id(WORD id)
 {
 	unique_id_ = id;
 }

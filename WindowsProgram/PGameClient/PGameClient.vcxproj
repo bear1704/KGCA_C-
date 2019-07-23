@@ -134,7 +134,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PInstructionProcessor.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Sample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PGameClient.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
