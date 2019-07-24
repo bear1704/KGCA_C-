@@ -24,6 +24,11 @@ bool Sample::Init()
 {
 
 	InitDataLoad();
+	
+	PInstructionProcessor* p = &PInstructionProcessor::GetInstance();
+	instruction_process_thread_ = std::thread([&p]() {p->ProcessInstruction(); });
+
+	PInstructionProcessor::GetInstance().BindScene(g_current_scene_);
 
 
 	if (g_current_scene_)
@@ -43,7 +48,6 @@ bool Sample::Init()
 	}
 	// 3)¸ðµ¨ ¼±ÅÃ
 	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket(), OperateMode::CLIENT));
-
 
 
 	return true;
@@ -137,10 +141,7 @@ bool Sample::InitDataLoad()
 
 	g_current_scene_ = scene1;
 	
-	PInstructionProcessor* p = &PInstructionProcessor::GetInstance();
-	instruction_process_thread_ = std::thread([&p]() {p->ProcessInstruction(); });
 
-	PInstructionProcessor::GetInstance().BindScene(g_current_scene_);
 
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree.mp3"));
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree_die.mp3"));

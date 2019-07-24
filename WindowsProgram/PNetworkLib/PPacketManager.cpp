@@ -43,6 +43,7 @@ bool PPacketManager::SendPacketFromPacketPool(SOCKET socket, PACKET packet)
 
 unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 스레드
 {
+	OutputDebugString(L"\n 리하(리시브 하이라는뜻)");
 	int		recv_bytes_ = 0;
 	char	recv_buffer[PACKET_MAX_DATA_SIZE + PACKET_HEADER_SIZE]; //2052
 	ZeroMemory(recv_buffer, sizeof(recv_buffer));
@@ -75,10 +76,21 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 		if (recv_bytes_ < PACKET_HEADER_SIZE)
 		{
+			OutputDebugString(L"\n recv 최상단"+ __LINE__);
+			std::wstring fwc = std::to_wstring(recv_bytes_);
+			OutputDebugString(L"\n 최상단에서의 recv_bytes :  ");
+			OutputDebugString(fwc.c_str());
+			OutputDebugString(L"\n-----------------------");
 			int once_recv = recv(socket_ref_from_parameter, &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
 			
+			std::wstring fw = std::to_wstring(once_recv);
+			OutputDebugString(L"\n first once_recv :  ");
+			OutputDebugString(fw.c_str());
+			OutputDebugString(L"\n-----------------------");
+
 			if (once_recv == 0)
 			{
+				OutputDebugString(L"\n === 0");
 				//return true;
 			}
 
@@ -87,10 +99,12 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
 				{	//받을 데이터 없음, 쓰레드 슬립
 	
+					OutputDebugString(L"\n WSAEWOULDBLOCK ");
 					continue;
 				}
 				else
 				{
+					OutputDebugString(L"\n recv error 발생!!");
 					int err = WSAGetLastError();
 					E_MSG("recv error 발생!!");
 					return false;
@@ -103,25 +117,57 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 					packet = (PACKET*)recv_buffer; //헤더로 일단 패킷을 만들어 둔다.
 				else
 				{
+					OutputDebugString(L"\n continue");
 					notify_request_count_from_paramater += 1;
 					continue;
 				}
 
+				std::wstring wstr = std::to_wstring(recv_bytes_);
+				std::wstring wstr1 = std::to_wstring(packet->ph.len);
+				std::wstring wstr2 = std::to_wstring(packet->ph.type);
+				std::wstring wstr3 = std::to_wstring(once_recv);
+				OutputDebugString(L"\n else->지점1 : ph_len : ");
+				OutputDebugString(wstr1.c_str());
+				OutputDebugString(L"\nrecvbytes : ");
+				OutputDebugString(wstr.c_str());
+				OutputDebugString(L"\ntype : ");
+				OutputDebugString(wstr2.c_str());
+				OutputDebugString(L"\nonce_recv : ");
+				OutputDebugString(wstr3.c_str());
+				OutputDebugString(L"\n-----------------------");
 
 				if (packet->ph.len == recv_bytes_)
 				{
 					if (packet->ph.type == PACKET_ANYDIR_SAY_HI)
 					{
+						OutputDebugString(L"\n === HIPACKET");
 						memcpy(packet->msg, &socket_ref_from_parameter, sizeof(SOCKET));
 						packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
 					}
 
+					OutputDebugString(L"\n 전송됨 패킷");
 					PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
 					PPacketManager::GetInstance().NotifyProcessEvent();
 					recv_bytes_ = 0;
+				
 					//return true; //리턴하면 안 되는게, 또 recv해서 0이 될 때 까지..
 				}
 
+				
+				wstr = std::to_wstring(recv_bytes_);
+				wstr1 = std::to_wstring(packet->ph.len);
+				wstr2 = std::to_wstring(packet->ph.type);
+				wstr3 = std::to_wstring(once_recv);
+				OutputDebugString(L"\n else->헤더는 받았어요 : ph_len : ");
+				OutputDebugString(wstr1.c_str());
+				OutputDebugString(L"\nrecvbytes : ");
+				OutputDebugString(wstr.c_str());
+				OutputDebugString(L"\ntype : ");
+				OutputDebugString(wstr2.c_str());
+				OutputDebugString(L"\nonce_recv : ");
+				OutputDebugString(wstr3.c_str());
+				OutputDebugString(L"\n-----------------------");
+				//notify_request_count_from_paramater += 1;
 			}
 		}
 		else
@@ -133,17 +179,19 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 			if (once_recv == 0)
 			{
+				OutputDebugString(L"\n === 0");
 				//return true; //정상종료
 			}
 			if (once_recv == SOCKET_ERROR)
 			{
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
 				{
-
+					OutputDebugString(L"\n WSAEWOULDBLOCK");
 					continue;
 				}
 				else
 				{
+					OutputDebugString(L"\n ERR");
 					E_MSG("recv");
 					return false;
 				}
@@ -151,22 +199,47 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 			recv_bytes_ += once_recv;
 
+			std::wstring wstr = std::to_wstring(recv_bytes_);
+			std::wstring wstr1 = std::to_wstring(packet->ph.len);
+			std::wstring wstr2 = std::to_wstring(packet->ph.type);
+			std::wstring wstr3 = std::to_wstring(once_recv);
+			OutputDebugString(L"\n else->지점2 : ph_len : ");
+			OutputDebugString(wstr1.c_str());
+			OutputDebugString(L"\nrecvbytes : ");
+			OutputDebugString(wstr.c_str());
+			OutputDebugString(L"\ntype : ");
+			OutputDebugString(wstr2.c_str());
+			OutputDebugString(L"\nonce_recv : ");
+			OutputDebugString(wstr3.c_str());
+			OutputDebugString(L"\n-----------------------");
+
+
 			if (packet->ph.len == recv_bytes_)
 			{
 				if (packet->ph.type == PACKET_ANYDIR_SAY_HI)
 				{
+					OutputDebugString(L"\n === HIPACKET");
 					memcpy(packet->msg, &socket_ref_from_parameter, sizeof(SOCKET));
 					packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
 				}
+				
+				OutputDebugString(L"\n 전송됨 패킷");
 				PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
 				recv_bytes_ = 0;
 				PPacketManager::GetInstance().NotifyProcessEvent();
 				//return true;// 리턴하면 안 되는게, 또 recv해서 0이 될 때 까지 받아야 함
 			}
+			else
+			{
+				OutputDebugString(L"\n continue2");
+				notify_request_count_from_paramater += 1;
+				continue;
+			}
 
 		}
+		OutputDebugString(L"\n  어둠의땅1");
 	}
-
+	OutputDebugString(L"\n  어둠의땅2");
 
 	//return true;
 }
@@ -188,10 +261,11 @@ unsigned __stdcall ProcessThread(LPVOID param)
 
 	while (g_window_terminated == false)
 	{
-		PPacketManager::is_both_pool_empty_ = (recv_packet_pool.size() == 0 && send_packet_pool.size() == 0) ? true : false; //풀 방법이 없음!
+		//PPacketManager::is_both_pool_empty_ = (recv_packet_pool.size() == 0 && send_packet_pool.size() == 0) ? true : false; //풀 방법이 없음!
 		std::unique_lock<std::mutex> process_lock(PPacketManager::process_mutex_);
-		PPacketManager::process_event_.wait(process_lock, []()
-			{return !PPacketManager::is_both_pool_empty_; });
+		PPacketManager::process_event_.wait(process_lock, [&recv_packet_pool, &send_packet_pool]()
+			{return !(((recv_packet_pool.size() == 0) && (send_packet_pool.size() == 0)) ? true : false);  });
+
 		
 		if (g_window_terminated == true)
 			break;
@@ -206,7 +280,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 					{
 						case PACKET_SC_ID_PROVIDE:
 						{
-							MessageBox(g_hWnd, L"provide_pp", L"PROVIDE_pp", MB_OK);
+							//MessageBox(g_hWnd, L"provide_pp", L"PROVIDE_pp", MB_OK);
 							PInstructionManager::GetInstance().AddInstruction(packet);	
 							break;
 						}
@@ -217,7 +291,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 						}
 						case PACKET_SC_SPAWN_CHARACTER:
 						{
-							MessageBox(g_hWnd, L"spawn_pp", L"SPAWN_pp", MB_OK);
+							//MessageBox(g_hWnd, L"spawn_pp", L"SPAWN_pp", MB_OK);
 							PInstructionManager::GetInstance().AddInstruction(packet);
 							break;
 						}

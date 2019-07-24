@@ -29,7 +29,6 @@ bool PEventSelect::Init()
 		
 		PPacketManager::GetInstance().PushPacket(PushType::SEND, pack);
 
-
 	}
 	else if (g_operate_mode == OperateMode::SERVER)
 	{
@@ -41,11 +40,11 @@ bool PEventSelect::Init()
 		{
 			E_MSG("accept_error");
 		}
+	PPacketManager::GetInstance().ThreadInit(&socket_); //쓰레드 초기화 및 생성
 	}
 	else
 		assert(false);
 	
-	PPacketManager::GetInstance().ThreadInit(&socket_); //쓰레드 초기화 및 생성
 
 	return true;
 }
@@ -78,6 +77,7 @@ bool PEventSelect::Frame()
 			{
 				return false;
 			}
+			OutputDebugString(L"\nREAD");
 			PPacketManager::GetInstance().NotifyReceiveEvent(); //thread에서 리시브하게 명령
 		}
 

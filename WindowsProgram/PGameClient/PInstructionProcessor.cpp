@@ -91,7 +91,7 @@ void PInstructionProcessor::ProcessInstruction()
 				}
 				case PACKET_SC_ID_PROVIDE:
 				{
-					MessageBox(g_hWnd, L"provide", L"PROVIDE", MB_OK);
+					//MessageBox(g_hWnd, L"provide", L"PROVIDE", MB_OK);
 					
 					WORD id = *((WORD*)packet.msg);
 					PUserManager::GetInstance().oneself_user_.set_id(id);
@@ -100,7 +100,7 @@ void PInstructionProcessor::ProcessInstruction()
 				}
 				case PACKET_SC_SPAWN_CHARACTER:
 				{
-					MessageBox(g_hWnd, L"spawn", L"SPAWN", MB_OK);
+					//MessageBox(g_hWnd, L"spawn", L"SPAWN", MB_OK);
 					PKT_MSG_SPAWN pos_msg;
 					memcpy(&pos_msg, packet.msg, packet.ph.len - PACKET_HEADER_SIZE);
 

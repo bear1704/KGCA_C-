@@ -29,7 +29,7 @@ bool PTimer::Frame()
 
 		_stprintf_s(csBuffer, _T("\nTimer:[%10.4f], FPS:[%d]"),
 			accumulationTime, FPS);
-		OutputDebugString(csBuffer);
+		//OutputDebugString(csBuffer);
 	}
 
 	frameCount++;
