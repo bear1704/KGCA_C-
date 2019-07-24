@@ -24,11 +24,11 @@ class Sample : public PCore
 	HWND			m_hButton;
 	HWND			m_hList;
 public:
-	bool		Init();
+	bool		Init() override;
 	bool		PreFrame() override;
-	bool		Frame();
-	bool		Release();
-	bool		Render();
+	bool		Frame() override;
+	bool		Release() override;
+	bool		Render() override;
 	bool		InitDataLoad();
 
 	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -17,11 +17,13 @@ void PMobIdleAction::Process(PPlayerCharacter* target)
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
 	}
 
-	if (PCollision::GetInstance().RectInRect(target->get_collision_rect_(), owner_->get_collision_rect_()))
-	{  //플레이어와의 충돌 체크 
-		target->set_hit_(true);
+	if (target != nullptr) // 플레이어가 아직 스폰되지 않았다면,
+	{
+		if (PCollision::GetInstance().RectInRect(target->get_collision_rect_(), owner_->get_collision_rect_()))
+		{  //플레이어와의 충돌 체크 
+			target->set_hit_(true);
+		}
 	}
-
 
 	if (owner_->get_ishit_())
 	{

@@ -65,6 +65,7 @@ public:
 	void AddUser(PUser* user);
 	void DeleteUser(PUser* user);
 	PUser* FindUserById(WORD id);
+	PUser* FindUserBySocket(SOCKET sock);
 
 
 public:

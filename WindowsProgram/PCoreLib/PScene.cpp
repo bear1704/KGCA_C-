@@ -21,6 +21,7 @@ bool PScene::Init()
 		if (game_objects_[i]->get_type_() == Type::PLAYER)
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
+			player->set_client_owner_character(true);
 			target = player;
 			player->Init();
 		}
@@ -281,10 +282,27 @@ std::vector<PRectObject*>* PScene::get_game_objects()
 	return &game_objects_;
 }
 
+void PScene::AddGameObjects(PRectObject* obj)
+{
+	if(obj != nullptr)
+		game_objects_.push_back(obj);
+}
+
+void PScene::AddUiComponents(PUIComponent* ui)
+{
+	if(ui != nullptr)
+		ui_compositions_.push_back(ui);
+}
+
 PRectObject* PScene::FindObjectById(WORD id)
 {
 	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
 		[&id](PRectObject* obj) ->bool {return obj->get_id() == id; });
 
 	return *iter;
+}
+
+void PScene::set_target(PPlayerCharacter* character)
+{
+	target = character;
 }

@@ -84,6 +84,8 @@ bool PCore::PCoreInit()
 	PObjectInfoManager::GetInstance().Init();
 	PObjectDataManager::GetInstance().Init();
 	PSpriteManager::GetInstance().Init();
+
+
 	return Init();
 }
 
@@ -121,7 +123,8 @@ bool PCore::PCoreRelease()
 	PInput::GetInstance().Release();
 	PSoundMgr::GetInstance().Release();
 	P2DCamera::GetInstance().Release();
-	return true;
+
+	return Release();
 }
 
 void PCore::MessageProc(MSG msg)

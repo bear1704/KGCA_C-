@@ -54,7 +54,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 	int& notify_request_count_from_paramater = *(param_set->recv_notify_request_count); //헷갈리니까 아예 참조로 받아온다.
 	SOCKET& socket_ref_from_parameter = *(param_set->socket);
 
-	while (1)
+	while (g_window_terminated == false)
 	{
 		
 
@@ -62,6 +62,9 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 		PPacketManager::recv_event_.wait(recv_lock, [&notify_request_count_from_paramater]()
 		{return notify_request_count_from_paramater > 0; });
 		notify_request_count_from_paramater -= 1;
+
+		if (g_window_terminated == true)
+			break;
 
 		//lock은 return()의 조건을 보호하기 위함 
 		//wait앞에서 대기, notify가 콜되면 인수의 조건을 체크하여, false면 recv_lock을 풀고(쓰레드가 대기할 수 있도록)
@@ -98,9 +101,21 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				recv_bytes_ += once_recv;
 				if (recv_bytes_ == PACKET_HEADER_SIZE)
 					packet = (PACKET*)recv_buffer; //헤더로 일단 패킷을 만들어 둔다.
+				else
+				{
+					notify_request_count_from_paramater += 1;
+					continue;
+				}
+
 
 				if (packet->ph.len == recv_bytes_)
 				{
+					if (packet->ph.type == PACKET_ANYDIR_SAY_HI)
+					{
+						memcpy(packet->msg, &socket_ref_from_parameter, sizeof(SOCKET));
+						packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
+					}
+
 					PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
 					PPacketManager::GetInstance().NotifyProcessEvent();
 					recv_bytes_ = 0;
@@ -138,6 +153,11 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 			if (packet->ph.len == recv_bytes_)
 			{
+				if (packet->ph.type == PACKET_ANYDIR_SAY_HI)
+				{
+					memcpy(packet->msg, &socket_ref_from_parameter, sizeof(SOCKET));
+					packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
+				}
 				PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
 				recv_bytes_ = 0;
 				PPacketManager::GetInstance().NotifyProcessEvent();
@@ -166,13 +186,17 @@ unsigned __stdcall ProcessThread(LPVOID param)
 
 	SOCKET& socket_ref_from_parameter = *(param_set->socket);
 
-	while (true)
+	while (g_window_terminated == false)
 	{
 		PPacketManager::is_both_pool_empty_ = (recv_packet_pool.size() == 0 && send_packet_pool.size() == 0) ? true : false; //풀 방법이 없음!
 		std::unique_lock<std::mutex> process_lock(PPacketManager::process_mutex_);
 		PPacketManager::process_event_.wait(process_lock, []()
 			{return !PPacketManager::is_both_pool_empty_; });
 		
+		if (g_window_terminated == true)
+			break;
+
+		SOCKET& socket_ref_from_parameter = *(param_set->socket);
 
 			for (PACKET& packet : recv_packet_pool)
 			{
@@ -180,32 +204,23 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					switch (packet.ph.type)
 					{
-					case PACKET_SC_SAY_HI:
-					{
-						//assert(false); //패킷 감지시 바로 반응하게
-						OutputDebugString(L"hi전송됨\n");
-						//MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
-						//printf("\nHI 전송받음");
-						break;
-					}
-					case PACKET_SC_ID_PROVIDE:
-					{
-						//assert(false); //패킷 감지시 바로 반응하게
-						//WORD id = *((WORD*)packet.msg);
-						//MessageBox(g_hWnd, std::to_wstring(id).c_str(), L"hi", MB_OK);
-						//PUserManager::GetInstance().oneself_user_.set_id(id);
-
-						PInstructionManager::GetInstance().AddInstruction(packet);
-						
-						break;
-					}
-					case PACKET_SC_TEST_HPDECREASE:
-					{
-						PInstructionManager::GetInstance().AddInstruction(packet);
-
-					}
-
-
+						case PACKET_SC_ID_PROVIDE:
+						{
+							MessageBox(g_hWnd, L"provide_pp", L"PROVIDE_pp", MB_OK);
+							PInstructionManager::GetInstance().AddInstruction(packet);	
+							break;
+						}
+						case PACKET_SC_TEST_HPDECREASE:
+						{
+							PInstructionManager::GetInstance().AddInstruction(packet);
+							break;
+						}
+						case PACKET_SC_SPAWN_CHARACTER:
+						{
+							MessageBox(g_hWnd, L"spawn_pp", L"SPAWN_pp", MB_OK);
+							PInstructionManager::GetInstance().AddInstruction(packet);
+							break;
+						}
 
 					}
 				}
@@ -213,29 +228,17 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					switch (packet.ph.type)
 					{
-						case PACKET_SC_SAY_HI:
+						case PACKET_ANYDIR_SAY_HI:
 						{
-							//assert(false); //패킷 감지시 바로 반응하게
-							OutputDebugString(L"hi전송됨\n");
-							MessageBox(g_hWnd, L"hi전송됨", L"hi", MB_OK);
-							printf("\nHI 전송받음");
+							PInstructionManager::GetInstance().AddInstruction(packet);
 							break;
 						}
 						case PACKET_CS_LOGIN_SEND_USERNAME:
 						{
-							WORD id = packet.ph.id;
-							PUser* user = PUserManager::GetInstance().FindUserById(id);
-							std::string str(packet.msg);
-							user->set_name(str);
-							
-							printf("\n 플레이어 id %hd 의 이름 %s 전송받음", id, user->get_name().c_str());
-
-							int a = 4;
-							PPacketManager::GetInstance().PushPacket(user, PACKET_SC_TEST_HPDECREASE, (char*)a, sizeof(int),
-								PushType::SEND, false);
-							//PInstructionManager::GetInstance().AddInstruction(packet);
-
+							PInstructionManager::GetInstance().AddInstruction(packet);
+							break;
 						}
+
 					}
 				}
 
@@ -249,6 +252,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					PPacketManager::GetInstance().SendPacketFromPacketPool(socket_ref_from_parameter, packet);
 				}
+				send_packet_pool.clear();
 			}
 			else if(g_operate_mode == OperateMode::SERVER)
 			{
@@ -256,10 +260,18 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					PUser* user = PUserManager::GetInstance().FindUserById(packet.ph.id);
 
-					PPacketManager::GetInstance().SendPacketFromPacketPool(user->get_socket() , packet);
+					if(user != nullptr)
+						PPacketManager::GetInstance().SendPacketFromPacketPool(user->get_socket() , packet);
+					else
+					{
+						SOCKET sock;
+						memcpy(&sock, packet.msg, sizeof(SOCKET));
+						PPacketManager::GetInstance().SendPacketFromPacketPool(sock, packet);
+					}
 				}
+				send_packet_pool.clear();
 			}
-			send_packet_pool.clear();
+			
 	}
 
 
@@ -366,16 +378,18 @@ bool PPacketManager::Release()
 
 void PPacketManager::ThreadInit(SOCKET* socket)
 {
-	recv_notify_request_count_ = 0;
-	send_notify_request_count_ = 0;
-	param_set_.recv_packet_pool = &recv_packet_pool_;
-	param_set_.send_packet_pool = &send_packet_pool_;
-	param_set_.socket = socket;
-	param_set_.recv_notify_request_count = &recv_notify_request_count_;
-	param_set_.send_notify_request_count = &send_notify_request_count_;
-	receive_thread_ = (HANDLE)_beginthreadex(NULL, 0, RecvPacketThread, &param_set_, 0, NULL);
-	process_thread_ = (HANDLE)_beginthreadex(NULL, 0, ProcessThread, &param_set_, 0, NULL);
-
+	std::lock_guard<std::mutex> lk(mutex_);
+	{
+		recv_notify_request_count_ = 0;
+		send_notify_request_count_ = 0;
+		param_set_.recv_packet_pool = &recv_packet_pool_;
+		param_set_.send_packet_pool = &send_packet_pool_;
+		param_set_.socket = socket;
+		param_set_.recv_notify_request_count = &recv_notify_request_count_;
+		param_set_.send_notify_request_count = &send_notify_request_count_;
+		receive_thread_ = (HANDLE)_beginthreadex(NULL, 0, RecvPacketThread, &param_set_, 0, NULL);
+		process_thread_ = (HANDLE)_beginthreadex(NULL, 0, ProcessThread, &param_set_, 0, NULL);
+	}
 }
 
 void PPacketManager::ChangeSocketToParam(SOCKET* socket)

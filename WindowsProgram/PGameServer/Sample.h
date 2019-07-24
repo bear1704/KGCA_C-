@@ -1,6 +1,6 @@
 #pragma once
 #include "PNetwork.h"
-
+#include "PServerInstructionProcessor.h"
 
 class Sample
 {
@@ -15,9 +15,12 @@ public:
 	bool		PostRender();
 	bool		Release();
 
+private:
+	std::thread instruction_process_thread_;
 
 	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:
+
 	Sample();
 	virtual ~Sample();
 };

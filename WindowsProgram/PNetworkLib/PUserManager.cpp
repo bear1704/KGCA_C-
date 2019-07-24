@@ -35,21 +35,15 @@ void PUserManager::AddUser(PUser* user)
 		auto generator = std::bind(distribution, engine); //데미지 난수화 
 		WORD random = generator();
 
+
+		user->set_id(random);
 		user->set_connected(true);
 		user->set_event(WSACreateEvent());
-		user->set_id(random);
 		//user->set_name필요 
 
 		user_list_.push_back(user);
 
-		PACKET id_send_packet;
-		ZeroMemory(&id_send_packet, sizeof(PACKET));
-		id_send_packet.ph.type = PACKET_SC_ID_PROVIDE;
-		PPacketManager::GetInstance().PushPacket(user, PACKET_SC_ID_PROVIDE, (char*)random, sizeof(WORD), PushType::SEND, false);
-
-		printf("\n유저에게 ID부여 : %hd  ", user->get_id());
-
-		printf("\n접속 [%s][%d] , -%d-",
+		printf("\n[접속 [%s][%d] , -%d-]",
 			inet_ntoa(user->get_client_addr().sin_addr),
 			ntohs(user->get_client_addr().sin_port),
 			user_list_.size());
@@ -62,7 +56,7 @@ void PUserManager::DeleteUser(PUser* user)
 	iter = find(user_list_.begin(), user_list_.end(), user);
 	closesocket(user->get_socket());
 	user->set_connected(false);
-	printf("\n접속 종료됨 [%s][%d] , -%d-, ID : %hd  ",
+	printf("\n[접속 종료됨 [%s][%d] , -%d-, ID : %hd]",
 		inet_ntoa(user->get_client_addr().sin_addr),
 		ntohs(user->get_client_addr().sin_port),
 		user_list_.size(), user->get_id());
@@ -78,6 +72,16 @@ PUser* PUserManager::FindUserById(WORD id)
 	for (PUser* user : user_list_)
 	{
 		if (user->get_id() == id)
+			return user;
+	}
+	return nullptr;
+}
+
+PUser* PUserManager::FindUserBySocket(SOCKET sock)
+{
+	for (PUser* user : user_list_)
+	{
+		if (user->get_socket() == sock)
 			return user;
 	}
 	return nullptr;

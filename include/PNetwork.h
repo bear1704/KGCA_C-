@@ -4,7 +4,6 @@
 #define MAX_PLAYER 8
 
 
-
 class PNetwork //PClient?
 {
 protected:
@@ -26,6 +25,7 @@ public:
 	bool ShutDown();
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static bool connect_;
+
 
 public:
 	virtual bool Init();

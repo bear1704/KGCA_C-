@@ -1,23 +1,28 @@
 #include "Sample.h"
 #include "PEventSelect.h"
 
+bool g_window_terminated;
 
 Sample::Sample()
 {
 	timer = 0.0f;
 	sound_flag = false;
+	g_window_terminated = false;
 }
 
 Sample::~Sample()
 {
 	if(instruction_process_thread_.joinable())
 		instruction_process_thread_.join();
+
+
 }
 
 
 
 bool Sample::Init()
 {
+
 	InitDataLoad();
 
 
@@ -68,6 +73,7 @@ bool Sample::Frame() {
 	}
 
 	PInstructionManager::GetInstance().NotifyProcessEvent();
+	PPacketManager::GetInstance().NotifyProcessEvent();
 	return true;
 }
 
@@ -86,6 +92,13 @@ bool Sample::Release()
 	m_Network.Release(); 
 	if (g_current_scene_)
 		g_current_scene_->Release(); 
+
+	g_window_terminated = true;
+	PInstructionManager::GetInstance().NotifyProcessEvent();
+
+
+	if(instruction_process_thread_.joinable())
+		instruction_process_thread_.join();
 
 	return true; 
 }
@@ -126,6 +139,8 @@ bool Sample::InitDataLoad()
 	
 	PInstructionProcessor* p = &PInstructionProcessor::GetInstance();
 	instruction_process_thread_ = std::thread([&p]() {p->ProcessInstruction(); });
+
+	PInstructionProcessor::GetInstance().BindScene(g_current_scene_);
 
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree.mp3"));
 	//PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/extree_die.mp3"));

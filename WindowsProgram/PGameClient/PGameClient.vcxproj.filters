@@ -26,10 +26,10 @@
     <ClInclude Include="Sample.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PInstructionProcessor.h">
+    <ClInclude Include="resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="PInstructionProcessor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

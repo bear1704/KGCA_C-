@@ -31,7 +31,10 @@ public:
 	void SceneChange(int scene_number);
 	std::vector<PUIComponent*>* get_ui_compositions_();
 	std::vector<PRectObject*>* get_game_objects();
+	void AddGameObjects(PRectObject* obj);
+	void AddUiComponents(PUIComponent* ui);
 	PRectObject* FindObjectById(WORD id);
+	void set_target(PPlayerCharacter* character);
 
 };
 

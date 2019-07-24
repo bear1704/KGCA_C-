@@ -8,6 +8,7 @@ bool PEventSelect::Init()
 {
 	if (g_operate_mode == OperateMode::CLIENT)
 	{
+
 		event_array_[0] = WSACreateEvent();
 		int ret = WSAEventSelect(socket_, event_array_[0], FD_CONNECT |
 			FD_CLOSE | FD_READ | FD_WRITE);
@@ -19,6 +20,16 @@ bool PEventSelect::Init()
 
 		PUserManager::GetInstance().oneself_user_.set_event(event_array_[0]);
 		PPacketManager::GetInstance().ThreadInit(&socket_); //쓰레드 초기화 및 생성
+
+		PACKET pack;
+		ZeroMemory(&pack, sizeof(PACKET));
+		pack.ph.id = 0;
+		pack.ph.type = PACKET_ANYDIR_SAY_HI;
+		pack.ph.len = PACKET_HEADER_SIZE;
+		
+		PPacketManager::GetInstance().PushPacket(PushType::SEND, pack);
+
+
 	}
 	else if (g_operate_mode == OperateMode::SERVER)
 	{
@@ -115,20 +126,23 @@ bool PEventSelect::Frame()
 				if (networkevent.iErrorCode[FD_ACCEPT_BIT] != 0) { assert(false); }
 				
 				int addr_len = sizeof(SOCKADDR_IN);
+
 				PUser* user = new PUser;
 				SOCKET clientsock = accept(socket_, (SOCKADDR*)user->get_client_addr_by_ptr(), &addr_len);
+				
 
 				if (clientsock == INVALID_SOCKET) { E_MSG("Server:accept"); }
 
 				user->set_socket(clientsock);
 
+				printf("\n[AddUser작업 시작]");
 				PUserManager::GetInstance().AddUser(user);
-
+				printf("\n[AddUser작업 끝]");
 				event_array_[user_list_ref.size()] = *(user->get_event_by_ptr());
 				WSAEventSelect(*(user->get_socket_by_ptr()), *(user->get_event_by_ptr()), FD_READ | FD_WRITE | FD_CLOSE);
 
-				PPacketManager::GetInstance().PushPacket(user, PACKET_SC_SAY_HI, nullptr, NULL, PushType::SEND, false);
-				printf("\n HI보냄");
+
+				//PPacketManager::GetInstance().PushPacket(user, PACKET_ANYDIR_SAY_HI, nullptr, NULL, PushType::SEND, false);
 			}		
 
 		}

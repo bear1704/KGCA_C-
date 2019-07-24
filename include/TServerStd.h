@@ -10,6 +10,7 @@
 #pragma comment(lib, "ws2_32.lib")
 
 
+
 enum class OperateMode
 {
 	SERVER,
@@ -17,6 +18,7 @@ enum class OperateMode
 };
 
 extern OperateMode g_operate_mode;
+extern bool g_window_terminated;
 
 static void E_MSG(const char* pMsg)
 {
