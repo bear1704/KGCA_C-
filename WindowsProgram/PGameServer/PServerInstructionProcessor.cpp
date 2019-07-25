@@ -1,6 +1,6 @@
 #include "PServerInstructionProcessor.h"
 
-
+std::mutex PServerInstructionProcessor::process_mutex1_;
 PServerInstructionProcessor::PServerInstructionProcessor()
 {
 	

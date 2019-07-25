@@ -4,6 +4,8 @@
 HWND g_edit_name;
 HWND g_hDlg;
 
+std::mutex PInstructionProcessor::process_mutex_;
+std::mutex PInstructionProcessor::spawn_mutex_;
 
 LRESULT CALLBACK DlgProc(HWND hDlg,
 	UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -137,20 +139,21 @@ bool PInstructionProcessor::Release()
 
 void PInstructionProcessor::SpawnPlayer(pPoint& pos)
 {
-	PPlayerCharacter* component;
-	component = new PPlayerCharacter();
-	component->Set(path, L"player", pPoint(pos.x, pos.y));
-	PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
-	component->set_gravity_(450.0f);
-	component->set_type_(Type::PLAYER);
-	component->StatusSet(status_path, component->get_object_name());
-	component->set_animation_list_(PObjectDataManager::GetInstance().
-		get_animation_list_from_map(L"player"));
-	component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
-	component->set_client_owner_character(true);
-	current_scene_->set_target(component);
-	component->Init();
-	current_scene_->AddGameObjects(component);
-	
+	std::lock_guard<std::mutex> lk(spawn_mutex_);
+	{
+		PPlayerCharacter* component;
+		component = new PPlayerCharacter();
+		component->Set(path, L"player", pPoint(pos.x, pos.y));
+		PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
+		component->set_gravity_(450.0f);
+		component->set_type_(Type::PLAYER);
+		component->StatusSet(status_path, component->get_object_name());
+		component->set_animation_list_(PObjectDataManager::GetInstance().get_animation_list_from_map(L"player"));
+		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
+		component->set_client_owner_character(true);
+		current_scene_->set_target(component);
+		component->Init();
+		current_scene_->AddGameObjects(component);
+	}
 	return;
 }

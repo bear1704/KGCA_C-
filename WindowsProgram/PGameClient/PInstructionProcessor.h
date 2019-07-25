@@ -14,7 +14,8 @@ private:
 	friend class PSingleton<PInstructionProcessor>;
 	
 	PScene* current_scene_;
-	std::mutex process_mutex_;
+	static std::mutex process_mutex_;
+	static std::mutex spawn_mutex_;
 
 	const std::wstring path = L"data/character/character_data.txt";
 	const std::wstring map_path = L"data/map/map_data.txt";

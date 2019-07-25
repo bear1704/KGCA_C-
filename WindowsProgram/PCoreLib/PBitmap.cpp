@@ -34,11 +34,6 @@ bool PBitmap::Release()
 
 bool PBitmap::Load(std::wstring filename)
 {
-	//handle_bitmap_ = (HBITMAP)LoadImage(g_hInstance,
-	//	filename.c_str(), IMAGE_BITMAP,
-	//	0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
-
-	//if (handle_bitmap_ == NULL) return false;
 
 	HANDLE hFile = CreateFile(filename.c_str(),
 		GENERIC_READ, 0,
@@ -70,10 +65,15 @@ bool PBitmap::Load(std::wstring filename)
 	CloseHandle(hFile);
 
 	handle_memoryDC_ = CreateCompatibleDC(g_handle_screenDC);
+	if (handle_memoryDC_ == NULL)
+	{
+		handle_memoryDC_ = CreateCompatibleDC(GetDC(g_hWnd));
+		
+	}
+
 	SelectObject(handle_memoryDC_, handle_bitmap_);
 
 	GetObject(handle_bitmap_, sizeof(BITMAP), &bitmap_info);
-
 	return true;
 }
 
@@ -96,7 +96,7 @@ bool PBitmap::Draw(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float sc
 	float half_width = abs((rect.right * scale) / 2);
 	float half_height = abs((rect.bottom * scale) / 2);
 
-
+	
 	HDC reversal_DC = CreateCompatibleDC(handle_memoryDC_);
 	HBITMAP bitmap = CreateCompatibleBitmap(handle_memoryDC_, rect.right, rect.bottom);
 	SelectObject(reversal_DC, bitmap);

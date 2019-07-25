@@ -117,6 +117,7 @@ void PObjectRotateUtil::GetRotationBitmap(PSprite* one_frame_sprite, HDC& colorD
 		colorDC = destDC;
 
 		DeleteObject(bitmap);
+		DeleteDC(destDC);
 
 	//FLOAT_RECT 회전방법 정의
 

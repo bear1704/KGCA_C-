@@ -1,62 +1,186 @@
-#SPRITE 17
-cashshopbutton 4 777 777 data/UI/sprite/cashshopbutton.bmp
-0 0 0 32 32
-1 67 0 32 32
-2 34 0 32 32
-3 0 0 32 32
-eventbutton 4 777 777 data/UI/sprite/eventbutton.bmp
-0 0 0 32 32
-1 67 0 32 32
-2 34 0 32 32
-3 0 0 32 32
-characterbutton 4 777 777 data/UI/sprite/characterbutton.bmp
-0 0 0 32 32
-1 67 0 32 32
-2 34 0 32 32
-3 0 0 32 32
-communitybutton 4 777 777 data/UI/sprite/communitybutton.bmp
-0 0 0 32 32
-1 67 0 32 32
-2 34 0 32 32
-3 0 0 32 32
-optionbutton 4 777 777 data/UI/sprite/optionbutton.bmp
-0 0 0 32 32
-1 67 0 32 32
-2 34 0 32 32
-3 0 0 32 32
-menubutton 4 777 777 data/UI/sprite/menubutton.bmp
-0 0 0 32 32
-1 67 0 32 32
-2 34 0 32 32
-3 0 0 32 32
-hpbar 1 777 777 data/UI/sprite/hpbar.bmp
-0 0 0 170 12
-mpbar 1 777 777 data/UI/sprite/mpbar.bmp
-0 0 0 170 12
-guage_slot 1 777 777 data/UI/sprite/guage_slot.bmp
-0 0 0 204 70
-guage_slot_background 1 777 777 data/UI/sprite/guage_slot_background.bmp
-0 0 0 198 37
-quickslot 1 777 777 data/UI/sprite/quickslot.bmp
-0 0 0 158 79
-expbar_background 1 777 777 data/UI/sprite/expbar_background.bmp
-0 0 0 1024 10
-expbar 1 777 777 data/UI/sprite/expbar_exp.bmp
-0 0 0 1008 7
-expbar_separate 1 777 777 data/UI/sprite/expbar_separatebar.bmp
-0 0 0 810 7
-dmg_font 10 777 777 data/UI/sprite/dmgfont.bmp
-0 7 4 33 36
-1 45 4 35 36
-2 83 4 35 36
-3 124 5 35 36
-4 162 6 35 36
-5 203 5 35 36
-6 246 6 35 36
-7 4 50 35 36
-8 44 51 35 36
-9 84 50 35 36
-end_illust 1 777 777 data/UI/sprite/end.bmp
-0 0 0 1024 768
-gameover_illust 1 777 777 data/UI/sprite/gameover.bmp
-0 0 0 1024 768
+<sprite>
+	<name> cashshopbutton </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/cashshopbutton.bmp </path>
+	<coord> 0,0,32,32 </coord>
+	<coord> 67,0,32,32 </coord>
+	<coord> 34,0,32,32 </coord>
+	<coord> 0,0,32,32 </coord>
+</sprite>
+<sprite>
+	<name> eventbutton </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/eventbutton.bmp </path>
+	<coord> 0,0,32,32 </coord>
+	<coord> 67,0,32,32 </coord>
+	<coord> 34,0,32,32 </coord>
+	<coord> 0,0,32,32 </coord>
+</sprite>
+<sprite>
+	<name> characterbutton </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/characterbutton.bmp </path>
+	<coord> 0,0,32,32 </coord>
+	<coord> 67,0,32,32 </coord>
+	<coord> 34,0,32,32 </coord>
+	<coord> 0,0,32,32 </coord>
+</sprite>
+<sprite>
+	<name> communitybutton </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/communitybutton.bmp </path>
+	<coord> 0,0,32,32 </coord>
+	<coord> 67,0,32,32 </coord>
+	<coord> 34,0,32,32 </coord>
+	<coord> 0,0,32,32 </coord>
+</sprite>
+<sprite>
+	<name> optionbutton </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/optionbutton.bmp </path>
+	<coord> 0,0,32,32 </coord>
+	<coord> 67,0,32,32 </coord>
+	<coord> 34,0,32,32 </coord>
+	<coord> 0,0,32,32 </coord>
+</sprite>
+<sprite>
+	<name> menubutton </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/menubutton.bmp </path>
+	<coord> 0,0,32,32 </coord>
+	<coord> 67,0,32,32 </coord>
+	<coord> 34,0,32,32 </coord>
+	<coord> 0,0,32,32 </coord>
+</sprite>
+<sprite>
+	<name> hpbar </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/hpbar.bmp </path>
+	<coord> 0,0,170,12 </coord>
+</sprite>
+<sprite>
+	<name> mpbar </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/mpbar.bmp </path>
+	<coord> 0,0,170,12</coord>
+</sprite>
+<sprite>
+	<name> guage_slot </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/guage_slot.bmp </path>
+	<coord> 0,0,204,70</coord>
+</sprite>
+<sprite>
+	<name> guage_slot_background </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/guage_slot_background.bmp </path>
+	<coord> 0,0,198,37</coord>
+</sprite>
+<sprite>
+	<name> quickslot </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/quickslot.bmp </path>
+	<coord> 0,0,158,79</coord>
+</sprite>
+<sprite>
+	<name> expbar_background </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/expbar_background.bmp </path>
+	<coord> 0,0,1024,10</coord>
+</sprite>
+<sprite>
+	<name> expbar </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/expbar_exp.bmp </path>
+	<coord> 0,0,1008,7</coord>
+</sprite>
+<sprite>
+	<name> expbar_separate </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/expbar_separatebar.bmp </path>
+	<coord> 0,0,810,7</coord>
+</sprite>
+<sprite>
+	<name> dmg_font </name>
+	<max_frame> 10 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 7,4,33,36</coord>
+	<coord> 45,4,35,36</coord>
+	<coord> 83,4,35,36</coord>
+	<coord> 124,5,35,36</coord>
+	<coord> 162,6,35,36</coord>
+	<coord> 203,5,35,36</coord>
+	<coord> 246,6,35,36</coord>
+	<coord> 4,50,35,36</coord>
+	<coord> 44,51,35,36</coord>
+	<coord> 84,50,35,36</coord>
+</sprite>
+<sprite>
+	<name> end_illust </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/end.bmp </path>
+	<coord> 0,0,1024,768</coord>
+</sprite>
+<sprite>
+	<name> gameover_illust </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/gameover.bmp </path>
+	<coord> 0,0,1024,768</coord>
+</sprite>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

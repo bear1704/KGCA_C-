@@ -2,6 +2,8 @@
 
 std::condition_variable PInstructionManager::process_event_;
 
+
+
 PInstructionManager::PInstructionManager()
 {
 	instruction_event_count_ = 0;

@@ -12,7 +12,6 @@ class PServerInstructionProcessor : public PSingleton<PServerInstructionProcesso
 private:
 	friend class PSingleton<PServerInstructionProcessor>;
 	
-	std::mutex process_mutex1_;
 
 	PServerInstructionProcessor();
 public:
@@ -21,6 +20,7 @@ public:
 	std::thread process_thread_;
 	void ProcessInstruction();
 
+	static std::mutex process_mutex1_;
 
 public:
 	bool Init();

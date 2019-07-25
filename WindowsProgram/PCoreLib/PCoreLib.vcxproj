@@ -46,11 +46,11 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -83,8 +83,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../../output</OutDir>
-    <IntDir>../../output</IntDir>
+    <OutDir>../../output/PCorelib</OutDir>
+    <IntDir>../../output/PCoreLib</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -171,6 +171,19 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <OutputFile>PCoreLib.lib</OutputFile>
+      <AdditionalDependencies>fmod_vc.lib;winmm.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../lib;</AdditionalLibraryDirectories>
+    </Lib>
+    <PreBuildEvent>
+      <Command>copy "..\\..\\FMOD\\inc\\*.*" "..\\..\\include"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy "*.h" "../../include"
+copy "PCoreLib.lib" "../../lib/"
+copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="PCoreLib.rc" />

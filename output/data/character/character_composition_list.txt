@@ -1,13 +1,5 @@
-#CHARLIST 1
-MUSHROOMLAND 11
-orange_mushroom 1200 500 MONSTER
-orange_mushroom 500 50 MONSTER
-orange_mushroom 680 650 MONSTER
-orange_mushroom 830 620 MONSTER
-orange_mushroom 700 70 MONSTER
-orange_mushroom 500 600 MONSTER
-orange_mushroom 200 70 MONSTER
-orange_mushroom 300 680 MONSTER
-orange_mushroom 1460 750 MONSTER
-player 500 300 PLAYER
-map1 0 0 MAP
+<CHARLIST> <!-- CHARLIST와 같이 구분자 역할을 하는 요소는 second에 들어감! first는 START/END -->
+	<name> MUSHROOMLAND </name>
+	<MAP> map1 </MAP>
+		<COORD> 0,0 </COORD>
+</CHARLIST>
