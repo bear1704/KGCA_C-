@@ -76,23 +76,11 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 		if (recv_bytes_ < PACKET_HEADER_SIZE)
 		{
-			OutputDebugString(L"\n recv 최상단"+ __LINE__);
 			std::wstring fwc = std::to_wstring(recv_bytes_);
-			OutputDebugString(L"\n 최상단에서의 recv_bytes :  ");
-			OutputDebugString(fwc.c_str());
-			OutputDebugString(L"\n-----------------------");
 			int once_recv = recv(socket_ref_from_parameter, &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
 			
 			std::wstring fw = std::to_wstring(once_recv);
-			OutputDebugString(L"\n first once_recv :  ");
-			OutputDebugString(fw.c_str());
-			OutputDebugString(L"\n-----------------------");
 
-			if (once_recv == 0)
-			{
-				OutputDebugString(L"\n === 0");
-				//return true;
-			}
 
 			if (once_recv == SOCKET_ERROR)
 			{
@@ -122,19 +110,6 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 					continue;
 				}
 
-				std::wstring wstr = std::to_wstring(recv_bytes_);
-				std::wstring wstr1 = std::to_wstring(packet->ph.len);
-				std::wstring wstr2 = std::to_wstring(packet->ph.type);
-				std::wstring wstr3 = std::to_wstring(once_recv);
-				OutputDebugString(L"\n else->지점1 : ph_len : ");
-				OutputDebugString(wstr1.c_str());
-				OutputDebugString(L"\nrecvbytes : ");
-				OutputDebugString(wstr.c_str());
-				OutputDebugString(L"\ntype : ");
-				OutputDebugString(wstr2.c_str());
-				OutputDebugString(L"\nonce_recv : ");
-				OutputDebugString(wstr3.c_str());
-				OutputDebugString(L"\n-----------------------");
 
 				if (packet->ph.len == recv_bytes_)
 				{
@@ -153,21 +128,6 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 					//return true; //리턴하면 안 되는게, 또 recv해서 0이 될 때 까지..
 				}
 
-				
-				wstr = std::to_wstring(recv_bytes_);
-				wstr1 = std::to_wstring(packet->ph.len);
-				wstr2 = std::to_wstring(packet->ph.type);
-				wstr3 = std::to_wstring(once_recv);
-				OutputDebugString(L"\n else->헤더는 받았어요 : ph_len : ");
-				OutputDebugString(wstr1.c_str());
-				OutputDebugString(L"\nrecvbytes : ");
-				OutputDebugString(wstr.c_str());
-				OutputDebugString(L"\ntype : ");
-				OutputDebugString(wstr2.c_str());
-				OutputDebugString(L"\nonce_recv : ");
-				OutputDebugString(wstr3.c_str());
-				OutputDebugString(L"\n-----------------------");
-				//notify_request_count_from_paramater += 1;
 			}
 		}
 		else
@@ -177,11 +137,6 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			int once_recv = recv(socket_ref_from_parameter, &recv_buffer[recv_bytes_],
 				packet->ph.len - recv_bytes_, 0);
 
-			if (once_recv == 0)
-			{
-				OutputDebugString(L"\n === 0");
-				//return true; //정상종료
-			}
 			if (once_recv == SOCKET_ERROR)
 			{
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
@@ -198,20 +153,6 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			}
 
 			recv_bytes_ += once_recv;
-
-			std::wstring wstr = std::to_wstring(recv_bytes_);
-			std::wstring wstr1 = std::to_wstring(packet->ph.len);
-			std::wstring wstr2 = std::to_wstring(packet->ph.type);
-			std::wstring wstr3 = std::to_wstring(once_recv);
-			OutputDebugString(L"\n else->지점2 : ph_len : ");
-			OutputDebugString(wstr1.c_str());
-			OutputDebugString(L"\nrecvbytes : ");
-			OutputDebugString(wstr.c_str());
-			OutputDebugString(L"\ntype : ");
-			OutputDebugString(wstr2.c_str());
-			OutputDebugString(L"\nonce_recv : ");
-			OutputDebugString(wstr3.c_str());
-			OutputDebugString(L"\n-----------------------");
 
 
 			if (packet->ph.len == recv_bytes_)
@@ -237,9 +178,8 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			}
 
 		}
-		OutputDebugString(L"\n  어둠의땅1");
 	}
-	OutputDebugString(L"\n  어둠의땅2");
+
 
 	//return true;
 }
@@ -278,23 +218,12 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					switch (packet.ph.type)
 					{
-						case PACKET_SC_ID_PROVIDE:
-						{
-							//MessageBox(g_hWnd, L"provide_pp", L"PROVIDE_pp", MB_OK);
-							PInstructionManager::GetInstance().AddInstruction(packet);	
-							break;
-						}
-						case PACKET_SC_TEST_HPDECREASE:
+						default:
 						{
 							PInstructionManager::GetInstance().AddInstruction(packet);
 							break;
 						}
-						case PACKET_SC_SPAWN_CHARACTER:
-						{
-							//MessageBox(g_hWnd, L"spawn_pp", L"SPAWN_pp", MB_OK);
-							PInstructionManager::GetInstance().AddInstruction(packet);
-							break;
-						}
+
 
 					}
 				}
@@ -308,6 +237,11 @@ unsigned __stdcall ProcessThread(LPVOID param)
 							break;
 						}
 						case PACKET_CS_LOGIN_SEND_USERNAME:
+						{
+							PInstructionManager::GetInstance().AddInstruction(packet);
+							break;
+						}
+						case PACKET_CS_SPAWN_COMPLETE:
 						{
 							PInstructionManager::GetInstance().AddInstruction(packet);
 							break;

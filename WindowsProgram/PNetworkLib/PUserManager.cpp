@@ -125,6 +125,11 @@ void PUser::set_id(WORD id)
 	unique_id_ = id;
 }
 
+void PUser::set_character_id(WORD id)
+{
+	character_id_ = id;
+}
+
 bool PUser::get_connected()
 {
 	return connected_;
@@ -163,6 +168,11 @@ SOCKET* PUser::get_socket_by_ptr()
 SOCKADDR_IN PUser::get_client_addr()
 {
 	return client_addr_;
+}
+
+WORD PUser::get_character_id()
+{
+	return character_id_;
 }
 
 int PUser::get_id()

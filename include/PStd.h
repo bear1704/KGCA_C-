@@ -233,6 +233,7 @@ extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
 extern FLOAT_RECT g_rectangle_client;
 extern PScene* g_current_scene_;
+extern bool g_custom_tick;
 
 template <typename T>
 class PSingleton

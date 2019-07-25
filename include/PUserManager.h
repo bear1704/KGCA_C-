@@ -17,6 +17,7 @@ private:
 	bool connected_;
 	std::string name_;
 	WORD unique_id_;
+	WORD character_id_;
 	SOCKADDR_IN client_addr_;
 public:
 	PUser();
@@ -30,7 +31,7 @@ public:
 	void set_socket(SOCKET socket);
 	void set_id(WORD id);
 	void SetUser(bool connect, std::string name, HANDLE event, SOCKET socket, WORD id);
-	
+	void set_character_id(WORD id);
 	//getter
 
 	bool get_connected();
@@ -41,6 +42,7 @@ public:
 	SOCKADDR_IN* get_client_addr_by_ptr();
 	SOCKET* get_socket_by_ptr();
 	SOCKADDR_IN get_client_addr();
+	WORD get_character_id();
 	int get_id();
 };
 

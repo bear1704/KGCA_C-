@@ -84,6 +84,7 @@ bool PScene::Frame()
 		}
 	}
 
+
 	for (int i = 0; i < game_objects_.size(); i++)
 	{
 		if (game_objects_[i]->get_type_() == Type::MONSTER)
@@ -101,6 +102,11 @@ bool PScene::Frame()
 		{
 			PRectObject* map = (PRectObject*)game_objects_[i];
 			map->Frame();
+		}
+		else if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
+		{
+			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
+			player->Frame();
 		}
 	}
 	for (int i = 0; i < ui_compositions_.size(); i++)
@@ -139,6 +145,11 @@ bool PScene::Render()
 		{
 			PRectObject* npc = (PRectObject*)game_objects_[i];
 			npc->Render();
+		}
+		else if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
+		{
+			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
+			player->Render();
 		}
 	}
 	for (int i = 0; i < ui_compositions_.size(); i++)
@@ -199,6 +210,11 @@ bool PScene::Release()
 		{
 			PRectObject* map = (PRectObject*)game_objects_[i];
 			map->Release();
+		}
+		else if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
+		{
+			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
+			player->Release();
 		}
 	}
 

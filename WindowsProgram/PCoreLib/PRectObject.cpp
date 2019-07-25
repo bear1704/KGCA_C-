@@ -284,6 +284,11 @@ void PRectObject::set_alpha_and_scale_(float alpha, float scale)
 	sprite_.set_scale_(scale);
 }
 
+void PRectObject::set_id(WORD id)
+{
+	id_ = id;
+}
+
 pPoint PRectObject::get_spawn_position_()
 {
 	return spawn_position_;

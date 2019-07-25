@@ -62,6 +62,8 @@ void PServerInstructionProcessor::ProcessInstruction()
 					printf("\n [캐릭터 스폰 지시, Pos : %f,%f , CID : %hd, SOCKET : %d]", 
 						pkt_msg.posx, pkt_msg.posy, random, (int)(user->get_socket()));
 
+					user->set_character_id(random);
+
 					break;
 				}
 				case PACKET_ANYDIR_SAY_HI:
@@ -75,7 +77,18 @@ void PServerInstructionProcessor::ProcessInstruction()
 						sizeof(WORD), PushType::SEND, false);
 
 					printf("\n[유저에게 ID부여 : %hd, SOCKET : %d]", user->get_id(), user->get_socket());
+					break;
 
+				}
+				case PACKET_CS_SPAWN_COMPLETE: //플레이어 스폰되면 그 주소를 브로드캐스트
+				{
+					PACKET pack;
+					ZeroMemory(&pack, sizeof(PACKET));
+					memcpy(&pack, &packet, sizeof(packet));
+					pack.ph.type = PACKET_BROADCAST_USERX_SPAWN;
+					Broadcast(pack);
+					printf("\n ID : %hd 인 플레이어 스폰됨을 브로드캐스트함, ", packet.ph.id);
+					break;
 				}
 		}
 
@@ -100,5 +113,18 @@ bool PServerInstructionProcessor::Render()
 
 bool PServerInstructionProcessor::Release()
 {
+	return false;
+}
+
+bool PServerInstructionProcessor::Broadcast(PACKET& packet)
+{
+	std::vector<PUser*> userlist = PUserManager::GetInstance().user_list_;
+
+	for (auto iter : userlist)
+	{
+		PPacketManager::GetInstance().PushPacket(iter, packet.ph.type, packet.msg, sizeof(packet.msg), PushType::SEND, true);
+		
+	}
+
 	return false;
 }

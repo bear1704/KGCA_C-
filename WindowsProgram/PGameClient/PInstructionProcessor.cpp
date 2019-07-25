@@ -100,16 +100,36 @@ void PInstructionProcessor::ProcessInstruction()
 					DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_DIALOG1), HWND_DESKTOP, DlgProc);
 					break;
 				}
-				case PACKET_SC_SPAWN_CHARACTER:
+				case PACKET_SC_SPAWN_CHARACTER: //캐릭터 스폰시키고 캐릭터 고유 아이디 부여
 				{
-					//MessageBox(g_hWnd, L"spawn", L"SPAWN", MB_OK);
 					PKT_MSG_SPAWN pos_msg;
 					memcpy(&pos_msg, packet.msg, packet.ph.len - PACKET_HEADER_SIZE);
 
 					pPoint pos = pPoint(pos_msg.posx, pos_msg.posy);
-					SpawnPlayer(pos);
+					SpawnPlayer(pos, pos_msg.id);
+
+
+					char msg[sizeof(PKT_MSG_SPAWN)];
+					memcpy(msg, &pos_msg, sizeof(PKT_MSG_SPAWN));
+					PPacketManager::GetInstance().PushPacket(&PUserManager::GetInstance().oneself_user_, 
+						PACKET_CS_SPAWN_COMPLETE,
+						msg, sizeof(PKT_MSG_SPAWN), PushType::SEND, true);
+
 					break;
 
+				}
+				case PACKET_BROADCAST_USERX_SPAWN:
+				{
+					PKT_MSG_SPAWN broad_msg;
+					memcpy(&broad_msg, packet.msg, sizeof(PKT_MSG_SPAWN));
+					
+					if (broad_msg.id == PUserManager::GetInstance().oneself_user_.get_character_id())
+						break;  //스폰 브로드캐스트 객체가 자신의 캐릭터 iD이면, 스폰할 필요 없다.
+					
+					
+					pPoint pos = pPoint(broad_msg.posx, broad_msg.posy);
+					SpawnOtherPlayer(pos, broad_msg.id);
+					break;
 				}
 		}
 
@@ -137,7 +157,7 @@ bool PInstructionProcessor::Release()
 	return false;
 }
 
-void PInstructionProcessor::SpawnPlayer(pPoint& pos)
+void PInstructionProcessor::SpawnPlayer(pPoint& pos, WORD id)
 {
 	std::lock_guard<std::mutex> lk(spawn_mutex_);
 	{
@@ -152,7 +172,33 @@ void PInstructionProcessor::SpawnPlayer(pPoint& pos)
 		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 		component->set_client_owner_character(true);
 		current_scene_->set_target(component);
+		component->set_id(id);
+		PUserManager::GetInstance().oneself_user_.set_character_id(id);
 		component->Init();
+		
+		current_scene_->AddGameObjects(component);
+	}
+	return;
+}
+
+void PInstructionProcessor::SpawnOtherPlayer(pPoint& pos, WORD id)
+{
+	std::lock_guard<std::mutex> lk(spawn_mutex_);
+	{
+		PPlayerCharacter* component;
+		component = new PPlayerCharacter();
+		component->Set(path, L"other_player", pPoint(pos.x, pos.y));
+		PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
+		component->set_gravity_(450.0f);
+		component->set_type_(Type::OTHER_PLAYER);
+		component->StatusSet(status_path, component->get_object_name());
+		component->set_animation_list_(PObjectDataManager::GetInstance().get_animation_list_from_map(L"other_player"));
+		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
+		component->set_client_owner_character(false);
+		current_scene_->set_target(component);
+		component->set_id(id);
+		component->Init();
+
 		current_scene_->AddGameObjects(component);
 	}
 	return;

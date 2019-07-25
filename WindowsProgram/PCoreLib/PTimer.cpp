@@ -4,9 +4,11 @@ float g_SecondPerFrame = 0.0f;
 float g_fGameTimer = 0.0f;
 
 
+
 bool PTimer::Init()
 {
 	beforeTick = timeGetTime();
+
 	return true;
 }
 
@@ -51,6 +53,7 @@ bool PTimer::Render()
 
 bool PTimer::Release()
 {
+
 	return false;
 }
 

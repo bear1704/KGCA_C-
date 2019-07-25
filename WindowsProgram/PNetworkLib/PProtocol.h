@@ -25,7 +25,8 @@ typedef struct pkt{
 #define PACKET_SC_LOGIN_ACCEPT			603		//로그인 승인
 #define PACKET_SC_ID_PROVIDE			604		//최초 접속 시 ID값 부여
 #define PACKET_SC_SPAWN_CHARACTER				632		//서버가 클라에게 메인플레이어 생성 지시, ID부여, 포지션 부여 
-#define PACKET_BORADCAST_USERX_SPAWN			633		//서버가 클라들에게 USERX가 스폰했음을 알림
+#define PACKET_CS_SPAWN_COMPLETE				633
+#define PACKET_BROADCAST_USERX_SPAWN			634		//서버가 클라들에게 USERX가 스폰했음을 알림
 #define PACKET_BROADCAST_USERX_MOVEAXIS_AtoB	700		//유저들에게 유저X의 이동상태를 재생하라고 보냄.user pos정보 + 방향 + 속도
 #define	PACKET_BROADCAST_ATTACK_SUCCESS			701		//서버가 클라에게 해당 공격이 성공했음을 알림
 #define	PACKET_CS_ATTACK_REQUEST				703		//클라가 서버에게 공격 요청. 공격

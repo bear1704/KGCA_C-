@@ -52,6 +52,13 @@ bool Sample::Init()
 bool Sample::PreFrame()
 {
 	m_Network.Frame();
+
+	if (g_custom_tick == true)
+	{
+		printf("\ncustom tick on");
+		g_custom_tick = false;
+	}
+
 	return true;
 }
 

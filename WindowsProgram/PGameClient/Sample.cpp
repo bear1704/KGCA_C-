@@ -56,6 +56,7 @@ bool Sample::PreFrame()
 {
 	m_Network.Frame();
 	//assert(false);
+	
 	return true;
 }
 bool Sample::Frame() {

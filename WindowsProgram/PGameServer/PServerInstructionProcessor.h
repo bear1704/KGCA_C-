@@ -27,5 +27,8 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
+
+	bool Broadcast(PACKET& packet);
+
 };
 
