@@ -14,6 +14,7 @@ private:
 	float flickering_rate;
 	float invincible_rate;
 	bool client_owner_character_;
+	bool right_dir_;
 protected:
 
 public:
@@ -32,11 +33,12 @@ public:
 	void ProcessAction();
 	void set_hit_(bool hit);
 	void set_client_owner_character(bool isowner);
+	void set_right_dir(bool isright);
 
 	bool get_hit_();
 	void InvincibleProgress();
 	bool get_client_owner_character();
-
+	bool is_right_dir();
 
 
 	

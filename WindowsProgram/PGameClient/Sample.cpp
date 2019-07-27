@@ -58,7 +58,7 @@ bool Sample::PreFrame()
 	m_Network.Frame();
 	//assert(false);
 	
-	if (g_custom_tick)
+	if (g_custom_tick && PInstructionProcessor::GetInstance().get_loading_end())
 	{
 		g_custom_tick = false;
 		PInstructionProcessor::GetInstance().ReportPositionMsg();

@@ -47,6 +47,23 @@ void PMoveAction::Process()
 			owner_->set_position_(pPoint(owner_->get_position_().x + owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 		}
 	}
+	
+	
+	
+	if (owner_->is_right_dir() == false && is_owner == false) //other_player(online other client)
+	{
+			owner_->get_is_reversal_() = false;
+			owner_->set_position_(pPoint(owner_->get_position_().x - owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
+	}
+	else if (owner_->is_right_dir() == true && is_owner == false) //other_player(online other client)
+	{
+			owner_->get_is_reversal_() = true;
+			owner_->set_position_(pPoint(owner_->get_position_().x + owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
+	}
+
+
+
+
 
 	owner_->get_sprite_()->SetPosition(owner_->get_position_().x, owner_->get_position_().y);
 

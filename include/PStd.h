@@ -98,7 +98,7 @@ enum class PXY
 };
 
 
-enum class FSM_State { IDLE, MOVE, ATTACK, JUMP, HIT, DEAD, REVIVE };
+enum class FSM_State { IDLE, MOVE, ATTACK, JUMP, HIT, DEAD, REVIVE, ERR };
 enum class FSM_Event { INPUT_NONE, INPUT_MOVE, INPUT_ATTACK, ATTACK_END, HPEMPTY,  TIME_OUT,
 					INPUT_JUMP, HIT , MOB_TIME_OUT, MOB_JUMP_TIME_OUT, MOB_CHASE ,JUMP_END, 
 						};
@@ -253,6 +253,39 @@ static ObjectType StringToObjectType(std::string str)
 	return ObjectType::ERROR_OCCUR;
 
 }
+
+static FSM_Event FsmStateToFsmEvent(FSM_State state)
+{
+	FSM_Event fsm_event;
+
+	switch (state)
+	{
+	case FSM_State::IDLE:
+		fsm_event = FSM_Event::INPUT_NONE;
+		break;
+	case FSM_State::MOVE:
+		fsm_event = FSM_Event::INPUT_MOVE;
+		break;
+	case FSM_State::JUMP:
+		fsm_event = FSM_Event::INPUT_JUMP;
+		break;
+	case FSM_State::HIT:
+		fsm_event = FSM_Event::HIT;
+		break;
+	case FSM_State::REVIVE:
+		fsm_event = FSM_Event::MOB_TIME_OUT;
+		break;
+	case FSM_State::DEAD:
+		fsm_event = FSM_Event::HPEMPTY;
+		break;
+	default:
+		fsm_event = FSM_Event::INPUT_NONE;
+		break;
+	}
+
+	return fsm_event;
+}
+
 
 extern HWND g_hWnd;
 extern POINT g_MousePos;

@@ -49,7 +49,7 @@ LRESULT CALLBACK DlgProc(HWND hDlg,
 
 PInstructionProcessor::PInstructionProcessor()
 {
-	
+	loading_end_ = false;
 }
 
 
@@ -112,6 +112,8 @@ void PInstructionProcessor::ProcessInstruction()
 						PACKET_CS_SPAWN_COMPLETE,
 						msg, sizeof(PKT_MSG_SPAWN), PushType::SEND, true);
 
+					loading_end_ = true;
+
 					break;
 
 				}
@@ -126,6 +128,36 @@ void PInstructionProcessor::ProcessInstruction()
 					pPoint pos = pPoint(broad_msg.posx, broad_msg.posy);
 					SpawnOtherPlayer(pos, broad_msg.id);
 					PUserManager::GetInstance().AddUserSimpleType(packet.ph.id, broad_msg.id); //클라 유저리스트에 유저추가
+
+					break;
+				}
+				case PACKET_BROADCAST_USERX_MOVEAXIS_AtoB:
+				{
+					PKT_MSG_REGULAR_POS_REPORT report_msg;
+					ZeroMemory(&report_msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+					memcpy(&report_msg, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+
+					if (report_msg.cid == PUserManager::GetInstance().oneself_user_.get_character_id())
+						break;
+
+					PPlayerCharacter* userx_character = (PPlayerCharacter*)current_scene_->FindObjectByCid(report_msg.cid);
+
+					if (userx_character == nullptr) //늦게 들어온 플레이어는 other_spawn 처리를 못했으므로 없을 것이다.
+					{
+						//그래서 이전까지 플레이어를 만들어준다.
+						pPoint other_player_pos = pPoint(report_msg.posx, report_msg.posy);
+						SpawnOtherPlayer(other_player_pos, report_msg.cid);
+						userx_character = (PPlayerCharacter*)current_scene_->FindObjectByCid(report_msg.cid);
+					}
+
+					userx_character->set_position_(pPoint(report_msg.posx, report_msg.posy));
+
+					userx_character->SetTransition(FsmStateToFsmEvent(report_msg.current_state));
+					
+					if (report_msg.dir == Direction::RIGHT)
+						userx_character->set_right_dir(true);
+					else
+						userx_character->set_right_dir(false);
 
 					break;
 				}
@@ -223,4 +255,9 @@ void PInstructionProcessor::ReportPositionMsg()
 	memcpy(packet.msg, &posmsg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
 
 	PPacketManager::GetInstance().PushPacket(PushType::SEND, packet);
+}
+
+const bool& PInstructionProcessor::get_loading_end()
+{
+	return loading_end_;
 }

@@ -315,6 +315,9 @@ PRectObject* PScene::FindObjectByCid(WORD id)
 	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
 		[&id](PRectObject* obj) ->bool {return obj->get_id() == id; });
 
+	if (iter == game_objects_.end())
+		return nullptr;
+
 	return *iter;
 }
 

@@ -124,6 +124,7 @@ PUserManager::~PUserManager()
 PUser::PUser()
 {
 	recv_bytes_ = 0;
+	ZeroMemory(recv_buffer_, sizeof(recv_buffer_));
 }
 
 PUser::~PUser()
@@ -210,9 +211,14 @@ int PUser::get_id()
 	return unique_id_;
 }
 
-void PUser::AddPool(PACKET packet)
+int& PUser::get_recv_bytes()
 {
-	recv_packet_pool_.push_back(packet);
+	return recv_bytes_;
+}
+
+char* PUser::get_recv_buffer_by_ptr()
+{
+	return recv_buffer_;
 }
 
 void PUser::AddRecvBytes(int num)

@@ -38,6 +38,7 @@ bool PPlayerCharacter::Init()
 	player_fsm_.Add(FSM_State::IDLE, FSM_Event::INPUT_JUMP, FSM_State::JUMP);
 	player_fsm_.Add(FSM_State::MOVE, FSM_Event::INPUT_JUMP, FSM_State::JUMP);
 	player_fsm_.Add(FSM_State::JUMP, FSM_Event::JUMP_END, FSM_State::MOVE);
+
 	//ATTACK
 	player_fsm_.Add(FSM_State::IDLE, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
 	player_fsm_.Add(FSM_State::MOVE, FSM_Event::INPUT_ATTACK, FSM_State::ATTACK);
@@ -106,7 +107,8 @@ void PPlayerCharacter::Movement()
 
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
-		physics_.StartJump();
+		if(client_owner_character_)
+			physics_.StartJump();
 	}
 	if (g_InputActionMap.qKey == KEYSTAT::KEY_PUSH)
 	{
@@ -176,6 +178,11 @@ void PPlayerCharacter::SetTransition(FSM_Event event)
 	if (!state) return; //현재 스테이트가 없으면 에러 
 
 	FSM_State next = state->get_next_state(event); //현재 스테이트에서 이벤트로 트랜지션되는 다음 스테이트 가져오기
+	
+	if (next == FSM_State::ERR) //다음 스테이트가 없을때 현재 스테이트 고정
+		next = current_player_state_;
+
+
 	current_player_action_ = action_list_[next]; //그 다음 스테이트에 맞게 액션 가져오기.(스테이트 전환)
 	current_player_state_ = next;  //현재 스테이트 변수도 다음스테이트를 가리키게 전환
 }
@@ -193,6 +200,11 @@ void PPlayerCharacter::set_hit_(bool hit)
 void PPlayerCharacter::set_client_owner_character(bool isowner)
 {
 	client_owner_character_ = isowner;
+}
+
+void PPlayerCharacter::set_right_dir(bool isright)
+{
+	right_dir_ = isright;
 }
 
 bool PPlayerCharacter::get_hit_()
@@ -237,4 +249,9 @@ void PPlayerCharacter::InvincibleProgress()
 bool PPlayerCharacter::get_client_owner_character()
 {
 	return client_owner_character_;
+}
+
+bool PPlayerCharacter::is_right_dir()
+{
+	return right_dir_;
 }

@@ -12,17 +12,22 @@ class PPacketManager;
 class PUser
 {
 private:
-	SOCKET user_socket_;
-	HANDLE user_event_;
-	bool connected_;
+	SOCKET		user_socket_;
+	HANDLE		user_event_;
+	bool		connected_;
 	std::string name_;
-	WORD unique_id_;
-	WORD character_id_;
+	WORD		unique_id_;
+	WORD		character_id_;
 	SOCKADDR_IN client_addr_;
+	int		recv_bytes_;
+	char	recv_buffer_[PACKET_MAX_DATA_SIZE + PACKET_HEADER_SIZE]; //2052
+
+
 public:
 	PUser();
 	~PUser();
 	
+
 	//setter
 
 	void set_connected(bool connect);
@@ -32,6 +37,8 @@ public:
 	void set_id(WORD id);
 	void SetUser(bool connect, std::string name, HANDLE event, SOCKET socket, WORD id);
 	void set_character_id(WORD id);
+	void set_recv_bytes(int num);
+
 	//getter
 
 	bool get_connected();
@@ -44,6 +51,13 @@ public:
 	SOCKADDR_IN get_client_addr();
 	WORD get_character_id();
 	int get_id();
+	int& get_recv_bytes();
+	char* get_recv_buffer_by_ptr();
+
+	//etc
+	void AddRecvBytes(int num);
+
+
 };
 
 

@@ -178,6 +178,10 @@ void PMonster::SetTransition(FSM_Event event)
 	if (!state) assert(!state); //현재 스테이트가 없으면 에러 
 
 	FSM_State next = state->get_next_state(event); //현재 스테이트에서 이벤트로 트랜지션되는 다음 스테이트 가져오기
+	
+	if (next == FSM_State::ERR) //다음 스테이트가 없을때 현재 스테이트 고정
+		next = current_monster_state_;
+	
 	current_monster_action_ = action_list_[next]; //그 다음 스테이트에 맞게 액션 가져오기.(스테이트 전환)
 	current_monster_state_ = next;  //현재 스테이트 변수도 다음스테이트를 가리키게 전환
 
