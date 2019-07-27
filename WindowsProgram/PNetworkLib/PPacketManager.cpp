@@ -43,7 +43,6 @@ bool PPacketManager::SendPacketFromPacketPool(SOCKET socket, PACKET packet)
 
 unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 스레드
 {
-	OutputDebugString(L"\n 리하(리시브 하이라는뜻)");
 	int		recv_bytes_ = 0;
 	char	recv_buffer[PACKET_MAX_DATA_SIZE + PACKET_HEADER_SIZE]; //2052
 	ZeroMemory(recv_buffer, sizeof(recv_buffer));
@@ -73,12 +72,16 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 		//의문 : 1회차는 돌았다. 2회차에서 wait을 만나면 notify가 또 터질때까지 기다릴 것인가, 조건에 맞기만 하면 진행할 것인가?
 		 
 		SOCKET& socket_ref_from_parameter = *(param_set->socket); //소켓 자체를 바꿔버리므로 참조는 단지 원래 소켓자체를 가리킬뿐.
+		PUser* current_user = PUserManager::GetInstance().FindUserBySocket(socket_ref_from_parameter);
 
 		if (recv_bytes_ < PACKET_HEADER_SIZE)
 		{
-			std::wstring fwc = std::to_wstring(recv_bytes_);
+			
 			int once_recv = recv(socket_ref_from_parameter, &recv_buffer[recv_bytes_], PACKET_HEADER_SIZE - recv_bytes_, 0);
 			
+			//std::wstring once_r = L"\nrv : " + to_wstring(recv_bytes_) + L" p.len : " + to_wstring(packet->ph.len);
+			//OutputDebugString(once_r.c_str());
+
 			std::wstring fw = std::to_wstring(once_recv);
 
 
@@ -120,10 +123,10 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 						packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
 					}
 
-					OutputDebugString(L"\n 전송됨 패킷");
 					PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
 					PPacketManager::GetInstance().NotifyProcessEvent();
 					recv_bytes_ = 0;
+					OutputDebugString(L"\n 제대로 전송됨 패킷");
 				
 					//return true; //리턴하면 안 되는게, 또 recv해서 0이 될 때 까지..
 				}
@@ -137,6 +140,13 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			int once_recv = recv(socket_ref_from_parameter, &recv_buffer[recv_bytes_],
 				packet->ph.len - recv_bytes_, 0);
 
+			//int ret_nread = 0;
+			//int fd = -1;
+			//WSAIoctl(fd, FIONREAD, &ret_nread);
+			std::wstring once_r = L"\nrv : " + to_wstring(recv_bytes_) + L" onrv : "+ to_wstring(once_recv) + L" p.len : " + to_wstring(packet->ph.len) 
+								+ L" p.id : " + to_wstring(packet->ph.id) + L" p.type " + to_wstring(packet->ph.type);
+			OutputDebugString(once_r.c_str());
+			
 			if (once_recv == SOCKET_ERROR)
 			{
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
@@ -146,7 +156,8 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				}
 				else
 				{
-					OutputDebugString(L"\n ERR");
+					OutputDebugString(L"\n recv error 발생!!\n");
+					int err = WSAGetLastError();
 					E_MSG("recv");
 					return false;
 				}
@@ -164,7 +175,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 					packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
 				}
 				
-				OutputDebugString(L"\n 전송됨 패킷");
+				OutputDebugString(L"     전송됨 패킷");
 				PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
 				recv_bytes_ = 0;
 				PPacketManager::GetInstance().NotifyProcessEvent();
@@ -231,22 +242,11 @@ unsigned __stdcall ProcessThread(LPVOID param)
 				{
 					switch (packet.ph.type)
 					{
-						case PACKET_ANYDIR_SAY_HI:
+						default:
 						{
 							PInstructionManager::GetInstance().AddInstruction(packet);
 							break;
 						}
-						case PACKET_CS_LOGIN_SEND_USERNAME:
-						{
-							PInstructionManager::GetInstance().AddInstruction(packet);
-							break;
-						}
-						case PACKET_CS_SPAWN_COMPLETE:
-						{
-							PInstructionManager::GetInstance().AddInstruction(packet);
-							break;
-						}
-
 					}
 				}
 
@@ -294,7 +294,7 @@ PPacketManager::PPacketManager()
 
 
 
-void PPacketManager::PushPacket(PushType type, PACKET packet)
+void PPacketManager::PushPacket(PushType type, PACKET packet, PUser* user)
 {
 
 	std::unique_lock<std::recursive_mutex > lock(push_mutex_);
@@ -302,7 +302,7 @@ void PPacketManager::PushPacket(PushType type, PACKET packet)
 		if (type == PushType::SEND)
 			send_packet_pool_.push_back(packet);
 		else
-			recv_packet_pool_.push_back(packet);
+			user->AddPool(packet);
 	}
 	PPacketManager::GetInstance().NotifyProcessEvent();
 	lock.unlock();
@@ -334,7 +334,7 @@ void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_
 	if (type == PushType::SEND)
 		send_packet_pool_.push_back(packet);
 	else
-		recv_packet_pool_.push_back(packet);
+		user->AddPool(packet);
 	
 	PPacketManager::GetInstance().NotifyProcessEvent();
 	}
@@ -369,6 +369,7 @@ bool PPacketManager::Init()
 
 bool PPacketManager::Frame()
 {
+
 	return false;
 }
 

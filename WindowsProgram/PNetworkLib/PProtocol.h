@@ -7,6 +7,13 @@ template<typename T>
 using PacketMessage = T*;
 
 #pragma pack( push, 1)
+
+enum class Direction
+{
+	LEFT,
+	RIGHT,
+};
+
 typedef struct ph
 {
 	WORD len;   // 데이터 길이+헤더길이   WORD : unisgned short
@@ -59,5 +66,15 @@ typedef struct PKT_MSG_SPAWN_ {
 	float posx;
 	float posy;
 }PKT_MSG_SPAWN;
+
+typedef struct PKT_MSG_REGULAR_POS_REPORT_
+{
+	WORD cid;
+	float posx; float posy;
+	FSM_State current_state;
+	Direction dir;
+
+}PKT_MSG_REGULAR_POS_REPORT;
+
 
 #pragma pack(pop)

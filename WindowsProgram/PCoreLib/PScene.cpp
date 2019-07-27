@@ -310,13 +310,15 @@ void PScene::AddUiComponents(PUIComponent* ui)
 		ui_compositions_.push_back(ui);
 }
 
-PRectObject* PScene::FindObjectById(WORD id)
+PRectObject* PScene::FindObjectByCid(WORD id)
 {
 	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
 		[&id](PRectObject* obj) ->bool {return obj->get_id() == id; });
 
 	return *iter;
 }
+
+
 
 void PScene::set_target(PPlayerCharacter* character)
 {

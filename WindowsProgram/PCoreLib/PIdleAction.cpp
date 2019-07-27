@@ -13,6 +13,8 @@ PIdleAction::~PIdleAction()
 
 void PIdleAction::Process()
 {
+	bool is_owner = (owner_->get_client_owner_character());
+
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::IDLE)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
@@ -20,24 +22,28 @@ void PIdleAction::Process()
 
 	if (owner_->get_hit_() && owner_->get_invisible_() == false)
 	{
-		owner_->SetTransition(FSM_Event::HIT);
+		if(is_owner)
+			owner_->SetTransition(FSM_Event::HIT);
 	}
 
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
-		owner_->SetTransition(FSM_Event::INPUT_JUMP);
+		if (is_owner)
+			owner_->SetTransition(FSM_Event::INPUT_JUMP);
 	}
 
 
 	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD || g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
 	{
-		owner_->SetTransition(FSM_Event::INPUT_MOVE); 
+		if (is_owner)
+			owner_->SetTransition(FSM_Event::INPUT_MOVE); 
 	}
 
 
 	if (g_InputActionMap.attackKey == KEYSTAT::KEY_PUSH) //공격 
 	{
-		owner_->SetTransition(FSM_Event::INPUT_ATTACK); //sprite setposition필요
+		if (is_owner)
+			owner_->SetTransition(FSM_Event::INPUT_ATTACK); //sprite setposition필요
 	}
 
 	owner_->get_sprite_()->SetPosition(owner_->get_position_().x, owner_->get_position_().y);

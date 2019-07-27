@@ -41,7 +41,8 @@ public:
 
 public:
 	void SpawnPlayer(pPoint& pos, WORD id);
-	void SpawnOtherPlayer(pPoint& pos, WORD id);
+	void SpawnOtherPlayer(pPoint& pos, WORD cid);
+	void ReportPositionMsg();
 
 
 };

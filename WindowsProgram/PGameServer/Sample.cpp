@@ -10,7 +10,6 @@ int main()
 	while (true)
 	{
 		sample.PreFrame();
-
 	}
 
 }
@@ -47,17 +46,18 @@ bool Sample::Init()
 	PServerInstructionProcessor* p = &PServerInstructionProcessor::GetInstance();
 	instruction_process_thread_ = std::thread([&p]() {p->ProcessInstruction(); });
 
+	PNetworkTimer::GetInstance().Init();
 	return true;
 }
 bool Sample::PreFrame()
 {
 	m_Network.Frame();
 
-	if (g_custom_tick == true)
+	if (g_custom_tick)
 	{
-		printf("\ncustom tick on");
 		g_custom_tick = false;
 	}
+
 
 	return true;
 }

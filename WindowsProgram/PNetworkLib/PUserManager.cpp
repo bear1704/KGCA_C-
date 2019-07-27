@@ -25,7 +25,7 @@ bool PUserManager::Release()
 	return false;
 }
 
-void PUserManager::AddUser(PUser* user)
+void PUserManager::AddUserFirstTime(PUser* user)
 {
 	std::lock_guard<std::mutex> lock(mutex_);
 	{
@@ -49,6 +49,24 @@ void PUserManager::AddUser(PUser* user)
 			user_list_.size());
 	}
 }
+
+
+void PUserManager::AddUserSimpleType(WORD id, WORD cid) // client only
+{
+	if (g_operate_mode == OperateMode::CLIENT)
+	{
+		PUser* user = new PUser();
+		user->set_character_id(cid);
+		user->set_id(id);
+		user_list_.push_back(user);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+
+
 
 void PUserManager::DeleteUser(PUser* user)
 {
@@ -77,6 +95,17 @@ PUser* PUserManager::FindUserById(WORD id)
 	return nullptr;
 }
 
+PUser* PUserManager::FindUserByCid(WORD cid)
+{
+	for (PUser* user : user_list_)
+	{
+		if (user->get_character_id() == cid)
+			return user;
+	}
+	assert(false);
+	return nullptr;
+}
+
 PUser* PUserManager::FindUserBySocket(SOCKET sock)
 {
 	for (PUser* user : user_list_)
@@ -84,6 +113,7 @@ PUser* PUserManager::FindUserBySocket(SOCKET sock)
 		if (user->get_socket() == sock)
 			return user;
 	}
+	assert(false);
 	return nullptr;
 }
 
@@ -93,7 +123,7 @@ PUserManager::~PUserManager()
 
 PUser::PUser()
 {
-
+	recv_bytes_ = 0;
 }
 
 PUser::~PUser()
@@ -179,3 +209,19 @@ int PUser::get_id()
 {
 	return unique_id_;
 }
+
+void PUser::AddPool(PACKET packet)
+{
+	recv_packet_pool_.push_back(packet);
+}
+
+void PUser::AddRecvBytes(int num)
+{
+	recv_bytes_ += num;
+}
+
+void PUser::set_recv_bytes(int num)
+{
+	recv_bytes_ = num;
+}
+

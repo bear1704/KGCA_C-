@@ -86,14 +86,12 @@ void PInstructionProcessor::ProcessInstruction()
 				{
 					int dec = *(PacketMessage<int>)packet.msg;
 					WORD id = packet.ph.id;
-					//PPlayerCharacter* obj = (PPlayerCharacter*)current_scene_->FindObjectById(id);
-					//아직 캐릭터에 ID를 부여하지 않았음!!!
-					//obj->get_status().DecreaseHP(100);
+					PPlayerCharacter* obj = (PPlayerCharacter*)current_scene_->FindObjectByCid(id);
+					obj->get_status().DecreaseHP(100);
 					break;
 				}
 				case PACKET_SC_ID_PROVIDE:
 				{
-					//MessageBox(g_hWnd, L"provide", L"PROVIDE", MB_OK);
 					
 					WORD id = *((WORD*)packet.msg);
 					PUserManager::GetInstance().oneself_user_.set_id(id);
@@ -107,7 +105,6 @@ void PInstructionProcessor::ProcessInstruction()
 
 					pPoint pos = pPoint(pos_msg.posx, pos_msg.posy);
 					SpawnPlayer(pos, pos_msg.id);
-
 
 					char msg[sizeof(PKT_MSG_SPAWN)];
 					memcpy(msg, &pos_msg, sizeof(PKT_MSG_SPAWN));
@@ -125,10 +122,11 @@ void PInstructionProcessor::ProcessInstruction()
 					
 					if (broad_msg.id == PUserManager::GetInstance().oneself_user_.get_character_id())
 						break;  //스폰 브로드캐스트 객체가 자신의 캐릭터 iD이면, 스폰할 필요 없다.
-					
-					
+										
 					pPoint pos = pPoint(broad_msg.posx, broad_msg.posy);
 					SpawnOtherPlayer(pos, broad_msg.id);
+					PUserManager::GetInstance().AddUserSimpleType(packet.ph.id, broad_msg.id); //클라 유저리스트에 유저추가
+
 					break;
 				}
 		}
@@ -181,7 +179,7 @@ void PInstructionProcessor::SpawnPlayer(pPoint& pos, WORD id)
 	return;
 }
 
-void PInstructionProcessor::SpawnOtherPlayer(pPoint& pos, WORD id)
+void PInstructionProcessor::SpawnOtherPlayer(pPoint& pos, WORD cid)
 {
 	std::lock_guard<std::mutex> lk(spawn_mutex_);
 	{
@@ -196,10 +194,33 @@ void PInstructionProcessor::SpawnOtherPlayer(pPoint& pos, WORD id)
 		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 		component->set_client_owner_character(false);
 		current_scene_->set_target(component);
-		component->set_id(id);
+		component->set_id(cid);
 		component->Init();
 
 		current_scene_->AddGameObjects(component);
 	}
 	return;
+}
+
+void PInstructionProcessor::ReportPositionMsg()
+{
+	PACKET packet;
+	packet.ph.id = PUserManager::GetInstance().oneself_user_.get_id();
+	packet.ph.len = sizeof(PKT_MSG_REGULAR_POS_REPORT) + PACKET_HEADER_SIZE;
+	packet.ph.type = PACKET_CS_REPORT_MYPOSITION;
+	PKT_MSG_REGULAR_POS_REPORT posmsg;
+	posmsg.cid = PUserManager::GetInstance().oneself_user_.get_character_id();
+	PPlayerCharacter* pp = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(posmsg.cid);
+	posmsg.current_state = pp->current_player_state_;
+	posmsg.posx = pp->get_position_().x;
+	posmsg.posy = pp->get_position_().y;
+
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+		posmsg.dir = Direction::LEFT;
+	else if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+		posmsg.dir = Direction::RIGHT;
+
+	memcpy(packet.msg, &posmsg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+
+	PPacketManager::GetInstance().PushPacket(PushType::SEND, packet);
 }

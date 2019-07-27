@@ -1,5 +1,6 @@
 #include "Sample.h"
 #include "PEventSelect.h"
+#include "PNetworkTimer.h"
 
 bool g_window_terminated;
 
@@ -49,13 +50,20 @@ bool Sample::Init()
 	// 3)¸ðµ¨ ¼±ÅÃ
 	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket(), OperateMode::CLIENT));
 
-
+	PNetworkTimer::GetInstance().Init();
 	return true;
 }
 bool Sample::PreFrame()
 {
 	m_Network.Frame();
 	//assert(false);
+	
+	if (g_custom_tick)
+	{
+		g_custom_tick = false;
+		PInstructionProcessor::GetInstance().ReportPositionMsg();
+	}
+
 	
 	return true;
 }

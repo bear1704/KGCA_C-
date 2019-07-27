@@ -64,9 +64,11 @@ public:
 	bool Release();
 
 
-	void AddUser(PUser* user);
+	void AddUserFirstTime(PUser* user);
+	void AddUserSimpleType(WORD id, WORD cid);// client only
 	void DeleteUser(PUser* user);
 	PUser* FindUserById(WORD id);
+	PUser* FindUserByCid(WORD cid);
 	PUser* FindUserBySocket(SOCKET sock);
 
 

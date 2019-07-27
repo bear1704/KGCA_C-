@@ -153,6 +153,7 @@ copy "PNetworkLib.lib" "../../lib/"</Command>
     <ClCompile Include="PEventSelect.cpp" />
     <ClCompile Include="PInstructionManager.cpp" />
     <ClCompile Include="PNetwork.cpp" />
+    <ClCompile Include="PNetworkTimer.cpp" />
     <ClCompile Include="PPacketManager.cpp" />
     <ClCompile Include="PSelectModel.cpp" />
     <ClCompile Include="PUserManager.cpp" />
@@ -161,6 +162,7 @@ copy "PNetworkLib.lib" "../../lib/"</Command>
     <ClInclude Include="PEventSelect.h" />
     <ClInclude Include="PInstructionManager.h" />
     <ClInclude Include="PNetwork.h" />
+    <ClInclude Include="PNetworkTimer.h" />
     <ClInclude Include="PPacketManager.h" />
     <ClInclude Include="PProtocol.h" />
     <ClInclude Include="PSelectModel.h" />

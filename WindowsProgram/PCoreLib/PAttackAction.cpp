@@ -12,6 +12,8 @@ PAttackAction::~PAttackAction()
 
 void PAttackAction::Process()
 {
+	bool is_owner = (owner_->get_client_owner_character());
+
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::ATTACK)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK));
@@ -22,9 +24,12 @@ void PAttackAction::Process()
 	
 	if (g_InputActionMap.attackKey == KEYSTAT::KEY_HOLD && owner_->get_sprite_()->get_is_dead_()) //공격버튼을 꾹 누르고 있을 경우
 	{
-		AttackProcess();
-		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK)); //다른 공격모션으로 체인지 
-		owner_->get_sprite_()->Play(); //죽은 스프라이트 다시 재생 
+		if (is_owner)
+		{
+			AttackProcess();
+			owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK)); //다른 공격모션으로 체인지 
+			owner_->get_sprite_()->Play(); //죽은 스프라이트 다시 재생 
+		}
 	}
 
 
@@ -33,15 +38,18 @@ void PAttackAction::Process()
 
 	if (owner_->get_sprite_()->get_is_dead_())
 	{
-		owner_->SetTransition(FSM_Event::ATTACK_END);
-		AttackProcess();
+			owner_->SetTransition(FSM_Event::ATTACK_END);
+			AttackProcess();
 
 	}
 	if (owner_->get_hit_() && owner_->get_invisible_() == false)
 	{
-		if (owner_->get_sprite_()->get_is_dead_() == true)
+		if (is_owner)
 		{
-			owner_->SetTransition(FSM_Event::HIT);
+			if (owner_->get_sprite_()->get_is_dead_() == true)
+			{
+				owner_->SetTransition(FSM_Event::HIT);
+			}
 		}
 	}
 

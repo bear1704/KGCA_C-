@@ -5,6 +5,8 @@
 #include "PUserManager.h"
 #include "PPacketManager.h"
 #include "PScene.h"
+#include "PNetworkTimer.h"
+#include "TServerStd.h"
 
 
 class PServerInstructionProcessor : public PSingleton<PServerInstructionProcessor>

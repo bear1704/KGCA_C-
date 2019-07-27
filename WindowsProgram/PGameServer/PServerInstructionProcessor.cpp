@@ -87,7 +87,28 @@ void PServerInstructionProcessor::ProcessInstruction()
 					memcpy(&pack, &packet, sizeof(packet));
 					pack.ph.type = PACKET_BROADCAST_USERX_SPAWN;
 					Broadcast(pack);
-					printf("\n ID : %hd 인 플레이어 스폰됨을 브로드캐스트함, ", packet.ph.id);
+					printf("\n [브로드캐스트] ID : %hd 인 플레이어 스폰 ", packet.ph.id);
+					break;
+				}
+				case PACKET_CS_REPORT_MYPOSITION:
+				{
+					PACKET pkt;
+					ZeroMemory(&pkt, sizeof(PACKET));
+					pkt.ph.type = PACKET_BROADCAST_USERX_MOVEAXIS_AtoB;
+					pkt.ph.len = sizeof(PKT_MSG_REGULAR_POS_REPORT) + PACKET_HEADER_SIZE;
+					pkt.ph.id = 0;
+					memcpy(pkt.msg, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+					Broadcast(pkt);
+
+
+					PKT_MSG_REGULAR_POS_REPORT report_msg;
+					ZeroMemory(&report_msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+					memcpy(&report_msg, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+					std::string dir; std::string state;
+					dir = (report_msg.dir == Direction::LEFT) ? "LEFT" : "RIGHT";
+					state = FsmStateToString(report_msg.current_state);
+					//printf("\n [브로드캐스트] ID : %hd 인 패킷의 좌표 X: %f, Y: %f DIR : %s  STATE : %s", 
+					//	packet.ph.id, report_msg.posx, report_msg.posy, dir.c_str(), state.c_str());
 					break;
 				}
 		}

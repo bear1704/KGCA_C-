@@ -19,10 +19,14 @@ private:
 	WORD unique_id_;
 	WORD character_id_;
 	SOCKADDR_IN client_addr_;
+	std::list<PACKET> recv_packet_pool_;
+	int recv_bytes_;
+
 public:
 	PUser();
 	~PUser();
 	
+
 	//setter
 
 	void set_connected(bool connect);
@@ -44,6 +48,11 @@ public:
 	SOCKADDR_IN get_client_addr();
 	WORD get_character_id();
 	int get_id();
+	//etc
+	void AddPool(PACKET packet);
+	void AddRecvBytes(int num);
+	void set_recv_bytes(int num);
+
 };
 
 
@@ -64,9 +73,11 @@ public:
 	bool Release();
 
 
-	void AddUser(PUser* user);
+	void AddUserFirstTime(PUser* user);
+	void AddUserSimpleType(WORD id, WORD cid);// client only
 	void DeleteUser(PUser* user);
 	PUser* FindUserById(WORD id);
+	PUser* FindUserByCid(WORD cid);
 	PUser* FindUserBySocket(SOCKET sock);
 
 

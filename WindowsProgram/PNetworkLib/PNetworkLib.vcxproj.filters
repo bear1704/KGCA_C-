@@ -51,6 +51,9 @@
     <ClCompile Include="PInstructionManager.cpp">
       <Filter>소스 파일\Client</Filter>
     </ClCompile>
+    <ClCompile Include="PNetworkTimer.cpp">
+      <Filter>소스 파일\Common\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PProtocol.h">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PNetworkTimer.h">
+      <Filter>소스 파일\Common\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

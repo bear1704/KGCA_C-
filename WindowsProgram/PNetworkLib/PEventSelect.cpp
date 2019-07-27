@@ -107,7 +107,7 @@ bool PEventSelect::Frame()
 			user_list_ref.size() + 1,
 			event_array_,
 			FALSE,
-			1000,
+			0,
 			FALSE);
 
 		if (index == WSA_WAIT_FAILED) return false;
@@ -135,9 +135,9 @@ bool PEventSelect::Frame()
 
 				user->set_socket(clientsock);
 
-				printf("\n[AddUser작업 시작]");
-				PUserManager::GetInstance().AddUser(user);
-				printf("\n[AddUser작업 끝]");
+				printf("\n[AddUserFirstTime작업 시작]");
+				PUserManager::GetInstance().AddUserFirstTime(user);
+				printf("\n[AddUserFirstTime작업 끝]");
 				event_array_[user_list_ref.size()] = *(user->get_event_by_ptr());
 				WSAEventSelect(*(user->get_socket_by_ptr()), *(user->get_event_by_ptr()), FD_READ | FD_WRITE | FD_CLOSE);
 

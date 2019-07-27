@@ -42,7 +42,7 @@ private:
 
 
 public:
-	void PushPacket(PushType type, PACKET packet);
+	void PushPacket(PushType type, PACKET packet, PUser* user);
 	void PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type, bool ischar);
 	bool NotifyReceiveEvent();
 	bool NotifyProcessEvent();

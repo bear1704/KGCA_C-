@@ -207,6 +207,38 @@ static ANIMATIONTYPE WstringToAnimationtype(std::wstring wstr)
 	return ANIMATIONTYPE::ERROR_OCCUR;
 }
 
+static std::string FsmStateToString(FSM_State state)
+{ 
+	std::string str;
+	
+	switch (state)
+	{
+	case FSM_State::IDLE:
+		str = "IDLE";
+		break;
+	case FSM_State::MOVE:
+		str = "MOVE";
+		break;
+	case FSM_State::ATTACK:
+		str = "ATTACK";
+		break;
+	case FSM_State::JUMP:
+		str = "JUMP";
+		break;
+	case FSM_State::HIT:
+		str = "HIT";
+		break;
+	case FSM_State::DEAD:
+		str = "DEAD";
+		break;
+	case FSM_State::REVIVE:
+		str = "REVIVE";
+		break;
+	}
+
+	return str;
+
+}
 static ObjectType StringToObjectType(std::string str)
 {
 	if (str.compare("player") == 0)
@@ -222,7 +254,6 @@ static ObjectType StringToObjectType(std::string str)
 
 }
 
-
 extern HWND g_hWnd;
 extern POINT g_MousePos;
 extern float g_fGameTimer;
@@ -233,7 +264,6 @@ extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
 extern FLOAT_RECT g_rectangle_client;
 extern PScene* g_current_scene_;
-extern bool g_custom_tick;
 
 template <typename T>
 class PSingleton

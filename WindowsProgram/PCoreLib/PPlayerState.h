@@ -13,6 +13,5 @@ public:
 public:
 	PPlayerState(PPlayerCharacter* parent) : owner_(parent) {}
 	virtual ~PPlayerState();
-
 };
 
