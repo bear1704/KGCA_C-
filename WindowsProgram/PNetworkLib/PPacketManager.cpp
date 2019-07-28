@@ -121,7 +121,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				if (current_recv_bytes == PACKET_HEADER_SIZE)
 				{
 					//packet = (PACKET*)recv_buf_ptr; //헤더로 일단 패킷을 만들어 둔다.
-					*packet = (PACKET*)recv_buf_ptr; //각 유저별 패킷에 패킷헤더정보를 할당한다. (헤더가 연속으로 들어올경우 대책)
+					current_user->packet = (PACKET*)recv_buf_ptr; //각 유저별 패킷에 패킷헤더정보를 할당한다. (헤더가 연속으로 들어올경우 대책)
 
 					std::wstring once_r = L" \n [6byte_header_sock : " + to_wstring(socket_ref_from_parameter)
 						+ L" header_pid : " + to_wstring(packet->ph.id) + L" header_plen : " + to_wstring(packet->ph.len) + 
