@@ -84,6 +84,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 		else //client
 		{
 			current_user = &PUserManager::GetInstance().oneself_user_;
+			packet = &current_user->packet;
 		}
 		
 		int& current_recv_bytes = current_user->get_recv_bytes();
@@ -121,12 +122,12 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				if (current_recv_bytes == PACKET_HEADER_SIZE)
 				{
 					//packet = (PACKET*)recv_buf_ptr; //헤더로 일단 패킷을 만들어 둔다.
-					current_user->packet = (PACKET*)recv_buf_ptr; //각 유저별 패킷에 패킷헤더정보를 할당한다. (헤더가 연속으로 들어올경우 대책)
+					*packet = (PACKET*)recv_buf_ptr; //각 유저별 패킷에 패킷헤더정보를 할당한다. (헤더가 연속으로 들어올경우 대책)
 
-					std::wstring once_r = L" \n [6byte_header_sock : " + to_wstring(socket_ref_from_parameter)
-						+ L" header_pid : " + to_wstring(packet->ph.id) + L" header_plen : " + to_wstring(packet->ph.len) + 
-						L" header_type : "  + to_wstring(packet->ph.type) + L" ]   ";
-					OutputDebugString(once_r.c_str());
+					//std::wstring once_r = L" \n [6byte_header_sock : " + to_wstring(socket_ref_from_parameter)
+					//	+ L" header_pid : " + to_wstring((*packet)->ph.id) + L" header_plen : " + to_wstring((*packet)->ph.len) +
+					//	L" header_type : "  + to_wstring((*packet)->ph.type) + L" ]   ";
+					//OutputDebugString(once_r.c_str());
 				}
 				else
 				{
@@ -136,16 +137,16 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				}
 
 
-				if (packet->ph.len == current_recv_bytes)
+				if ((*packet)->ph.len == current_recv_bytes)
 				{
-					if (packet->ph.type == PACKET_ANYDIR_SAY_HI)
+					if ((*packet)->ph.type == PACKET_ANYDIR_SAY_HI)
 					{
 						OutputDebugString(L"\n === HIPACKET");
-						memcpy(packet->msg, &socket_ref_from_parameter, sizeof(SOCKET));
-						packet->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
+						memcpy((*packet)->msg, &socket_ref_from_parameter, sizeof(SOCKET));
+						(*packet)->ph.len = PACKET_HEADER_SIZE + sizeof(SOCKET);
 					}
 
-					PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
+					PPacketManager::GetInstance().PushPacket(PushType::RECV, *(*packet));
 					PPacketManager::GetInstance().NotifyProcessEvent();
 					current_user->set_recv_bytes(0);
 
@@ -161,12 +162,13 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 			//packet = (UPACKET*)recv_buffer;
 			int once_recv = recv(socket_ref_from_parameter, &recv_buf_ptr[current_recv_bytes],
-				packet->ph.len - current_recv_bytes, 0);
+				(*packet)->ph.len - current_recv_bytes, 0);
 
-			std::wstring once_r = L"\nrecv_bytes : " + to_wstring(current_recv_bytes) + L" once_recv : " + to_wstring(once_recv) + L" p.len : " + to_wstring(packet->ph.len)
-				+ L" p.id : " + to_wstring(packet->ph.id) + L" p.type " + to_wstring(packet->ph.type)
-				+ L" p.socket : " + to_wstring(socket_ref_from_parameter);
-			OutputDebugString(once_r.c_str());
+			//std::wstring once_r = L"\nrecv_bytes : " + to_wstring(current_recv_bytes) + L" once_recv : " + to_wstring(once_recv) + L" p.len : " 
+			//	+ to_wstring((*packet)->ph.len)
+			//	+ L" p.id : " + to_wstring((*packet)->ph.id) + L" p.type " + to_wstring((*packet)->ph.type)
+			//	+ L" p.socket : " + to_wstring(socket_ref_from_parameter);
+			//OutputDebugString(once_r.c_str());
 			
 			if (once_recv == SOCKET_ERROR)
 			{
@@ -186,9 +188,9 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 
 			current_user->AddRecvBytes(once_recv);
 
-			if (packet->ph.len == current_recv_bytes)
+			if ((*packet)->ph.len == current_recv_bytes)
 			{
-				PPacketManager::GetInstance().PushPacket(PushType::RECV, *packet);
+				PPacketManager::GetInstance().PushPacket(PushType::RECV, *(*packet));
 				current_user->set_recv_bytes(0);
 				PPacketManager::GetInstance().NotifyProcessEvent();
 				//return true;// 리턴하면 안 되는게, 또 recv해서 0이 될 때 까지 받아야 함
