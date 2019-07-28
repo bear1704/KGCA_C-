@@ -43,8 +43,9 @@ bool PPacketManager::SendPacketFromPacketPool(SOCKET socket, PACKET packet)
 
 unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 스레드
 {
-	PACKET* packet = nullptr;
-	
+
+	PACKET** packet = nullptr;
+
 
 	ThreadParamSet* param_set = (ThreadParamSet*)param; //소켓, recv_pool, send_pool이 들어가있는 파라미터 세트
 
@@ -62,19 +63,28 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 		if (g_window_terminated == true)
 			break;
 
+
+		
+
+
 		//lock은 return()의 조건을 보호하기 위함 
 		//wait앞에서 대기, notify가 콜되면 인수의 조건을 체크하여, false면 recv_lock을 풀고(쓰레드가 대기할 수 있도록)
 		//Thread를 block한다. 만약 true면 recv_lock을 걸고(쓰레드 하나만 접근) 블록을 해제한다(코드 진행)
 		//의문 : 1회차는 돌았다. 2회차에서 wait을 만나면 notify가 또 터질때까지 기다릴 것인가, 조건에 맞기만 하면 진행할 것인가?
 		 
-		SOCKET& socket_ref_from_parameter = *(param_set->socket); //소켓 자체를 바꿔버리므로 참조는 단지 원래 소켓자체를 가리킬뿐.
+		SOCKET socket_ref_from_parameter = *(param_set->socket); //소켓 자체를 바꿔버리므로 참조는 단지 원래 소켓자체를 가리킬뿐.
 		
 		PUser* current_user;
 
-		if(g_operate_mode == OperateMode::SERVER)
+		if (g_operate_mode == OperateMode::SERVER)
+		{
 			current_user = PUserManager::GetInstance().FindUserBySocket(socket_ref_from_parameter);
-		else
+			packet = &current_user->packet;
+		}
+		else //client
+		{
 			current_user = &PUserManager::GetInstance().oneself_user_;
+		}
 		
 		int& current_recv_bytes = current_user->get_recv_bytes();
 		char* recv_buf_ptr = current_user->get_recv_buffer_by_ptr();
@@ -109,7 +119,15 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 				current_user->AddRecvBytes(once_recv);
 
 				if (current_recv_bytes == PACKET_HEADER_SIZE)
-					packet = (PACKET*)recv_buf_ptr; //헤더로 일단 패킷을 만들어 둔다.
+				{
+					//packet = (PACKET*)recv_buf_ptr; //헤더로 일단 패킷을 만들어 둔다.
+					*packet = (PACKET*)recv_buf_ptr; //각 유저별 패킷에 패킷헤더정보를 할당한다. (헤더가 연속으로 들어올경우 대책)
+
+					std::wstring once_r = L" \n [6byte_header_sock : " + to_wstring(socket_ref_from_parameter)
+						+ L" header_pid : " + to_wstring(packet->ph.id) + L" header_plen : " + to_wstring(packet->ph.len) + 
+						L" header_type : "  + to_wstring(packet->ph.type) + L" ]   ";
+					OutputDebugString(once_r.c_str());
+				}
 				else
 				{
 					OutputDebugString(L"\n packet header size 부족, continue");
@@ -145,8 +163,9 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			int once_recv = recv(socket_ref_from_parameter, &recv_buf_ptr[current_recv_bytes],
 				packet->ph.len - current_recv_bytes, 0);
 
-			std::wstring once_r = L"\nrv : " + to_wstring(current_recv_bytes) + L" onrv : "+ to_wstring(once_recv) + L" p.len : " + to_wstring(packet->ph.len)
-								+ L" p.id : " + to_wstring(packet->ph.id) + L" p.type " + to_wstring(packet->ph.type);
+			std::wstring once_r = L"\nrecv_bytes : " + to_wstring(current_recv_bytes) + L" once_recv : " + to_wstring(once_recv) + L" p.len : " + to_wstring(packet->ph.len)
+				+ L" p.id : " + to_wstring(packet->ph.id) + L" p.type " + to_wstring(packet->ph.type)
+				+ L" p.socket : " + to_wstring(socket_ref_from_parameter);
 			OutputDebugString(once_r.c_str());
 			
 			if (once_recv == SOCKET_ERROR)
@@ -380,6 +399,7 @@ bool PPacketManager::Release()
 
 void PPacketManager::ThreadInit(SOCKET* socket)
 {
+	OutputDebugString(L"\n Thread Initialize... ");
 	std::lock_guard<std::mutex> lk(mutex_);
 	{
 		recv_notify_request_count_ = 0;

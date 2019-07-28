@@ -57,6 +57,8 @@ public:
 	//etc
 	void AddRecvBytes(int num);
 
+public: // 편의상 일부러 public을 유지. 나중에 리팩토링
+	PACKET* packet;
 
 };
 

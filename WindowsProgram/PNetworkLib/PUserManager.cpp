@@ -125,6 +125,7 @@ PUser::PUser()
 {
 	recv_bytes_ = 0;
 	ZeroMemory(recv_buffer_, sizeof(recv_buffer_));
+	packet = nullptr;
 }
 
 PUser::~PUser()
