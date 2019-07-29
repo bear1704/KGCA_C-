@@ -23,7 +23,7 @@
     <ProjectGuid>{7BD277D4-F7F3-4464-907D-C8AE28181A85}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>PCoreLib</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -197,6 +197,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PAttackAction.h" />
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
+    <ClInclude Include="PBossMobHitAction.h" />
+    <ClInclude Include="PBossMobIdleAction.h" />
+    <ClInclude Include="PBossMobState.h" />
+    <ClInclude Include="PBossMonster.h" />
     <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PCharacter.h" />
     <ClInclude Include="PComponentStorage.h" />
@@ -216,6 +220,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PMobReviveAction.h" />
     <ClInclude Include="PMobState.h" />
     <ClInclude Include="PMoveAction.h" />
+    <ClInclude Include="PNetworkDataStorage.h" />
     <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
     <ClInclude Include="PCollision.h" />
@@ -246,6 +251,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PAttackAction.cpp" />
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />
+    <ClCompile Include="PBossMobHitAction.cpp" />
+    <ClCompile Include="PBossMobIdleAction.cpp" />
+    <ClCompile Include="PBossMobState.cpp" />
+    <ClCompile Include="PBossMonster.cpp" />
     <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PCharacter.cpp" />
     <ClCompile Include="PComponentStorage.cpp" />
@@ -265,6 +274,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PMobReviveAction.cpp" />
     <ClCompile Include="PMobState.cpp" />
     <ClCompile Include="PMoveAction.cpp" />
+    <ClCompile Include="PNetworkDataStorage.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />
     <ClCompile Include="PCollision.cpp" />

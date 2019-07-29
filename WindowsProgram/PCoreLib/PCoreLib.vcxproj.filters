@@ -46,6 +46,12 @@
     <Filter Include="소스 파일\Parser">
       <UniqueIdentifier>{cbe7f7f7-5328-4831-8ac5-2a767b28fc68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\BossState">
+      <UniqueIdentifier>{bd153075-c0d1-4505-8817-1f742253b2b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\NetworkDataManager">
+      <UniqueIdentifier>{86bd0e59-0029-47a4-92bf-21ec12cdfb78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PCoreLib.rc">
@@ -202,6 +208,21 @@
     <ClInclude Include="PParser.h">
       <Filter>소스 파일\Parser</Filter>
     </ClInclude>
+    <ClInclude Include="PBossMonster.h">
+      <Filter>소스 파일\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PBossMobHitAction.h">
+      <Filter>소스 파일\BossState</Filter>
+    </ClInclude>
+    <ClInclude Include="PBossMobIdleAction.h">
+      <Filter>소스 파일\BossState</Filter>
+    </ClInclude>
+    <ClInclude Include="PBossMobState.h">
+      <Filter>소스 파일\BossState</Filter>
+    </ClInclude>
+    <ClInclude Include="PNetworkDataStorage.h">
+      <Filter>소스 파일\NetworkDataManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSprite.cpp">
@@ -341,6 +362,21 @@
     </ClCompile>
     <ClCompile Include="PParser.cpp">
       <Filter>소스 파일\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="PBossMonster.cpp">
+      <Filter>소스 파일\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PBossMobHitAction.cpp">
+      <Filter>소스 파일\BossState</Filter>
+    </ClCompile>
+    <ClCompile Include="PBossMobIdleAction.cpp">
+      <Filter>소스 파일\BossState</Filter>
+    </ClCompile>
+    <ClCompile Include="PBossMobState.cpp">
+      <Filter>소스 파일\BossState</Filter>
+    </ClCompile>
+    <ClCompile Include="PNetworkDataStorage.cpp">
+      <Filter>소스 파일\NetworkDataManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

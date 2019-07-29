@@ -1,6 +1,6 @@
 <map_data>
 	<name> map1 </name>
-	<image_size> 0,0,1499,749 </image_size>
+	<image_size> 0,0,1367,780 </image_size>
 	<alpha> 1.0 </alpha>
 	<scale> 1.0 </scale>
 	<init_sprite> map1  </init_sprite>

@@ -105,6 +105,7 @@ void PInstructionProcessor::ProcessInstruction()
 
 					pPoint pos = pPoint(pos_msg.posx, pos_msg.posy);
 					SpawnPlayer(pos, pos_msg.id);
+					
 
 					char msg[sizeof(PKT_MSG_SPAWN)];
 					memcpy(msg, &pos_msg, sizeof(PKT_MSG_SPAWN));
@@ -161,6 +162,17 @@ void PInstructionProcessor::ProcessInstruction()
 
 					break;
 				}
+				case PACKET_SC_SPAWN_BOSS:
+				{
+					PKT_MSG_SPAWN spawn_msg;
+					ZeroMemory(&spawn_msg, sizeof(PKT_MSG_SPAWN));
+					memcpy(&spawn_msg, packet.msg, sizeof(PKT_MSG_SPAWN));
+
+					pPoint boss_pos = pPoint(spawn_msg.posx, spawn_msg.posy);
+					
+					SpawnBossMonster(boss_pos, spawn_msg.id);
+					break;
+				}
 		}
 
 	}
@@ -205,7 +217,8 @@ void PInstructionProcessor::SpawnPlayer(pPoint& pos, WORD id)
 		component->set_id(id);
 		PUserManager::GetInstance().oneself_user_.set_character_id(id);
 		component->Init();
-		
+		my_character_ = component;
+
 		current_scene_->AddGameObjects(component);
 	}
 	return;
@@ -227,6 +240,28 @@ void PInstructionProcessor::SpawnOtherPlayer(pPoint& pos, WORD cid)
 		component->set_client_owner_character(false);
 		current_scene_->set_target(component);
 		component->set_id(cid);
+		component->Init();
+
+		current_scene_->AddGameObjects(component);
+	}
+	return;
+}
+
+void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
+{
+
+	std::lock_guard<std::mutex> lk(spawn_mutex_);
+	{
+		PBossMonster* component;
+		component = new PBossMonster();
+		component->Set(path, L"zakum", pPoint(pos.x, pos.y));
+		PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
+		//component->set_gravity_(450.0f);
+		component->set_type_(Type::BOSS_MONSTER);
+		component->StatusSet(status_path, component->get_object_name());
+		component->set_animation_list_(PObjectDataManager::GetInstance().get_animation_list_from_map(L"zakum"));
+		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
+		component->set_id(id);
 		component->Init();
 
 		current_scene_->AddGameObjects(component);

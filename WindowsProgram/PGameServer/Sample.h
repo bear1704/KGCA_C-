@@ -2,6 +2,9 @@
 #include "PNetwork.h"
 #include "PServerInstructionProcessor.h"
 
+
+PScene* g_current_scene_;
+
 class Sample
 {
 	PNetwork		m_Network;
@@ -15,8 +18,10 @@ public:
 	bool		PostRender();
 	bool		Release();
 
+
 private:
 	std::thread instruction_process_thread_;
+
 
 	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:

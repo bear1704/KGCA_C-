@@ -42,6 +42,7 @@ public:
 private:
 	float angle = 0;
 	std::thread instruction_process_thread_;
+
 public:
 	Sample();
 	virtual ~Sample();

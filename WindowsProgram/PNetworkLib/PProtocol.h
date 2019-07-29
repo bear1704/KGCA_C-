@@ -3,6 +3,9 @@
 #define PACKET_MAX_DATA_SIZE 2048
 #include <cassert>
 
+#define ZAKUM_ID	20000
+#define SERVER_ID   44444;
+
 template<typename T>
 using PacketMessage = T*;
 
@@ -44,6 +47,7 @@ typedef struct pkt{
 #define PACKET_BROADCAST_BE_ATTACKED			708		//서버가 클라에게 공격받았다 알림  데미지 + 방향
 #define PACKET_BROADCAST_SPAWN_CHARACTER		709		//
 #define PACKET_SC_TEST_HPDECREASE				710
+#define PACKET_SC_SPAWN_BOSS					780		//자쿰 소환 명령
 
 
 

@@ -168,6 +168,24 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 					component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 					object_list.push_back(component);
 				}
+				else if (iter->first.compare("BOSSMONSTER") == 0)
+				{
+					object_name = iter->second;
+					iter++; //COORD 확인용
+
+					std::vector<string> pos_vec = parser.SplitString(iter->second, ',');
+					pPoint pos = { std::stof(pos_vec[0].c_str()), std::stof(pos_vec[1].c_str()) };
+
+					component = (PBossMonster*) new PBossMonster();
+					component->Set(path, string_to_multibyte(object_name), pPoint(pos.x, pos.y));
+					LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
+					//component->set_gravity_(450.0f);
+					component->set_type_(Type::BOSS_MONSTER);
+					component->StatusSet(status_path, component->get_object_name());
+					component->set_animation_list_(PObjectDataManager::get_animation_list_from_map(string_to_multibyte(object_name)));
+					component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
+					object_list.push_back(component);
+				}
 			}
 
 			object_composition_list_.insert(std::make_pair(multibyte_to_unicode_str(composition_name), object_list));

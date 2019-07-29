@@ -23,7 +23,7 @@ public:
 	void ProcessInstruction();
 
 	static std::mutex process_mutex1_;
-
+	std::mutex spawn_mutex_;
 public:
 	bool Init();
 	bool Frame();

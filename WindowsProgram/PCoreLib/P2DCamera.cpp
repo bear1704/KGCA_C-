@@ -155,7 +155,7 @@ bool P2DCamera::Init()
 	center_rect_ = { 400,400, (float)center_rect_width ,(float)center_rect_height}; 
 	camera_object_rect_ = { center_rect_.left,center_rect_.top , g_rectangle_client.right, g_rectangle_client.bottom };
 	move_dir_vector_ = { 0,0 };
-	world_size_ = { 1499,895 }; //749
+	world_size_ = { 1367,830 }; //749
 	camera_scroll_speed_ = 360.0f;
 	return true;
 }

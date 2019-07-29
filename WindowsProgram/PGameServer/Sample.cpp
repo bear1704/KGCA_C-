@@ -27,6 +27,14 @@ Sample::~Sample()
 bool Sample::Init()
 {
 
+
+	PScene* server_scene = new PScene();
+	g_current_scene_ = server_scene;
+	PObjectInfoManager::GetInstance().Init();
+	PObjectDataManager::GetInstance().Init();
+	PSpriteManager::GetInstance().Init();
+	PServerInstructionProcessor::GetInstance().Init();
+
 	std::cout << "서버 시작됨\n" << std::endl;
 	// 1)초기화
 

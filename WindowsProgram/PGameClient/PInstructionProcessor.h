@@ -44,7 +44,9 @@ public:
 public:
 	void SpawnPlayer(pPoint& pos, WORD id);
 	void SpawnOtherPlayer(pPoint& pos, WORD cid);
+	void SpawnBossMonster(pPoint& pos, WORD id);
 	void ReportPositionMsg();
+	PPlayerCharacter* my_character_;
 
 public:
 	const bool& get_loading_end();

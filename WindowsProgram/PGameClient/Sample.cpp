@@ -51,20 +51,22 @@ bool Sample::Init()
 	m_Network.set_current_model(make_shared<PEventSelect>(m_Network.get_socket(), OperateMode::CLIENT));
 
 	PNetworkTimer::GetInstance().Init();
+
 	return true;
 }
 bool Sample::PreFrame()
 {
 	m_Network.Frame();
 	//assert(false);
-	
+
 	if (g_custom_tick && PInstructionProcessor::GetInstance().get_loading_end())
 	{
-		g_custom_tick = false;
-		PInstructionProcessor::GetInstance().ReportPositionMsg();
+			g_custom_tick = false;
+			PInstructionProcessor::GetInstance().ReportPositionMsg();
 	}
 
 	
+
 	return true;
 }
 bool Sample::Frame() {

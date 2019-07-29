@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\BossFsm">
-      <UniqueIdentifier>{390cdefa-85b0-4a8c-8d65-8adea9a7ba11}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -24,23 +21,8 @@
     <ClCompile Include="PServerInstructionProcessor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MobFsm\PMobAttackAction.cpp">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClCompile>
-    <ClCompile Include="MobFsm\PMobDeadAction.cpp">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClCompile>
-    <ClCompile Include="MobFsm\PMobHitAction.cpp">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClCompile>
-    <ClCompile Include="MobFsm\PMobIdleAction.cpp">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClCompile>
-    <ClCompile Include="MobFsm\PMobJumpAction.cpp">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClCompile>
-    <ClCompile Include="MobFsm\PMobMoveAction.cpp">
-      <Filter>소스 파일\BossFsm</Filter>
+    <ClCompile Include="BossInfoObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,23 +32,8 @@
     <ClInclude Include="PServerInstructionProcessor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MobFsm\PMobAttackAction.h">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClInclude>
-    <ClInclude Include="MobFsm\PMobDeadAction.h">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClInclude>
-    <ClInclude Include="MobFsm\PMobHitAction.h">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClInclude>
-    <ClInclude Include="MobFsm\PMobIdleAction.h">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClInclude>
-    <ClInclude Include="MobFsm\PMobJumpAction.h">
-      <Filter>소스 파일\BossFsm</Filter>
-    </ClInclude>
-    <ClInclude Include="MobFsm\PMobMoveAction.h">
-      <Filter>소스 파일\BossFsm</Filter>
+    <ClInclude Include="BossInfoObject.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

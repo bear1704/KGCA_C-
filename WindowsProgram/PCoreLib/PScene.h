@@ -3,6 +3,7 @@
 #include "PObjectDataManager.h"
 #include "PPlayerCharacter.h"
 #include "PMonster.h"
+#include "PBossMonster.h"
 #include "PCore.h"
 
 

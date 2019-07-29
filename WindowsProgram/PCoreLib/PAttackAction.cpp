@@ -90,6 +90,22 @@ void PAttackAction::AttackProcess()
 					break;
 				}
 			}
+			else if (game_objects[i]->get_type_() == Type::BOSS_MONSTER)
+			{
+				PBossMonster* bmonster = (PBossMonster*)game_objects[i];
+
+				if (bmonster->get_current_monster_state_() == FSM_State::DEAD)
+					continue;
+
+				if (bmonster->check_hit(owner_->get_attack_collision_box_()))
+				{
+					bmonster->get_status().DecreaseHP(damage);
+					//bmonster->set_ishit_(true); //몬스터 한대 맞았다고 알려주기 
+					//monster->set_be_received_damage_(damage);
+					//hit판정과 타격패킷전송필요
+				}
+				break;
+			}
 		}
 
 	

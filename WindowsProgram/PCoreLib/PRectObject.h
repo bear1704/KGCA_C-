@@ -14,6 +14,7 @@ enum class Type
 	MONSTER,
 	NPC,
 	MAP,
+	BOSS_MONSTER,
 
 };
 

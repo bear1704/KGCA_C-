@@ -3,6 +3,8 @@
 std::mutex PServerInstructionProcessor::process_mutex1_;
 PServerInstructionProcessor::PServerInstructionProcessor()
 {
+
+	
 	
 }
 
@@ -88,6 +90,22 @@ void PServerInstructionProcessor::ProcessInstruction()
 					pack.ph.type = PACKET_BROADCAST_USERX_SPAWN;
 					Broadcast(pack);
 					printf("\n [브로드캐스트] ID : %hd 인 플레이어 스폰 ", packet.ph.id);
+
+					PACKET boss_pack;
+					ZeroMemory(&boss_pack, sizeof(PACKET));
+					PKT_MSG_SPAWN spawn_msg;
+					spawn_msg.id = ZAKUM_ID;
+					spawn_msg.posx = 720;
+					spawn_msg.posy = 490; //hard_coded
+
+					memcpy(&boss_pack.msg, &spawn_msg, sizeof(PKT_MSG_SPAWN));
+					boss_pack.ph.type = PACKET_SC_SPAWN_BOSS;
+					boss_pack.ph.len = sizeof(PKT_MSG_SPAWN) + PACKET_HEADER_SIZE;
+					boss_pack.ph.id = pack.ph.id;
+
+					PPacketManager::GetInstance().PushPacket(PushType::SEND, boss_pack);
+
+
 					break;
 				}
 				case PACKET_CS_REPORT_MYPOSITION:
@@ -123,7 +141,8 @@ void PServerInstructionProcessor::ProcessInstruction()
 
 bool PServerInstructionProcessor::Init()
 {
-	return false;
+	
+	return true;
 }
 
 bool PServerInstructionProcessor::Frame()

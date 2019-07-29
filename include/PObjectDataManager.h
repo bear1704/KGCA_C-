@@ -3,6 +3,7 @@
 #include "PRectObject.h"
 #include "PMonster.h"
 #include "PPlayerCharacter.h"
+#include "PBossMonster.h"
 
 
 class PObjectDataManager : public PSingleton<PObjectDataManager>

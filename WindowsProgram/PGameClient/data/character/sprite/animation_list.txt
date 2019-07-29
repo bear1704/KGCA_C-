@@ -25,3 +25,7 @@
 	<attack> orange_mushroom_move </attack> <!-- 주벗은 공격이 move와 같음 -->
 	<dead> orange_mushroom_die </dead> <!-- 각각의 애니메이션 리스트 컴포넌트를 입력 -->
 </list>
+<list> <!-- 자쿰 애니메이션 리스트 -->
+	<name> zakum </name>
+	<idle> zakum_idle </idle>
+</list>
