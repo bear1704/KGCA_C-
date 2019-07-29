@@ -31,6 +31,9 @@
     <Filter Include="소스 파일\Client">
       <UniqueIdentifier>{ec1a624a-65a3-42c8-bd3f-dcca103765cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Server\FSM">
+      <UniqueIdentifier>{f6dbd4bb-5aa1-4b25-8d48-91cfb5c48485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEventSelect.cpp">
@@ -53,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="PNetworkTimer.cpp">
       <Filter>소스 파일\Common\System</Filter>
+    </ClCompile>
+    <ClCompile Include="PFiniteState.cpp">
+      <Filter>소스 파일\Server\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="PFsm.cpp">
+      <Filter>소스 파일\Server\FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="PNetworkTimer.h">
       <Filter>소스 파일\Common\System</Filter>
+    </ClInclude>
+    <ClInclude Include="PFiniteState.h">
+      <Filter>소스 파일\Server\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="PFsm.h">
+      <Filter>소스 파일\Server\FSM</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

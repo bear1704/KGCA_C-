@@ -136,10 +136,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MobFsm\PMobAttackAction.cpp" />
+    <ClCompile Include="MobFsm\PMobDeadAction.cpp" />
+    <ClCompile Include="MobFsm\PMobHitAction.cpp" />
+    <ClCompile Include="MobFsm\PMobIdleAction.cpp" />
+    <ClCompile Include="MobFsm\PMobJumpAction.cpp" />
+    <ClCompile Include="MobFsm\PMobMoveAction.cpp" />
     <ClCompile Include="PServerInstructionProcessor.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MobFsm\PMobAttackAction.h" />
+    <ClInclude Include="MobFsm\PMobDeadAction.h" />
+    <ClInclude Include="MobFsm\PMobHitAction.h" />
+    <ClInclude Include="MobFsm\PMobIdleAction.h" />
+    <ClInclude Include="MobFsm\PMobJumpAction.h" />
+    <ClInclude Include="MobFsm\PMobMoveAction.h" />
     <ClInclude Include="PServerInstructionProcessor.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>

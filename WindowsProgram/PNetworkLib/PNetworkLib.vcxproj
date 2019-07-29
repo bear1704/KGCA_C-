@@ -151,6 +151,8 @@ copy "PNetworkLib.lib" "../../lib/"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PEventSelect.cpp" />
+    <ClCompile Include="PFiniteState.cpp" />
+    <ClCompile Include="PFsm.cpp" />
     <ClCompile Include="PInstructionManager.cpp" />
     <ClCompile Include="PNetwork.cpp" />
     <ClCompile Include="PNetworkTimer.cpp" />
@@ -160,6 +162,8 @@ copy "PNetworkLib.lib" "../../lib/"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PEventSelect.h" />
+    <ClInclude Include="PFiniteState.h" />
+    <ClInclude Include="PFsm.h" />
     <ClInclude Include="PInstructionManager.h" />
     <ClInclude Include="PNetwork.h" />
     <ClInclude Include="PNetworkTimer.h" />
