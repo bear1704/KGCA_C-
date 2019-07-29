@@ -28,7 +28,7 @@ void PServerInstructionProcessor::ProcessInstruction()
 
 		//아래에 구현내용
 		PACKET packet = PInstructionManager::GetInstance().PopBackInstruction();
-		
+
 
 		switch (packet.ph.type)
 		{
@@ -100,6 +100,10 @@ void PServerInstructionProcessor::ProcessInstruction()
 					memcpy(pkt.msg, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
 					Broadcast(pkt);
 
+					WORD id = packet.ph.id;
+					PUser* user = PUserManager::GetInstance().FindUserById(id);
+					if (user == nullptr)
+						break;
 
 					PKT_MSG_REGULAR_POS_REPORT report_msg;
 					ZeroMemory(&report_msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));

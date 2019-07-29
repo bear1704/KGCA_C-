@@ -16,16 +16,20 @@ PInstructionManager::~PInstructionManager()
 
 void PInstructionManager::AddInstruction(PACKET packet)
 {
+	std::lock_guard<std::mutex> lk(mutex_);
+	{
 		instruction_queue_.push(packet);
+	}
 		NotifyProcessEvent();
 }
 
 PACKET PInstructionManager::PopBackInstruction()
 {
-	//std::lock_guard<std::mutex> lk(mutex_);
+	
 	
 	if (!instruction_queue_.empty())
 	{
+		std::lock_guard<std::mutex> lk(mutex_);
 		PACKET p = instruction_queue_.front();
 		instruction_queue_.pop();
 		return p;

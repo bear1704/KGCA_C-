@@ -1,0 +1,180 @@
+ <!-- 777 : INFINITY -->
+<sprite>
+	<name> pc_idle </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/character.bmp </path>
+	<coord> 266,119,53,77 </coord>
+</sprite>
+<sprite>
+	<name> pc_move </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.7 </once_playtime>
+	<path> data/character/sprite/character.bmp </path>
+	<coord> 31,323,66,69 </coord>
+	<coord> 103,320,66,69 </coord>
+	<coord> 171,318,66,70 </coord>
+	<coord> 236,344,65,69 </coord>
+</sprite>
+<sprite>
+	<name> pc_jump </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/character.bmp </path>
+	<coord> 69,21,65,69 </coord>
+</sprite>
+<sprite>
+	<name> pc_slash </name>
+	<max_frame>5</max_frame>
+	<lifetime>0.8</lifetime>
+	<once_playtime>0.8</once_playtime>
+	<path> data/character/sprite/character.bmp </path>
+	<coord>629,358,67,69</coord>
+	<coord>629,358,67,69</coord>
+	<coord>520,360,67,69</coord>
+	<coord>395,361,90,68</coord>
+	<coord>395,361,90,68</coord>
+</sprite>
+<sprite>
+	<name> pc_swing </name>
+	<max_frame> 9 </max_frame>
+	<lifetime> 0.8 </lifetime>
+	<once_playtime> 0.8 </once_playtime>
+	<path> data/character/sprite/character.bmp </path>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>726,361,91,66</coord>
+	<coord>629,358,67,69</coord>
+	<coord>629,358,67,69</coord>
+	<coord>629,358,67,69</coord>
+</sprite>
+<sprite>
+	<name> pc_pierce </name>
+	<max_frame> 5 </max_frame>
+	<lifetime> 0.8 </lifetime>
+	<once_playtime> 0.8 </once_playtime>
+	<path> data/character/sprite/character.bmp </path>
+	<coord>813,46,96,72</coord>
+	<coord>813,46,96,72</coord>
+	<coord>813,46,96,72</coord>
+	<coord>690,42,118,73 </coord>
+	<coord>690,42,118,73 </coord>
+</sprite>
+<sprite>
+	<name> other_pc_idle </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/character_other_player.bmp </path>
+	<coord> 266,119,53,77 </coord>
+</sprite>
+<sprite>
+	<name> other_pc_move </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.7 </once_playtime>
+	<path> data/character/sprite/character_other_player.bmp </path>
+	<coord> 31,323,66,69 </coord>
+	<coord> 103,320,66,69 </coord>
+	<coord> 171,318,66,70 </coord>
+	<coord> 236,344,65,69 </coord>
+</sprite>
+<sprite>
+	<name> other_pc_jump </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/character_other_player.bmp </path>
+	<coord> 69,21,65,69 </coord>
+</sprite>
+<sprite>
+	<name> other_pc_slash </name>
+	<max_frame>5</max_frame>
+	<lifetime>0.8</lifetime>
+	<once_playtime>0.8</once_playtime>
+	<path> data/character/sprite/character_other_player.bmp </path>
+	<coord>629,358,67,69</coord>
+	<coord>629,358,67,69</coord>
+	<coord>520,360,67,69</coord>
+	<coord>395,361,90,68</coord>
+	<coord>395,361,90,68</coord>
+</sprite>
+<sprite>
+	<name> other_pc_swing </name>
+	<max_frame> 9 </max_frame>
+	<lifetime> 0.8 </lifetime>
+	<once_playtime> 0.8 </once_playtime>
+	<path> data/character/sprite/character_other_player.bmp </path>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>853,355,65,67</coord>
+	<coord>726,361,91,66</coord>
+	<coord>629,358,67,69</coord>
+	<coord>629,358,67,69</coord>
+	<coord>629,358,67,69</coord>
+</sprite>
+<sprite>
+	<name> other_pc_pierce </name>
+	<max_frame> 5 </max_frame>
+	<lifetime> 0.8 </lifetime>
+	<once_playtime> 0.8 </once_playtime>
+	<path> data/character/sprite/character_other_player.bmp </path>
+	<coord>813,46,96,72</coord>
+	<coord>813,46,96,72</coord>
+	<coord>813,46,96,72</coord>
+	<coord>690,42,118,73 </coord>
+	<coord>690,42,118,73 </coord>
+</sprite>
+<sprite>
+	<name> orange_mushroom_idle </name>
+	<max_frame> 2 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.5 </once_playtime>
+	<path> data/character/sprite/mushroom.bmp </path>
+	<coord>6,4,62,60</coord>
+	<coord>72,3,63,59</coord>
+</sprite>
+<sprite>
+	<name> orange_mushroom_move </name>
+	<max_frame> 3 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.5 </once_playtime>
+	<path> data/character/sprite/mushroom.bmp </path>
+	<coord> 6,73,64,60 </coord>
+	<coord> 73,72,63,65 </coord>
+	<coord> 139,76,62,57 </coord>
+</sprite>
+<sprite>
+	<name> orange_mushroom_jump </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/mushroom.bmp </path>
+	<coord> 73,72,63,65 </coord>
+</sprite>
+<sprite>
+	<name> orange_mushroom_hit </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/mushroom.bmp </path>
+	<coord> 8,142,61,65 </coord>
+</sprite>
+<sprite>
+	<name> orange_mushroom_die </name>
+	<max_frame> 3 </max_frame>
+	<lifetime> 1.0 </lifetime>
+	<once_playtime> 1.0 </once_playtime>
+	<path> data/character/sprite/mushroom.bmp </path>
+	<coord> 9,214,60,61 </coord>
+	<coord> 75,215,60,55 </coord>
+	<coord> 141,222,60,45 </coord>
+</sprite>

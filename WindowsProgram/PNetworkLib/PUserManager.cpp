@@ -80,6 +80,7 @@ void PUserManager::DeleteUser(PUser* user)
 		user_list_.size(), user->get_id());
 
 	delete* iter;
+	*iter = nullptr;
 	user_list_.erase(iter);
 
 
