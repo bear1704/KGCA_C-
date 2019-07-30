@@ -16,6 +16,8 @@ Sample::~Sample()
 	if(instruction_process_thread_.joinable())
 		instruction_process_thread_.join();
 
+	//if (client_task_thread_.joinable())
+	//	client_task_thread_.join();
 
 }
 

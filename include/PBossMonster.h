@@ -20,7 +20,7 @@ public:
 	bool Render() override;
 	bool Release() override;
 
-	PFsm monster_fsm_;
+	PFsm boss_monster_fsm_;
 	PBossMobState* current_boss_monster_action_;
 	std::map<FSM_State, PBossMobState*> action_list_;
 	FSM_State current_boss_monster_state_;

@@ -16,14 +16,21 @@ class PNetworkDataStorage :
 private:
 	PNetworkDataStorage();
 	friend class PSingleton<PNetworkDataStorage>;
+	std::list<HitData> hit_list_;
 
 public:
 	~PNetworkDataStorage();
 
-	std::list<HitData> hit_list_;
+	void AddData(HitData data);
+	HitData PopData();
+	bool IsQueueEmpty();
 
 
-
+public:
+	virtual bool Init();
+	virtual bool Frame();
+	virtual bool Render();
+	virtual bool Release();
 
 
 };

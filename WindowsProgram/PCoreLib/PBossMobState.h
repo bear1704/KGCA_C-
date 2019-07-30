@@ -2,8 +2,7 @@
 #include <random>
 #include <functional>
 #include <ctime>
-#include "TServerStd.h"
-#include "PProtocol.h"
+#include "PStd.h"
 
 class PBossMonster;
 

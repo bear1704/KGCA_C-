@@ -6,6 +6,8 @@
 #define ZAKUM_ID	20000
 #define SERVER_ID   44444;
 
+extern bool g_custom_tick;
+
 template<typename T>
 using PacketMessage = T*;
 
@@ -39,7 +41,8 @@ typedef struct pkt{
 #define PACKET_BROADCAST_USERX_SPAWN			634		//서버가 클라들에게 USERX가 스폰했음을 알림
 #define PACKET_BROADCAST_USERX_MOVEAXIS_AtoB	700		//유저들에게 유저X의 이동상태를 재생하라고 보냄.user pos정보 + 방향 + 속도
 #define	PACKET_BROADCAST_ATTACK_SUCCESS			701		//서버가 클라에게 해당 공격이 성공했음을 알림
-#define	PACKET_CS_ATTACK_REQUEST				703		//클라가 서버에게 공격 요청. 공격
+#define PACKET_CS_USER_ATTACK					702		//클라의 캐릭터가 공격을 수행하였음을 알림(스킬, 방향 정보 삽입)
+#define	PACKET_CS_MONSTER_HIT					703		//클라가 서버에게 몬스터가 피격당해 데미지를 입었음을 알림.
 #define	PACKET_SC_ATTACK_ACK					704		//
 #define	PACKET_BROADCAST_USERX_JUMP				705		//유저X의 점프를 유저들에게 알림
 #define	PACKET_CS_REPORT_MYPOSITION				706		//위치보정용 위치전송
@@ -80,5 +83,13 @@ typedef struct PKT_MSG_REGULAR_POS_REPORT_
 
 }PKT_MSG_REGULAR_POS_REPORT;
 
+
+typedef struct PKT_MSG_MONSTER_HIT_
+{
+	WORD monster_id;
+	WORD player_cid;
+	WORD player_user_id;
+	int damage;
+}PKT_MSG_MONSTER_HIT;
 
 #pragma pack(pop)

@@ -51,9 +51,23 @@ void PBossMonster::Set(multibyte_string data_path, multibyte_string object_name,
 
 }
 
+void PBossMonster::SetTransition(FSM_Event event)
+{
+}
+
 void PBossMonster::ProcessAction()
 {
 	current_boss_monster_action_->Process();
+}
+
+bool PBossMonster::check_hit(FLOAT_RECT player_attack_col)
+{
+	return false;
+}
+
+FSM_State PBossMonster::get_current_monster_state_()
+{
+	return FSM_State();
 }
 
 bool PBossMonster::Frame()

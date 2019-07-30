@@ -6,6 +6,7 @@
 #include "PPacketManager.h"
 #include "PScene.h"
 #include "PObjectDataManager.h"
+#include "PNetworkDataStorage.h"
 
 
 class PInstructionProcessor : public PSingleton<PInstructionProcessor>
@@ -15,6 +16,7 @@ private:
 	
 	PScene* current_scene_;
 	static std::mutex process_mutex_;
+	static std::mutex client_mutex_;
 	static std::mutex spawn_mutex_;
 
 	const std::wstring path = L"data/character/character_data.txt";
@@ -31,8 +33,8 @@ public:
 	
 	//Client only
 	void BindScene(PScene* current_scene); //Client Only
-	std::thread process_thread_;
 	void ProcessInstruction();
+	void ProcessClientTask();
 
 
 public:

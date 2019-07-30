@@ -6,6 +6,7 @@ HWND g_hDlg;
 
 std::mutex PInstructionProcessor::process_mutex_;
 std::mutex PInstructionProcessor::spawn_mutex_;
+std::mutex PInstructionProcessor::client_mutex_;
 
 LRESULT CALLBACK DlgProc(HWND hDlg,
 	UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -70,7 +71,7 @@ void PInstructionProcessor::ProcessInstruction()
 		//MessageBox(g_hWnd, L"proces", L"proces", MB_OK);
 		std::unique_lock<std::mutex> ul(process_mutex_);
 		PInstructionManager::GetInstance().process_event_.wait(ul, []()
-			{return !PInstructionManager::GetInstance().IsQueueEmpty() || g_window_terminated; }); //큐가 비지 않았다면 실행
+			{return !PInstructionManager::GetInstance().IsQueueEmpty() && !g_window_terminated; }); //큐가 비지 않았다면 실행
 
 
 		if (g_window_terminated == true)
@@ -177,6 +178,22 @@ void PInstructionProcessor::ProcessInstruction()
 
 	}
 
+}
+
+void PInstructionProcessor::ProcessClientTask()
+{
+	while (g_window_terminated == false)
+	{
+		
+		std::unique_lock<std::mutex> ul(client_mutex_);
+		PInstructionManager::GetInstance().process_event_.wait(ul, []()
+			{return !PNetworkDataStorage::GetInstance().IsQueueEmpty() && !g_window_terminated; }); //큐가 비지 않았다면 실행
+
+		HitData data = PNetworkDataStorage::GetInstance().PopData();
+		
+
+
+	}
 }
 
 bool PInstructionProcessor::Init()

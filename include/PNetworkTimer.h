@@ -21,8 +21,7 @@ private:
 public:
 	~PNetworkTimer();
 private:
-	HANDLE handle_timer_;
-	HANDLE handle_100ms_timer_queue_;
+	
 public:
 	void Init();
 
@@ -30,3 +29,5 @@ public:
 };
 
 extern bool g_custom_tick;
+extern HANDLE g_handle_100ms_timer_queue_;
+extern HANDLE g_handle_timer_;
