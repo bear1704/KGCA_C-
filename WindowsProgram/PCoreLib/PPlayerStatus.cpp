@@ -229,6 +229,28 @@ void PPlayerStatus::StatusSet(multibyte_string status_path, multibyte_string obj
 
 }
 
+void PPlayerStatus::StatusSetForServer(multibyte_string status_path, multibyte_string object_name)
+{
+	PObjectInfoManager::GetInstance().LoadStatusDataFromScript(status_path);
+	ObjectStatus* status = PObjectInfoManager::GetInstance().get_object_status_from_map(object_name);
+
+	level_ = status->level_;
+	hp_ = status->current_hp_;
+	mp_ = status->current_mp_;
+	exp_ = status->current_exp_;
+	max_hp_ = status->max_hp_;
+	max_mp_ = status->max_mp_;
+	max_exp_ = status->level_ * 1003;
+	str_ = status->str_;
+	dex_ = status->dex_;
+	atk_ = str_ * 2 + dex_;
+	past_hp_ = hp_;
+	past_mp_ = mp_;
+	past_exp_ = exp_;
+	reward_exp_mob = status->reward_exp_;
+	damage_mob = status->monster_damage_;
+}
+
 int PPlayerStatus::get_level_()
 {
 	return level_;

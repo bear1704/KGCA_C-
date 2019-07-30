@@ -48,6 +48,7 @@ public:
 	virtual bool Render();
 	virtual bool Release();
 	virtual void StatusSet(multibyte_string status_path, multibyte_string object_name);
+	virtual void StatusSetForServer(multibyte_string status_path, multibyte_string object_name);
 
 	virtual void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	

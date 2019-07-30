@@ -44,6 +44,11 @@ void PCharacter::StatusSet(multibyte_string status_path, multibyte_string object
 	status.StatusSet(status_path, object_name);
 }
 
+void PCharacter::StatusSetForServer(multibyte_string status_path, multibyte_string object_name)
+{
+	status.StatusSetForServer(status_path, object_name);
+}
+
 PPlayerStatus & PCharacter::get_status()
 {
 		return status;

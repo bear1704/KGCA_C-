@@ -13,7 +13,7 @@ void PNetworkDataStorage::AddData(HitData data)
 	hit_list_.push_back(data);
 }
 
-HitData PNetworkDataStorage::PopData()
+HitData PNetworkDataStorage::PopHitData()
 {
 	HitData ret = hit_list_.front();
 	hit_list_.pop_front();
@@ -23,6 +23,11 @@ HitData PNetworkDataStorage::PopData()
 bool PNetworkDataStorage::IsQueueEmpty()
 {
 	return hit_list_.empty();
+}
+
+bool PNetworkDataStorage::GetHitListSize()
+{
+	return hit_list_.size();
 }
 
 bool PNetworkDataStorage::Init()

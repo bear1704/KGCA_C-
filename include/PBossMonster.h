@@ -12,8 +12,9 @@ class PBossMonster :
 public:
 	PBossMonster();
 	~PBossMonster();
-public:
-
+private:
+	bool ishit_;
+	int be_received_damage_;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -26,9 +27,18 @@ public:
 	FSM_State current_boss_monster_state_;
 
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
+	void SetForServer(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	void SetTransition(FSM_Event event);
 	void ProcessAction();
 	bool check_hit(FLOAT_RECT player_attack_col);
 	FSM_State get_current_monster_state_();
+
+	void set_ishit_(bool hit);
+	bool get_ishit_();
+	void set_be_received_damage_(int damage);
+	int get_be_received_damage();
+
+
+	PUIComponent* damage_present_image_;
 };
 

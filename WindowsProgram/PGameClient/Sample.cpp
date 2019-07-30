@@ -16,8 +16,8 @@ Sample::~Sample()
 	if(instruction_process_thread_.joinable())
 		instruction_process_thread_.join();
 
-	//if (client_task_thread_.joinable())
-	//	client_task_thread_.join();
+	if (client_task_thread_.joinable())
+		client_task_thread_.join();
 
 }
 
@@ -30,6 +30,7 @@ bool Sample::Init()
 	
 	PInstructionProcessor* p = &PInstructionProcessor::GetInstance();
 	instruction_process_thread_ = std::thread([&p]() {p->ProcessInstruction(); });
+	client_task_thread_ = std::thread([&p]() {p->ProcessClientTask(); });
 
 	PInstructionProcessor::GetInstance().BindScene(g_current_scene_);
 

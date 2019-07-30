@@ -3,7 +3,8 @@
 #include "PCharacter.h"
 
 #pragma once
-class BossInfoObject //서버가 보스를 제어할때 필요한 정보들 모음 
+//서버가 보스를 제어할때 필요한 정보들 모음 
+class BossInfoObject
 {
 public:
 	BossInfoObject(pPoint position);

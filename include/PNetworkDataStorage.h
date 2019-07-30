@@ -5,7 +5,6 @@ typedef struct HitData_ {
 	int damage;
 	WORD boss_id;
 	WORD player_id;
-	WORD player_cid;
 }HitData;
 
 
@@ -22,8 +21,9 @@ public:
 	~PNetworkDataStorage();
 
 	void AddData(HitData data);
-	HitData PopData();
+	HitData PopHitData();
 	bool IsQueueEmpty();
+	bool GetHitListSize();
 
 
 public:

@@ -3,6 +3,7 @@
 #include <functional>
 #include <ctime>
 #include "PStd.h"
+#include "PNetworkDataStorage.h"
 
 class PBossMonster;
 
@@ -16,5 +17,6 @@ public:
 	virtual ~PBossMobState();
 public:
 	virtual void Process() = 0;
+
 };
 

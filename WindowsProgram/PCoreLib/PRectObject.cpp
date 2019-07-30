@@ -51,6 +51,10 @@ void PRectObject::StatusSet(multibyte_string status_path, multibyte_string objec
 {
 }
 
+void PRectObject::StatusSetForServer(multibyte_string status_path, multibyte_string object_name)
+{
+}
+
 
 void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, pPoint position)
 {

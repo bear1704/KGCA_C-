@@ -97,8 +97,8 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			int once_recv = recv(socket_ref_from_parameter, &recv_buf_ptr[current_recv_bytes],
 				PACKET_HEADER_SIZE - current_user->get_recv_bytes(), 0);
 		
-			std::wstring once_r = L"\nonce_rv_first: " + to_wstring(once_recv);
-			OutputDebugString(once_r.c_str());
+			//std::wstring once_r = L"\nonce_rv_first: " + to_wstring(once_recv);
+			//OutputDebugString(once_r.c_str());
 
 			if (once_recv == SOCKET_ERROR)
 			{
@@ -237,8 +237,10 @@ unsigned __stdcall ProcessThread(LPVOID param)
 
 		SOCKET& socket_ref_from_parameter = *(param_set->socket);
 
-			for (PACKET& packet : recv_packet_pool)
+			for (auto iter = recv_packet_pool.begin(); iter != recv_packet_pool.end();)
 			{
+				PACKET& packet = *iter;
+
 				if (g_operate_mode == OperateMode::CLIENT) // 클라이언트
 				{
 					switch (packet.ph.type)
@@ -264,23 +266,37 @@ unsigned __stdcall ProcessThread(LPVOID param)
 					}
 				}
 
+				iter = recv_packet_pool.erase(iter);
+
 			}
-			recv_packet_pool.clear(); //clear하지 않고, 그때그때 지워줘야 컨텍스트 스위칭 중 처리 안한 패킷 clear하는 참사가 발생하지 않는다.
+			
 
 			if (g_operate_mode == OperateMode::CLIENT)
 			{
 
-				for (PACKET& packet : send_packet_pool)
+				for (auto iter = send_packet_pool.begin(); iter != send_packet_pool.end();)
 				{
+					PACKET& packet = *iter;
 					PPacketManager::GetInstance().SendPacketFromPacketPool(socket_ref_from_parameter, packet);
+					iter = send_packet_pool.erase(iter);
 				}
-				send_packet_pool.clear();
+			
 			}
 			else if(g_operate_mode == OperateMode::SERVER)
 			{
-				for (PACKET& packet : send_packet_pool)
+				//for (PACKET& packet : send_packet_pool)
+				for(auto iter = send_packet_pool.begin(); iter != send_packet_pool.end() ;)
 				{
+					PACKET& packet = *iter;
 					PUser* user = PUserManager::GetInstance().FindUserById(packet.ph.id);
+
+					PKT_MSG_REGULAR_POS_REPORT rep;
+					memcpy(&rep, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
+
+				/*	std::wstring wstr = L"\n [packet.id = " + std::to_wstring(packet.ph.id) + L"packet.len = " + std::to_wstring(packet.ph.len) +
+						L" packet.type = " + std::to_wstring(packet.ph.type) + L" send_pool_size = " + std::to_wstring(send_packet_pool.size()) +
+						L" report_cid = " + std::to_wstring(rep.cid) + L" report_posx = " + std::to_wstring(rep.posx) + L"]";
+					OutputDebugString(wstr.c_str());*/
 
 					if(user != nullptr)
 						PPacketManager::GetInstance().SendPacketFromPacketPool(user->get_socket() , packet);
@@ -290,8 +306,10 @@ unsigned __stdcall ProcessThread(LPVOID param)
 						memcpy(&sock, packet.msg, sizeof(SOCKET));
 						PPacketManager::GetInstance().SendPacketFromPacketPool(sock, packet);
 					}
+
+					iter = send_packet_pool.erase(iter);
+					
 				}
-				send_packet_pool.clear();
 			}
 			
 	}

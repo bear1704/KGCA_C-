@@ -30,6 +30,16 @@ bool Sample::Init()
 
 	PScene* server_scene = new PScene();
 	g_current_scene_ = server_scene;
+
+	PObjectInfoManager::GetInstance().Init();
+	PObjectDataManager::GetInstance().Init();
+	PObjectInfoManager::GetInstance().LoadDataFromScript(L"data/character_data.txt", ObjectLoadType::CHARACTER);
+	PObjectDataManager::GetInstance().LoadDataFromScript(L"data/character_composition_list.txt");
+	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"ZAKUM_TEMPLE");
+	
+	g_current_scene_->InsertObject(game_objects_);
+
+
 	PObjectInfoManager::GetInstance().Init();
 	PObjectDataManager::GetInstance().Init();
 	PSpriteManager::GetInstance().Init();

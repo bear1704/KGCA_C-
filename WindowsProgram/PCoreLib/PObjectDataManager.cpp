@@ -186,6 +186,33 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 					component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 					object_list.push_back(component);
 				}
+				else if (iter->first.compare("BOSSMONSTER_SERV") == 0)
+				{
+
+					const std::wstring path = L"data/character_data.txt";
+					const std::wstring status_path = L"data/character_status_data.txt";
+
+					object_name = iter->second;
+					iter++; //COORD È®ÀÎ¿ë
+
+					std::vector<string> pos_vec = parser.SplitString(iter->second, ',');
+					pPoint pos = { std::stof(pos_vec[0].c_str()), std::stof(pos_vec[1].c_str()) };
+
+					PBossMonster* component = new PBossMonster();
+					component->SetForServer(path, string_to_multibyte(object_name), pPoint(pos.x, pos.y));
+					component->set_type_(Type::BOSS_MONSTER);
+					component->StatusSetForServer(status_path, component->get_object_name());
+					component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
+					
+					component->set_id(20000); //hard_coded
+
+
+					PRectObject* rect_component = component;
+
+
+
+					object_list.push_back(rect_component);
+				}
 			}
 
 			object_composition_list_.insert(std::make_pair(multibyte_to_unicode_str(composition_name), object_list));

@@ -62,15 +62,17 @@ void PAttackAction::AttackProcess()
 
 	if (g_current_scene_)
 	{
-		std::vector<PRectObject*> game_objects = 
-			PObjectDataManager::GetInstance().get_object_list_from_map(g_current_scene_->get_scene_name_()); //MUSHROOMRAND
+		//std::vector<PRectObject*> game_objects = 
+		//	PObjectDataManager::GetInstance().get_object_list_from_map(g_current_scene_->get_scene_name_()); //MUSHROOMRAND
+
+		std::vector<PRectObject*>* game_objects = g_current_scene_->get_game_objects();
 
 		//몬스터별 충돌체크(RECT가지고)
-		for (int i = 0; i < game_objects.size(); i++)
+		for (int i = 0; i < game_objects->size(); i++)
 		{
-			if (game_objects[i]->get_type_() == Type::MONSTER)
+			if ((*game_objects)[i]->get_type_() == Type::MONSTER)
 			{
-				PMonster* monster = (PMonster*) game_objects[i];
+				PMonster* monster = (PMonster*)(*game_objects)[i];
 				
 				if (monster->get_current_monster_state_() == FSM_State::DEAD)
 					continue;   //죽은 몬스터는 히트판정 X
@@ -90,18 +92,25 @@ void PAttackAction::AttackProcess()
 					break;
 				}
 			}
-			else if (game_objects[i]->get_type_() == Type::BOSS_MONSTER)
+			else if ((*game_objects)[i]->get_type_() == Type::BOSS_MONSTER)
 			{
-				PBossMonster* bmonster = (PBossMonster*)game_objects[i];
+				PBossMonster* bmonster = (PBossMonster*)(*game_objects)[i];
 
 				if (bmonster->get_current_monster_state_() == FSM_State::DEAD)
 					continue;
 
 				if (bmonster->check_hit(owner_->get_attack_collision_box_()))
 				{
-					bmonster->get_status().DecreaseHP(damage);
-					//bmonster->set_ishit_(true); //몬스터 한대 맞았다고 알려주기 
-					//monster->set_be_received_damage_(damage);
+					bmonster->get_status().DecreaseHP(damage); //보스 체력 감소 
+					HitData data;
+					data.boss_id = bmonster->get_id();
+					data.damage = damage;
+					data.player_id = owner_->get_id();
+					
+					PNetworkDataStorage::GetInstance().AddData(data); //네트워크립을 위한 데이터 저장
+
+					bmonster->set_ishit_(true); //몬스터 한대 맞았다고 알려주기 
+					bmonster->set_be_received_damage_(damage);
 					//hit판정과 타격패킷전송필요
 				}
 				break;

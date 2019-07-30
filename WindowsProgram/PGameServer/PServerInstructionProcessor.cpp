@@ -88,17 +88,18 @@ void PServerInstructionProcessor::ProcessInstruction()
 					ZeroMemory(&pack, sizeof(PACKET));
 					memcpy(&pack, &packet, sizeof(packet));
 					pack.ph.type = PACKET_BROADCAST_USERX_SPAWN;
-					Broadcast(pack);
+					Broadcast(pack, pack.ph.len);
 					printf("\n [브로드캐스트] ID : %hd 인 플레이어 스폰 ", packet.ph.id);
 
 					PACKET boss_pack;
 					ZeroMemory(&boss_pack, sizeof(PACKET));
 					PKT_MSG_SPAWN spawn_msg;
 					spawn_msg.id = ZAKUM_ID;
-					spawn_msg.posx = 720;
-					spawn_msg.posy = 490; //hard_coded
+					PBossMonster* pbm = (PBossMonster*) g_current_scene_->FindObjectByCid(ZAKUM_ID);
+					spawn_msg.posx = pbm->get_position_().x;
+					spawn_msg.posy = pbm->get_position_().y; //hard_coded
 
-					memcpy(&boss_pack.msg, &spawn_msg, sizeof(PKT_MSG_SPAWN));
+					memcpy(boss_pack.msg, &spawn_msg, sizeof(PKT_MSG_SPAWN));
 					boss_pack.ph.type = PACKET_SC_SPAWN_BOSS;
 					boss_pack.ph.len = sizeof(PKT_MSG_SPAWN) + PACKET_HEADER_SIZE;
 					boss_pack.ph.id = pack.ph.id;
@@ -116,7 +117,7 @@ void PServerInstructionProcessor::ProcessInstruction()
 					pkt.ph.len = sizeof(PKT_MSG_REGULAR_POS_REPORT) + PACKET_HEADER_SIZE;
 					pkt.ph.id = 0;
 					memcpy(pkt.msg, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
-					Broadcast(pkt);
+					Broadcast(pkt, pkt.ph.len);
 
 					WORD id = packet.ph.id;
 					PUser* user = PUserManager::GetInstance().FindUserById(id);
@@ -131,6 +132,21 @@ void PServerInstructionProcessor::ProcessInstruction()
 					state = FsmStateToString(report_msg.current_state);
 					//printf("\n [브로드캐스트] ID : %hd 인 패킷의 좌표 X: %f, Y: %f DIR : %s  STATE : %s", 
 					//	packet.ph.id, report_msg.posx, report_msg.posy, dir.c_str(), state.c_str());
+					break;
+				}
+				case PACKET_CS_MONSTER_HIT:
+				{
+					PKT_MSG_MONSTER_HIT pmmh;
+					ZeroMemory(&pmmh, sizeof(PKT_MSG_MONSTER_HIT));
+					memcpy(&pmmh, packet.msg, sizeof(PKT_MSG_MONSTER_HIT));
+					PBossMonster* bm = (PBossMonster*)g_current_scene_->FindObjectByCid(pmmh.monster_id);
+					bm->get_status().DecreaseHP(pmmh.damage);
+
+
+					std::wstring wstr = L"\n[hit!] \n  dmg : " + std::to_wstring(pmmh.damage) + L" remian_hp :  " +
+						std::to_wstring(bm->get_status().get_hp_());
+
+					OutputDebugString(wstr.c_str());
 					break;
 				}
 		}
@@ -160,13 +176,14 @@ bool PServerInstructionProcessor::Release()
 	return false;
 }
 
-bool PServerInstructionProcessor::Broadcast(PACKET& packet)
+bool PServerInstructionProcessor::Broadcast(PACKET& packet, WORD packet_msglen)
 {
 	std::vector<PUser*> userlist = PUserManager::GetInstance().user_list_;
 
 	for (auto iter : userlist)
 	{
-		PPacketManager::GetInstance().PushPacket(iter, packet.ph.type, packet.msg, sizeof(packet.msg), PushType::SEND, true);
+			PPacketManager::GetInstance().PushPacket(iter, packet.ph.type, packet.msg, packet_msglen - PACKET_HEADER_SIZE,
+				PushType::SEND, true);
 		
 	}
 

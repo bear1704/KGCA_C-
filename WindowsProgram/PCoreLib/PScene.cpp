@@ -142,9 +142,9 @@ bool PScene::Render()
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Render();
-			//draw_test_rect(player->get_foot_plane_box());
-			//draw_test_rect(player->get_collision_rect_());
-			//draw_test_rect(player->get_attack_collision_box_());
+			draw_test_rect(player->get_foot_plane_box());
+			draw_test_rect(player->get_collision_rect_());
+			draw_test_rect(player->get_attack_collision_box_());
 		}
 		else if (game_objects_[i]->get_type_() == Type::MONSTER)
 		{
@@ -164,6 +164,7 @@ bool PScene::Render()
 		else if (game_objects_[i]->get_type_() == Type::BOSS_MONSTER)
 		{
 			PBossMonster* player = (PBossMonster*)game_objects_[i];
+			draw_test_rect(player->get_collision_rect_());
 			player->Render();
 		}
 	}
@@ -181,19 +182,19 @@ bool PScene::Render()
 	int wall_size = PWallAndPlatform::GetInstance().get_wall_list_().size();
 
 
-	//for (int i = 0; i < platform_size; i++)
-	//{
-	//	draw_test_rect(PWallAndPlatform::GetInstance().get_platform_list_().at(i));
-	//}
+	for (int i = 0; i < platform_size; i++)
+	{
+		draw_test_rect(PWallAndPlatform::GetInstance().get_platform_list_().at(i));
+	}
 	//for (int i = 0; i < monsterwall_size; i++)
 	//{
 	//	draw_test_rect(PWallAndPlatform::GetInstance().get_monster_wall_list_().
 	//		at(i));
 	//}
-	//for (int i = 0; i < wall_size; i++)
-	//{
-	//	draw_test_rect(PWallAndPlatform::GetInstance().get_wall_list_().at(i));
-	//}
+	for (int i = 0; i < wall_size; i++)
+	{
+		draw_test_rect(PWallAndPlatform::GetInstance().get_wall_list_().at(i));
+	}
 
 
 

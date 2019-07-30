@@ -189,8 +189,30 @@ void PInstructionProcessor::ProcessClientTask()
 		PInstructionManager::GetInstance().process_event_.wait(ul, []()
 			{return !PNetworkDataStorage::GetInstance().IsQueueEmpty() && !g_window_terminated; }); //큐가 비지 않았다면 실행
 
-		HitData data = PNetworkDataStorage::GetInstance().PopData();
-		
+		if (g_window_terminated == true)
+			break;
+
+		if (PNetworkDataStorage::GetInstance().GetHitListSize() > 0)
+		{
+			HitData data = PNetworkDataStorage::GetInstance().PopHitData();
+			PACKET packet;
+			ZeroMemory(&packet, sizeof(PACKET));
+			packet.ph.type = PACKET_CS_MONSTER_HIT;
+			packet.ph.id = PUserManager::GetInstance().oneself_user_.get_id();
+			packet.ph.len = PACKET_HEADER_SIZE + sizeof(PKT_MSG_MONSTER_HIT);
+
+			PKT_MSG_MONSTER_HIT pmmh;
+			pmmh.damage = data.damage;
+			pmmh.monster_id = data.boss_id;
+			pmmh.player_user_id = data.player_id;
+			pmmh.player_cid = PUserManager::GetInstance().oneself_user_.get_character_id();
+
+			memcpy(packet.msg, &pmmh, sizeof(PKT_MSG_MONSTER_HIT));
+
+			PPacketManager::GetInstance().PushPacket(PushType::SEND, packet);
+
+		}
+
 
 
 	}

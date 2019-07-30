@@ -32,7 +32,8 @@ public:
 	void PlatformWallCollision();
 	void SavePrevPosition();
 	float get_move_speed_();
-	void StatusSet(multibyte_string status_path, multibyte_string object_name);
+	virtual void StatusSet(multibyte_string status_path, multibyte_string object_name);
+	virtual void StatusSetForServer(multibyte_string status_path, multibyte_string object_name);
 	PPlayerStatus& get_status();
 
 

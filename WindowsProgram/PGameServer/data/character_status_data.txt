@@ -4,7 +4,7 @@
 	<level> 150 </level>
 	<max_hp> 3200 </max_hp>
 	<max_mp> 1600 </max_mp>
-	<current_hp> 320 </current_hp>
+	<current_hp> 3200 </current_hp>
 	<current_mp> 1600 </current_mp>
 	<reward_exp> 9500 </reward_exp>
 	<body_dmg> 150 </body_dmg>
