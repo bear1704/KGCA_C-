@@ -18,6 +18,7 @@ void PIdleAction::Process()
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::IDLE)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
+		PNetworkDataStorage::GetInstance().set_b_need_report(true);
 	}
 
 	if (owner_->get_hit_() && owner_->get_invisible_() == false)

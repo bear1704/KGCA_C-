@@ -16,6 +16,7 @@ private:
 	PNetworkDataStorage();
 	friend class PSingleton<PNetworkDataStorage>;
 	std::list<HitData> hit_list_;
+	bool b_need_report_; //위치보고가 필요한지 여부(이동, 공격 등..)
 
 public:
 	~PNetworkDataStorage();
@@ -24,7 +25,8 @@ public:
 	HitData PopHitData();
 	bool IsQueueEmpty();
 	bool GetHitListSize();
-
+	void set_b_need_report(bool ismove);
+	bool is_b_need_report();
 
 public:
 	virtual bool Init();

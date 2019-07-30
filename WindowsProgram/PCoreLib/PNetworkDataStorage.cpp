@@ -2,6 +2,7 @@
 
 PNetworkDataStorage::PNetworkDataStorage()
 {
+	b_need_report_ = false;
 }
 
 PNetworkDataStorage::~PNetworkDataStorage()
@@ -28,6 +29,16 @@ bool PNetworkDataStorage::IsQueueEmpty()
 bool PNetworkDataStorage::GetHitListSize()
 {
 	return hit_list_.size();
+}
+
+void PNetworkDataStorage::set_b_need_report(bool ismove)
+{
+	b_need_report_ = ismove;
+}
+
+bool PNetworkDataStorage::is_b_need_report()
+{
+	return b_need_report_;
 }
 
 bool PNetworkDataStorage::Init()

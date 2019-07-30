@@ -130,8 +130,8 @@ void PServerInstructionProcessor::ProcessInstruction()
 					std::string dir; std::string state;
 					dir = (report_msg.dir == Direction::LEFT) ? "LEFT" : "RIGHT";
 					state = FsmStateToString(report_msg.current_state);
-					//printf("\n [브로드캐스트] ID : %hd 인 패킷의 좌표 X: %f, Y: %f DIR : %s  STATE : %s", 
-					//	packet.ph.id, report_msg.posx, report_msg.posy, dir.c_str(), state.c_str());
+					printf("\n [브로드캐스트] ID : %hd 인 패킷의 좌표 X: %f, Y: %f DIR : %s  STATE : %s", 
+						packet.ph.id, report_msg.posx, report_msg.posy, dir.c_str(), state.c_str());
 					break;
 				}
 				case PACKET_CS_MONSTER_HIT:

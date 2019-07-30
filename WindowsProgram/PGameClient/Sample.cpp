@@ -64,8 +64,12 @@ bool Sample::PreFrame()
 
 	if (g_custom_tick && PInstructionProcessor::GetInstance().get_loading_end())
 	{
+		if (PNetworkDataStorage::GetInstance().is_b_need_report())
+		{
 			g_custom_tick = false;
+			PNetworkDataStorage::GetInstance().set_b_need_report(false);
 			PInstructionProcessor::GetInstance().ReportPositionMsg();
+		}
 	}
 
 	
@@ -117,6 +121,9 @@ bool Sample::Release()
 
 	if(instruction_process_thread_.joinable())
 		instruction_process_thread_.join();
+
+	if (client_task_thread_.joinable())
+		client_task_thread_.join();
 
 	return true; 
 }

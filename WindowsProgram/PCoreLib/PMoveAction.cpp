@@ -15,6 +15,8 @@ void PMoveAction::Process()
 {
 	bool is_owner = (owner_->get_client_owner_character());
 
+	PNetworkDataStorage::GetInstance().set_b_need_report(true);
+
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::MOVE)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::MOVE));
@@ -24,6 +26,7 @@ void PMoveAction::Process()
 	{
 		if (is_owner)
 			owner_->SetTransition(FSM_Event::INPUT_JUMP);
+
 	}
 	if (owner_->get_hit_() && owner_->get_invisible_() == false)
 	{
@@ -69,14 +72,17 @@ void PMoveAction::Process()
 
 	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_FREE && g_InputActionMap.rightArrowKey == KEYSTAT::KEY_FREE) //무브->IDLE
 	{
-		if(is_owner)
+		if (is_owner)
 			owner_->SetTransition(FSM_Event::INPUT_NONE);
+
 	}
 
 	if (g_InputActionMap.attackKey == KEYSTAT::KEY_PUSH) //공격으로 전환
 	{
-		if(is_owner)
+		if (is_owner)
 			owner_->SetTransition(FSM_Event::INPUT_ATTACK); //sprite setposition필요
+
+
 	}
 
 }
