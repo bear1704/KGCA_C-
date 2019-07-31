@@ -47,7 +47,7 @@ void PInstructionManager::NotifyProcessEvent()
 {
 	//std::lock_guard<std::mutex> lk(mutex_);
 	instruction_event_count_ += 1;
-	process_event_.notify_one();
+	process_event_.notify_all();
 }
 
 bool PInstructionManager::Init()

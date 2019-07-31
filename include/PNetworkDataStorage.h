@@ -8,7 +8,6 @@ typedef struct HitData_ {
 }HitData;
 
 
-
 class PNetworkDataStorage :
 	public PSingleton<PNetworkDataStorage>
 {
@@ -25,7 +24,7 @@ public:
 	HitData PopHitData();
 	bool IsQueueEmpty();
 	bool GetHitListSize();
-	void set_b_need_report(bool ismove);
+	void set_b_need_report(bool need_report);
 	bool is_b_need_report();
 
 public:

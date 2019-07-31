@@ -14,7 +14,7 @@ private:
 	float flickering_rate;
 	float invincible_rate;
 	bool client_owner_character_;
-	bool right_dir_;
+	bool automata_right_dir_;
 protected:
 
 public:

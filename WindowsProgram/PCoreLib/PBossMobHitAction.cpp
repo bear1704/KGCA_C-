@@ -17,7 +17,7 @@ void PBossMobHitAction::Process()
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::IDLE)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
-		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/mushroom_hit.mp3"));
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/skill_hit.mp3"));
 		owner_->damage_present_image_->hit_world_pos = pPoint(owner_->get_position_().x, owner_->get_position_().y - 65.0f);
 		owner_->damage_present_image_->DamageToSprite(owner_->get_be_received_damage());
 		owner_->damage_present_image_->ResetDmgPresent();
@@ -30,10 +30,10 @@ void PBossMobHitAction::Process()
 	//}
 
 
-	if (owner_->get_status().get_hp_() <= 0)
-	{
-		owner_->SetTransition(FSM_Event::HPEMPTY);
-	}
-
+	//if (owner_->get_status().get_hp_() <= 0)
+	//{
+	//	owner_->SetTransition(FSM_Event::HPEMPTY);
+	//}
+	owner_->SetTransition(FSM_Event::INPUT_NONE);
 
 }

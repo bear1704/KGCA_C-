@@ -12,13 +12,14 @@ PBossMonster::~PBossMonster()
 
 bool PBossMonster::Init()
 {
-	action_list_.insert((std::make_pair(FSM_State::IDLE, new PBossMobIdleAction(this))));
-	action_list_.insert((std::make_pair(FSM_State::HIT, new PBossMobHitAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::BOSS_IDLE, new PBossMobIdleAction(this))));
+	action_list_.insert((std::make_pair(FSM_State::BOSS_HIT, new PBossMobHitAction(this))));
 
-	current_boss_monster_action_ = action_list_[FSM_State::IDLE];
-	current_boss_monster_state_ = FSM_State::IDLE;
+	current_boss_monster_action_ = action_list_[FSM_State::BOSS_IDLE];
+	current_boss_monster_state_ = FSM_State::BOSS_IDLE;
 
-	//boss_monster_fsm_.Add(FSM_State::IDLE, FSM_Event::HIT, FSM_State::HIT);
+	boss_monster_fsm_.Add(FSM_State::BOSS_IDLE, FSM_Event::HIT, FSM_State::BOSS_HIT);
+	boss_monster_fsm_.Add(FSM_State::BOSS_HIT, FSM_Event::INPUT_NONE, FSM_State::BOSS_IDLE);
 
 
 	return false;

@@ -14,6 +14,7 @@ PIdleAction::~PIdleAction()
 void PIdleAction::Process()
 {
 	bool is_owner = (owner_->get_client_owner_character());
+	PNetworkDataStorage::GetInstance().set_b_need_report(true);
 
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::IDLE)
 	{

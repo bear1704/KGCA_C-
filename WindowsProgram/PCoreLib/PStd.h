@@ -81,6 +81,7 @@ enum class ObjectLoadType //로드 시 중복방지
 	UI,
 	MAP,
 	OBJECT,
+	ETC_SPRITE,
 };
 
 
@@ -98,7 +99,7 @@ enum class PXY
 };
 
 
-enum class FSM_State { IDLE, MOVE, ATTACK, JUMP, HIT, DEAD, REVIVE,BOSS_IDLE, BOSS_SKILL1, BOOL_SKILL2, BOSS_DEAD ,ERR };
+enum class FSM_State { IDLE, MOVE, ATTACK, JUMP, HIT, DEAD, REVIVE,BOSS_IDLE, BOSS_SKILL1, BOOL_SKILL2, BOSS_DEAD , BOSS_HIT,ERR };
 enum class FSM_Event { INPUT_NONE, INPUT_MOVE, INPUT_ATTACK, ATTACK_END, HPEMPTY,  TIME_OUT,
 					INPUT_JUMP, HIT , MOB_TIME_OUT, MOB_JUMP_TIME_OUT, MOB_CHASE ,JUMP_END, 
 						};
@@ -277,6 +278,9 @@ static FSM_Event FsmStateToFsmEvent(FSM_State state)
 		break;
 	case FSM_State::DEAD:
 		fsm_event = FSM_Event::HPEMPTY;
+		break;
+	case FSM_State::ATTACK:
+		fsm_event = FSM_Event::INPUT_ATTACK;
 		break;
 	default:
 		fsm_event = FSM_Event::INPUT_NONE;

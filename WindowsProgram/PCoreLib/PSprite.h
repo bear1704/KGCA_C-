@@ -47,6 +47,7 @@ private:
 	bool automata_;
 	bool is_reversal_for_automata_;//reversal 상태인지 스프라이트가 원래는 알 필요 없지만, 특수 상황(1회용 스프라이트 제작 등..)에서 필요하므로 넣는다.
 							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
+	bool is_dmg_; //데미지를 표시하는 스프라이트인지 체크
 	
 public:
 	PBitmap* bitmap_;
@@ -76,6 +77,7 @@ public:
 	void set_current_played_spriteframe_(int current);
 	void set_rect_list_size(FLOAT_RECT size);
 	void set_animation_type_(ANIMATIONTYPE type);
+	void set_is_dmg(bool isdmg);
 	vector<FLOAT_RECT>& get_original_size_list();
 	ANIMATIONTYPE get_animation_type_();
 	float get_remain_lifetime_();
@@ -84,6 +86,7 @@ public:
 	int get_max_sprite_number();
 	int get_current_played_frame();
 	float get_allocatetime_for_onesprite();
+	bool get_is_dmg();
 	
 };
 

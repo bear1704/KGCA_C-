@@ -204,7 +204,7 @@ void PPlayerCharacter::set_client_owner_character(bool isowner)
 
 void PPlayerCharacter::set_right_dir(bool isright)
 {
-	right_dir_ = isright;
+	automata_right_dir_ = isright;
 }
 
 bool PPlayerCharacter::get_hit_()
@@ -253,5 +253,5 @@ bool PPlayerCharacter::get_client_owner_character()
 
 bool PPlayerCharacter::is_right_dir()
 {
-	return right_dir_;
+	return automata_right_dir_;
 }

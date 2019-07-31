@@ -80,12 +80,12 @@ void PMobMoveAction::Process(PPlayerCharacter* target)
 
 	if (owner_->get_direction_side_() == SIDE::LEFT)
 	{
-		owner_->get_is_reversal_() = false;
+		owner_->set_is_reversal(false);
 		owner_->set_position_(pPoint(owner_->get_position_().x - owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 	}
 	else
 	{
-		owner_->get_is_reversal_() = true;
+		owner_->set_is_reversal(true);
 		owner_->set_position_(pPoint(owner_->get_position_().x + owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 	}
 	

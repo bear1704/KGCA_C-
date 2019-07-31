@@ -293,6 +293,11 @@ void PRectObject::set_id(WORD id)
 	id_ = id;
 }
 
+void PRectObject::set_is_reversal(bool isreversal)
+{
+	is_reversal_ = isreversal;
+}
+
 pPoint PRectObject::get_spawn_position_()
 {
 	return spawn_position_;

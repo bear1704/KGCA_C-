@@ -58,6 +58,7 @@ void PUserManager::AddUserSimpleType(WORD id, WORD cid) // client only
 		PUser* user = new PUser();
 		user->set_character_id(cid);
 		user->set_id(id);
+		user->set_connected(true);
 		user_list_.push_back(user);
 	}
 	else
@@ -70,6 +71,18 @@ void PUserManager::AddUserSimpleType(WORD id, WORD cid) // client only
 
 void PUserManager::DeleteUser(PUser* user)
 {
+
+	EXIT_MSG msg;
+	msg.id = user->get_id();
+	PACKET pack;
+	pack.ph.id = SERVER_ID;
+	pack.ph.len = PACKET_HEADER_SIZE + sizeof(EXIT_MSG);
+	pack.ph.type = PAKCET_BROADCAST_USERX_EXIT;
+
+	memcpy(pack.msg, &msg, sizeof(EXIT_MSG));
+
+	PPacketManager::GetInstance().PushPacket(PushType::SEND, pack);
+
 	std::vector<PUser*>::iterator iter;
 	iter = find(user_list_.begin(), user_list_.end(), user);
 	closesocket(user->get_socket());
@@ -79,8 +92,9 @@ void PUserManager::DeleteUser(PUser* user)
 		ntohs(user->get_client_addr().sin_port),
 		user_list_.size(), user->get_id());
 
-	delete* iter;
-	*iter = nullptr;
+
+	//유저들에게 접속종료를 알려주는 패킷 전송
+
 	user_list_.erase(iter);
 
 

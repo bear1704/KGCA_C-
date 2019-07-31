@@ -30,7 +30,7 @@ public:
 	bool Render();
 	bool Release();
 
-	bool Broadcast(PACKET& packet, WORD packet_msglen);
+	bool Broadcast(PACKET& packet);
 
 };
 

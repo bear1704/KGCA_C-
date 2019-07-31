@@ -36,14 +36,17 @@ void PAttackAction::Process()
 {
 	bool is_owner = (owner_->get_client_owner_character());
 
-
+	PNetworkDataStorage::GetInstance().set_b_need_report(true);
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::ATTACK)
 	{
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK));
-		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/sword.mp3"));
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/skill.mp3"));
 
-		CreateTimerQueueTimer(&handle_attack_timer_, handle_attack_timer_queue_, (WAITORTIMERCALLBACK)AttackTimerCallBack,
-			nullptr, 0, ATTACK_SPEED, WT_EXECUTEDEFAULT);
+		if (is_owner) //플레이어 캐릭터만 필요한 피격판정임.
+		{
+			CreateTimerQueueTimer(&handle_attack_timer_, handle_attack_timer_queue_, (WAITORTIMERCALLBACK)AttackTimerCallBack,
+				nullptr, 0, ATTACK_SPEED, WT_EXECUTEDEFAULT);
+		}
 
 		pPoint attackpos;
 		if (owner_->get_is_reversal_())
@@ -70,7 +73,7 @@ void PAttackAction::Process()
 	
 	
 
-	if (hit_time)
+	if (hit_time && is_owner)
 	{
 		DeleteTimerQueueTimer(handle_attack_timer_queue_, handle_attack_timer_, nullptr);
 		hit_time = false;
@@ -84,7 +87,7 @@ void PAttackAction::Process()
 		{
 			CreateTimerQueueTimer(&handle_attack_timer_, handle_attack_timer_queue_, (WAITORTIMERCALLBACK)AttackTimerCallBack,
 				nullptr, 0, ATTACK_SPEED, WT_EXECUTEDEFAULT);
-			PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/sword.mp3"));
+			PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/skill.mp3"));
 			owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK)); //다른 공격모션으로 체인지 
 			owner_->get_sprite_()->Play(); //죽은 스프라이트 다시 재생 
 			PSpriteManager::GetInstance().AddRenderWaitList(effect_sprite);
@@ -170,6 +173,13 @@ void PAttackAction::AttackProcess()
 					bmonster->set_ishit_(true); //몬스터 한대 맞았다고 알려주기 
 					bmonster->set_be_received_damage_(damage);
 					//hit판정과 타격패킷전송필요
+
+					pPoint attackpos = pPoint(owner_->get_attack_collision_box_().left + 10.0f, owner_->get_attack_collision_box_().top - 30.0f);//hard_coded
+					PSpriteManager::GetInstance().CreateDamageFontFromInteger(damage, attackpos); //데미지 표기 띄우기
+
+
+
+
 				}
 				break;
 			}

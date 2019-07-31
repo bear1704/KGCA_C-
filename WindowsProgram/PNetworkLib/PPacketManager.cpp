@@ -312,9 +312,10 @@ unsigned __stdcall ProcessThread(LPVOID param)
 						PPacketManager::GetInstance().SendPacketFromPacketPool(user->get_socket() , packet);
 					else
 					{
-						SOCKET sock;
+						/*SOCKET sock;
 						memcpy(&sock, packet.msg, sizeof(SOCKET));
-						PPacketManager::GetInstance().SendPacketFromPacketPool(sock, packet);
+						PPacketManager::GetInstance().SendPacketFromPacketPool(sock, packet);*/ //무의미한 코드로 의심되지만 일단 남겨둠
+						//애초에 ID가 없는 경우가 유저 퇴장시 말고는 있을수가 없음. 연결 accept하자마자 ID부터 부여하고 시작하기 때문.
 					}
 					{
 						std::lock_guard<std::mutex> lk(PPacketManager::send_packet_mutex_);

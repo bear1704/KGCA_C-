@@ -34,6 +34,7 @@ public:
 	std::vector<PRectObject*>* get_game_objects();
 	void AddGameObjects(PRectObject* obj);
 	void AddUiComponents(PUIComponent* ui);
+	void DeleteGameObjectsByCid(WORD cid);
 	PRectObject* FindObjectByCid(WORD id);
 	void set_target(PPlayerCharacter* character);
 

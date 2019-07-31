@@ -292,7 +292,7 @@ int PPlayerStatus::get_damage()
 
 	std::random_device r;
 	std::mt19937 engine(r());
-	std::uniform_int_distribution<int> distribution(-10, 10);
+	std::uniform_int_distribution<int> distribution(-300, 300);
 	auto generator = std::bind(distribution, engine); //데미지 난수화 
 	int random = generator();
 	damage += random;

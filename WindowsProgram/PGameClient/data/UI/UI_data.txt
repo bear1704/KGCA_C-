@@ -122,17 +122,7 @@
 	<scale> 1.0 </scale>
 	<init_sprite> expbar_separate </init_sprite>
 	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
-</ui_Data>
-
-<ui_data>
-	<name> dmg_font  </name>
-	<image_size> 0,0,35,36 </image_size>
-	<alpha> 1.0 </alpha>
-	<scale> 1.0 </scale>
-	<init_sprite> dmg_font </init_sprite>
-	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
-</ui_Data>
-
+</ui_data>
 <ui_data>
 	<name> end_illust  </name>
 	<image_size> 0,0,1024,768 </image_size>
@@ -140,7 +130,7 @@
 	<scale> 1.0 </scale>
 	<init_sprite> end_illust </init_sprite>
 	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
-</ui_Data>
+</ui_data>
 
 <ui_data>
 	<name> gameover_illust  </name>
@@ -149,7 +139,7 @@
 	<scale> 1.0 </scale>
 	<init_sprite> gameover_illust </init_sprite>
 	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
-</ui_Data>
+</ui_data>
 
 <ui_data>
 	<name> boss_hp_slot  </name>

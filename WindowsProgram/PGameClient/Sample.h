@@ -44,6 +44,8 @@ private:
 	std::thread instruction_process_thread_;
 	std::thread client_task_thread_;
 
+	int other_character_info_renew_counter_;
+
 public:
 	Sample();
 	virtual ~Sample();

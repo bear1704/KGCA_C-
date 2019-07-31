@@ -136,12 +136,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BossInfoObject.cpp" />
     <ClCompile Include="PServerInstructionProcessor.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BossInfoObject.h" />
     <ClInclude Include="PServerInstructionProcessor.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>

@@ -36,15 +36,6 @@
 	</composition>
 	
 	<composition>
-		<name> DMGPRESENT  </name>
-			<coord> 130,30 </coord>
-		<image> dmg_font   </image>
-			<coord> 35,0 </coord>
-		<image> dmg_font  </image>
-			<coord> 70,0 </coord>
-	</composition>
-	
-	<composition>
 		<name> END  </name>
 			<coord> 0,0 </coord>
 		<image> end_illust   </image>

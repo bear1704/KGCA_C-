@@ -31,9 +31,9 @@ bool PNetworkDataStorage::GetHitListSize()
 	return hit_list_.size();
 }
 
-void PNetworkDataStorage::set_b_need_report(bool ismove)
+void PNetworkDataStorage::set_b_need_report(bool need_report)
 {
-	b_need_report_ = ismove;
+	b_need_report_ = need_report;
 }
 
 bool PNetworkDataStorage::is_b_need_report()

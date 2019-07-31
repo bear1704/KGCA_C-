@@ -88,7 +88,7 @@ void PServerInstructionProcessor::ProcessInstruction()
 					ZeroMemory(&pack, sizeof(PACKET));
 					memcpy(&pack, &packet, sizeof(packet));
 					pack.ph.type = PACKET_BROADCAST_USERX_SPAWN;
-					Broadcast(pack, pack.ph.len);
+					Broadcast(pack);
 					printf("\n [브로드캐스트] ID : %hd 인 플레이어 스폰 ", packet.ph.id);
 
 					PACKET boss_pack;
@@ -117,7 +117,7 @@ void PServerInstructionProcessor::ProcessInstruction()
 					pkt.ph.len = sizeof(PKT_MSG_REGULAR_POS_REPORT) + PACKET_HEADER_SIZE;
 					pkt.ph.id = 0;
 					memcpy(pkt.msg, packet.msg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
-					Broadcast(pkt, pkt.ph.len);
+					Broadcast(pkt);
 
 					WORD id = packet.ph.id;
 					PUser* user = PUserManager::GetInstance().FindUserById(id);
@@ -145,8 +145,17 @@ void PServerInstructionProcessor::ProcessInstruction()
 
 					std::wstring wstr = L"\n[hit!] \n  dmg : " + std::to_wstring(pmmh.damage) + L" remian_hp :  " +
 						std::to_wstring(bm->get_status().get_hp_());
-
 					OutputDebugString(wstr.c_str());
+
+
+
+					PACKET pkt;
+					pkt.ph.id = SERVER_ID;
+					pkt.ph.len = PACKET_HEADER_SIZE + sizeof(PKT_MSG_MONSTER_HIT);
+					pkt.ph.type = PACKET_BROADCAST_USERX_ATTACK_SUCCESS;
+					memcpy(pkt.msg, &pmmh, sizeof(PKT_MSG_MONSTER_HIT));
+
+					Broadcast(pkt);
 					break;
 				}
 		}
@@ -176,13 +185,13 @@ bool PServerInstructionProcessor::Release()
 	return false;
 }
 
-bool PServerInstructionProcessor::Broadcast(PACKET& packet, WORD packet_msglen)
+bool PServerInstructionProcessor::Broadcast(PACKET& packet)
 {
 	std::vector<PUser*> userlist = PUserManager::GetInstance().user_list_;
 
 	for (PUser* iter : userlist)
 	{
-			PPacketManager::GetInstance().PushPacket(iter, packet.ph.type, packet.msg, packet_msglen - PACKET_HEADER_SIZE,
+			PPacketManager::GetInstance().PushPacket(iter, packet.ph.type, packet.msg, packet.ph.len - PACKET_HEADER_SIZE,
 				PushType::SEND, true);
 		
 	}

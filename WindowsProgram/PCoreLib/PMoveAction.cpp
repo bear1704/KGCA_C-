@@ -34,19 +34,20 @@ void PMoveAction::Process()
 			owner_->SetTransition(FSM_Event::HIT);
 	}
 
-	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD || g_InputActionMap.leftArrowKey == KEYSTAT::KEY_PUSH)
 	{
 		if (is_owner)
 		{
-			owner_->get_is_reversal_() = false;
+			owner_->set_is_reversal(false);
 			owner_->set_position_(pPoint(owner_->get_position_().x - owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 		}
 	}
-	else if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+	else if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD || g_InputActionMap.leftArrowKey == KEYSTAT::KEY_PUSH)
 	{
 		if (is_owner)
 		{
-			owner_->get_is_reversal_() = true;
+			
+			owner_->set_is_reversal(true);
 			owner_->set_position_(pPoint(owner_->get_position_().x + owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 		}
 	}
@@ -55,12 +56,12 @@ void PMoveAction::Process()
 	
 	if (owner_->is_right_dir() == false && is_owner == false) //other_player(online other client)
 	{
-			owner_->get_is_reversal_() = false;
+			owner_->set_is_reversal(false);
 			owner_->set_position_(pPoint(owner_->get_position_().x - owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 	}
 	else if (owner_->is_right_dir() == true && is_owner == false) //other_player(online other client)
 	{
-			owner_->get_is_reversal_() = true;
+			owner_->set_is_reversal(true);
 			owner_->set_position_(pPoint(owner_->get_position_().x + owner_->get_move_speed_() * g_SecondPerFrame, owner_->get_position_().y));
 	}
 

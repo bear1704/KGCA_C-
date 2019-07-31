@@ -6,6 +6,7 @@ PSprite::PSprite()
 {
 	isDead = false;
 	alpha_ = 1.0f;
+	is_dmg_ = false;
 }
 
 
@@ -420,6 +421,11 @@ void PSprite::set_animation_type_(ANIMATIONTYPE type)
 	animation_type_ = type;
 }
 
+void PSprite::set_is_dmg(bool isdmg)
+{
+	is_dmg_ = isdmg;
+}
+
 ANIMATIONTYPE PSprite::get_animation_type_()
 {
 	return animation_type_;
@@ -453,4 +459,9 @@ int PSprite::get_current_played_frame()
 float PSprite::get_allocatetime_for_onesprite()
 {
 	return allocatetime_for_onesprite;
+}
+
+bool PSprite::get_is_dmg()
+{
+	return is_dmg_;
 }

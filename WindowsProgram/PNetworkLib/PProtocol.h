@@ -40,7 +40,7 @@ typedef struct pkt{
 #define PACKET_CS_SPAWN_COMPLETE				633
 #define PACKET_BROADCAST_USERX_SPAWN			634		//서버가 클라들에게 USERX가 스폰했음을 알림
 #define PACKET_BROADCAST_USERX_MOVEAXIS_AtoB	700		//유저들에게 유저X의 이동상태를 재생하라고 보냄.user pos정보 + 방향 + 속도
-#define	PACKET_BROADCAST_ATTACK_SUCCESS			701		//서버가 클라에게 해당 공격이 성공했음을 알림
+#define PACKET_BROADCAST_USERX_ATTACK_SUCCESS	701		//유저X가 몹을 때려서 데미지를 주었음을 브로드캐스트
 #define PACKET_CS_USER_ATTACK					702		//클라의 캐릭터가 공격을 수행하였음을 알림(스킬, 방향 정보 삽입)
 #define	PACKET_CS_MONSTER_HIT					703		//클라가 서버에게 몬스터가 피격당해 데미지를 입었음을 알림.
 #define	PACKET_SC_ATTACK_ACK					704		//
@@ -49,8 +49,10 @@ typedef struct pkt{
 #define PACKET_CS_REPORT_MOVE_STATUS_MYPOSITION 707		//클라가 서버에게 이동중이라 알림. 유저 pos + 이동속도 + 이동방향(데드레커닝 추론용)
 #define PACKET_BROADCAST_BE_ATTACKED			708		//서버가 클라에게 공격받았다 알림  데미지 + 방향
 #define PACKET_BROADCAST_SPAWN_CHARACTER		709		//
-#define PACKET_SC_TEST_HPDECREASE				710
+#define PAKCET_BROADCAST_USERX_EXIT				710		//USERX가 나갔다고 브로드캐스트
+#define PACKET_SC_TEST_HPDECREASE				730
 #define PACKET_SC_SPAWN_BOSS					780		//자쿰 소환 명령
+
 
 
 
@@ -58,6 +60,10 @@ typedef struct{
 	char username[30];
 	int user_id;
 }User;
+
+typedef struct EXIT_MSG_{
+	WORD id;
+}EXIT_MSG;
 
 typedef struct {
 	User user;

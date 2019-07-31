@@ -332,6 +332,14 @@ void PScene::AddUiComponents(PUIComponent* ui)
 		ui_compositions_.push_back(ui);
 }
 
+void PScene::DeleteGameObjectsByCid(WORD cid)
+{
+	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
+		[&cid](PRectObject* obj) ->bool {return obj->get_id() == cid; });
+
+	game_objects_.erase(iter);
+}
+
 PRectObject* PScene::FindObjectByCid(WORD id)
 {
 	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),

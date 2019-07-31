@@ -71,11 +71,11 @@ void PInstructionProcessor::ProcessInstruction()
 		//MessageBox(g_hWnd, L"proces", L"proces", MB_OK);
 		std::unique_lock<std::mutex> ul(process_mutex_);
 		PInstructionManager::GetInstance().process_event_.wait(ul, []()
-			{return !PInstructionManager::GetInstance().IsQueueEmpty() && !g_window_terminated; }); //큐가 비지 않았다면 실행
+			{return !PInstructionManager::GetInstance().IsQueueEmpty() || g_window_terminated;}); //큐가 비지 않았다면 실행
 
 
 		if (g_window_terminated == true)
-			return;
+			break;
 
 		//아래에 구현내용
 		PACKET packet = PInstructionManager::GetInstance().PopBackInstruction();
@@ -151,15 +151,32 @@ void PInstructionProcessor::ProcessInstruction()
 						SpawnOtherPlayer(other_player_pos, report_msg.cid);
 						userx_character = (PPlayerCharacter*)current_scene_->FindObjectByCid(report_msg.cid);
 					}
-
-					userx_character->set_position_(pPoint(report_msg.posx, report_msg.posy));
-
-					userx_character->SetTransition(FsmStateToFsmEvent(report_msg.current_state));
-					
 					if (report_msg.dir == Direction::RIGHT)
 						userx_character->set_right_dir(true);
 					else
 						userx_character->set_right_dir(false);
+
+					if (report_msg.current_state == FSM_State::MOVE)
+					{
+						pPoint move_lerp = pPoint((report_msg.posx - userx_character->get_position_().x) / 3,
+							(report_msg.posy - userx_character->get_position_().y)/3);
+						pPoint user_position = pPoint(userx_character->get_position_());
+						userx_character->set_position_(pPoint(user_position.x + move_lerp.x , user_position.y));
+						//y축은 동기화할 필요 없음.(겁나튐)
+					}
+					else if (report_msg.current_state == FSM_State::IDLE)
+					{
+						userx_character->set_position_(pPoint(report_msg.posx, report_msg.posy));
+					}
+					else if (report_msg.current_state == FSM_State::JUMP)
+					{
+						userx_character->get_physics_().StartJump();  
+   	 				}
+
+
+					userx_character->SetTransition(FsmStateToFsmEvent(report_msg.current_state));
+					
+			
 
 					break;
 				}
@@ -174,6 +191,31 @@ void PInstructionProcessor::ProcessInstruction()
 					SpawnBossMonster(boss_pos, spawn_msg.id);
 					break;
 				}
+				case PACKET_BROADCAST_USERX_ATTACK_SUCCESS:
+				{
+					PKT_MSG_MONSTER_HIT pmmh;
+					ZeroMemory(&pmmh, sizeof(PKT_MSG_MONSTER_HIT));
+					memcpy(&pmmh, packet.msg, sizeof(PKT_MSG_MONSTER_HIT));
+
+					PPlayerCharacter* userx_character = (PPlayerCharacter*)current_scene_->FindObjectByCid(pmmh.player_cid);
+					pPoint userx_attack_pos = pPoint(userx_character->get_attack_collision_box_().left + 10.0f,
+						userx_character->get_attack_collision_box_().top - 30.0f); //hard_coded
+					PSpriteManager::GetInstance().CreateDamageFontFromInteger(pmmh.damage, userx_attack_pos);
+
+				}
+
+
+
+			/*	case PAKCET_BROADCAST_USERX_EXIT:
+				{
+					EXIT_MSG msg;
+					ZeroMemory(&msg, sizeof(EXIT_MSG));
+					memcpy(&msg, packet.msg, sizeof(EXIT_MSG));
+					
+					PUser* user = PUserManager::GetInstance().FindUserById(msg.id);
+					user->set_connected(false);
+					break;
+				}*/
 		}
 
 	}
@@ -187,10 +229,10 @@ void PInstructionProcessor::ProcessClientTask()
 		
 		std::unique_lock<std::mutex> ul(client_mutex_);
 		PInstructionManager::GetInstance().process_event_.wait(ul, []()
-			{return !PNetworkDataStorage::GetInstance().IsQueueEmpty() && !g_window_terminated; }); //큐가 비지 않았다면 실행
+			{return !PNetworkDataStorage::GetInstance().IsQueueEmpty() || g_window_terminated; }); //큐가 비지 않았다면 실행
 
 		if (g_window_terminated == true)
-			return;
+			break;
 
 		if (PNetworkDataStorage::GetInstance().GetHitListSize() > 0)
 		{
@@ -321,10 +363,15 @@ void PInstructionProcessor::ReportPositionMsg()
 	posmsg.posx = pp->get_position_().x;
 	posmsg.posy = pp->get_position_().y;
 
-	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
-		posmsg.dir = Direction::LEFT;
-	else if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+	//if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+	//	posmsg.dir = Direction::LEFT;
+	//else if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+	//	posmsg.dir = Direction::RIGHT;
+
+	if(pp->get_is_reversal_())
 		posmsg.dir = Direction::RIGHT;
+	else
+		posmsg.dir = Direction::LEFT;
 
 	memcpy(packet.msg, &posmsg, sizeof(PKT_MSG_REGULAR_POS_REPORT));
 
