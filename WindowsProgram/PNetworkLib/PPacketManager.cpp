@@ -104,7 +104,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			{
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
 				{
-					OutputDebugString(L"\n WSAEWOULDBLOCK ");
+					//OutputDebugString(L"\n WSAEWOULDBLOCK ");
 					continue;
 				}
 				else
@@ -174,7 +174,7 @@ unsigned __stdcall RecvPacketThread(LPVOID param) //패킷을 받는 recv를 수행하는 
 			{
 				if (WSAGetLastError() == WSAEWOULDBLOCK)
 				{
-					OutputDebugString(L"\n WSAEWOULDBLOCK");
+					//OutputDebugString(L"\n WSAEWOULDBLOCK");
 					continue;
 				}
 				else
@@ -227,7 +227,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 	while (g_window_terminated == false)
 	{
 		//PPacketManager::is_both_pool_empty_ = (recv_packet_pool.size() == 0 && send_packet_pool.size() == 0) ? true : false; //풀 방법이 없음!
-		std::unique_lock<std::mutex> process_lock(PPacketManager::process_mutex_);
+		std::unique_lock<std::mutex> process_lock(PPacketManager::GetInstance().packet_mutex_);
 		PPacketManager::process_event_.wait(process_lock, [&recv_packet_pool, &send_packet_pool]()
 			{return !(((recv_packet_pool.size() == 0) && (send_packet_pool.size() == 0)) ? true : false);  });
 
@@ -329,12 +329,22 @@ PPacketManager::PPacketManager()
 void PPacketManager::PushPacket(PushType type, PACKET packet)
 {
 
-	std::unique_lock<std::recursive_mutex > lock(push_mutex_);
+	std::unique_lock<std::mutex > lock(packet_mutex_);
 	{
 		if (type == PushType::SEND)
+		{
 			send_packet_pool_.push_back(packet);
+			//std::wstring wstr = L"\nsnd_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
+			//	L"  | ph.type : " + std::to_wstring(packet.ph.type) + L" | snd_pool_size : " + std::to_wstring(send_packet_pool_.size());
+			//OutputDebugString(wstr.c_str());
+		}
 		else
+		{
 			recv_packet_pool_.push_back(packet);
+			//std::wstring wstr = L"\nrv_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
+			//	L" | ph.type : " + std::to_wstring(packet.ph.type) + L" | rv_pool_size : " + std::to_wstring(recv_packet_pool_.size());
+			//OutputDebugString(wstr.c_str());
+		}
 	}
 	PPacketManager::GetInstance().NotifyProcessEvent();
 	lock.unlock();
@@ -344,31 +354,39 @@ void PPacketManager::PushPacket(PushType type, PACKET packet)
 
 void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type, bool ischar)
 {
-	std::unique_lock<std::recursive_mutex > lock(push_mutex_);
+	std::unique_lock<std::mutex > lock(packet_mutex_);
 	{
-	PACKET packet;
-	ZeroMemory(&packet, sizeof(PACKET));
-	packet.ph.type = protocol;
-	packet.ph.id = user->get_id();
-	packet.ph.len = data_size + PACKET_HEADER_SIZE;
+		PACKET packet;
+		ZeroMemory(&packet, sizeof(PACKET));
+		packet.ph.type = protocol;
+		packet.ph.id = user->get_id();
+		packet.ph.len = data_size + PACKET_HEADER_SIZE;
 
-	if (data != nullptr)
-	{
-		if(ischar) //char 배열을 char*로 가져와서 주소그자체일경우
-			memcpy(packet.msg, data, data_size);
-		else //특정 값을 char*로 가져와서 값을 char*화한 경우
-			memcpy(packet.msg, &data, data_size);
-	}
-		
-	
+		if (data != nullptr)
+		{
+			if(ischar) //char 배열을 char*로 가져와서 주소그자체일경우
+				memcpy(packet.msg, data, data_size);
+			else //특정 값을 char*로 가져와서 값을 char*화한 경우
+				memcpy(packet.msg, &data, data_size);
+		}
+			
 
+		if (type == PushType::SEND)
+		{
+			send_packet_pool_.push_back(packet);
+			//std::wstring wstr = L"\nsnd_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
+			//	L"  | ph.type : " + std::to_wstring(packet.ph.type) + L" | rv_pool_size : " + std::to_wstring(send_packet_pool_.size());
+			//OutputDebugString(wstr.c_str());
+		}
+		else
+		{
+			recv_packet_pool_.push_back(packet);
 
-	if (type == PushType::SEND)
-		send_packet_pool_.push_back(packet);
-	else
-		recv_packet_pool_.push_back(packet);
-	
-	PPacketManager::GetInstance().NotifyProcessEvent();
+			//std::wstring wstr = L"\nrv_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
+			//	L" |  ph.type : " + std::to_wstring(packet.ph.type) + L" | rv_pool_size : " + std::to_wstring(recv_packet_pool_.size());
+			//OutputDebugString(wstr.c_str());
+		}
+		PPacketManager::GetInstance().NotifyProcessEvent();
 	}
 	lock.unlock();
 

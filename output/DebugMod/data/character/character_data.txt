@@ -25,3 +25,11 @@
 	<init_sprite> orange_mushroom_idle </init_sprite>
 	<sprite_path> data/character/sprite/character_coord.txt </sprite_path>
 </character_data>
+<character_data>
+	<name> zakum </name>
+	<collision_box> 95,0,227,396 </collision_box>
+	<alpha> 1.0 </alpha>
+	<scale> 1.3 </scale>
+	<init_sprite> zakum_idle </init_sprite>
+	<sprite_path> data/character/sprite/character_coord.txt </sprite_path>
+</character_data>

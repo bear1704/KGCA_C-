@@ -211,7 +211,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 
 
 
-					object_list.push_back(rect_component);
+					object_list.insert(object_list.begin(), rect_component); //맵 다음으로 보여지도록
 				}
 			}
 

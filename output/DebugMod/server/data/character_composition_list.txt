@@ -1,0 +1,5 @@
+<CHARLIST> <!-- CHARLIST와 같이 구분자 역할을 하는 요소는 second에 들어감! first는 START/END -->
+	<name> ZAKUM_TEMPLE </name>
+	<BOSSMONSTER_SERV> zakum </BOSSMONSTER_SERV>
+		<COORD> 720,490 </COORD>
+</CHARLIST>

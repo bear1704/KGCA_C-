@@ -178,3 +178,21 @@
 	<coord> 75,215,60,55 </coord>
 	<coord> 141,222,60,45 </coord>
 </sprite>
+<sprite>
+	<name> zakum_idle </name>
+	<max_frame> 7 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.5 </once_playtime>
+	<path> data/character/sprite/zakum.bmp </path>
+	<coord> 0,16,384,384 </coord>
+	<coord> 385,16,384,384 </coord>
+	<coord> 774,16,384,384 </coord>
+	<coord> 1160,16,384,384 </coord>
+	<coord> 1549,16,384,384 </coord>
+	<coord> 1945,16,384,384 </coord>
+	<coord> 2339,16,384,384 </coord>	
+</sprite>
+
+
+
+
