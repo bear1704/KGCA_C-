@@ -56,8 +56,10 @@ bool PSprite::Release()
 {
 	if (isDead)
 	{
-		bitmap_->Release();
-		bitmap_mask_->Release();
+		if(bitmap_ != nullptr)
+			bitmap_->Release();
+		if(bitmap_mask_ != nullptr)
+			bitmap_mask_->Release();
 	}
 	return false;
 }

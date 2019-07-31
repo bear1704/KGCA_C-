@@ -114,10 +114,15 @@ bool PBitmap::Draw(float x, float y, FLOAT_RECT rect, BLENDFUNCTION bf, float sc
 	}
 	else
 	{
-
+		StretchBlt(reversal_DC, 0,0,
+			rect.right, rect.bottom, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
+			SRCCOPY);
 		AlphaBlend(g_handle_off_screenDC, x - half_width, y - half_height,
-			rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
-			bf); //기존 알파블렌딩 코드
+			rect.right * scale, rect.bottom * scale, reversal_DC, 0, 0, rect.right, rect.bottom,
+			bf);
+		//AlphaBlend(g_handle_off_screenDC, x - half_width, y - half_height,
+		//	rect.right * scale, rect.bottom * scale, handle_memoryDC_, rect.left, rect.top, rect.right, rect.bottom,
+		//	bf); //기존 알파블렌딩 코드
 	}
 
 
