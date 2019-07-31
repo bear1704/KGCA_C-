@@ -1,8 +1,6 @@
 #include "PSpriteManager.h"
 
 
-
-
 PSpriteManager::~PSpriteManager()
 {
 }
@@ -17,16 +15,40 @@ bool PSpriteManager::Init()
 
 bool PSpriteManager::Frame()
 {
+	for (PSprite& sprite : render_wait_list_)
+	{
+		sprite.Frame();
+	}
+
 	return false;
 }
 
 bool PSpriteManager::Render()
 {
+	for (PSprite& sprite : render_wait_list_)
+	{
+		sprite.Render();
+	}
+
 	return false;
 }
 
 bool PSpriteManager::Release()
 {
+	for (auto iter = render_wait_list_.begin(); iter != render_wait_list_.end(); )
+	{
+		PSprite& sprite = *iter;
+		if (sprite.get_is_dead_())
+		{
+			sprite.Release();
+			iter = render_wait_list_.erase(iter);
+		}
+		else
+		{
+			iter++;
+		}
+	}
+	
 	return false;
 }
 
@@ -176,4 +198,9 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 bool PSpriteManager::Delete(int key)
 {
 	return false;
+}
+
+void PSpriteManager::AddRenderWaitList(PSprite sprite)
+{
+	render_wait_list_.push_back(sprite);
 }

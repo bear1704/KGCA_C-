@@ -44,16 +44,11 @@ bool PSprite::Frame()
 
 bool PSprite::Render()
 {
-	/*if (bitmap_mask_ != nullptr)
-	{
-		bitmap_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCAND);
-		bitmap_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);
-		bitmap_mask_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCINVERT);
-	}
-	else
-	{
-		bitmap_->Draw(position_.x, position_.y, rect_list.at(current_played_spriteframe_), SRCCOPY);
-	}*/
+	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(position_);
+	pPoint origin_pos = (position_);
+	SetPosition(scrpos.x, scrpos.y);
+	Draw(is_reversal_for_automata_);
+	SetPosition(origin_pos.x, origin_pos.y);
 	return true;
 }
 
@@ -173,8 +168,33 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	if (sprite->get_bitmap_mask_() != nullptr)
 		bitmap_mask_ = get_bitmap_mask_();
 
-	
+
+	automata_ = false;
 }
+
+void PSprite::AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position)
+{
+	rect_list = sprite->get_rect_list_copy();
+	original_size_list = rect_list;
+	remain_lifetime_ = sprite->get_remain_lifetime_();
+	lifetime_ = sprite->get_lifetime_();
+	position_ = position;
+	number_of_max_spriteframe_ = sprite->get_max_sprite_number();
+	allocatetime_for_onesprite = sprite->get_allocatetime_for_onesprite();
+	alpha_ = alpha;
+	scale_ = scale;
+	current_played_spriteframe_ = 0;
+	if (sprite->get_bitmap_() != nullptr)
+		bitmap_ = sprite->get_bitmap_();
+
+	if (sprite->get_bitmap_mask_() != nullptr)
+		bitmap_mask_ = get_bitmap_mask_();
+
+	automata_ = true;
+	is_reversal_for_automata_ = is_reversal;
+}
+
+
 
 void PSprite::AlphaDrawNotCenter()
 {

@@ -2,6 +2,7 @@
 #include "PBitmapManager.h"
 #include "PStd.h"
 #include <assert.h>
+#include "P2DCamera.h"
 
 struct SpriteDataInfo
 {
@@ -43,8 +44,10 @@ private:
 	float scale_;
 	pPoint position_;
 	ANIMATIONTYPE animation_type_;
-
-
+	bool automata_;
+	bool is_reversal_for_automata_;//reversal 상태인지 스프라이트가 원래는 알 필요 없지만, 특수 상황(1회용 스프라이트 제작 등..)에서 필요하므로 넣는다.
+							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
+	
 public:
 	PBitmap* bitmap_;
 	PBitmap* bitmap_mask_;
@@ -58,6 +61,7 @@ public:
 	void Play();
 	void Draw(bool is_reversal);
 	void Clone(PSprite* sprite, float alpha, float scale);
+	void AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position);
 	//void Draw(int x, int y);
 	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
 	void AlphaDrawNotCenter();

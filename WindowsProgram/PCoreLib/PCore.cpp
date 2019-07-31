@@ -96,6 +96,7 @@ bool PCore::PCoreFrame()
 	PInput::GetInstance().Frame();
 	PSoundMgr::GetInstance().Frame();
 	P2DCamera::GetInstance().Frame();
+	PSpriteManager::GetInstance().Frame();
 	Frame();
 	return PostFrame();
 }
@@ -106,9 +107,11 @@ bool PCore::PCoreRender()
 	PInput::GetInstance().Render();
 	PSoundMgr::GetInstance().Render();
 	P2DCamera::GetInstance().Render();
+
 	
 	PreRender();
 	Render();
+	PSpriteManager::GetInstance().Render();
 	PostRender();
 	return true;
 }
@@ -123,6 +126,7 @@ bool PCore::PCoreRelease()
 	PInput::GetInstance().Release();
 	PSoundMgr::GetInstance().Release();
 	P2DCamera::GetInstance().Release();
+	PSpriteManager::GetInstance().Release();
 
 	return Release();
 }

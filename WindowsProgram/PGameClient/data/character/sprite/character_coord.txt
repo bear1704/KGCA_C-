@@ -226,14 +226,15 @@
 <sprite>
 	<name> panic </name>
 	<max_frame> 6 </max_frame>
-	<lifetime> 1.8 </lifetime>
-	<once_playtime> 0.3 </once_playtime>
+	<lifetime> 0.8 </lifetime>
+	<once_playtime> 0.8 </once_playtime>
 	<path> data/character/sprite/panic.bmp </path>
 	<coord> 20,60,300,250 </coord>
 	<coord> 330,60,300,250 </coord>
 	<coord> 715,60,360,250 </coord>
 	<coord> 1076,60,356,250 </coord>
 	<coord> 1444,60,314,250 </coord>
+	<coord> 2111,60,371,250 </coord>
 	<coord> 2111,60,371,250 </coord>
 </sprite>
 

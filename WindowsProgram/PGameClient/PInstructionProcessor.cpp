@@ -75,7 +75,7 @@ void PInstructionProcessor::ProcessInstruction()
 
 
 		if (g_window_terminated == true)
-			break;
+			return;
 
 		//아래에 구현내용
 		PACKET packet = PInstructionManager::GetInstance().PopBackInstruction();

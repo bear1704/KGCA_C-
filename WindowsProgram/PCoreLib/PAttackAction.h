@@ -12,5 +12,8 @@ public:
 public:
 	void Process();
 	void AttackProcess();
+
+private:
+	PSprite effect_sprite;
 };
 

@@ -165,7 +165,7 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 	set_collision_box_(collision_box_norm_);
 
 	spawn_position_ = position;
-	attack_collision_box_ = { 0, 0, 55, 100 }; //임시로 position,크기 지정 
+	attack_collision_box_ = { 0, 0, 105, 100 }; //임시로 position,크기 지정 
 
 	if(get_client_owner_character())
 		P2DCamera::GetInstance().set_character_collision_rect(&collision_box_); //캐릭터 only
