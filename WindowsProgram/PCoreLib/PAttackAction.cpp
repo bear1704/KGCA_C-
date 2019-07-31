@@ -45,12 +45,23 @@ void PAttackAction::Process()
 		CreateTimerQueueTimer(&handle_attack_timer_, handle_attack_timer_queue_, (WAITORTIMERCALLBACK)AttackTimerCallBack,
 			nullptr, 0, ATTACK_SPEED, WT_EXECUTEDEFAULT);
 
+		pPoint attackpos;
+		if (owner_->get_is_reversal_())
+		{
+			attackpos = pPoint(owner_->get_attack_collision_box_().left + owner_->get_attack_collision_box_().right,
+				owner_->get_attack_collision_box_().top + owner_->get_attack_collision_box_().bottom / 2);
+		}
+		else
+		{
+			attackpos = pPoint(owner_->get_attack_collision_box_().left,
+				owner_->get_attack_collision_box_().top + owner_->get_attack_collision_box_().bottom / 2);
+		}
+
+
 		effect_sprite.AutomataClone(PSpriteManager::GetInstance().get_sprite_from_map_ex(L"panic"), 1.0f, 1.0f,
-			owner_->get_is_reversal_(),	
-			/*pPoint(owner_->get_attack_collision_box_().left,
-				owner_->get_attack_collision_box_().top)*/	
-				pPoint(owner_->get_attack_collision_box_().left + owner_->get_attack_collision_box_().right,
-			owner_->get_attack_collision_box_().top + owner_->get_attack_collision_box_().bottom/2));
+			owner_->get_is_reversal_(),
+			attackpos
+				);
 	
 		effect_sprite.Play();
 		PSpriteManager::GetInstance().AddRenderWaitList(effect_sprite);
