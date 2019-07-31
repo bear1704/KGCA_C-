@@ -161,7 +161,14 @@
 	<path> data/UI/sprite/gameover.bmp </path>
 	<coord> 0,0,1024,768</coord>
 </sprite>
-
+<sprite>
+	<name> boss_hp_slot </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/boss_hp_case.bmp </path>
+	<coord> 0,0,800,40</coord>
+</sprite>
 
 
 

@@ -8,6 +8,7 @@ class PAttackAction : public PPlayerState
 public:
 	PAttackAction(PPlayerCharacter* parent);
 	~PAttackAction();
+
 public:
 	void Process();
 	void AttackProcess();

@@ -57,8 +57,9 @@ public:
 	static std::mutex mutex_;
 	static std::mutex process_mutex_;
 	static std::mutex recv_mutex_;
-	std::recursive_mutex push_mutex_;
-	std::mutex packet_mutex_; //임시
+	
+	static std::mutex send_packet_mutex_; //임시
+	static std::mutex recv_packet_mutex_; //임시
 	std::mutex notify_mutex_;
 
 	int recv_notify_request_count_;

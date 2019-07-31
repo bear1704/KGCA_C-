@@ -57,7 +57,12 @@
 		<image> gameover_illust   </image>
 			<coord> 0,0 </coord>
 	</composition>
-
+	<composition>
+		<name> BOSS_HPBAR  </name>
+			<coord> 0,0 </coord>
+		<image> boss_hp_slot   </image>
+			<coord> 0,0 </coord>
+	</composition>
 </ui_composition_list>
 
 

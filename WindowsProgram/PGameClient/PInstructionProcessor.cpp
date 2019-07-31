@@ -190,7 +190,7 @@ void PInstructionProcessor::ProcessClientTask()
 			{return !PNetworkDataStorage::GetInstance().IsQueueEmpty() && !g_window_terminated; }); //큐가 비지 않았다면 실행
 
 		if (g_window_terminated == true)
-			break;
+			return;
 
 		if (PNetworkDataStorage::GetInstance().GetHitListSize() > 0)
 		{

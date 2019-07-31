@@ -138,6 +138,12 @@ bool PScene::Render()
 			PRectObject* map = (PRectObject*)game_objects_[i];
 			map->Render();
 		}
+		else if (game_objects_[i]->get_type_() == Type::BOSS_MONSTER)
+		{
+			PBossMonster* player = (PBossMonster*)game_objects_[i];
+			draw_test_rect(player->get_collision_rect_());
+			player->Render();
+		}
 		else if (game_objects_[i]->get_type_() == Type::PLAYER)
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
@@ -161,12 +167,7 @@ bool PScene::Render()
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Render();
 		}
-		else if (game_objects_[i]->get_type_() == Type::BOSS_MONSTER)
-		{
-			PBossMonster* player = (PBossMonster*)game_objects_[i];
-			draw_test_rect(player->get_collision_rect_());
-			player->Render();
-		}
+	
 	}
 	for (int i = 0; i < ui_compositions_.size(); i++)
 	{

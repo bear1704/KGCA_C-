@@ -6,6 +6,8 @@ bool PPacketManager::is_both_pool_empty_ = false;
 std::mutex PPacketManager::mutex_;
 std::mutex PPacketManager::process_mutex_;
 std::mutex PPacketManager::recv_mutex_;
+std::mutex PPacketManager::send_packet_mutex_;
+std::mutex PPacketManager::recv_packet_mutex_;
 std::condition_variable PPacketManager::recv_event_;
 std::condition_variable PPacketManager::process_event_;
 
@@ -227,7 +229,7 @@ unsigned __stdcall ProcessThread(LPVOID param)
 	while (g_window_terminated == false)
 	{
 		//PPacketManager::is_both_pool_empty_ = (recv_packet_pool.size() == 0 && send_packet_pool.size() == 0) ? true : false; //풀 방법이 없음!
-		std::unique_lock<std::mutex> process_lock(PPacketManager::GetInstance().packet_mutex_);
+		std::unique_lock<std::mutex> process_lock(PPacketManager::GetInstance().process_mutex_);
 		PPacketManager::process_event_.wait(process_lock, [&recv_packet_pool, &send_packet_pool]()
 			{return !(((recv_packet_pool.size() == 0) && (send_packet_pool.size() == 0)) ? true : false);  });
 
@@ -239,10 +241,13 @@ unsigned __stdcall ProcessThread(LPVOID param)
 
 			for (auto iter = recv_packet_pool.begin(); iter != recv_packet_pool.end();)
 			{
+				
 				PACKET& packet = *iter;
 
 				if (g_operate_mode == OperateMode::CLIENT) // 클라이언트
 				{
+	
+
 					switch (packet.ph.type)
 					{
 						default:
@@ -250,12 +255,12 @@ unsigned __stdcall ProcessThread(LPVOID param)
 							PInstructionManager::GetInstance().AddInstruction(packet);
 							break;
 						}
-
-
 					}
 				}
 				else //서버
 				{
+					
+
 					switch (packet.ph.type)
 					{
 						default:
@@ -266,13 +271,16 @@ unsigned __stdcall ProcessThread(LPVOID param)
 					}
 				}
 
-				iter = recv_packet_pool.erase(iter);
-
+				{
+					std::lock_guard<std::mutex> lk(PPacketManager::recv_packet_mutex_);
+					iter = recv_packet_pool.erase(iter);
+				}
 			}
 			
 
 			if (g_operate_mode == OperateMode::CLIENT)
 			{
+				std::lock_guard<std::mutex> lk(PPacketManager::send_packet_mutex_);
 
 				for (auto iter = send_packet_pool.begin(); iter != send_packet_pool.end();)
 				{
@@ -284,7 +292,8 @@ unsigned __stdcall ProcessThread(LPVOID param)
 			}
 			else if(g_operate_mode == OperateMode::SERVER)
 			{
-				//for (PACKET& packet : send_packet_pool)
+				
+
 				for(auto iter = send_packet_pool.begin(); iter != send_packet_pool.end() ;)
 				{
 					PACKET& packet = *iter;
@@ -306,8 +315,11 @@ unsigned __stdcall ProcessThread(LPVOID param)
 						memcpy(&sock, packet.msg, sizeof(SOCKET));
 						PPacketManager::GetInstance().SendPacketFromPacketPool(sock, packet);
 					}
-
-					iter = send_packet_pool.erase(iter);
+					{
+						std::lock_guard<std::mutex> lk(PPacketManager::send_packet_mutex_);
+						iter = send_packet_pool.erase(iter);
+					}
+					
 					
 				}
 			}
@@ -329,10 +341,11 @@ PPacketManager::PPacketManager()
 void PPacketManager::PushPacket(PushType type, PACKET packet)
 {
 
-	std::unique_lock<std::mutex > lock(packet_mutex_);
-	{
+	
+	
 		if (type == PushType::SEND)
 		{
+			std::lock_guard<std::mutex > lock(send_packet_mutex_);
 			send_packet_pool_.push_back(packet);
 			//std::wstring wstr = L"\nsnd_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
 			//	L"  | ph.type : " + std::to_wstring(packet.ph.type) + L" | snd_pool_size : " + std::to_wstring(send_packet_pool_.size());
@@ -340,22 +353,22 @@ void PPacketManager::PushPacket(PushType type, PACKET packet)
 		}
 		else
 		{
+			std::lock_guard<std::mutex > lock(recv_packet_mutex_);
 			recv_packet_pool_.push_back(packet);
 			//std::wstring wstr = L"\nrv_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
 			//	L" | ph.type : " + std::to_wstring(packet.ph.type) + L" | rv_pool_size : " + std::to_wstring(recv_packet_pool_.size());
 			//OutputDebugString(wstr.c_str());
 		}
-	}
+	
 	PPacketManager::GetInstance().NotifyProcessEvent();
-	lock.unlock();
 
 }
 
 
 void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_size, PushType type, bool ischar)
 {
-	std::unique_lock<std::mutex > lock(packet_mutex_);
-	{
+	
+	
 		PACKET packet;
 		ZeroMemory(&packet, sizeof(PACKET));
 		packet.ph.type = protocol;
@@ -373,6 +386,7 @@ void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_
 
 		if (type == PushType::SEND)
 		{
+			std::lock_guard<std::mutex > lock(send_packet_mutex_);
 			send_packet_pool_.push_back(packet);
 			//std::wstring wstr = L"\nsnd_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
 			//	L"  | ph.type : " + std::to_wstring(packet.ph.type) + L" | rv_pool_size : " + std::to_wstring(send_packet_pool_.size());
@@ -380,6 +394,7 @@ void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_
 		}
 		else
 		{
+			std::lock_guard<std::mutex > lock(recv_packet_mutex_);
 			recv_packet_pool_.push_back(packet);
 
 			//std::wstring wstr = L"\nrv_pool ph.len : " + std::to_wstring(packet.ph.len) + L" |  ph.id : " + std::to_wstring(packet.ph.id) +
@@ -387,8 +402,8 @@ void PPacketManager::PushPacket(PUser* user, int protocol, char* data, int data_
 			//OutputDebugString(wstr.c_str());
 		}
 		PPacketManager::GetInstance().NotifyProcessEvent();
-	}
-	lock.unlock();
+	
+
 
 }
 

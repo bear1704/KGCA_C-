@@ -1,8 +1,24 @@
 #include "PAttackAction.h"
 #include "PPlayerCharacter.h"
 
+HANDLE handle_attack_timer_queue_;
+HANDLE handle_attack_timer_;
+bool hit_time;
+#define ATTACK_SPEED 0.5
+
+VOID CALLBACK TimerCallBack(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+{
+	hit_time = true;
+	Sleep(100);
+	DeleteTimerQueueTimer(handle_attack_timer_queue_, handle_attack_timer_, nullptr);
+}
+
+
 PAttackAction::PAttackAction(PPlayerCharacter* parent) : PPlayerState(parent)
 {
+	handle_attack_timer_ = NULL;
+	handle_attack_timer_queue_ = NULL;
+	hit_time = false;
 }
 
 
@@ -14,6 +30,10 @@ PAttackAction::~PAttackAction()
 void PAttackAction::Process()
 {
 	bool is_owner = (owner_->get_client_owner_character());
+
+	handle_attack_timer_queue_ = CreateTimerQueue();
+	CreateTimerQueueTimer(handle_attack_timer_, handle_attack_timer_queue_, (WAITORTIMERCALLBACK)TimerCallBack,
+		nullptr, 0, ATTACK_SPEED, WT_EXECUTEDEFAULT);
 
 	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::ATTACK)
 	{
