@@ -73,6 +73,7 @@ bool PPlayerCharacter::Frame()
 	PlatformWallCollision();
 	status.Frame();
 	InvincibleProgress();
+	MissleCollisionCheck();
 	return true;
 }
 
@@ -205,6 +206,23 @@ void PPlayerCharacter::set_client_owner_character(bool isowner)
 void PPlayerCharacter::set_right_dir(bool isright)
 {
 	automata_right_dir_ = isright;
+}
+
+void PPlayerCharacter::MissleCollisionCheck()
+{
+	while (PNetworkDataStorage::GetInstance().GetRECTListSize() > 0)
+	{
+		FLOAT_RECT rect = PNetworkDataStorage::GetInstance().PopRECTData();
+
+		if (PCollision::GetInstance().RectInRect(collision_box_, rect) && !get_invisible_())
+		{
+			hit_ = true;
+			SetTransition(FSM_Event::HIT);
+			status.DecreaseHP(100);
+			set_invisible_(true);
+		}
+
+	}
 }
 
 bool PPlayerCharacter::get_hit_()

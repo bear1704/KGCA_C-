@@ -14,10 +14,22 @@ void PNetworkDataStorage::AddData(HitData data)
 	hit_list_.push_back(data);
 }
 
+void PNetworkDataStorage::AddData(FLOAT_RECT data)
+{
+	col_rect_list_.push_back(data);
+}
+
 HitData PNetworkDataStorage::PopHitData()
 {
 	HitData ret = hit_list_.front();
 	hit_list_.pop_front();
+	return ret;
+}
+
+FLOAT_RECT PNetworkDataStorage::PopRECTData()
+{
+	FLOAT_RECT ret = col_rect_list_.front();
+	col_rect_list_.pop_front();
 	return ret;
 }
 
@@ -26,9 +38,19 @@ bool PNetworkDataStorage::IsQueueEmpty()
 	return hit_list_.empty();
 }
 
+bool PNetworkDataStorage::isColListEmpty()
+{
+	return col_rect_list_.empty();
+}
+
 bool PNetworkDataStorage::GetHitListSize()
 {
 	return hit_list_.size();
+}
+
+bool PNetworkDataStorage::GetRECTListSize()
+{
+	return col_rect_list_.size();
 }
 
 void PNetworkDataStorage::set_b_need_report(bool need_report)

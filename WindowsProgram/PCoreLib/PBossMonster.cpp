@@ -113,6 +113,8 @@ bool PBossMonster::Frame()
 	ProcessAction();
 	set_collision_box_(collision_box_norm_);
 
+
+
 	return false;
 }
 
@@ -157,7 +159,16 @@ void PBossMonster::StatusSet(multibyte_string status_path, multibyte_string obje
 	
 }
 
-void PBossMonster::AddSkill(PSkill skill)
+void PBossMonster::AddSkill(PSkill* skill)
 {
 	skill_list_.push_back(skill);
+}
+
+void PBossMonster::AddSkillSprite(PSprite sprite)
+{
+	skill_sprite_.push_back(sprite);
+}
+
+void PBossMonster::StartSkillPhase(int skill_number)
+{
 }

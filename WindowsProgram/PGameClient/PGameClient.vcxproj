@@ -137,10 +137,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PInstructionProcessor.cpp" />
+    <ClCompile Include="PMeteor.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PInstructionProcessor.h" />
+    <ClInclude Include="PMeteor.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>

@@ -52,6 +52,9 @@
     <Filter Include="소스 파일\NetworkDataManager">
       <UniqueIdentifier>{86bd0e59-0029-47a4-92bf-21ec12cdfb78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Skill">
+      <UniqueIdentifier>{d2283fc9-ebd0-4f65-9427-3eac356a6e8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PCoreLib.rc">
@@ -223,6 +226,12 @@
     <ClInclude Include="PNetworkDataStorage.h">
       <Filter>소스 파일\NetworkDataManager</Filter>
     </ClInclude>
+    <ClInclude Include="PBossMobSkillAction.h">
+      <Filter>소스 파일\BossState</Filter>
+    </ClInclude>
+    <ClInclude Include="PSkill.h">
+      <Filter>소스 파일\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PSprite.cpp">
@@ -377,6 +386,12 @@
     </ClCompile>
     <ClCompile Include="PNetworkDataStorage.cpp">
       <Filter>소스 파일\NetworkDataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="PBossMobSkillAction.cpp">
+      <Filter>소스 파일\BossState</Filter>
+    </ClCompile>
+    <ClCompile Include="PSkill.cpp">
+      <Filter>소스 파일\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

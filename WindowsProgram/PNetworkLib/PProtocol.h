@@ -54,7 +54,7 @@ typedef struct pkt{
 #define PACKET_CS_IM_HIT						731		//자기가 데미지를 입었음을 서버에게 보고
 #define PACKET_SC_SPAWN_BOSS					780		//자쿰 소환 명령
 #define PACKET_SC_BOSS_REAMIN_HP				781		//자쿰 남은 HP 서버->클라로 전송. 자신이 MONSTER_HIT을 보냈을때만 반송됨(HP 어긋나는거 방지)
-
+#define PACKET_BROADCAST_METEOR_ACTIVE			901		//메테오 스킬 사용 지시
 
 
 typedef struct{

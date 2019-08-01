@@ -237,5 +237,20 @@
 	<coord> 2111,60,371,250 </coord>
 	<coord> 2111,60,371,250 </coord>
 </sprite>
-
+<sprite>
+	<name> meteor </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/meteor.bmp </path>
+	<coord> 0,0,50,123 </coord>
+</sprite>
+<sprite>
+	<name> SL </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/SL.bmp </path>
+	<coord> 103,7,358,355 </coord>
+</sprite>
 

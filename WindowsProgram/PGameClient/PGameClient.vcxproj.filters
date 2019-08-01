@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Skill">
+      <UniqueIdentifier>{ff586a96-e940-4e90-bf2d-2f662ea3726a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -20,6 +23,9 @@
     </ClCompile>
     <ClCompile Include="PInstructionProcessor.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PMeteor.cpp">
+      <Filter>소스 파일\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +37,9 @@
     </ClInclude>
     <ClInclude Include="PInstructionProcessor.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PMeteor.h">
+      <Filter>소스 파일\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -199,6 +199,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PBossMobHitAction.h" />
     <ClInclude Include="PBossMobIdleAction.h" />
+    <ClInclude Include="PBossMobSkillAction.h" />
     <ClInclude Include="PBossMobState.h" />
     <ClInclude Include="PBossMonster.h" />
     <ClInclude Include="PButtonControl.h" />
@@ -235,6 +236,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClInclude Include="PPlayerStatus.h" />
     <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PScene.h" />
+    <ClInclude Include="PSkill.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
     <ClInclude Include="PSprite.h" />
@@ -253,6 +255,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PBossMobHitAction.cpp" />
     <ClCompile Include="PBossMobIdleAction.cpp" />
+    <ClCompile Include="PBossMobSkillAction.cpp" />
     <ClCompile Include="PBossMobState.cpp" />
     <ClCompile Include="PBossMonster.cpp" />
     <ClCompile Include="PButtonControl.cpp" />
@@ -289,6 +292,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/debug"</Command>
     <ClCompile Include="PPlayerStatus.cpp" />
     <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PScene.cpp" />
+    <ClCompile Include="PSkill.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
     <ClCompile Include="PSprite.cpp" />

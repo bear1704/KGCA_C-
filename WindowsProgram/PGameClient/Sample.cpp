@@ -52,6 +52,8 @@ bool Sample::Init()
 
 	PNetworkTimer::GetInstance().Init();
 
+	
+
 	return true;
 }
 bool Sample::PreFrame()
@@ -142,6 +144,9 @@ bool Sample::Frame() {
 	
 	PInstructionManager::GetInstance().NotifyProcessEvent();
 	PPacketManager::GetInstance().NotifyProcessEvent();
+	
+
+
 	return true;
 }
 
@@ -151,7 +156,8 @@ bool Sample::Render()
 
 	if (g_current_scene_)
 		g_current_scene_->Render();
-
+	
+	
 	return true;
 
 }
@@ -171,7 +177,7 @@ bool Sample::Release()
 	if (g_current_scene_)
 		g_current_scene_->Release(); 
 
-
+	
 
 	
 
