@@ -36,15 +36,6 @@
 	</composition>
 	
 	<composition>
-		<name> DMGPRESENT  </name>
-			<coord> 130,30 </coord>
-		<image> dmg_font   </image>
-			<coord> 35,0 </coord>
-		<image> dmg_font  </image>
-			<coord> 70,0 </coord>
-	</composition>
-	
-	<composition>
 		<name> END  </name>
 			<coord> 0,0 </coord>
 		<image> end_illust   </image>
@@ -57,7 +48,14 @@
 		<image> gameover_illust   </image>
 			<coord> 0,0 </coord>
 	</composition>
-
+	<composition>
+		<name> BOSS_HPBAR  </name>
+			<coord> 0,0 </coord>
+		<image> boss_hp_slot   </image>
+			<coord> 0,0 </coord>
+		<image> boss_hpbar </image>
+			<coord> 42,4 </coord>
+	</composition>
 </ui_composition_list>
 
 

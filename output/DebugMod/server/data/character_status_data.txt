@@ -2,9 +2,9 @@
 	<name> zakum </name>
 	<type> boss_monster </type> <!-- MonsterTYPE을 써도 되는지 확신이 안 감 -->
 	<level> 150 </level>
-	<max_hp> 3200 </max_hp>
+	<max_hp> 320000 </max_hp>
 	<max_mp> 1600 </max_mp>
-	<current_hp> 3200 </current_hp>
+	<current_hp> 320000 </current_hp>
 	<current_mp> 1600 </current_mp>
 	<reward_exp> 9500 </reward_exp>
 	<body_dmg> 150 </body_dmg>

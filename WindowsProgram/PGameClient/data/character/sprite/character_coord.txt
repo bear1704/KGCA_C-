@@ -253,4 +253,26 @@
 	<path> data/character/sprite/SL.bmp </path>
 	<coord> 103,7,358,355 </coord>
 </sprite>
+<sprite>
+	<name> boom </name>
+	<max_frame> 7 </max_frame>
+	<lifetime> 1 </lifetime>
+	<once_playtime> 1 </once_playtime>
+	<path> data/character/sprite/boom.bmp </path>
+	<coord> 23,24,741,720 </coord>
+	<coord> 755,21,741,720 </coord>
+	<coord> 1491,17,741,720 </coord>
+	<coord> 2253,24,741,720 </coord>
+	<coord> 3050,17,741,720 </coord>
+	<coord> 3825,18,741,720 </coord>
+	<coord> 4631,32,741,720 </coord>
+</sprite>
+<sprite>
+	<name> tomb </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/tomb.bmp </path>
+	<coord> 0,0,42,43 </coord>
+</sprite>
 

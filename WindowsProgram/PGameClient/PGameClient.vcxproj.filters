@@ -27,6 +27,9 @@
     <ClCompile Include="PMeteor.cpp">
       <Filter>소스 파일\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="PAllAttack.cpp">
+      <Filter>소스 파일\Skill</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h">
@@ -39,6 +42,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="PMeteor.h">
+      <Filter>소스 파일\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="PAllAttack.h">
       <Filter>소스 파일\Skill</Filter>
     </ClInclude>
   </ItemGroup>

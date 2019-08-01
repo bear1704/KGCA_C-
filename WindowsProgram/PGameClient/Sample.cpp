@@ -69,7 +69,7 @@ bool Sample::PreFrame()
 
 	if (g_custom_tick && PInstructionProcessor::GetInstance().get_loading_end())
 	{
-		if (PNetworkDataStorage::GetInstance().is_b_need_report())
+		if (PNetworkDataStorage::GetInstance().is_b_need_report() && g_window_terminated != true)
 		{
 			g_custom_tick = false;
 			PNetworkDataStorage::GetInstance().set_b_need_report(false);
@@ -97,6 +97,8 @@ bool Sample::PreFrame()
 
 
 		}*/ //플레이어 퇴장할때 캐릭터 지우는 코드. 넘실거리는 버그로 일단 봉인조치
+
+
 
 	}
 
@@ -126,6 +128,10 @@ bool Sample::Frame() {
 	{
 		PBossMonster* pbm = (PBossMonster*)g_current_scene_->FindObjectByCid(ZAKUM_ID);
 		PPlayerCharacter* mychar = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(PUserManager::GetInstance().oneself_user_.get_character_id());
+
+
+		if (mychar == nullptr || mychar->get_is_character_dead())
+			return false;
 
 		if (PCollision::GetInstance().RectInRect(mychar->get_collision_rect_(), pbm->get_collision_rect_()))
 		{
@@ -162,8 +168,8 @@ bool Sample::Render()
 
 	if (g_current_scene_)
 		g_current_scene_->Render();
-	
-	
+
+
 	return true;
 
 }

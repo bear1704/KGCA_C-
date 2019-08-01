@@ -1,7 +1,8 @@
 #include "PBossMonster.h"
 #include "PBossMobIdleAction.h"
 #include "PBossMobHitAction.h"
-
+#include "PPlayerCharacter.h"
+#include "PScene.h"
 
 HANDLE g_handle_4s_sprite_timer_queue_;
 HANDLE g_handle_4s_sprite_timer_;
@@ -15,7 +16,39 @@ VOID CALLBACK BossSkillTimerCallBack(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 	*sprite = *PSpriteManager::GetInstance().get_sprite_from_map_ex(L"zakum_idle");
 	(*sprite).SetPosition(720, 490);
 	(*sprite).set_scale_(1.3f);
+	
 
+	DeleteTimerQueueTimer(g_handle_4s_sprite_timer_queue_, g_handle_4s_sprite_timer_, nullptr);
+}
+
+
+VOID CALLBACK ExplosionCallBack(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+{
+
+	UserListForStorage* list = (UserListForStorage*)lpParam;
+	PPlayerCharacter* mychar = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(list->cid);
+	PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/pang.mp3"));
+	if (!PCollision::GetInstance().RectInRect(list->safe_zone, mychar->get_collision_rect_()))
+	{
+
+		mychar->get_status().DecreaseHP(500);
+	}
+	else
+	{
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/defence.mp3"));
+		mychar->get_status().IncreaseHP(700);
+	}
+
+	PSprite explosion;
+	explosion.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(L"boom"), 1.0f, 1.3f);
+	explosion.SetPosition(720, 300);
+	PSpriteManager::GetInstance().AddRenderWaitList(explosion);
+
+	PBossMonster* bm = (PBossMonster*) g_current_scene_->FindObjectByCid(20000);
+	bm->set_sprite_(*PSpriteManager::GetInstance().get_sprite_from_map_ex(L"zakum_idle"));
+	bm->get_sprite_()->set_scale_(1.3f);
+	bm->get_sprite_()->SetPosition(720,490);
+	bm->ResetSkill();
 
 	DeleteTimerQueueTimer(g_handle_4s_sprite_timer_queue_, g_handle_4s_sprite_timer_, nullptr);
 }
@@ -193,19 +226,50 @@ void PBossMonster::StartSkillPhase(int skill_number)
 {
 	if (skill_number == 0)
 	{
+
+
 		MeteorRandNumber num = PNetworkDataStorage::GetInstance().PopMeteorData();
 		
 		current_skill_ = skill_list_[skill_number];
 		 current_skill_->Start(num.initpos, num.downspeed);
 
+		 PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/casting.mp3"));
+		 PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/drop.mp3"));
 		 set_sprite_(*find_sprite_by_type(ANIMATIONTYPE::SKILLONE));
 		 sprite_.SetPosition(position_.x, position_.y);
 		 CreateTimerQueueTimer(&g_handle_4s_sprite_timer_, g_handle_4s_sprite_timer_queue_, (WAITORTIMERCALLBACK)BossSkillTimerCallBack,
 			 &sprite_, 4000, 0, WT_EXECUTEDEFAULT);
+		
+	}
+	else if (skill_number == 1)
+	{
+
+
+		WORD randnum = PNetworkDataStorage::GetInstance().get_explosion_rand_number_();
+
+		current_skill_ = skill_list_[skill_number];
+		current_skill_->Start(randnum);
+		current_skill_->Init();
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/casting.mp3"));
+		set_sprite_(*find_sprite_by_type(ANIMATIONTYPE::SKILLTWO));
+		sprite_.SetPosition(position_.x, position_.y);
+		
+
+		UserListForStorage list = PNetworkDataStorage::GetInstance().PopUserData();
+		UserListForStorage* sendlist = new UserListForStorage;
+		sendlist->cid = list.cid;
+		sendlist->safe_zone = list.safe_zone;
+		CreateTimerQueueTimer(&g_handle_4s_sprite_timer_, g_handle_4s_sprite_timer_queue_, (WAITORTIMERCALLBACK)ExplosionCallBack,
+			sendlist, 5000, 0, WT_EXECUTEDEFAULT);
 	}
 }
 
 void PBossMonster::ChangeSprite(PSprite* sprite)
 {
 	sprite_ = *sprite;
+}
+
+void PBossMonster::ResetSkill()
+{
+	current_skill_ = nullptr;
 }

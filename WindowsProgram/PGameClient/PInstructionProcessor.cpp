@@ -187,7 +187,7 @@ void PInstructionProcessor::ProcessInstruction()
 				}
 				case PACKET_BROADCAST_USERX_ATTACK_SUCCESS:
 				{
-
+				
 
 					PKT_MSG_MONSTER_HIT pmmh;
 					ZeroMemory(&pmmh, sizeof(PKT_MSG_MONSTER_HIT));
@@ -197,6 +197,7 @@ void PInstructionProcessor::ProcessInstruction()
 						break;
 
 					PPlayerCharacter* userx_character = (PPlayerCharacter*)current_scene_->FindObjectByCid(pmmh.player_cid);
+
 					pPoint userx_attack_pos = pPoint(userx_character->get_attack_collision_box_().left + 10.0f,
 						userx_character->get_attack_collision_box_().top - 30.0f); //hard_coded
 					PSpriteManager::GetInstance().CreateDamageFontFromInteger(pmmh.damage, userx_attack_pos);
@@ -255,6 +256,37 @@ void PInstructionProcessor::ProcessInstruction()
 					pbm->StartSkillPhase(0);
 					break;
 					//test code end
+				}
+				case PACKET_BROADCAST_ALLATTACK_ACTIVE:
+				{
+					PBossMonster* pbm = (PBossMonster*)current_scene_->FindObjectByCid(ZAKUM_ID);
+
+					WORD data;
+					memcpy(&data, packet.msg, sizeof(WORD));
+
+
+					PNetworkDataStorage::GetInstance().set_explosion_rand_number_(data);
+					pbm->StartSkillPhase(1);
+					break;
+				}
+				case PACKET_BROADCAST_GAMEOVER:
+				{
+					WORD scene_number;
+					memcpy(&scene_number, packet.msg, sizeof(WORD));
+					g_current_scene_->SceneChange(3);
+					g_window_terminated = true;
+					return;
+					break;
+				}
+				case PACKET_BROADCAST_GAMECLEAR:
+				{
+					WORD scene_number;
+					memcpy(&scene_number, packet.msg, sizeof(WORD));
+					g_current_scene_->SceneChange(2);
+					g_window_terminated = true;
+
+					return;
+					break;
 				}
 
 		}
@@ -378,6 +410,8 @@ void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
 	{
 		PMeteor* meteor = new PMeteor();
 		PNetworkDataStorage::GetInstance().AddData(meteor);
+		PAllAttack* allattack = new PAllAttack();
+		PNetworkDataStorage::GetInstance().AddData(allattack);
 
 		PBossMonster* component;
 		component = new PBossMonster();
@@ -392,6 +426,7 @@ void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
 		component->set_id(id);
 		component->Init();
 		component->AddSkill(meteor);
+		component->AddSkill(allattack);
 
 		current_scene_->AddGameObjects(component);
 	}
@@ -400,6 +435,9 @@ void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
 
 void PInstructionProcessor::ReportPositionMsg()
 {
+	if (g_window_terminated)
+		return;
+
 	PACKET packet;
 	packet.ph.id = PUserManager::GetInstance().oneself_user_.get_id();
 	packet.ph.len = sizeof(PKT_MSG_REGULAR_POS_REPORT) + PACKET_HEADER_SIZE;
@@ -407,6 +445,9 @@ void PInstructionProcessor::ReportPositionMsg()
 	PKT_MSG_REGULAR_POS_REPORT posmsg;
 	posmsg.cid = PUserManager::GetInstance().oneself_user_.get_character_id();
 	PPlayerCharacter* pp = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(posmsg.cid);
+	if (pp == nullptr)
+		return;
+
 	posmsg.current_state = pp->current_player_state_;
 	posmsg.posx = pp->get_position_().x;
 	posmsg.posy = pp->get_position_().y;

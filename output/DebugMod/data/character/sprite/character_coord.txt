@@ -192,7 +192,87 @@
 	<coord> 1945,16,384,384 </coord>
 	<coord> 2339,16,384,384 </coord>	
 </sprite>
-
-
-
+<sprite>
+	<name> zakum_shiny </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.3 </once_playtime>
+	<path> data/character/sprite/ShinyZakum.bmp </path>
+	<coord> 0,0,393,393 </coord>
+	<coord> 422,0,393,393 </coord>
+	<coord> 816,0,393,393 </coord>
+	<coord> 1210,0,393,393 </coord>
+</sprite>
+<sprite>
+	<name> zakum_skill </name>
+	<max_frame> 4 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.3 </once_playtime>
+	<path> data/character/sprite/SkillZakum.bmp </path>
+	<coord> 0,0,388,393 </coord>
+	<coord> 393,0,388,393 </coord>
+	<coord> 787,0,388,393 </coord>
+	<coord> 1196,0,388,393 </coord>
+</sprite>
+<sprite>
+	<name> ilbi </name>
+	<max_frame> 2 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 0.1 </once_playtime>
+	<path> data/character/sprite/ilbi.bmp </path>
+	<coord> 0,0,27,27 </coord>
+	<coord> 28,28,54,54 </coord>
+</sprite>
+<sprite>
+	<name> panic </name>
+	<max_frame> 6 </max_frame>
+	<lifetime> 0.8 </lifetime>
+	<once_playtime> 0.8 </once_playtime>
+	<path> data/character/sprite/panic.bmp </path>
+	<coord> 20,60,300,250 </coord>
+	<coord> 330,60,300,250 </coord>
+	<coord> 715,60,360,250 </coord>
+	<coord> 1076,60,356,250 </coord>
+	<coord> 1444,60,314,250 </coord>
+	<coord> 2111,60,371,250 </coord>
+	<coord> 2111,60,371,250 </coord>
+</sprite>
+<sprite>
+	<name> meteor </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/meteor.bmp </path>
+	<coord> 0,0,50,123 </coord>
+</sprite>
+<sprite>
+	<name> SL </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/SL.bmp </path>
+	<coord> 103,7,358,355 </coord>
+</sprite>
+<sprite>
+	<name> boom </name>
+	<max_frame> 7 </max_frame>
+	<lifetime> 1 </lifetime>
+	<once_playtime> 1 </once_playtime>
+	<path> data/character/sprite/boom.bmp </path>
+	<coord> 23,24,741,720 </coord>
+	<coord> 755,21,741,720 </coord>
+	<coord> 1491,17,741,720 </coord>
+	<coord> 2253,24,741,720 </coord>
+	<coord> 3050,17,741,720 </coord>
+	<coord> 3825,18,741,720 </coord>
+	<coord> 4631,32,741,720 </coord>
+</sprite>
+<sprite>
+	<name> tomb </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/character/sprite/tomb.bmp </path>
+	<coord> 0,0,42,43 </coord>
+</sprite>
 

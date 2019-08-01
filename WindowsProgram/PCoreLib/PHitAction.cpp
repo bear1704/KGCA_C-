@@ -21,6 +21,12 @@ void PHitAction::Process() //날아가는대로 바로 스테이트 체인지, 무적과 히트상태 
 	}
 
 
+	if (owner_->get_status().get_hp_() < 0)
+	{
+		owner_->SetTransition(FSM_Event::HPEMPTY);
+	}
+
+
 	if (knockback_distance_ <= 0)
 	{
 		owner_->SetTransition(FSM_Event::TIME_OUT);

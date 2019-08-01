@@ -14,6 +14,7 @@ public:
 	virtual void Render() = 0;
 	virtual void Release() = 0;
 	virtual void Start();
+	virtual void Start(int randnum);
 	virtual void Start(std::vector<int> , std::vector<int>);
 
 };

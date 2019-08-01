@@ -29,6 +29,22 @@ void PNetworkDataStorage::AddData(MeteorRandNumber data)
 	meteor_data_.push_back(data);
 }
 
+void PNetworkDataStorage::AddData(UserListForStorage data)
+{
+	user_list_.clear();
+	user_list_.push_back(data);
+}
+
+void PNetworkDataStorage::set_explosion_rand_number_(int number)
+{
+	explosion_rand_number_ = number;
+}
+
+WORD PNetworkDataStorage::get_explosion_rand_number_()
+{
+	return explosion_rand_number_;
+}
+
 HitData PNetworkDataStorage::PopHitData()
 {
 	HitData ret = hit_list_.front();
@@ -54,6 +70,13 @@ MeteorRandNumber PNetworkDataStorage::PopMeteorData()
 {
 	MeteorRandNumber ret = meteor_data_.front();
 	meteor_data_.pop_front();
+	return ret;
+}
+
+UserListForStorage PNetworkDataStorage::PopUserData()
+{
+	UserListForStorage ret = user_list_.front();
+	user_list_.pop_front();
 	return ret;
 }
 

@@ -128,23 +128,8 @@
 	<path> data/UI/sprite/expbar_separatebar.bmp </path>
 	<coord> 0,0,810,7</coord>
 </sprite>
-<sprite>
-	<name> dmg_font </name>
-	<max_frame> 10 </max_frame>
-	<lifetime> 777 </lifetime>
-	<once_playtime> 777 </once_playtime>
-	<path> data/UI/sprite/dmgfont.bmp </path>
-	<coord> 7,4,33,36</coord>
-	<coord> 45,4,35,36</coord>
-	<coord> 83,4,35,36</coord>
-	<coord> 124,5,35,36</coord>
-	<coord> 162,6,35,36</coord>
-	<coord> 203,5,35,36</coord>
-	<coord> 246,6,35,36</coord>
-	<coord> 4,50,35,36</coord>
-	<coord> 44,51,35,36</coord>
-	<coord> 84,50,35,36</coord>
-</sprite>
+
+
 <sprite>
 	<name> end_illust </name>
 	<max_frame> 1 </max_frame>
@@ -161,9 +146,22 @@
 	<path> data/UI/sprite/gameover.bmp </path>
 	<coord> 0,0,1024,768</coord>
 </sprite>
-
-
-
+<sprite>
+	<name> boss_hp_slot </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/boss_hp_case.bmp </path>
+	<coord> 0,0,800,40</coord>
+</sprite>
+<sprite>
+	<name> boss_hpbar </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/boss_hpbar.bmp </path>
+	<coord> 0,0,760,13</coord>
+</sprite>
 
 
 

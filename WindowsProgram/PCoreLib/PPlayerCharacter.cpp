@@ -26,14 +26,16 @@ bool PPlayerCharacter::Init()
 	action_list_.insert(std::make_pair(FSM_State::JUMP, new PJumpAction(this)));
 	action_list_.insert(std::make_pair(FSM_State::ATTACK, new PAttackAction(this)));
 	action_list_.insert(std::make_pair(FSM_State::HIT, new PHitAction(this)));
-	//action_list_.insert(std::make_pair(FSM_State::DEAD, new PDeadAction(this)));
+	action_list_.insert(std::make_pair(FSM_State::DEAD, new PDeadAction(this)));
 
 	current_player_action_ = action_list_[FSM_State::IDLE];
 	current_player_state_ = FSM_State::IDLE;
 	
+	player_fsm_.Add(FSM_State::IDLE, FSM_Event::HPEMPTY, FSM_State::DEAD);
 	//MOVE
 	player_fsm_.Add(FSM_State::IDLE, FSM_Event::INPUT_MOVE, FSM_State::MOVE);
 	player_fsm_.Add(FSM_State::MOVE, FSM_Event::INPUT_NONE, FSM_State::IDLE);
+	player_fsm_.Add(FSM_State::MOVE, FSM_Event::HPEMPTY, FSM_State::DEAD);
 	//JUMP
 	player_fsm_.Add(FSM_State::IDLE, FSM_Event::INPUT_JUMP, FSM_State::JUMP);
 	player_fsm_.Add(FSM_State::MOVE, FSM_Event::INPUT_JUMP, FSM_State::JUMP);
@@ -51,7 +53,7 @@ bool PPlayerCharacter::Init()
 	player_fsm_.Add(FSM_State::JUMP, FSM_Event::HIT, FSM_State::HIT);
 	player_fsm_.Add(FSM_State::ATTACK, FSM_Event::HIT, FSM_State::HIT);
 	player_fsm_.Add(FSM_State::HIT, FSM_Event::TIME_OUT, FSM_State::IDLE);
-
+	player_fsm_.Add(FSM_State::HIT, FSM_Event::HPEMPTY, FSM_State::DEAD);
 
 	status.ModifyHP(1930);
 	status.ModifyMP(1930);
@@ -198,6 +200,7 @@ void PPlayerCharacter::set_hit_(bool hit)
 	hit_ = hit;
 }
 
+
 void PPlayerCharacter::set_client_owner_character(bool isowner)
 {
 	client_owner_character_ = isowner;
@@ -218,17 +221,24 @@ void PPlayerCharacter::MissleCollisionCheck()
 		{
 			hit_ = true;
 			SetTransition(FSM_Event::HIT);
-			status.DecreaseHP(100);
+			status.DecreaseHP(200);
 			set_invisible_(true);
 		}
 
 	}
 }
 
+void PPlayerCharacter::set_is_character_dead(bool isdead)
+{
+	is_character_dead_ = isdead;
+}
+
 bool PPlayerCharacter::get_hit_()
 {
 	return hit_;
 }
+
+
 
 void PPlayerCharacter::InvincibleProgress()
 {
@@ -267,6 +277,11 @@ void PPlayerCharacter::InvincibleProgress()
 bool PPlayerCharacter::get_client_owner_character()
 {
 	return client_owner_character_;
+}
+
+bool PPlayerCharacter::get_is_character_dead()
+{
+	return is_character_dead_;
 }
 
 bool PPlayerCharacter::is_right_dir()

@@ -44,6 +44,6 @@ void PNetworkTimer::Init()
 		nullptr, 0, 200, WT_EXECUTEDEFAULT);
 
 	CreateTimerQueueTimer(&g_handle_20s_timer_, g_handle_20s_timer_queue_, (WAITORTIMERCALLBACK)SkillTimerCallBack,
-		nullptr, 10000, 20000, WT_EXECUTEDEFAULT);
+		nullptr, 10000, 10000, WT_EXECUTEDEFAULT);
 	printf("\n[Network timer start]");
 }

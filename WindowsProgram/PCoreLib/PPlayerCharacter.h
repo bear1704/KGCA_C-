@@ -15,6 +15,7 @@ private:
 	float invincible_rate;
 	bool client_owner_character_;
 	bool automata_right_dir_;
+	bool is_character_dead_;
 protected:
 
 public:
@@ -35,10 +36,12 @@ public:
 	void set_client_owner_character(bool isowner);
 	void set_right_dir(bool isright);
 	void MissleCollisionCheck();
+	void set_is_character_dead(bool isdead);
 
 	bool get_hit_();
 	void InvincibleProgress();
 	bool get_client_owner_character();
+	bool get_is_character_dead();
 	bool is_right_dir();
 
 

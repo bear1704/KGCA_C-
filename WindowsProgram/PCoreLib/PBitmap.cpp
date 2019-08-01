@@ -28,7 +28,10 @@ bool PBitmap::Render()
 
 bool PBitmap::Release()
 {
-	DeleteObject(handle_bitmap_);
+	if (handle_bitmap_ != NULL)
+	{
+		DeleteObject(handle_bitmap_);
+	}
 	return true;
 }
 

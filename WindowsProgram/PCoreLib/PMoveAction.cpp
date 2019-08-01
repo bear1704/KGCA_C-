@@ -22,6 +22,12 @@ void PMoveAction::Process()
 		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::MOVE));
 	}
 
+
+	if (owner_->get_status().get_hp_() < 0)
+	{
+		owner_->SetTransition(FSM_Event::HPEMPTY);
+	}
+
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH )
 	{
 		if (is_owner)

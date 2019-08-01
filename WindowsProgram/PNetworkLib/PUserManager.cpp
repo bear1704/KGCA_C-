@@ -222,6 +222,11 @@ WORD PUser::get_character_id()
 	return character_id_;
 }
 
+bool PUser::get_is_dead()
+{
+	return is_dead_;
+}
+
 int PUser::get_id()
 {
 	return unique_id_;
@@ -245,5 +250,10 @@ void PUser::AddRecvBytes(int num)
 void PUser::set_recv_bytes(int num)
 {
 	recv_bytes_ = num;
+}
+
+void PUser::set_is_dead(bool dead)
+{
+	is_dead_ = dead;
 }
 

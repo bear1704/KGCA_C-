@@ -22,7 +22,12 @@ void PIdleAction::Process()
 		PNetworkDataStorage::GetInstance().set_b_need_report(true);
 	}
 
-	
+
+	if (owner_->get_status().get_hp_() < 0)
+	{
+		owner_->SetTransition(FSM_Event::HPEMPTY);
+	}
+
 
 	if (owner_->get_hit_() && owner_->get_invisible_() == false)
 	{

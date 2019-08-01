@@ -76,7 +76,10 @@ void PPlayerStatus::DecreaseEXP(int minus)
 }
 void PPlayerStatus::IncreaseHP(int plus)
 {
-	hp_ += plus;
+	if (hp_ + plus > max_hp_)
+		hp_ = max_hp_;
+	else
+		hp_ += plus;
 }
 void PPlayerStatus::IncreaseMP(int plus)
 {

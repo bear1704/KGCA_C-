@@ -40,7 +40,12 @@ void PMeteor::Render()
 	for (int i = 0; i < stone_list_.size(); i++)
 	{
 		stone_list_[i].stone_sprite_.Render();
+		FLOAT_RECT arect = P2DCamera::GetInstance().WorldToGamescreenRECT(stone_list_[i].stone_rect_);
+		int prevMode2 = Rectangle(g_handle_off_screenDC, arect.left, arect.top,
+			arect.left + arect.right, arect.top + arect.bottom);
+		SetROP2(g_handle_off_screenDC, prevMode2);
 	}
+
 }
 
 void PMeteor::Release()

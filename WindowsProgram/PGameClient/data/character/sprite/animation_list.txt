@@ -6,6 +6,7 @@
 	<attack> pc_slash </attack>
 	<attack> pc_swing </attack>
 	<attack> pc_pierce </attack>
+	<dead> tomb </dead>
 </list>
 <list> <!-- 타 플레이어 캐릭터 애니메이션 리스트 -->
 	<name> other_player </name>
@@ -15,6 +16,7 @@
 	<attack> other_pc_slash </attack>
 	<attack> other_pc_swing </attack>
 	<attack> other_pc_pierce </attack>
+	<dead> tomb </dead>
 </list>
 <list> <!-- 주황버섯 애니메이션 리스트 -->
 	<name> orange_mushroom </name>

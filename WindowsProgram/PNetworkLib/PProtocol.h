@@ -57,7 +57,9 @@ typedef struct pkt{
 #define PACKET_SC_SPAWN_BOSS					780		//자쿰 소환 명령
 #define PACKET_SC_BOSS_REAMIN_HP				781		//자쿰 남은 HP 서버->클라로 전송. 자신이 MONSTER_HIT을 보냈을때만 반송됨(HP 어긋나는거 방지)
 #define PACKET_BROADCAST_METEOR_ACTIVE			901		//메테오 스킬 사용 지시
-
+#define PACKET_BROADCAST_ALLATTACK_ACTIVE		902		//전체공격기 사용 지시 
+#define PACKET_BROADCAST_GAMEOVER				903		//게임오버
+#define PACKET_BROADCAST_GAMECLEAR				904		//게임클리어
 
 typedef struct{
 	char username[30];
@@ -112,6 +114,7 @@ typedef struct MeteorRandNumberForPacket_
 	int initpos[8];
 	int downspeed[8];
 }MeteorRandNumberForPacket;
+
 
 
 #pragma pack(pop)

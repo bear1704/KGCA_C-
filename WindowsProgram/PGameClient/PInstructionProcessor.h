@@ -8,6 +8,7 @@
 #include "PObjectDataManager.h"
 #include "PNetworkDataStorage.h"
 #include "PMeteor.h"
+#include "PAllAttack.h"
 
 class PInstructionProcessor : public PSingleton<PInstructionProcessor>
 {

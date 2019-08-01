@@ -77,7 +77,6 @@ bool PEventSelect::Frame()
 			{
 				return false;
 			}
-			OutputDebugString(L"\nREAD");
 			PPacketManager::GetInstance().NotifyReceiveEvent(); //thread에서 리시브하게 명령
 		}
 

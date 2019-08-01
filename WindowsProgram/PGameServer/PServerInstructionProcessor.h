@@ -7,7 +7,6 @@
 #include "PScene.h"
 #include "PNetworkTimer.h"
 #include "TServerStd.h"
-#include "atomic"
 
 class PServerInstructionProcessor : public PSingleton<PServerInstructionProcessor>
 {

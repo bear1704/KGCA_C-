@@ -92,6 +92,7 @@ void PServerInstructionProcessor::ProcessInstruction()
 				{
 					PACKET* pack = new PACKET;
 					ZeroMemory(pack, sizeof(PACKET));
+
 					memcpy(pack, &packet, sizeof(packet));
 					pack->ph.type = PACKET_BROADCAST_USERX_SPAWN;
 					Broadcast(*pack);
@@ -140,6 +141,27 @@ void PServerInstructionProcessor::ProcessInstruction()
 					state = FsmStateToString(report_msg->current_state);
 
 
+					if (report_msg->current_state == FSM_State::DEAD)
+						user->set_is_dead(true);
+					
+					int alldead = true;
+					for (PUser* user : PUserManager::GetInstance().user_list_)
+					{
+						if (user->get_is_dead() == false)
+							alldead = false;
+					}
+					if (alldead == true)
+					{
+						PACKET* over_pkt = new PACKET;
+						over_pkt->ph.id = SERVER_ID;
+						over_pkt->ph.len = PACKET_HEADER_SIZE + sizeof(WORD);
+						over_pkt->ph.type = PACKET_BROADCAST_GAMEOVER;
+						WORD scene_number = 2;
+						memcpy(over_pkt->msg, &scene_number, sizeof(WORD));
+						Broadcast(*over_pkt);
+						delete over_pkt;
+					}
+
 					PPlayerCharacter* character = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(user->get_character_id());
 					character->set_position_(pPoint(report_msg->posx, report_msg->posy));
 					FLOAT_RECT norm_box = { 0,0,53,77 };
@@ -161,6 +183,18 @@ void PServerInstructionProcessor::ProcessInstruction()
 					memcpy(pmmh, packet.msg, sizeof(PKT_MSG_MONSTER_HIT));
 					PBossMonster* bm = (PBossMonster*)g_current_scene_->FindObjectByCid(pmmh->monster_id);
 					bm->get_status().DecreaseHP(pmmh->damage);
+
+					if (bm->get_status().get_hp_() < 0)
+					{
+						PACKET* win_pkt = new PACKET;
+						win_pkt->ph.id = SERVER_ID;
+						win_pkt->ph.len = PACKET_HEADER_SIZE + sizeof(WORD);
+						win_pkt->ph.type = PACKET_BROADCAST_GAMECLEAR;
+						WORD change_num = 2;
+						memcpy(win_pkt->msg, &change_num, sizeof(WORD));
+
+						Broadcast(*win_pkt);
+					}
 
 
 					PACKET* pkt = new PACKET;

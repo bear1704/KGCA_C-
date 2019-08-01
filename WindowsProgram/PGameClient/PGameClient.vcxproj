@@ -136,11 +136,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PAllAttack.cpp" />
     <ClCompile Include="PInstructionProcessor.cpp" />
     <ClCompile Include="PMeteor.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PAllAttack.h" />
     <ClInclude Include="PInstructionProcessor.h" />
     <ClInclude Include="PMeteor.h" />
     <ClInclude Include="resource.h" />

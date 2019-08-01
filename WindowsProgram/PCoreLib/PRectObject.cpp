@@ -33,7 +33,7 @@ bool PRectObject::Render()
 
 bool PRectObject::Release()
 {
-	if (sprite_.get_bitmap_() != nullptr)
+	if (sprite_.get_bitmap_mask_() != nullptr)
 	{
 		sprite_.get_bitmap_()->Release();
 		delete sprite_.get_bitmap_();

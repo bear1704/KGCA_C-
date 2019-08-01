@@ -19,8 +19,9 @@ private:
 	WORD		unique_id_;
 	WORD		character_id_;
 	SOCKADDR_IN client_addr_;
-	int		recv_bytes_;
-	char	recv_buffer_[PACKET_MAX_DATA_SIZE + PACKET_HEADER_SIZE]; //2052
+	int			recv_bytes_;
+	char		recv_buffer_[PACKET_MAX_DATA_SIZE + PACKET_HEADER_SIZE]; //2052
+	bool		is_dead_;
 
 
 public:
@@ -38,6 +39,7 @@ public:
 	void SetUser(bool connect, std::string name, HANDLE event, SOCKET socket, WORD id);
 	void set_character_id(WORD id);
 	void set_recv_bytes(int num);
+	void set_is_dead(bool dead);
 
 	//getter
 
@@ -50,6 +52,7 @@ public:
 	SOCKET* get_socket_by_ptr();
 	SOCKADDR_IN get_client_addr();
 	WORD get_character_id();
+	bool get_is_dead();
 	int get_id();
 	int& get_recv_bytes();
 	char* get_recv_buffer_by_ptr();
