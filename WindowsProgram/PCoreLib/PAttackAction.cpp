@@ -46,6 +46,7 @@ void PAttackAction::Process()
 		{
 			CreateTimerQueueTimer(&handle_attack_timer_, handle_attack_timer_queue_, (WAITORTIMERCALLBACK)AttackTimerCallBack,
 				nullptr, 0, ATTACK_SPEED, WT_EXECUTEDEFAULT);
+			owner_->get_status().DecreaseMP(10);
 		}
 
 		pPoint attackpos;
@@ -68,6 +69,7 @@ void PAttackAction::Process()
 	
 		effect_sprite.Play();
 		PSpriteManager::GetInstance().AddRenderWaitList(effect_sprite);
+	
 	}
 
 	
@@ -91,6 +93,7 @@ void PAttackAction::Process()
 			owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK)); //다른 공격모션으로 체인지 
 			owner_->get_sprite_()->Play(); //죽은 스프라이트 다시 재생 
 			PSpriteManager::GetInstance().AddRenderWaitList(effect_sprite);
+			owner_->get_status().DecreaseMP(10);
 		}
 	}
 
@@ -166,7 +169,7 @@ void PAttackAction::AttackProcess()
 					HitData data;
 					data.boss_id = bmonster->get_id();
 					data.damage = damage;
-					data.player_id = owner_->get_id();
+					data.player_cid = owner_->get_id();
 
 					PNetworkDataStorage::GetInstance().AddData(data); //네트워크립을 위한 데이터 저장
 

@@ -53,6 +53,8 @@
 			<coord> 0,0 </coord>
 		<image> boss_hp_slot   </image>
 			<coord> 0,0 </coord>
+		<image> boss_hpbar </image>
+			<coord> 42,4 </coord>
 	</composition>
 </ui_composition_list>
 

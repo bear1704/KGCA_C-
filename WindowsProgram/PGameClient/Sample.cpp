@@ -114,6 +114,32 @@ bool Sample::Frame() {
 		sound_flag = true;
 	}
 
+	if (PInstructionProcessor::GetInstance().boss_spawn_)
+	{
+		PBossMonster* pbm = (PBossMonster*)g_current_scene_->FindObjectByCid(ZAKUM_ID);
+		PPlayerCharacter* mychar = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(PUserManager::GetInstance().oneself_user_.get_character_id());
+
+		if (PCollision::GetInstance().RectInRect(mychar->get_collision_rect_(), pbm->get_collision_rect_()))
+		{
+			mychar->set_hit_(true);
+			PACKET* pack = new PACKET;
+			ZeroMemory(pack, sizeof(PACKET));
+			pack->ph.id = PUserManager::GetInstance().oneself_user_.get_id();
+			pack->ph.type = PACKET_CS_IM_HIT;
+			pack->ph.len = sizeof(WORD) + PACKET_HEADER_SIZE;
+
+			WORD cid = mychar->get_id();
+			memcpy(pack->msg, &cid, sizeof(WORD));
+
+			PPacketManager::GetInstance().PushPacket(PushType::SEND, *pack); //내가 맞았음을 서버에 보고
+
+			
+
+			delete pack;
+		}
+	}
+
+	
 	PInstructionManager::GetInstance().NotifyProcessEvent();
 	PPacketManager::GetInstance().NotifyProcessEvent();
 	return true;
@@ -181,7 +207,9 @@ bool Sample::InitDataLoad()
 	PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"MYSETTINGBTN");
 	std::vector<PRectObject*> game_objects_ = PObjectDataManager::GetInstance().get_object_list_from_map(L"MUSHROOMLAND");
 
+	PUIComponent* uicomp_bossbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"BOSS_HPBAR");
 	scene1->InsertObject(uicomp_settingbar);
+	scene1->InsertObject(uicomp_bossbar);
 	scene1->InsertObject(game_objects_);
 	scene1->set_scene_name_(L"MUSHROOMLAND");
 

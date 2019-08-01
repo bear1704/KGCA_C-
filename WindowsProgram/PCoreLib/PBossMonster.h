@@ -2,7 +2,7 @@
 #include "PCharacter.h"
 #include "PFsm.h"
 #include "PBossMobState.h"
-
+#include "PSkill.h"
 
 
 class PBossMonster :
@@ -15,6 +15,7 @@ public:
 private:
 	bool ishit_;
 	int be_received_damage_;
+	std::vector<PSkill> skill_list_;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -38,6 +39,9 @@ public:
 	void set_be_received_damage_(int damage);
 	int get_be_received_damage();
 
+	void StatusSet(multibyte_string status_path, multibyte_string object_name);
+
+	void AddSkill(PSkill skill);
 
 	PUIComponent* damage_present_image_;
 };

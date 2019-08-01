@@ -7,16 +7,6 @@
 #include "P2DCamera.h"
 #include "PFsm.h"
 
-enum class Type
-{
-	PLAYER,
-	OTHER_PLAYER,
-	MONSTER,
-	NPC,
-	MAP,
-	BOSS_MONSTER,
-
-};
 
 
 class PRectObject
@@ -82,6 +72,7 @@ public:
 	void set_alpha_and_scale_(float alpha, float scale); //주의! 같은 애니메이션 리스트를 사용하는 모든 개체가 변환이 적용되는 문제가 있음.
 	void set_id(WORD id);
 	void set_is_reversal(bool isreversal);
+	void set_collision_box_norm(FLOAT_RECT fl);
 
 	void Spawn();
 	virtual PSprite* find_sprite_by_type(ANIMATIONTYPE type);

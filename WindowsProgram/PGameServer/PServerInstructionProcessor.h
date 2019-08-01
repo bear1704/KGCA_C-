@@ -7,7 +7,7 @@
 #include "PScene.h"
 #include "PNetworkTimer.h"
 #include "TServerStd.h"
-
+#include "atomic"
 
 class PServerInstructionProcessor : public PSingleton<PServerInstructionProcessor>
 {
@@ -31,6 +31,7 @@ public:
 	bool Release();
 
 	bool Broadcast(PACKET& packet);
-
+private:
+	static bool init_ok_;
 };
 

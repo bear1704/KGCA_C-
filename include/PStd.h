@@ -83,6 +83,16 @@ enum class ObjectLoadType //로드 시 중복방지
 	OBJECT,
 	ETC_SPRITE,
 };
+enum class Type
+{
+	PLAYER,
+	OTHER_PLAYER,
+	MONSTER,
+	NPC,
+	MAP,
+	BOSS_MONSTER,
+
+};
 
 
 enum class SIDE
@@ -122,6 +132,7 @@ enum class ObjectType
 	PLAYER_CHARACTER,
 	MONSTER,
 	NPC,
+	BOSS_MONSTER,
 	ITEM,
 	ERROR_OCCUR,
 };

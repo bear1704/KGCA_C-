@@ -298,6 +298,11 @@ void PRectObject::set_is_reversal(bool isreversal)
 	is_reversal_ = isreversal;
 }
 
+void PRectObject::set_collision_box_norm(FLOAT_RECT fl)
+{
+	collision_box_norm_ = fl;
+}
+
 pPoint PRectObject::get_spawn_position_()
 {
 	return spawn_position_;

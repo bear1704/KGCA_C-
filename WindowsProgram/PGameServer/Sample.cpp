@@ -17,6 +17,7 @@ int main()
 Sample::Sample()
 {
 	g_window_terminated = false;
+	
 }
 
 Sample::~Sample()
@@ -76,7 +77,7 @@ bool Sample::PreFrame()
 		g_custom_tick = false;
 	}
 
-
+	PServerInstructionProcessor::GetInstance().Frame();
 	return true;
 }
 

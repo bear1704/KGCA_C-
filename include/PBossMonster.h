@@ -38,6 +38,8 @@ public:
 	void set_be_received_damage_(int damage);
 	int get_be_received_damage();
 
+	void StatusSet(multibyte_string status_path, multibyte_string object_name);
+
 
 	PUIComponent* damage_present_image_;
 };

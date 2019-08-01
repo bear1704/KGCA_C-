@@ -27,8 +27,12 @@ void PHitAction::Process() //날아가는대로 바로 스테이트 체인지, 무적과 히트상태 
 		owner_->set_hit_(false);
 		knockback_distance_ = 45.0f;
 	}
-	CollisionCheck();
-	KnockBack();
+	
+	
+		CollisionCheck();
+		KnockBack();
+	
+	
 
 
 
@@ -62,8 +66,10 @@ void PHitAction::CollisionCheck()
 {
 	if (g_current_scene_)
 	{
-		std::vector<PRectObject*> game_objects =
-			PObjectDataManager::GetInstance().get_object_list_from_map(g_current_scene_->get_scene_name_()); //MUSHROOMRAND
+		//std::vector<PRectObject*> game_objects =
+		//	PObjectDataManager::GetInstance().get_object_list_from_map(g_current_scene_->get_scene_name_()); //MUSHROOMRAND
+
+		std::vector<PRectObject*> game_objects = *g_current_scene_->get_game_objects();
 
 		//몬스터별 충돌체크(RECT가지고)
 		for (int i = 0; i < game_objects.size(); i++)
@@ -91,6 +97,30 @@ void PHitAction::CollisionCheck()
 					break;
 				}
 			}
+			else if (game_objects[i]->get_type_() == Type::BOSS_MONSTER)
+			{
+				PBossMonster* monster = (PBossMonster*)game_objects[i];
+
+				if (monster->get_current_monster_state_() == FSM_State::DEAD)
+					continue;   //죽은 몬스터는 히트판정 X
+
+				if (monster->check_hit(owner_->get_collision_rect_()))
+				{
+					int damage = monster->get_status().mob_damage();
+
+					player_to_mob_side =
+						(owner_->get_collision_rect_().left - monster->get_collision_rect_().left) > 0 ? SIDE::LEFT : SIDE::RIGHT;
+
+					if (!(owner_->get_invisible_()))
+					{
+						owner_->get_status().DecreaseHP(damage);
+						owner_->set_invisible_(true);
+					}
+
+					break;
+				}
+			}
+			
 		}
 
 

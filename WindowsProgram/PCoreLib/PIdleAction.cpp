@@ -22,6 +22,8 @@ void PIdleAction::Process()
 		PNetworkDataStorage::GetInstance().set_b_need_report(true);
 	}
 
+	
+
 	if (owner_->get_hit_() && owner_->get_invisible_() == false)
 	{
 		if(is_owner)

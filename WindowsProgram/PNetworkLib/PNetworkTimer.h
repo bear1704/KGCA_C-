@@ -29,5 +29,5 @@ public:
 };
 
 extern bool g_custom_tick;
-extern HANDLE g_handle_100ms_timer_queue_;
+extern HANDLE g_handle_200ms_timer_queue_;
 extern HANDLE g_handle_timer_;

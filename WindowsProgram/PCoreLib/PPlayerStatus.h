@@ -2,10 +2,12 @@
 #include "PImageControl.h"
 #include "PUIDataManager.h"
 
+class PRectObject;
 
 class PPlayerStatus
 {
 public:
+	PPlayerStatus(PRectObject* owner);
 	PPlayerStatus();
 	virtual ~PPlayerStatus();
 	const float represent_sprite_number = 0;
@@ -25,6 +27,8 @@ protected:
 	int atk_;
 
 private:
+	PRectObject* owner_;
+
 	float past_hp_;
 	float past_mp_;
 	float past_exp_;
@@ -75,6 +79,7 @@ public:
 	int get_reward_exp();
 	int mob_damage();
 	bool is_dead();
+	void set_owner(PRectObject* owner);
 };
 
 

@@ -2,6 +2,11 @@
 #include <random>
 #include <functional>
 
+
+PPlayerStatus::PPlayerStatus(PRectObject* owner)
+{
+	owner_ = owner;
+}
 PPlayerStatus::PPlayerStatus()
 {
 }
@@ -83,16 +88,27 @@ void PPlayerStatus::IncreaseEXP(int plus)
 }
 bool PPlayerStatus::Init()
 {
-	hp_increase_speed_ = 500.0f;
-	mp_increase_speed_ = 100.0f;
-	exp_increase_speed_ = 500.0f;
+	/*if (owner_->get_type_() == Type::OTHER_PLAYER)
+	{
+		return false;
+	}*/
+
+	if (owner_->get_type_() == Type::BOSS_MONSTER)
+		hp_increase_speed_ = 5000.0f;
 
 
-	FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
-	FLOAT_RECT current_guage_rect = { 0,0,0,0 };
-	current_guage_rect.right = exp_rect.right * exp_ / max_exp_;
-	current_guage_rect.bottom = exp_rect.bottom;
-	exp_image->SetRectListSize(current_guage_rect);
+	if (owner_->get_type_() == Type::PLAYER || owner_->get_type_() == Type::OTHER_PLAYER)
+	{
+		hp_increase_speed_ = 500.0f;
+		mp_increase_speed_ = 20.0f;
+		exp_increase_speed_ = 500.0f;
+
+		FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
+		FLOAT_RECT current_guage_rect = { 0,0,0,0 };
+		current_guage_rect.right = exp_rect.right * exp_ / max_exp_;
+		current_guage_rect.bottom = exp_rect.bottom;
+		exp_image->SetRectListSize(current_guage_rect);
+	}
 
 	return true;
 }
@@ -105,6 +121,10 @@ bool PPlayerStatus::Frame()
 
 bool PPlayerStatus::Render()
 {
+
+	/*if (owner_->get_type_() == Type::OTHER_PLAYER)
+		return false;*/
+
 	float past_hp_rate = past_hp_ / max_hp_;
 	float current_hp_rate = hp_ / max_hp_;
 
@@ -132,44 +152,45 @@ bool PPlayerStatus::Render()
 		hp_image->SetRectListSize(current_guage_rect);
 		past_hp_ += hp_increase_speed_ * g_SecondPerFrame;
 	}
-	
-	if (past_mp_ > mp_ && abs(past_mp_ - mp_) > 0.1f) //MP
+	if (owner_->get_type_() == Type::PLAYER || owner_->get_type_() == Type::OTHER_PLAYER) //보스몬스터 이미지없어서 터지는거 방지 
 	{
-		FLOAT_RECT& mp_rect = mp_image->get_max_rect_size();
-		FLOAT_RECT current_guage_rect = { 0,0,0,0 };
-		current_guage_rect.right = mp_rect.right * past_mp_rate;
-		current_guage_rect.bottom = mp_rect.bottom;
-		mp_image->SetRectListSize(current_guage_rect);
-		past_mp_ -= mp_increase_speed_ * g_SecondPerFrame;
+		if (past_mp_ > mp_ && abs(past_mp_ - mp_) > 0.1f) //MP
+		{
+			FLOAT_RECT& mp_rect = mp_image->get_max_rect_size();
+			FLOAT_RECT current_guage_rect = { 0,0,0,0 };
+			current_guage_rect.right = mp_rect.right * past_mp_rate;
+			current_guage_rect.bottom = mp_rect.bottom;
+			mp_image->SetRectListSize(current_guage_rect);
+			past_mp_ -= mp_increase_speed_ * g_SecondPerFrame;
+		}
+		else if (past_mp_ < mp_)
+		{
+			FLOAT_RECT& mp_rect = mp_image->get_max_rect_size();
+			FLOAT_RECT current_guage_rect = { 0,0,0,0 };
+			current_guage_rect.right = mp_rect.right * past_mp_rate;
+			current_guage_rect.bottom = mp_rect.bottom;
+			mp_image->SetRectListSize(current_guage_rect);
+			past_mp_ += mp_increase_speed_ * g_SecondPerFrame;
+		}
+		if (past_exp_ > exp_ && abs(past_exp_ - exp_) > 0.01f) //EXP
+		{
+			FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
+			FLOAT_RECT current_guage_rect = { 0,0,0,0 };
+			current_guage_rect.right = exp_rect.right * past_exp_rate;
+			current_guage_rect.bottom = exp_rect.bottom;
+			exp_image->SetRectListSize(current_guage_rect);
+			past_exp_ -= exp_increase_speed_ * g_SecondPerFrame;
+		}
+		else if (past_exp_ < exp_) //EXP
+		{
+			FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
+			FLOAT_RECT current_guage_rect = { 0,0,0,0 };
+			current_guage_rect.right = exp_rect.right * past_exp_rate;
+			current_guage_rect.bottom = exp_rect.bottom;
+			exp_image->SetRectListSize(current_guage_rect);
+			past_exp_ += exp_increase_speed_ * g_SecondPerFrame;
+		}
 	}
-	else if (past_mp_ < mp_)
-	{
-		FLOAT_RECT& mp_rect = mp_image->get_max_rect_size();
-		FLOAT_RECT current_guage_rect = { 0,0,0,0 };
-		current_guage_rect.right = mp_rect.right * past_mp_rate;
-		current_guage_rect.bottom = mp_rect.bottom;
-		mp_image->SetRectListSize(current_guage_rect);
-		past_mp_ += mp_increase_speed_ * g_SecondPerFrame;
-	}
-	if (past_exp_ > exp_ && abs(past_exp_ - exp_) > 0.01f) //EXP
-	{
-		FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
-		FLOAT_RECT current_guage_rect = { 0,0,0,0 };
-		current_guage_rect.right = exp_rect.right * past_exp_rate;
-		current_guage_rect.bottom = exp_rect.bottom;
-		exp_image->SetRectListSize(current_guage_rect);
-		past_exp_ -= exp_increase_speed_ * g_SecondPerFrame;
-	}
-	else if (past_exp_ < exp_) //EXP
-	{
-		FLOAT_RECT& exp_rect = exp_image->get_max_rect_size();
-		FLOAT_RECT current_guage_rect = { 0,0,0,0 };
-		current_guage_rect.right = exp_rect.right * past_exp_rate;
-		current_guage_rect.bottom = exp_rect.bottom;
-		exp_image->SetRectListSize(current_guage_rect);
-		past_exp_ += exp_increase_speed_ * g_SecondPerFrame;
-	}
-	
 	player_ui_component->Render();
 
 	return true;
@@ -203,27 +224,45 @@ void PPlayerStatus::StatusSet(multibyte_string status_path, multibyte_string obj
 	damage_mob = status->monster_damage_;
 
 
-	 player_ui_component = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"ENERGY_GUAGE");
-	std::vector<PUIComponent*>& comp_vec = player_ui_component->get_component_list_();
-
-
-	for (int i = 0; i < comp_vec.size(); i++)
+	if (owner_->get_type_() == Type::PLAYER || owner_->get_type_() == Type::OTHER_PLAYER)
 	{
-		if (comp_vec[i]->get_object_name().compare(L"hpbar") == 0)
+		player_ui_component = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"ENERGY_GUAGE");
+		std::vector<PUIComponent*>& comp_vec = player_ui_component->get_component_list_();
+
+
+		for (int i = 0; i < comp_vec.size(); i++)
 		{
-			hp_image = (PImageControl*)comp_vec[i];
-			hp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+			if (comp_vec[i]->get_object_name().compare(L"hpbar") == 0)
+			{
+				hp_image = (PImageControl*)comp_vec[i];
+				hp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+			}
+
+			else if (comp_vec[i]->get_object_name().compare(L"mpbar") == 0)
+			{
+				mp_image = (PImageControl*)comp_vec[i];
+				mp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+			}
+			else if (comp_vec[i]->get_object_name().compare(L"expbar") == 0)
+			{
+				exp_image = (PImageControl*)comp_vec[i];
+				exp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+			}
 		}
-		
-		else if (comp_vec[i]->get_object_name().compare(L"mpbar") == 0)
+	}
+
+	if (owner_->get_type_() == Type::BOSS_MONSTER)
+	{
+		player_ui_component = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"BOSS_HPBAR");
+		std::vector<PUIComponent*>& comp_boss_vec = player_ui_component->get_component_list_();
+
+		for (int i = 0; i < comp_boss_vec.size(); i++) //플레이어 적용안되면 보스로 전이
 		{
-			mp_image = (PImageControl*)comp_vec[i];
-			mp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
-		}
-		else if (comp_vec[i]->get_object_name().compare(L"expbar") == 0)
-		{
-			exp_image = (PImageControl*)comp_vec[i];
-			exp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+			if (comp_boss_vec[i]->get_object_name().compare(L"boss_hpbar") == 0)
+			{
+				hp_image = (PImageControl*)comp_boss_vec[i];
+				hp_image->set_max_rect_size(comp_boss_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+			}
 		}
 	}
 
@@ -316,5 +355,10 @@ bool PPlayerStatus::is_dead()
 		return true;
 
 	return false;
+}
+
+void PPlayerStatus::set_owner(PRectObject* owner)
+{
+	owner_ = owner;
 }
 

@@ -23,7 +23,7 @@ typedef struct ph
 {
 	WORD len;   // 데이터 길이+헤더길이   WORD : unisgned short
 	WORD type;  // 패킷 타입 (프로토콜)
-	WORD id;
+	WORD id;  //클라는 내아이디, 서버는 보낼아이디, 서버가 브로드캐스트시 SERVER_ID
 
 }PACKET_HEADER;
 typedef struct pkt{
@@ -50,9 +50,10 @@ typedef struct pkt{
 #define PACKET_BROADCAST_BE_ATTACKED			708		//서버가 클라에게 공격받았다 알림  데미지 + 방향
 #define PACKET_BROADCAST_SPAWN_CHARACTER		709		//
 #define PAKCET_BROADCAST_USERX_EXIT				710		//USERX가 나갔다고 브로드캐스트
-#define PACKET_SC_TEST_HPDECREASE				730
+#define PACKET_BROADCAST_USERX_HIT				730		//USERX 데미지 입었음을 알림
+#define PACKET_CS_IM_HIT						731		//자기가 데미지를 입었음을 서버에게 보고
 #define PACKET_SC_SPAWN_BOSS					780		//자쿰 소환 명령
-
+#define PACKET_SC_BOSS_REAMIN_HP				781		//자쿰 남은 HP 서버->클라로 전송. 자신이 MONSTER_HIT을 보냈을때만 반송됨(HP 어긋나는거 방지)
 
 
 
@@ -97,5 +98,10 @@ typedef struct PKT_MSG_MONSTER_HIT_
 	WORD player_user_id;
 	int damage;
 }PKT_MSG_MONSTER_HIT;
+
+typedef struct INFO_CID_
+{
+	WORD cid;
+}INFO_CID;
 
 #pragma pack(pop)

@@ -50,6 +50,8 @@ public:
 	void ReportPositionMsg();
 	PPlayerCharacter* my_character_;
 
+	bool boss_spawn_;
+private:
 public:
 	const bool& get_loading_end();
 

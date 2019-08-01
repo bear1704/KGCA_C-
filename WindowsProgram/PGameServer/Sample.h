@@ -25,7 +25,6 @@ private:
 
 	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:
-
 	Sample();
 	virtual ~Sample();
 };

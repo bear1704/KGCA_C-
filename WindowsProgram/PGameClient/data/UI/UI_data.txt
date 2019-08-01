@@ -149,4 +149,12 @@
 	<init_sprite> boss_hp_slot </init_sprite>
 	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
 </ui_Data>
+<ui_data>
+	<name> boss_hpbar  </name>
+	<image_size> 0,0,760,13 </image_size>
+	<alpha> 1.0 </alpha>
+	<scale> 1.0 </scale>
+	<init_sprite> boss_hpbar </init_sprite>
+	<sprite_path> data/UI/sprite/UI_sprite.txt </sprite_path>
+</ui_Data>
 

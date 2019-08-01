@@ -154,8 +154,14 @@
 	<path> data/UI/sprite/boss_hp_case.bmp </path>
 	<coord> 0,0,800,40</coord>
 </sprite>
-
-
+<sprite>
+	<name> boss_hpbar </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<path> data/UI/sprite/boss_hpbar.bmp </path>
+	<coord> 0,0,760,13</coord>
+</sprite>
 
 
 

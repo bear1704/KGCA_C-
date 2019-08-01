@@ -83,14 +83,6 @@ void PInstructionProcessor::ProcessInstruction()
 
 		switch (packet.ph.type)
 		{			
-				case PACKET_SC_TEST_HPDECREASE:
-				{
-					int dec = *(PacketMessage<int>)packet.msg;
-					WORD id = packet.ph.id;
-					PPlayerCharacter* obj = (PPlayerCharacter*)current_scene_->FindObjectByCid(id);
-					obj->get_status().DecreaseHP(100);
-					break;
-				}
 				case PACKET_SC_ID_PROVIDE:
 				{
 					
@@ -189,33 +181,57 @@ void PInstructionProcessor::ProcessInstruction()
 					pPoint boss_pos = pPoint(spawn_msg.posx, spawn_msg.posy);
 					
 					SpawnBossMonster(boss_pos, spawn_msg.id);
+					boss_spawn_ = true;
 					break;
 				}
 				case PACKET_BROADCAST_USERX_ATTACK_SUCCESS:
 				{
+
+
 					PKT_MSG_MONSTER_HIT pmmh;
 					ZeroMemory(&pmmh, sizeof(PKT_MSG_MONSTER_HIT));
 					memcpy(&pmmh, packet.msg, sizeof(PKT_MSG_MONSTER_HIT));
+
+					if (pmmh.player_user_id == PUserManager::GetInstance().oneself_user_.get_id())
+						break;
 
 					PPlayerCharacter* userx_character = (PPlayerCharacter*)current_scene_->FindObjectByCid(pmmh.player_cid);
 					pPoint userx_attack_pos = pPoint(userx_character->get_attack_collision_box_().left + 10.0f,
 						userx_character->get_attack_collision_box_().top - 30.0f); //hard_coded
 					PSpriteManager::GetInstance().CreateDamageFontFromInteger(pmmh.damage, userx_attack_pos);
 
+					PBossMonster* zakum = (PBossMonster*)g_current_scene_->FindObjectByCid(ZAKUM_ID);
+					break;
+				}
+				case PACKET_BROADCAST_USERX_HIT:
+				{
+					/*WORD cid;
+					memcpy(&cid, packet.msg, sizeof(WORD));
+					
+					if (cid == PUserManager::GetInstance().oneself_user_.get_character_id())
+						break;
+
+					PPlayerCharacter* ochar = (PPlayerCharacter*)g_current_scene_->FindObjectByCid(cid);
+					ochar->SetTransition(FSM_Event::HIT);
+
+
+					break;*/
+					//hit는 득보다 실이 크다.
+					break;
+				}
+				case PACKET_SC_BOSS_REAMIN_HP:
+				{
+				/*	if (packet.ph.id == PUserManager::GetInstance().oneself_user_.get_id())
+						break;*/
+
+					int boss_remain_hp;
+					memcpy(&boss_remain_hp, packet.msg, sizeof(int));
+					PBossMonster* pbm = (PBossMonster*)g_current_scene_->FindObjectByCid(ZAKUM_ID);
+					pbm->get_status().ModifyHP(boss_remain_hp);
+					break;
+
 				}
 
-
-
-			/*	case PAKCET_BROADCAST_USERX_EXIT:
-				{
-					EXIT_MSG msg;
-					ZeroMemory(&msg, sizeof(EXIT_MSG));
-					memcpy(&msg, packet.msg, sizeof(EXIT_MSG));
-					
-					PUser* user = PUserManager::GetInstance().FindUserById(msg.id);
-					user->set_connected(false);
-					break;
-				}*/
 		}
 
 	}
@@ -246,8 +262,8 @@ void PInstructionProcessor::ProcessClientTask()
 			PKT_MSG_MONSTER_HIT pmmh;
 			pmmh.damage = data.damage;
 			pmmh.monster_id = data.boss_id;
-			pmmh.player_user_id = data.player_id;
-			pmmh.player_cid = PUserManager::GetInstance().oneself_user_.get_character_id();
+			pmmh.player_user_id = PUserManager::GetInstance().oneself_user_.get_id();
+			pmmh.player_cid = data.player_cid;
 
 			memcpy(packet.msg, &pmmh, sizeof(PKT_MSG_MONSTER_HIT));
 
@@ -290,6 +306,7 @@ void PInstructionProcessor::SpawnPlayer(pPoint& pos, WORD id)
 		PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
 		component->set_gravity_(450.0f);
 		component->set_type_(Type::PLAYER);
+		component->get_status().set_owner(component);
 		component->StatusSet(status_path, component->get_object_name());
 		component->set_animation_list_(PObjectDataManager::GetInstance().get_animation_list_from_map(L"player"));
 		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
@@ -315,6 +332,7 @@ void PInstructionProcessor::SpawnOtherPlayer(pPoint& pos, WORD cid)
 		PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
 		component->set_gravity_(450.0f);
 		component->set_type_(Type::OTHER_PLAYER);
+		component->get_status().set_owner(component);
 		component->StatusSet(status_path, component->get_object_name());
 		component->set_animation_list_(PObjectDataManager::GetInstance().get_animation_list_from_map(L"other_player"));
 		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
@@ -339,6 +357,7 @@ void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
 		PObjectDataManager::GetInstance().LoadAnimationDataFromScriptEx(animation_path); //캐릭터 스프라이트 선행 로드 후에 위치해야 함.
 		//component->set_gravity_(450.0f);
 		component->set_type_(Type::BOSS_MONSTER);
+		component->get_status().set_owner(component);
 		component->StatusSet(status_path, component->get_object_name());
 		component->set_animation_list_(PObjectDataManager::GetInstance().get_animation_list_from_map(L"zakum"));
 		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());

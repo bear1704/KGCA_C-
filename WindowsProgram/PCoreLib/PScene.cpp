@@ -78,14 +78,14 @@ bool PScene::Frame()
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Frame();
 			target = player;
-			if (target->get_status().get_exp_() >= target->get_status().get_max_exp() && scene_number_ == 1)
+		/*	if (target->get_status().get_exp_() >= target->get_status().get_max_exp() && scene_number_ == 1)
 			{
 				SceneChange(2);
 			}
 			if (target->get_status().get_hp_() <= 0)
 			{
 				SceneChange(3);
-			}
+			}*/
 		}
 	}
 

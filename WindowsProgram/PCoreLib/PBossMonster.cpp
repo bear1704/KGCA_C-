@@ -21,7 +21,7 @@ bool PBossMonster::Init()
 	boss_monster_fsm_.Add(FSM_State::BOSS_IDLE, FSM_Event::HIT, FSM_State::BOSS_HIT);
 	boss_monster_fsm_.Add(FSM_State::BOSS_HIT, FSM_Event::INPUT_NONE, FSM_State::BOSS_IDLE);
 
-
+	status.Init();
 	return false;
 }
 
@@ -109,6 +109,7 @@ FSM_State PBossMonster::get_current_monster_state_()
 bool PBossMonster::Frame()
 {
 	sprite_.Frame();
+	status.Frame();
 	ProcessAction();
 	set_collision_box_(collision_box_norm_);
 
@@ -118,6 +119,7 @@ bool PBossMonster::Frame()
 bool PBossMonster::Render()
 {
 	Spawn();
+	status.Render();
 	return false;
 }
 
@@ -146,4 +148,16 @@ void PBossMonster::set_be_received_damage_(int damage)
 int PBossMonster::get_be_received_damage()
 {
 	return be_received_damage_;
+}
+
+void PBossMonster::StatusSet(multibyte_string status_path, multibyte_string object_name)
+{
+	status.StatusSet(status_path, object_name);
+	
+	
+}
+
+void PBossMonster::AddSkill(PSkill skill)
+{
+	skill_list_.push_back(skill);
 }

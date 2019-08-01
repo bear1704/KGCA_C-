@@ -4,7 +4,7 @@
 typedef struct HitData_ {
 	int damage;
 	WORD boss_id;
-	WORD player_id;
+	WORD player_cid;
 }HitData;
 
 
