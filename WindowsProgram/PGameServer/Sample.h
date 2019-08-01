@@ -21,7 +21,7 @@ public:
 
 private:
 	std::thread instruction_process_thread_;
-
+	
 
 	LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:

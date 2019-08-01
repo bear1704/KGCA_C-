@@ -21,6 +21,7 @@ enum class OperateMode
 
 extern OperateMode g_operate_mode;
 extern bool g_window_terminated;
+extern HANDLE g_handle_timer_;
 
 static void E_MSG(const char* pMsg)
 {

@@ -32,6 +32,12 @@ bool Sample::Init()
 	PInstructionProcessor::GetInstance().BindScene(g_current_scene_);
 
 
+
+
+	
+
+
+
 	if (g_current_scene_)
 		g_current_scene_->Init();
 

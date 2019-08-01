@@ -123,6 +123,9 @@ enum class ANIMATIONTYPE
 	JUMP,
 	HIT,
 	DEAD,
+	SKILLONE,
+	SKILLTWO,
+	SKILLTHREE,
 	ERROR_OCCUR,
 
 };
@@ -215,6 +218,12 @@ static ANIMATIONTYPE WstringToAnimationtype(std::wstring wstr)
 		return ANIMATIONTYPE::HIT;
 	else if (wstr.compare(L"DEAD") == 0)
 		return ANIMATIONTYPE::DEAD;
+	else if (wstr.compare(L"SKILLONE") == 0)
+		return ANIMATIONTYPE::SKILLONE;
+	else if (wstr.compare(L"SKILLTWO") == 0)
+		return ANIMATIONTYPE::SKILLTWO;
+	else if (wstr.compare(L"SKILLTHREE") == 0)
+		return ANIMATIONTYPE::SKILLTHREE;
 
 	return ANIMATIONTYPE::ERROR_OCCUR;
 }

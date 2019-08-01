@@ -2,6 +2,24 @@
 #include "PBossMobIdleAction.h"
 #include "PBossMobHitAction.h"
 
+
+HANDLE g_handle_4s_sprite_timer_queue_;
+HANDLE g_handle_4s_sprite_timer_;
+
+
+VOID CALLBACK BossSkillTimerCallBack(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+{
+
+	PSprite* sprite = (PSprite*)lpParam;
+	
+	*sprite = *PSpriteManager::GetInstance().get_sprite_from_map_ex(L"zakum_idle");
+	(*sprite).SetPosition(720, 490);
+	(*sprite).set_scale_(1.3f);
+
+
+	DeleteTimerQueueTimer(g_handle_4s_sprite_timer_queue_, g_handle_4s_sprite_timer_, nullptr);
+}
+
 PBossMonster::PBossMonster()
 {
 }
@@ -113,6 +131,8 @@ bool PBossMonster::Frame()
 	ProcessAction();
 	set_collision_box_(collision_box_norm_);
 
+	if (current_skill_ != nullptr)
+		current_skill_->Frame();
 
 
 	return false;
@@ -122,6 +142,9 @@ bool PBossMonster::Render()
 {
 	Spawn();
 	status.Render();
+	
+	if (current_skill_ != nullptr)
+		current_skill_->Render();
 	return false;
 }
 
@@ -164,11 +187,25 @@ void PBossMonster::AddSkill(PSkill* skill)
 	skill_list_.push_back(skill);
 }
 
-void PBossMonster::AddSkillSprite(PSprite sprite)
-{
-	skill_sprite_.push_back(sprite);
-}
+
 
 void PBossMonster::StartSkillPhase(int skill_number)
 {
+	if (skill_number == 0)
+	{
+		MeteorRandNumber num = PNetworkDataStorage::GetInstance().PopMeteorData();
+		
+		current_skill_ = skill_list_[skill_number];
+		 current_skill_->Start(num.initpos, num.downspeed);
+
+		 set_sprite_(*find_sprite_by_type(ANIMATIONTYPE::SKILLONE));
+		 sprite_.SetPosition(position_.x, position_.y);
+		 CreateTimerQueueTimer(&g_handle_4s_sprite_timer_, g_handle_4s_sprite_timer_queue_, (WAITORTIMERCALLBACK)BossSkillTimerCallBack,
+			 &sprite_, 4000, 0, WT_EXECUTEDEFAULT);
+	}
+}
+
+void PBossMonster::ChangeSprite(PSprite* sprite)
+{
+	sprite_ = *sprite;
 }

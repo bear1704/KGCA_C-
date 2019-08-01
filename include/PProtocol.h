@@ -8,6 +8,8 @@
 
 extern bool g_custom_tick;
 
+
+
 template<typename T>
 using PacketMessage = T*;
 
@@ -23,7 +25,7 @@ typedef struct ph
 {
 	WORD len;   // 데이터 길이+헤더길이   WORD : unisgned short
 	WORD type;  // 패킷 타입 (프로토콜)
-	WORD id;  //클라는 내아이디, 서버는 보낼아이디, 서버가 브로드캐스트시 SERVER_ID
+	WORD id;  //클라는 내아이디, 서버는 보낼아이디, 서버가 전체 브로드캐스트시 SERVER_ID, 특정 유저 정보를 브로드캐스트시 특정 유저 ID
 
 }PACKET_HEADER;
 typedef struct pkt{
@@ -54,7 +56,7 @@ typedef struct pkt{
 #define PACKET_CS_IM_HIT						731		//자기가 데미지를 입었음을 서버에게 보고
 #define PACKET_SC_SPAWN_BOSS					780		//자쿰 소환 명령
 #define PACKET_SC_BOSS_REAMIN_HP				781		//자쿰 남은 HP 서버->클라로 전송. 자신이 MONSTER_HIT을 보냈을때만 반송됨(HP 어긋나는거 방지)
-
+#define PACKET_BROADCAST_METEOR_ACTIVE			901		//메테오 스킬 사용 지시
 
 
 typedef struct{
@@ -103,5 +105,13 @@ typedef struct INFO_CID_
 {
 	WORD cid;
 }INFO_CID;
+
+typedef struct MeteorRandNumberForPacket_
+{
+	int skillnum;
+	int initpos[8];
+	int downspeed[8];
+}MeteorRandNumberForPacket;
+
 
 #pragma pack(pop)

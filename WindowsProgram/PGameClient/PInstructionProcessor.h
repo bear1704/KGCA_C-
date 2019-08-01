@@ -7,7 +7,7 @@
 #include "PScene.h"
 #include "PObjectDataManager.h"
 #include "PNetworkDataStorage.h"
-
+#include "PMeteor.h"
 
 class PInstructionProcessor : public PSingleton<PInstructionProcessor>
 {

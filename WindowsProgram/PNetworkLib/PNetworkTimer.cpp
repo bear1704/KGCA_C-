@@ -2,14 +2,24 @@
 #include <cstdio>
 
 bool g_custom_tick = false;
+bool g_skill_time = false;
 
 HANDLE g_handle_200ms_timer_queue_;
 HANDLE g_handle_timer_;
+
+HANDLE g_handle_20s_timer_queue_;
+HANDLE g_handle_20s_timer_;
 
 
 VOID CALLBACK TimerCallBack(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 {
 	g_custom_tick = true;
+
+	//DeleteTimerQueueTimer(g_handle_200ms_timer_queue_, g_handle_timer_, nullptr);
+}
+VOID CALLBACK SkillTimerCallBack(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+{
+	g_skill_time = true;
 
 	//DeleteTimerQueueTimer(g_handle_200ms_timer_queue_, g_handle_timer_, nullptr);
 }
@@ -33,5 +43,7 @@ void PNetworkTimer::Init()
 	CreateTimerQueueTimer(&g_handle_timer_, g_handle_200ms_timer_queue_, (WAITORTIMERCALLBACK)TimerCallBack,
 		nullptr, 0, 200, WT_EXECUTEDEFAULT);
 
+	CreateTimerQueueTimer(&g_handle_20s_timer_, g_handle_20s_timer_queue_, (WAITORTIMERCALLBACK)SkillTimerCallBack,
+		nullptr, 10000, 20000, WT_EXECUTEDEFAULT);
 	printf("\n[Network timer start]");
 }

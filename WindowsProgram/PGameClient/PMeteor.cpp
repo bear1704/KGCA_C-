@@ -7,31 +7,17 @@ PMeteor::PMeteor(int initypos, int randdownspeed)
 	rand_downspeed_ = randdownspeed;
 }
 
+PMeteor::PMeteor()
+{
+}
+
 PMeteor::~PMeteor()
 {
 }
 
 void PMeteor::Init()
 {
-	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/character/sprite/character_coord.txt", ObjectLoadType::CHARACTER);
-	PSprite* sprite = PSpriteManager::GetInstance().get_sprite_from_map_ex(L"meteor");
-
-	std::random_device r;
-	std::mt19937 engine(r());
-	std::uniform_int_distribution<int> distribution(100, 300);
-	auto generator = std::bind(distribution, engine);
-
 	
-	for (int i = 0; i < 8; i++)
-	{
-		FLOAT_RECT rect = { 0,-1000, 50,123 };
-		pPoint pos = pPoint(23 + 150 * i, -500);
-		Stone st;
-		st.position_ = pos;
-		st.stone_sprite_.Clone(sprite, 1.0f, 1.0f);
-		st.drop_speed_ = generator();
-		stone_list_.push_back(st);
-	}
 }
 
 void PMeteor::Frame()
@@ -63,12 +49,29 @@ void PMeteor::Release()
 	{
 		stone_list_[i].stone_sprite_.Release();
 	}
+
+	//스킬은 재사용해야 하므로..
 }
 
-void PMeteor::Start()
+void PMeteor::Start(std::vector<int> initpos, std::vector<int> initspeed)
 {
 
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/character/sprite/character_coord.txt", ObjectLoadType::CHARACTER);
+	PSprite* sprite = PSpriteManager::GetInstance().get_sprite_from_map_ex(L"meteor");
 
+
+
+
+	for (int i = 0; i < 8; i++)
+	{
+		FLOAT_RECT rect = { 0,0, 50,123 };
+		pPoint pos = pPoint(23 + 150 * i, initpos[i]);
+		Stone st;
+		st.position_ = pos;
+		st.stone_sprite_.Clone(sprite, 1.0f, 1.0f);
+		st.drop_speed_ = initspeed[i];
+		stone_list_.push_back(st);
+	}
 
 
 }

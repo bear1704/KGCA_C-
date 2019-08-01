@@ -10,7 +10,6 @@
 #include "PCore.h"
 #include "PParser.h"
 #include "PInstructionProcessor.h"
-#include "PMeteor.h"
 
 
 PScene* g_current_scene_;

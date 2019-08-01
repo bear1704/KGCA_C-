@@ -19,6 +19,16 @@ void PNetworkDataStorage::AddData(FLOAT_RECT data)
 	col_rect_list_.push_back(data);
 }
 
+void PNetworkDataStorage::AddData(PSkill* skill)
+{
+	skill_list_.push_back(skill);
+}
+
+void PNetworkDataStorage::AddData(MeteorRandNumber data)
+{
+	meteor_data_.push_back(data);
+}
+
 HitData PNetworkDataStorage::PopHitData()
 {
 	HitData ret = hit_list_.front();
@@ -30,6 +40,20 @@ FLOAT_RECT PNetworkDataStorage::PopRECTData()
 {
 	FLOAT_RECT ret = col_rect_list_.front();
 	col_rect_list_.pop_front();
+	return ret;
+}
+
+PSkill* PNetworkDataStorage::PopSkillData()
+{
+	PSkill* ret = skill_list_.front();
+	col_rect_list_.pop_front();
+	return ret;
+}
+
+MeteorRandNumber PNetworkDataStorage::PopMeteorData()
+{
+	MeteorRandNumber ret = meteor_data_.front();
+	meteor_data_.pop_front();
 	return ret;
 }
 
@@ -51,6 +75,11 @@ bool PNetworkDataStorage::GetHitListSize()
 bool PNetworkDataStorage::GetRECTListSize()
 {
 	return col_rect_list_.size();
+}
+
+bool PNetworkDataStorage::GetSkillListSize()
+{
+	return skill_list_.size();
 }
 
 void PNetworkDataStorage::set_b_need_report(bool need_report)

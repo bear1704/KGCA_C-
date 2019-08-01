@@ -28,6 +28,6 @@
 <list> <!-- 자쿰 애니메이션 리스트 -->
 	<name> zakum </name>
 	<idle> zakum_idle </idle>
-	<idle> zakum_shiny </idle>
-	<idle> zakum_skill </idle>
+	<skillone> zakum_skill </skillone>
+	<skilltwo> zakum_shiny </skilltwo>
 </list>

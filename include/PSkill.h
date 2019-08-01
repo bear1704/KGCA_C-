@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 class PSkill
 {
 	
@@ -12,6 +14,7 @@ public:
 	virtual void Render() = 0;
 	virtual void Release() = 0;
 	virtual void Start();
+	virtual void Start(std::vector<int> , std::vector<int>);
 
 };
 

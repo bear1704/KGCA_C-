@@ -29,7 +29,7 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 			if (str.empty())
 				continue;
 			
-			std::regex type_start("<[a-zA-Z_]*>");
+			std::regex type_start("<[a-zA-Z0-9_]*>");
 			std::regex type_end("<[\/]+[a-zA-Z_]*>");
 			std::regex comment("<!--[a-zA-Z0-9-_\.\:\!\?\\s\(\)\']*-->");
 			std::regex whitespace("[\n\r]+");

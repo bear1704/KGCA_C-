@@ -26,6 +26,7 @@ class PMeteor : public PSkill
 
 public:
 	PMeteor(int initypos, int randdownspeed);
+	PMeteor();
 	~PMeteor();
 public:
 	std::vector<Stone> stone_list_;
@@ -38,7 +39,7 @@ public:
 	void Frame() override;
 	void Render() override;
 	void Release() override;
-	void Start();
+	void Start(std::vector<int> initpos, std::vector<int> initspeed) override;
 
 };
 

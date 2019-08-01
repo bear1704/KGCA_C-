@@ -16,7 +16,6 @@ private:
 	bool ishit_;
 	int be_received_damage_;
 	std::vector<PSkill*> skill_list_;
-	std::vector<PSprite> skill_sprite_;
 	PSkill* current_skill_;
 public:
 	bool Init() override;
@@ -44,9 +43,11 @@ public:
 	void StatusSet(multibyte_string status_path, multibyte_string object_name);
 
 	void AddSkill(PSkill* skill);
-	void AddSkillSprite(PSprite sprite);
 	void StartSkillPhase(int skill_number);
+	void ChangeSprite(PSprite* sprite);
 
 	PUIComponent* damage_present_image_;
 };
 
+extern HANDLE g_handle_4s_sprite_timer_queue_;
+extern HANDLE g_handle_4s_sprite_timer_;

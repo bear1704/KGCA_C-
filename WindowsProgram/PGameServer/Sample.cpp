@@ -3,6 +3,7 @@
 
 bool g_window_terminated;
 
+
 int main()
 {
 	Sample sample;
@@ -75,6 +76,44 @@ bool Sample::PreFrame()
 	if (g_custom_tick)
 	{
 		g_custom_tick = false;
+	}
+
+	if (g_skill_time)
+	{
+		g_skill_time = false;
+		//대충 0~2사이의 랜덤값을 출력하는 코드
+		
+		std::random_device r;
+		std::mt19937 engine(r());
+		std::uniform_int_distribution<int> distribution(100, 500);
+		std::uniform_int_distribution<int> distribution2(-1000, -500);
+		auto generator = std::bind(distribution, engine);
+		auto generator2 = std::bind(distribution2, engine);
+
+		int randnum = 0; //하나밖에 없으니 일단 0으로 초기화
+
+
+		MeteorRandNumberForPacket data;
+		data.skillnum = randnum;
+
+		for (int i = 0; i < 8; i++)
+		{
+			int num1 = generator2();
+			int num2 = generator();
+			data.initpos[i] = num1;
+			data.downspeed[i] = num2;
+		}
+
+		PACKET pack;
+		pack.ph.id = SERVER_ID;
+		pack.ph.type = PACKET_BROADCAST_METEOR_ACTIVE;
+		pack.ph.len = PACKET_HEADER_SIZE + sizeof(MeteorRandNumberForPacket);
+		memcpy(pack.msg, &data, sizeof(MeteorRandNumberForPacket));
+
+		
+		PServerInstructionProcessor::GetInstance().Broadcast(pack);
+		printf("\n 스킬 발동 : %d번", data.skillnum);
+
 	}
 
 	PServerInstructionProcessor::GetInstance().Frame();

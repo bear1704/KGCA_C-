@@ -182,6 +182,7 @@ void PInstructionProcessor::ProcessInstruction()
 					
 					SpawnBossMonster(boss_pos, spawn_msg.id);
 					boss_spawn_ = true;
+
 					break;
 				}
 				case PACKET_BROADCAST_USERX_ATTACK_SUCCESS:
@@ -230,6 +231,30 @@ void PInstructionProcessor::ProcessInstruction()
 					pbm->get_status().ModifyHP(boss_remain_hp);
 					break;
 
+				}
+				case PACKET_BROADCAST_METEOR_ACTIVE:
+				{
+					PBossMonster* pbm = (PBossMonster*)current_scene_->FindObjectByCid(ZAKUM_ID);
+
+					MeteorRandNumberForPacket data;
+					memcpy(&data, packet.msg, sizeof(MeteorRandNumberForPacket));
+					
+					MeteorRandNumber skill_data;
+					skill_data.skillnum = data.skillnum;
+					skill_data.initpos.resize(8);
+					skill_data.downspeed.resize(8);
+
+					for (int i = 0; i < 8; i++)//hard coded
+					{
+						skill_data.initpos[i] = data.initpos[i];
+						skill_data.downspeed[i] = data.downspeed[i];
+					}
+
+
+					PNetworkDataStorage::GetInstance().AddData(skill_data);
+					pbm->StartSkillPhase(0);
+					break;
+					//test code end
 				}
 
 		}
@@ -351,6 +376,9 @@ void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
 
 	std::lock_guard<std::mutex> lk(spawn_mutex_);
 	{
+		PMeteor* meteor = new PMeteor();
+		PNetworkDataStorage::GetInstance().AddData(meteor);
+
 		PBossMonster* component;
 		component = new PBossMonster();
 		component->Set(path, L"zakum", pPoint(pos.x, pos.y));
@@ -363,6 +391,7 @@ void PInstructionProcessor::SpawnBossMonster(pPoint& pos, WORD id)
 		component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
 		component->set_id(id);
 		component->Init();
+		component->AddSkill(meteor);
 
 		current_scene_->AddGameObjects(component);
 	}
