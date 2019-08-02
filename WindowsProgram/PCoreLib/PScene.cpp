@@ -130,7 +130,6 @@ bool PScene::Frame()
 
 bool PScene::Render()
 {
-	
 	for (int i = 0; i < game_objects_.size(); i++)
 	{
 		if (game_objects_[i]->get_type_() == Type::MAP)
@@ -144,7 +143,13 @@ bool PScene::Render()
 			//draw_test_rect(player->get_collision_rect_());
 			player->Render();
 		}
-		else if (game_objects_[i]->get_type_() == Type::PLAYER)
+
+	}
+
+	for (int i = 0; i < game_objects_.size(); i++)
+	{
+		
+		if (game_objects_[i]->get_type_() == Type::PLAYER)
 		{
 			PPlayerCharacter* player = (PPlayerCharacter*)game_objects_[i];
 			player->Render();

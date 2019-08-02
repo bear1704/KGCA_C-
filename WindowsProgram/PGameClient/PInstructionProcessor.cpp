@@ -164,6 +164,7 @@ void PInstructionProcessor::ProcessInstruction()
 					{
 						userx_character->get_physics_().StartJump();  
    	 				}
+					
 
 
 					userx_character->SetTransition(FsmStateToFsmEvent(report_msg.current_state));
