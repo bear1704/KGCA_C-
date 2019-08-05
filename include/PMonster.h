@@ -22,7 +22,6 @@ public:
 	bool Frame() override;
 	bool Render() override;
 	bool Release() override;
-	PUIComponent* dmg_comp;
 public:
 	void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	void MonsterWallCollision();
