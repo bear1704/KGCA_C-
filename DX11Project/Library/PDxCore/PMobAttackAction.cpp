@@ -14,6 +14,10 @@ PMobAttackAction::~PMobAttackAction()
 void PMobAttackAction::Process(PPlayerCharacter* target)
 {
 	
+	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::ATTACK) //attack(chase)는 move와 스프라이트를 공유
+	{
+		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::ATTACK));
+	}
 
 	if (owner_->get_ishit_()) //HIT
 	{

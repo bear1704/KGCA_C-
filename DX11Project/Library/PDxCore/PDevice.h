@@ -1,4 +1,5 @@
 #pragma once
+#include <assert.h>
 #include "PWindow.h"
 #include "PStd.h"
 #include <d3d11.h>

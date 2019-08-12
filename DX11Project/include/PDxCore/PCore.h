@@ -1,5 +1,5 @@
 #pragma once
-#include "PDevice.h"
+#include "PWindow.h"
 #include "PInput.h"
 #include "PTimer.h"
 #include "PSoundMgr.h"
@@ -9,14 +9,20 @@
 #include "PObjectDataManager.h"
 
 
-class PCore : public PDevice
+class PCore : public PWindow
 {
 public:
 	PCore();
 	virtual ~PCore();
 public:
 	PTimer timer;
-	
+	HDC handle_ScreenDC;
+	HDC handle_off_screenDC;
+	HBITMAP handle_off_screen_bitmap;
+	DWORD background_color;
+	HBRUSH handle_background_brush;
+	HANDLE handle_pen;
+
 public:
 	virtual bool Init();
 	virtual bool PreFrame();

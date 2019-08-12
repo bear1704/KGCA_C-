@@ -20,7 +20,7 @@ PPlayerCharacter::~PPlayerCharacter()
 
 bool PPlayerCharacter::Init()
 {
-
+	status.Init();
 	action_list_.insert(std::make_pair(FSM_State::IDLE, new PIdleAction(this)));
 	action_list_.insert(std::make_pair(FSM_State::MOVE, new PMoveAction(this)));
 	action_list_.insert(std::make_pair(FSM_State::JUMP, new PJumpAction(this)));
@@ -55,6 +55,9 @@ bool PPlayerCharacter::Init()
 	player_fsm_.Add(FSM_State::HIT, FSM_Event::TIME_OUT, FSM_State::IDLE);
 	player_fsm_.Add(FSM_State::HIT, FSM_Event::HPEMPTY, FSM_State::DEAD);
 
+	status.ModifyHP(1930);
+	status.ModifyMP(1930);
+	status.ModifyEXP(0);
 
 
 	return true;
@@ -64,33 +67,67 @@ bool PPlayerCharacter::Frame()
 {
 	SavePrevPosition();
 	ProcessAction();
+	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
 	Movement();
 	physics_.Jump(physics_.jump_init_time, position_, 800, 0.2f);
 	physics_.Gravity(position_, gravity_);
 	PlatformWallCollision();
+	status.Frame();
+	InvincibleProgress();
+	MissleCollisionCheck();
 	return true;
 }
 
 bool PPlayerCharacter::Render()
 {
-
+	Spawn();
+	status.Render();
 	return true;
 }
 
 bool PPlayerCharacter::Release()
 {
-
+	sprite_.Release();
+	status.Release();
 	return true;
 }
 
 void PPlayerCharacter::Movement()
 {
 
+
+	//if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+	//{
+	//	is_reversal_ = false;
+	//	set_position_(pPoint(position_.x - move_speed_ * g_SecondPerFrame, position_.y));
+	//}
+	//if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+	//{
+	//	is_reversal_ = true;
+	//	set_position_(pPoint(position_.x + move_speed_ * g_SecondPerFrame, position_.y));
+	//}
+
 	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
 	{
 		if(client_owner_character_)
 			physics_.StartJump();
+	}
+	if (g_InputActionMap.qKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyHP(240);
+	}
+	if (g_InputActionMap.wKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyHP(1930);
+	}
+	if (g_InputActionMap.aKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyMP(10);
+	}
+	if (g_InputActionMap.sKey == KEYSTAT::KEY_PUSH)
+	{
+		status.ModifyMP(300);
 	}
 	if (g_InputActionMap.dKey == KEYSTAT::KEY_PUSH)
 	{
@@ -117,6 +154,12 @@ void PPlayerCharacter::Set(multibyte_string data_path, multibyte_string object_n
 
 	if (character_name_ == L"player")
 		client_owner_character_ = true;
+
+	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
+	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path, ObjectLoadType::CHARACTER);
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(info.sprite_name), alpha_, scale_);
+	sprite_.SetPosition(position_.x, position_.y);
 
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
@@ -169,7 +212,6 @@ void PPlayerCharacter::set_right_dir(bool isright)
 }
 
 
-
 void PPlayerCharacter::set_is_character_dead(bool isdead)
 {
 	is_character_dead_ = isdead;
@@ -181,6 +223,40 @@ bool PPlayerCharacter::get_hit_()
 }
 
 
+
+void PPlayerCharacter::InvincibleProgress()
+{
+	if (get_invisible_() == true)
+	{
+	
+
+		if (flickering_rate < 0.15f)
+		{
+			sprite_.set_alpha_(0.2f);
+		}
+		else if (flickering_rate < 0.3f)
+		{
+			sprite_.set_alpha_(1.0f);
+		}
+		else
+		{
+			flickering_rate = 0.0f;
+		}
+
+		flickering_rate += g_SecondPerFrame;
+		invincible_rate += g_SecondPerFrame;
+
+		if (invincible_rate > 3.0f)
+		{
+			set_invisible_(false);
+			invincible_rate = 0.0f;
+			flickering_rate = 0.0f;
+			sprite_.set_alpha_(1.0f);
+
+		}
+
+	}
+}
 
 bool PPlayerCharacter::get_client_owner_character()
 {

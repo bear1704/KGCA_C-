@@ -199,6 +199,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="header.h" />
     <ClInclude Include="P2DCamera.h" />
     <ClInclude Include="PAttackAction.h" />
+    <ClInclude Include="PBitmap.h" />
+    <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PBossMobHitAction.h" />
     <ClInclude Include="PBossMobIdleAction.h" />
     <ClInclude Include="PBossMobSkillAction.h" />
@@ -233,11 +235,13 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PPhysicsModule.h" />
     <ClInclude Include="PPlayerCharacter.h" />
     <ClInclude Include="PPlayerState.h" />
+    <ClInclude Include="PPlayerStatus.h" />
     <ClInclude Include="PRectObject.h" />
     <ClInclude Include="PScene.h" />
-    <ClInclude Include="PSkill.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
+    <ClInclude Include="PSprite.h" />
+    <ClInclude Include="PSpriteManager.h" />
     <ClInclude Include="PStd.h" />
     <ClInclude Include="PTextrue.h" />
     <ClInclude Include="PTimer.h" />
@@ -249,6 +253,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
   <ItemGroup>
     <ClCompile Include="P2DCamera.cpp" />
     <ClCompile Include="PAttackAction.cpp" />
+    <ClCompile Include="PBitmap.cpp" />
+    <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PBossMobHitAction.cpp" />
     <ClCompile Include="PBossMobIdleAction.cpp" />
     <ClCompile Include="PBossMobSkillAction.cpp" />
@@ -289,11 +295,13 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PPhysicsModule.cpp" />
     <ClCompile Include="PPlayerCharacter.cpp" />
     <ClCompile Include="PPlayerState.cpp" />
+    <ClCompile Include="PPlayerStatus.cpp" />
     <ClCompile Include="PRectObject.cpp" />
     <ClCompile Include="PScene.cpp" />
-    <ClCompile Include="PSkill.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
+    <ClCompile Include="PSprite.cpp" />
+    <ClCompile Include="PSpriteManager.cpp" />
     <ClCompile Include="PTextrue.cpp" />
     <ClCompile Include="PTimer.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />

@@ -174,9 +174,6 @@
     <ClInclude Include="PScene.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
-    <ClInclude Include="PSkill.h">
-      <Filter>소스 파일\System</Filter>
-    </ClInclude>
     <ClInclude Include="PPhysicsModule.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
@@ -196,6 +193,21 @@
       <Filter>소스 파일\System</Filter>
     </ClInclude>
     <ClInclude Include="PTextrue.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PPlayerStatus.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PSprite.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PSpriteManager.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PBitmap.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PBitmapManager.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
   </ItemGroup>
@@ -311,9 +323,6 @@
     <ClCompile Include="PScene.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="PSkill.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
     <ClCompile Include="PPhysicsModule.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
@@ -336,6 +345,21 @@
       <Filter>소스 파일\System</Filter>
     </ClCompile>
     <ClCompile Include="PTextrue.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PPlayerStatus.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PSprite.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PSpriteManager.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PBitmap.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PBitmapManager.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
   </ItemGroup>

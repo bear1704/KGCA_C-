@@ -8,12 +8,13 @@
 #include <memory>
 #include <cmath>
 #include "PParser.h"
-#include <assert.h>
 
 class PScene;
 
 using namespace std;
 
+
+#pragma comment(lib, "PCoreLib.lib")
 #pragma comment(lib, "msimg32")
 
 #define PCORE_RUN(title,x,y,w,h) \
@@ -315,6 +316,8 @@ extern POINT g_MousePos;
 extern float g_fGameTimer;
 extern float g_SecondPerFrame;
 extern PInputActionMap g_InputActionMap;
+extern HDC g_handle_off_screenDC;
+extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
 extern FLOAT_RECT g_rectangle_client;
 extern PScene* g_current_scene_;

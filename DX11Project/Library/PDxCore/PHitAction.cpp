@@ -14,13 +14,17 @@ PHitAction::~PHitAction()
 
 void PHitAction::Process() //날아가는대로 바로 스테이트 체인지, 무적과 히트상태 풀기는 다른 곳에서
 {
+	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::IDLE) //HIT는 IDLE과 모션을 공유, 단 깜빡임
+	{
+		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
+		//owner_->set_invisible_(true);
+	}
 
 
-
-	//if (owner_->get_status().get_hp_() < 0)
-	//{
-	//	owner_->SetTransition(FSM_Event::HPEMPTY);
-	//}
+	if (owner_->get_status().get_hp_() < 0)
+	{
+		owner_->SetTransition(FSM_Event::HPEMPTY);
+	}
 
 
 	if (knockback_distance_ <= 0)
@@ -58,7 +62,7 @@ void PHitAction::KnockBack()
 			nextpos = pPoint(pos.x - knockback_speed_ * deltatime, pos.y);
 
 		owner_->set_position_(nextpos);
-
+		owner_->get_sprite_()->SetPosition(nextpos.x, nextpos.y);
 		knockback_distance_ -= g_SecondPerFrame * knockback_speed_;
 	}
 
@@ -85,14 +89,14 @@ void PHitAction::CollisionCheck()
 
 				if (monster->check_hit(owner_->get_collision_rect_()))
 				{
-					//int damage = monster->get_status().mob_damage();
+					int damage = monster->get_status().mob_damage();
 
 					player_to_mob_side =
 						(owner_->get_collision_rect_().left - monster->get_collision_rect_().left) > 0 ? SIDE::LEFT : SIDE::RIGHT;
 
 					if (!(owner_->get_invisible_()))
 					{
-						//owner_->get_status().DecreaseHP(damage);
+						owner_->get_status().DecreaseHP(damage);
 						owner_->set_invisible_(true);
 					}
 					
@@ -108,14 +112,14 @@ void PHitAction::CollisionCheck()
 
 				if (monster->check_hit(owner_->get_collision_rect_()))
 				{
-					//int damage = monster->get_status().mob_damage();
+					int damage = monster->get_status().mob_damage();
 
 					player_to_mob_side =
 						(owner_->get_collision_rect_().left - monster->get_collision_rect_().left) > 0 ? SIDE::LEFT : SIDE::RIGHT;
 
 					if (!(owner_->get_invisible_()))
 					{
-						//owner_->get_status().DecreaseHP(damage);
+						owner_->get_status().DecreaseHP(damage);
 						owner_->set_invisible_(true);
 					}
 

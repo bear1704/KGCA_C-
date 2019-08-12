@@ -15,6 +15,16 @@ void PJumpAction::Process()
 {
 	bool is_owner = (owner_->get_client_owner_character());
 
+	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::JUMP)
+	{
+		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::JUMP));
+		PSoundMgr::GetInstance().Play(PSoundMgr::GetInstance().Load(L"data/sound/jump.mp3"));
+	}
+	if (owner_->get_hit_() && owner_->get_invisible_() == false)
+	{
+		owner_->SetTransition(FSM_Event::HIT);
+	}
+
 	if (is_owner)
 	{
 
@@ -55,4 +65,6 @@ void PJumpAction::Process()
 			owner_->SetTransition(FSM_Event::INPUT_ATTACK);
 	}
 
+
+	owner_->get_sprite_()->SetPosition(owner_->get_position_().x, owner_->get_position_().y);
 }

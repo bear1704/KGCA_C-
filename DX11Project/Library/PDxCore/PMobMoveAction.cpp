@@ -13,7 +13,10 @@ PMobMoveAction::~PMobMoveAction()
 
 void PMobMoveAction::Process(PPlayerCharacter* target)
 {
-
+	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::MOVE)
+	{
+		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::MOVE));
+	}
 
 	if (PCollision::GetInstance().RectInRect(target->get_collision_rect_(), owner_->get_collision_rect_()))
 	{  //플레이어와의 충돌 체크 

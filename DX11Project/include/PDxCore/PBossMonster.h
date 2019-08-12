@@ -4,7 +4,6 @@
 #include "PCharacter.h"
 #include "PFsm.h"
 #include "PBossMobState.h"
-#include "PSkill.h"
 
 
 class PBossMonster :
@@ -17,8 +16,6 @@ public:
 private:
 	bool ishit_;
 	int be_received_damage_;
-	std::vector<PSkill*> skill_list_;
-	PSkill* current_skill_;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -44,6 +41,9 @@ public:
 
 	void StatusSet(multibyte_string status_path, multibyte_string object_name);
 
+	void ChangeSprite(PSprite* sprite);
+
+	PUIComponent* damage_present_image_;
 	void ResetSkill();
 };
 

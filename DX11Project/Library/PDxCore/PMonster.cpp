@@ -60,7 +60,10 @@ bool PMonster::Init()
 	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::MOB_TIME_OUT, FSM_State::IDLE);
 	monster_fsm_.Add(FSM_State::REVIVE, FSM_Event::HIT, FSM_State::HIT);
 
-
+	PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+	dmg_comp = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"DMGPRESENT");
+	
+	
 
 	return false;
 }
@@ -68,23 +71,28 @@ bool PMonster::Init()
 bool PMonster::Frame()
 {
 	SavePrevPosition();
+	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
 	ProcessAction(target_player_);
+	Movement();
 	physics_.Gravity(position_, gravity_);
 	physics_.Jump(physics_.jump_init_time, position_, 650, 0.25f);
 	PlatformWallCollision();
 	MonsterWallCollision();
+	dmg_comp->ReviseAllComponentPosition(dmg_comp->hit_world_pos);
 	return false;
 }
 
 bool PMonster::Render()
 {
+	Spawn();
+	dmg_comp->Render();
 	return false;
 }
 
 bool PMonster::Release()
 {
-
+	sprite_.Release();
 	return false;
 }
 
@@ -100,6 +108,13 @@ void PMonster::Set(multibyte_string data_path, multibyte_string object_name, pPo
 	alpha_ = info.alpha_;
 	scale_ = info.scale_;
 	move_speed_ = info.move_speed_;
+
+	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
+	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path, ObjectLoadType::CHARACTER);
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(info.sprite_name), alpha_, scale_);
+	
+	sprite_.SetPosition(position_.x, position_.y);
 
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
@@ -137,7 +152,10 @@ void PMonster::MonsterWallCollision()
 	}
 }
 
-
+void PMonster::Movement()
+{
+	sprite_.SetPosition(position_.x, position_.y);
+}
 
 SIDE PMonster::get_direction_side_()
 {

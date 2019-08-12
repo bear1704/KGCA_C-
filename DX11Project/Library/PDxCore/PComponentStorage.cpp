@@ -26,6 +26,10 @@ bool PComponentStorage::Release()
 	return false;
 }
 
+void PComponentStorage::InsertObject(PUIComponent * component)
+{
+	ui_compositions_.push_back(component);
+}
 
 void PComponentStorage::InsertObject(std::vector<PRectObject*>& list_component)
 {

@@ -27,12 +27,22 @@ bool PRectObject::Frame()
 
 bool PRectObject::Render()
 {
+	Spawn();
 	return true;
 }
 
 bool PRectObject::Release()
 {
-	
+	if (sprite_.get_bitmap_mask_() != nullptr)
+	{
+		sprite_.get_bitmap_()->Release();
+		delete sprite_.get_bitmap_();
+	}
+	if (sprite_.get_bitmap_mask_() != nullptr)
+	{
+		sprite_.get_bitmap_mask_()->Release();
+		delete sprite_.get_bitmap_mask_();
+	}
 	
 	return true;
 }
@@ -58,6 +68,12 @@ void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, 
 	alpha_ = info.alpha_;
 	scale_ = info.scale_;
 
+	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
+	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path, ObjectLoadType::MAP);
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(info.sprite_name), alpha_, scale_);
+	sprite_.SetPosition(position_.x, position_.y);
+
 
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
@@ -68,7 +84,25 @@ void PRectObject::Set(multibyte_string data_path, multibyte_string object_name, 
 
 }
 
+PBitmap * PRectObject::get_bitmap_()
+{
+	return sprite_.bitmap_;
+}
 
+PBitmap * PRectObject::get_bitmap_mask_()
+{
+	return sprite_.bitmap_mask_;
+}
+
+PSprite * PRectObject::get_sprite_()
+{
+	return &sprite_;
+}
+
+void PRectObject::set_sprite_(PSprite & sprite)
+{
+	sprite_ = sprite;
+}
 
 
 pPoint& PRectObject::get_position_()
@@ -142,7 +176,14 @@ void PRectObject::set_invisible_(bool invisible)
 	invisible_ = invisible;
 }
 
-
+void PRectObject::Spawn()
+{
+	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());
+	pPoint origin_pos = sprite_.get_position_();
+	sprite_.SetPosition(scrpos.x, scrpos.y);
+	sprite_.Draw(is_reversal_);
+	sprite_.SetPosition(origin_pos.x, origin_pos.y);
+}
 
 void PRectObject::set_gravity_(float gravity)
 {
@@ -164,9 +205,62 @@ multibyte_string PRectObject::get_object_name()
 	return object_name_;
 }
 
+void PRectObject::set_animation_list_(std::vector<PSprite*> list)
+{
+	animation_list_ = list;
+}
+
 
 
 ///스프라이트를 Type값으로 찾아준다. 첫번째 시도에서 type가 없으면, 그냥 IDLE 리턴
+PSprite * PRectObject::find_sprite_by_type(ANIMATIONTYPE type)
+{
+	/*auto iter = std::find_if(animation_list_.begin(), animation_list_.end(), 
+		[type](PSprite* element) {
+		return element->get_animation_type_() == type;
+	});
+	return *iter;*/
+
+	std::random_device r;
+	std::mt19937 engine(r());
+	std::uniform_int_distribution<int> distribution(0, 2);
+	auto generator = std::bind(distribution, engine);
+
+	int number = generator();
+
+	if (type == ANIMATIONTYPE::ATTACK) // ATTACK일 때 3가지 중 하나 고르는 부분
+	{
+		for (auto& iter : animation_list_)
+		{
+			if (iter->get_animation_type_() == type)
+			{
+				if (number > 0)
+				{
+					number--;
+					continue;
+				}
+				else
+					return iter;
+			}
+		}
+	}
+	else
+	{
+		for (auto& iter : animation_list_)
+		{
+			if (iter->get_animation_type_() == type)
+				return iter;
+		}
+	}
+
+
+	for (auto& iter : animation_list_) 
+	{
+		if (iter->get_animation_type_() == ANIMATIONTYPE::IDLE)
+			return iter;
+	}
+
+}
 
 bool& PRectObject::get_is_reversal_()
 {
@@ -183,7 +277,16 @@ const WORD PRectObject::get_id()
 	return id_;
 }
 
-
+void PRectObject::set_alpha_and_scale_(float alpha, float scale)
+{
+	for (PSprite* sprite : animation_list_)
+	{
+		sprite->set_alpha_(alpha);
+		sprite->set_scale_(scale);
+	}
+	sprite_.set_alpha_(alpha);
+	sprite_.set_scale_(scale);
+}
 
 void PRectObject::set_id(WORD id)
 {

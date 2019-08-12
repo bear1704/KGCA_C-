@@ -20,7 +20,7 @@ bool PCharacter::Init()
 
 bool PCharacter::Frame()
 {
-
+	sprite_.Frame();
 	set_collision_box_(collision_box_norm_);
 	PlatformWallCollision();
 
@@ -29,18 +29,31 @@ bool PCharacter::Frame()
 
 bool PCharacter::Render()
 {
+	Spawn();
 	return true;
 }
 
 bool PCharacter::Release()
 {
+	sprite_.Release();
 	return true;
 }
 
+void PCharacter::StatusSet(multibyte_string status_path, multibyte_string object_name)
+{
+	status.StatusSet(status_path, object_name);
+	
+}
 
+void PCharacter::StatusSetForServer(multibyte_string status_path, multibyte_string object_name)
+{
+	status.StatusSetForServer(status_path, object_name);
+}
 
-
-
+PPlayerStatus & PCharacter::get_status()
+{
+		return status;
+}
 
 void PCharacter::Movement()
 {
@@ -60,8 +73,12 @@ void PCharacter::Set(multibyte_string data_path, multibyte_string object_name, p
 	scale_ = info.scale_;
 	move_speed_ = info.move_speed_;
 
+	//PSpriteManager::GetInstance().LoadDataFromScript(info.sprite_path);
+	//sprite_.Set(*PSpriteManager::GetInstance().get_sprite_data_list_from_map(info.sprite_name), alpha_, scale_);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(info.sprite_path, ObjectLoadType::CHARACTER);
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(info.sprite_name), alpha_, scale_);
+	sprite_.SetPosition(position_.x, position_.y);
 	
-
 	FLOAT_RECT scaled_collisionbox_norm = { collision_box_norm_.left*scale_, collision_box_norm_.top*scale_ ,
 	collision_box_norm_.right*scale_, collision_box_norm_.bottom*scale_ };
 	spawn_position_ = position;

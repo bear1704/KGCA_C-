@@ -12,7 +12,10 @@ PMobIdleAction::~PMobIdleAction()
 
 void PMobIdleAction::Process(PPlayerCharacter* target)
 {
-
+	if (owner_->get_sprite_()->get_animation_type_() != ANIMATIONTYPE::IDLE)
+	{
+		owner_->set_sprite_(*owner_->find_sprite_by_type(ANIMATIONTYPE::IDLE));
+	}
 
 	if (target != nullptr) // 플레이어가 아직 스폰되지 않았다면,
 	{

@@ -59,6 +59,11 @@ bool PScene::Init()
 		}
 	}
 
+	for (int i = 0; i < ui_compositions_.size(); i++)
+	{
+		ui_compositions_[i]->Init();
+	}
+
 
 
 	return true;
@@ -114,6 +119,10 @@ bool PScene::Frame()
 			player->Frame();
 		}
 	}
+	for (int i = 0; i < ui_compositions_.size(); i++)
+	{
+		ui_compositions_[i]->Frame();
+	}
 
 
 	return true;
@@ -164,6 +173,10 @@ bool PScene::Render()
 			player->Render();
 		}
 	
+	}
+	for (int i = 0; i < ui_compositions_.size(); i++)
+	{
+		ui_compositions_[i]->Render();
 	}
 
 
@@ -232,10 +245,18 @@ bool PScene::Release()
 		}
 	}
 
+	for (int i = 0; i < ui_compositions_.size(); i++)
+	{
+		ui_compositions_[i]->Release();
+	}
 
 	return true;
 }
 
+void PScene::InsertObject(PUIComponent * component)
+{
+	ui_compositions_.push_back(component);
+}
 
 void PScene::InsertObject(std::vector<PRectObject*>& list_component)
 {
@@ -252,21 +273,24 @@ std::wstring PScene::get_scene_name_()
 	return scene_name_;
 }
 
-//void PScene::draw_test_rect(FLOAT_RECT rect)
-//{
-//
-//	SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
-//	FLOAT_RECT arect = P2DCamera::GetInstance().WorldToGamescreenRECT(rect);
-//	int prevMode2 = Rectangle(g_handle_off_screenDC, arect.left, arect.top,
-//		arect.left + arect.right, arect.top + arect.bottom);
-//	SetROP2(g_handle_off_screenDC, prevMode2);
-//}
+void PScene::draw_test_rect(FLOAT_RECT rect)
+{
+
+	SetROP2(g_handle_off_screenDC, R2_NOTXORPEN);
+	FLOAT_RECT arect = P2DCamera::GetInstance().WorldToGamescreenRECT(rect);
+	int prevMode2 = Rectangle(g_handle_off_screenDC, arect.left, arect.top,
+		arect.left + arect.right, arect.top + arect.bottom);
+	SetROP2(g_handle_off_screenDC, prevMode2);
+}
 
 void PScene::SceneChange(int scene_number)
 {
 	if (scene_number == 2)
 	{
 		PScene* scene2 = new PScene();
+		PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+		PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"END");
+		scene2->InsertObject(uicomp_settingbar);
 		g_current_scene_ = scene2;
 		scene_number_ = 2;
 		PSound* bgm = PSoundMgr::GetInstance().GetPtr(0);
@@ -276,6 +300,9 @@ void PScene::SceneChange(int scene_number)
 	else if (scene_number == 3)
 	{
 		PScene* scene3 = new PScene();
+		PUIDataManager::GetInstance().LoadDataFromScript(L"data/UI/UI_composition_list.txt");
+		PUIComponent* uicomp_settingbar = PUIDataManager::GetInstance().get_ui_composition_list_from_map(L"GAMEOVER");
+		scene3->InsertObject(uicomp_settingbar);
 		g_current_scene_ = scene3;
 		scene_number_ = 3;
 		PSound* bgm = PSoundMgr::GetInstance().GetPtr(0);
@@ -288,6 +315,10 @@ void PScene::SceneChange(int scene_number)
 
 }
 
+std::vector<PUIComponent*>* PScene::get_ui_compositions_()
+{
+	return &ui_compositions_;
+}
 
 std::vector<PRectObject*>* PScene::get_game_objects()
 {
@@ -300,6 +331,11 @@ void PScene::AddGameObjects(PRectObject* obj)
 		game_objects_.push_back(obj);
 }
 
+void PScene::AddUiComponents(PUIComponent* ui)
+{
+	if(ui != nullptr)
+		ui_compositions_.push_back(ui);
+}
 
 void PScene::DeleteGameObjectsByCid(WORD cid)
 {
