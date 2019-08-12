@@ -14,6 +14,6 @@ public:
 	void AttackProcess();
 
 private:
-
+	PSprite effect_sprite;
 };
 

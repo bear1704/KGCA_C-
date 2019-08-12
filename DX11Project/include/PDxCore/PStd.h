@@ -8,6 +8,7 @@
 #include <memory>
 #include <cmath>
 #include "PParser.h"
+#include <assert.h>
 
 class PScene;
 

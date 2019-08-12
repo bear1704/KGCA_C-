@@ -1,5 +1,6 @@
 #pragma once
 #include "PSoundMgr.h"
+#include "PNetworkDataStorage.h"
 
 class PPlayerCharacter;
 

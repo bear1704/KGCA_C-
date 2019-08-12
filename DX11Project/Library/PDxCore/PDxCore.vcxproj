@@ -65,6 +65,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="CoreDebug64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -110,7 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;../../dx/include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -209,6 +210,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PComponentStorage.h" />
     <ClInclude Include="PCore.h" />
     <ClInclude Include="PDeadAction.h" />
+    <ClInclude Include="PDevice.h" />
     <ClInclude Include="PFiniteState.h" />
     <ClInclude Include="PFsm.h" />
     <ClInclude Include="PHitAction.h" />
@@ -237,6 +239,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
     <ClInclude Include="PStd.h" />
+    <ClInclude Include="PTextrue.h" />
     <ClInclude Include="PTimer.h" />
     <ClInclude Include="PWallAndPlatform.h" />
     <ClInclude Include="PWindow.h" />
@@ -262,6 +265,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PComponentStorage.cpp" />
     <ClCompile Include="PCore.cpp" />
     <ClCompile Include="PDeadAction.cpp" />
+    <ClCompile Include="PDevice.cpp" />
     <ClCompile Include="PDxCore.cpp" />
     <ClCompile Include="PFiniteState.cpp" />
     <ClCompile Include="PFsm.cpp" />
@@ -290,6 +294,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PSkill.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
+    <ClCompile Include="PTextrue.cpp" />
     <ClCompile Include="PTimer.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />

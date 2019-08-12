@@ -44,6 +44,11 @@ public:
 
 	void StatusSet(multibyte_string status_path, multibyte_string object_name);
 
+	void AddSkill(PSkill* skill);
+	void StartSkillPhase(int skill_number);
+	void ChangeSprite(PSprite* sprite);
+
+	PUIComponent* damage_present_image_;
 	void ResetSkill();
 };
 

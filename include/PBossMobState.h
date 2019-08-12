@@ -3,6 +3,7 @@
 #include <functional>
 #include <ctime>
 #include "PStd.h"
+#include "PNetworkDataStorage.h"
 
 class PBossMonster;
 

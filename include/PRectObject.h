@@ -1,5 +1,7 @@
 #pragma once
+#include "PBitmap.h"
 #include "PCollision.h"
+#include "PSpriteManager.h"
 #include "PObjectInfoManager.h"
 #include "PPhysicsModule.h"
 #include "P2DCamera.h"
@@ -13,7 +15,8 @@ public:
 	PRectObject();
 	virtual ~PRectObject();
 protected:
-
+	PSprite sprite_;
+	std::vector<PSprite*> animation_list_;
 	pPoint position_;
 	FLOAT_RECT collision_box_;
 	FLOAT_RECT collision_box_norm_;
@@ -40,7 +43,10 @@ public:
 	virtual void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	
 	//getter
-
+	PBitmap* get_bitmap_();
+	PBitmap* get_bitmap_mask_();
+	PSprite* get_sprite_();
+	
 	pPoint& get_position_();
 	void set_position_(pPoint XY);
 	FLOAT_RECT get_collision_rect_();
@@ -58,16 +64,19 @@ public:
 	const WORD get_id();
 	
 	//setter
-
+	void set_sprite_(PSprite& sprite);
 	void set_invisible_(bool invisible);
 	void set_gravity_(float gravity);
 	void set_type_(Type type);
+	void set_animation_list_(std::vector<PSprite*> list);
 	void set_alpha_and_scale_(float alpha, float scale); //주의! 같은 애니메이션 리스트를 사용하는 모든 개체가 변환이 적용되는 문제가 있음.
 	void set_id(WORD id);
 	void set_is_reversal(bool isreversal);
 	void set_collision_box_norm(FLOAT_RECT fl);
 
 	void Spawn();
+	virtual PSprite* find_sprite_by_type(ANIMATIONTYPE type);
+	
 
 
 };

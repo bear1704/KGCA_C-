@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-
+#define TEST
 #ifdef TEST
 
 std::unique_ptr<int> func()
@@ -27,6 +27,9 @@ int main()
 	//std::unique_ptr<std::string> pstr3 = std::move(pstr);
 	//std::cout << *a << *b << *c << *d << std::endl;
 	//std::cout << *pstr << *pstr2 << *pstr3 << std::endl;
+	void getridof();
+	
+
 
 	int len = 4;
 	
