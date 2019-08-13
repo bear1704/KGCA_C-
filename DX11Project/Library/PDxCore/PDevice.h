@@ -2,12 +2,16 @@
 #include <assert.h>
 #include "PWindow.h"
 #include "PStd.h"
+#include <memory>
 #include <d3d11.h>
 #include <d3dx11.h>
 
+class PTexture;
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "d3dx11.lib")
+
+#define OUT_  
 
 struct VECTOR4
 {
@@ -17,7 +21,7 @@ struct VECTOR4
 	float w;
 
 };
-struct PVERTEX
+struct PVERTEX_TEX
 {
 	float posX;
 	float posY;
@@ -25,6 +29,20 @@ struct PVERTEX
 	float u;
 	float v;
 };
+
+struct PVERTEX
+{
+	float poxX;
+	float posY;
+	float posZ;
+};
+
+struct PTEXTURE_BUF
+{
+	float u;
+	float v;
+};
+
 
 struct VS_CONSTANT_BUFFER
 {
@@ -72,14 +90,17 @@ public:
 	bool		InitDevice(HWND hwnd, UINT client_width, UINT client_height);
 	bool		CreateSwapChain(HWND hwnd, UINT client_width, UINT client_height);
 	bool		CreateRenderTarget(UINT client_width, UINT client_height);
-	bool		CreateVertexBuffer(const PVERTEX* vertices, int vertices_size);
+	bool		CreateVertexBuffer(const PVERTEX_TEX* vertices, int vertices_size);
 	bool		CreateIndexBuffer(const DWORD* indices, int index_size);
 	bool		CreateConstantBuffer();
-	bool		LoadShaderResourceView(multibyte_string name);
+	bool		LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView* view);
 	bool		LoadShaderAndInputLayout(LPCTSTR v_shader_path, LPCTSTR ps_shader_path,LPCSTR v_shader_func_name, LPCSTR ps_shader_func_name);
+				//Layout이 들어가야할듯
 	bool		DevicePreRender();
 	bool		DeviceRender();
 	bool		DeviceRelease();
+
+	PVERTEX_TEX* AssemblyVertAndTex(const PVERTEX* vert, const PTEXTURE_BUF* tex_buf, int size); //나중에 텍스쳐매니져쯤으로 옮겨질 기능 
 
 
 

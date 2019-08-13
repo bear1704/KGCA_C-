@@ -1,5 +1,6 @@
 #pragma once
 #include "PCore.h"
+#include "PTexture.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -25,7 +26,6 @@ public:
 	bool Frame() override;
 	bool Render() override;
 	bool Release() override;
-
 
 
 

@@ -10,6 +10,9 @@ PIdleAction::PIdleAction(PPlayerCharacter * parent) : PPlayerState(parent)
 PIdleAction::~PIdleAction()
 {
 }
+void PIdleAction::Process()
+{
+}
 //
 //void PIdleAction::Process()
 //{

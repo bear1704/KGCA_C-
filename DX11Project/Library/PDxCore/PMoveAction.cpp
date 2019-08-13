@@ -10,6 +10,9 @@ PMoveAction::PMoveAction(PPlayerCharacter * parent) : PPlayerState(parent)
 PMoveAction::~PMoveAction()
 {
 }
+void PMoveAction::Process()
+{
+}
 //
 //void PMoveAction::Process()
 //{

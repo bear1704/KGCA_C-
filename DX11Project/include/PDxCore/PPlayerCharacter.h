@@ -35,7 +35,6 @@ public:
 	void set_hit_(bool hit);
 	void set_client_owner_character(bool isowner);
 	void set_right_dir(bool isright);
-	void MissleCollisionCheck();
 	void set_is_character_dead(bool isdead);
 
 	bool get_hit_();

@@ -192,9 +192,6 @@
     <ClInclude Include="PDevice.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
-    <ClInclude Include="PTextrue.h">
-      <Filter>소스 파일\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="PPlayerStatus.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
@@ -208,6 +205,21 @@
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
     <ClInclude Include="PBitmapManager.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PUIDataManager.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PUIComponent.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PButtonControl.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PImageControl.h">
+      <Filter>소스 파일\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PTexture.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
   </ItemGroup>
@@ -344,9 +356,6 @@
     <ClCompile Include="PDevice.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="PTextrue.cpp">
-      <Filter>소스 파일\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="PPlayerStatus.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
@@ -360,6 +369,21 @@
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PBitmapManager.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PUIDataManager.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PUIComponent.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PButtonControl.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PImageControl.cpp">
+      <Filter>소스 파일\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PTexture.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,7 +14,6 @@ class PScene;
 using namespace std;
 
 
-#pragma comment(lib, "PCoreLib.lib")
 #pragma comment(lib, "msimg32")
 
 #define PCORE_RUN(title,x,y,w,h) \

@@ -11,6 +11,10 @@ PDeadAction::~PDeadAction()
 {
 }
 
+void PDeadAction::Process()
+{
+}
+
 //void PDeadAction::Process()
 //{
 //

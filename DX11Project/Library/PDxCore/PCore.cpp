@@ -106,13 +106,13 @@ bool PCore::PCoreRender()
 	timer.Render();
 	PInput::GetInstance().Render();
 	PSoundMgr::GetInstance().Render();
-	P2DCamera::GetInstance().Render();
+	//P2DCamera::GetInstance().Render();
 
 	
 	PreRender();
 	Render();
-	PSpriteManager::GetInstance().Render();
-	PostRender();
+	//PSpriteManager::GetInstance().Render();
+	//PostRender();
 	return true;
 }
 

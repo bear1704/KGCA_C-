@@ -119,6 +119,10 @@ PAttackAction::~PAttackAction()
 //}
 
 
+void PAttackAction::Process()
+{
+}
+
 void PAttackAction::AttackProcess()
 {
 	int damage = owner_->get_status().get_damage();

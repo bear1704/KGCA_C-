@@ -75,7 +75,6 @@ bool PPlayerCharacter::Frame()
 	PlatformWallCollision();
 	status.Frame();
 	InvincibleProgress();
-	MissleCollisionCheck();
 	return true;
 }
 

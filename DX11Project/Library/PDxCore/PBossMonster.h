@@ -44,7 +44,7 @@ public:
 	void ChangeSprite(PSprite* sprite);
 
 	PUIComponent* damage_present_image_;
-	void ResetSkill();
+
 };
 
 extern HANDLE g_handle_4s_sprite_timer_queue_;

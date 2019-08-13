@@ -206,6 +206,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PBossMobSkillAction.h" />
     <ClInclude Include="PBossMobState.h" />
     <ClInclude Include="PBossMonster.h" />
+    <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PCharacter.h" />
     <ClInclude Include="PCollision.h" />
@@ -217,6 +218,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PFsm.h" />
     <ClInclude Include="PHitAction.h" />
     <ClInclude Include="PIdleAction.h" />
+    <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PInput.h" />
     <ClInclude Include="PJumpAction.h" />
     <ClInclude Include="PMobAttackAction.h" />
@@ -243,8 +245,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PSprite.h" />
     <ClInclude Include="PSpriteManager.h" />
     <ClInclude Include="PStd.h" />
-    <ClInclude Include="PTextrue.h" />
+    <ClInclude Include="PTexture.h" />
     <ClInclude Include="PTimer.h" />
+    <ClInclude Include="PUIComponent.h" />
+    <ClInclude Include="PUIDataManager.h" />
     <ClInclude Include="PWallAndPlatform.h" />
     <ClInclude Include="PWindow.h" />
     <ClInclude Include="Resource.h" />
@@ -260,6 +264,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PBossMobSkillAction.cpp" />
     <ClCompile Include="PBossMobState.cpp" />
     <ClCompile Include="PBossMonster.cpp" />
+    <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -277,6 +282,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PFsm.cpp" />
     <ClCompile Include="PHitAction.cpp" />
     <ClCompile Include="PIdleAction.cpp" />
+    <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PInput.cpp" />
     <ClCompile Include="PJumpAction.cpp" />
     <ClCompile Include="PMobAttackAction.cpp" />
@@ -302,8 +308,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PSoundMgr.cpp" />
     <ClCompile Include="PSprite.cpp" />
     <ClCompile Include="PSpriteManager.cpp" />
-    <ClCompile Include="PTextrue.cpp" />
+    <ClCompile Include="PTexture.cpp" />
     <ClCompile Include="PTimer.cpp" />
+    <ClCompile Include="PUIComponent.cpp" />
+    <ClCompile Include="PUIDataManager.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 #pragma once
-#include "PWindow.h"
+#include "PDevice.h"
 #include "PInput.h"
 #include "PTimer.h"
 #include "PSoundMgr.h"
@@ -9,7 +9,7 @@
 #include "PObjectDataManager.h"
 
 
-class PCore : public PWindow
+class PCore : public PDevice
 {
 public:
 	PCore();

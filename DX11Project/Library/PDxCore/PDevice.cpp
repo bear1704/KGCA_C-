@@ -1,4 +1,5 @@
 #include "PDevice.h"
+#include "PTexture.h"
 
 PDevice::PDevice()
 {
@@ -113,13 +114,13 @@ bool PDevice::CreateRenderTarget(UINT client_width, UINT client_height)
 	return true;
 }
 
-bool PDevice::CreateVertexBuffer(const PVERTEX* vertices, int vertices_size)
+bool PDevice::CreateVertexBuffer(const PVERTEX_TEX* vertices, int vertices_size)
 {
 	
 	D3D11_BUFFER_DESC buffer_desc;
 	D3D11_SUBRESOURCE_DATA subresource_data;
 
-	buffer_desc.ByteWidth = sizeof(PVERTEX) * vertices_size;
+	buffer_desc.ByteWidth = sizeof(PVERTEX_TEX) * vertices_size;
 	buffer_desc.Usage = D3D11_USAGE_DEFAULT;
 	buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	buffer_desc.CPUAccessFlags = 0;
@@ -181,10 +182,10 @@ bool PDevice::CreateConstantBuffer()
 
 }
 
-bool PDevice::LoadShaderResourceView(multibyte_string name)
+bool PDevice::LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView* view)
 {
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-		device_, name.c_str(), NULL, NULL, &shader_res_view_, NULL
+		device_, name.c_str(), NULL, NULL, &view, NULL
 	);
 	if (FAILED(hr))
 		return false;
@@ -226,7 +227,7 @@ bool PDevice::LoadShaderAndInputLayout(LPCTSTR v_shader_path, LPCTSTR ps_shader_
 		{"POSITION", 1, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}, //이부분 잘게 필기해서 올려놓을것
 	};
-
+	
 	int element_number = sizeof(layout) / sizeof(layout[0]);
 
 	hr = device_->CreateInputLayout(layout, element_number, v_shader_blob->GetBufferPointer(), v_shader_blob->GetBufferSize(), &input_layout_);
@@ -272,6 +273,22 @@ bool PDevice::DeviceRelease()
 	return true;
 }
 
+PVERTEX_TEX* PDevice::AssemblyVertAndTex(const PVERTEX* vert, const PTEXTURE_BUF* tex_buf, int size)
+{
+	PVERTEX_TEX* ret = new PVERTEX_TEX[size];
+	
+	for (int i = 0; i < size; i++)
+	{
+		ret[i].posX = vert[i].poxX;
+		ret[i].posY = vert[i].posY;
+		ret[i].posZ = vert[i].posZ;
+		ret[i].u = tex_buf[i].u;
+		ret[i].v = tex_buf[i].v;
+	}
+	return ret;
+}
+
+
 bool PDevice::DevicePreRender()
 {
 	float clearColor[] = { 0.88f, 0.66f, 0.95f, 1.0f };
@@ -287,8 +304,9 @@ bool PDevice::DeviceRender()
 	immediate_device_context_->PSSetShader(pixel_shader_, NULL, 0);
 
 
-	UINT stride = sizeof(PVERTEX);
+	UINT stride = sizeof(PVERTEX_TEX);
 	UINT offset = 0;
+
 
 	immediate_device_context_->IASetVertexBuffers(0, 1, &vertex_buffer_, &stride, &offset);
 	immediate_device_context_->IASetIndexBuffer(index_buffer_, DXGI_FORMAT_R32_UINT, 0);

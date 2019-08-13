@@ -1,5 +1,6 @@
 #include "Sample.h"
 
+
 Sample::Sample()
 {
 }
@@ -15,28 +16,51 @@ bool Sample::Init()
 	std::string v_shader_func = "VS";
 	std::string ps_shader_func = "PS";
 
+	//PVERTEX_TEX vertices[] =
+	//{
+	//	{-0.5f, 0.5f, 0.5f, 0.0f, 0.0f},
+	//	{0.5f, 0.5f, 0.5f, 0.5f, 0.0f},
+	//	{0.5f, -0.5f, 0.5f, 0.5f, 0.5f},
+	//	{-0.5f, -0.5f, 0.5f, 0.0f, 0.5f},
+	//}; 
+
+	PTEXTURE_BUF tex_uv[] =
+	{
+		{0.0f, 0.0f},
+		{0.5f, 0.0f},
+		{0.5f, 0.5f},
+		{0.0f, 0.5f},
+	};
+
+
+
 	PVERTEX vertices[] =
 	{
-		{-0.5f, 0.5f, 0.5f, 0.0f, 0.0f},
-		{0.5f, 0.5f, 0.5f, 1.0f, 0.0f},
-		{0.5f, -0.5f, 0.5f, 1.0f, 1.0f},
-		{-0.5f, -0.5f, 0.5f, 0.0f, 1.0f},
-	}; 
+		{-0.5f, 0.5f, 0.5f},
+		{0.5f, 0.5f, 0.5f},
+		{0.5f, -0.5f, 0.5f},
+		{-0.5f, -0.5f, 0.5f},
+	};
+
 	
 	DWORD indices[] =
 	{
 		0,1,2,
 		0,2,3,
 	};
+	
 
 
 	InitDevice(hWnd, g_rectangle_client.right, g_rectangle_client.bottom);
+	LoadShaderResourceView(L"../../data/bitmap/hots.png", &shader_res_view_);
+	std::shared_ptr<PVERTEX_TEX> sptr_tex_vertices(AssemblyVertAndTex(vertices, tex_uv, sizeof(vertices) / sizeof(vertices[0])));
+
 	CreateRenderTarget(g_rectangle_client.right, g_rectangle_client.bottom);
-	CreateVertexBuffer(vertices, 4);
+	CreateVertexBuffer(sptr_tex_vertices.get(), 4);
 	CreateIndexBuffer(indices, 6);
 	CreateConstantBuffer();
 	LoadShaderAndInputLayout(v_shader_name.c_str(), ps_shader_name.c_str(), v_shader_func.c_str(), ps_shader_func.c_str());
-	LoadShaderResourceView(L"../../data/bitmap/hots.png");
+	
 
 	HRESULT hr;
 	D3D11_RASTERIZER_DESC rasterize_desc;
