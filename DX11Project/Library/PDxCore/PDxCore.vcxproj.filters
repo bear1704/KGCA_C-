@@ -222,6 +222,9 @@
     <ClInclude Include="PTexture.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="PTextureManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -385,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="PTexture.cpp">
       <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PTextureManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

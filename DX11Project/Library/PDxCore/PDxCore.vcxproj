@@ -246,6 +246,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PSpriteManager.h" />
     <ClInclude Include="PStd.h" />
     <ClInclude Include="PTexture.h" />
+    <ClInclude Include="PTextureManager.h" />
     <ClInclude Include="PTimer.h" />
     <ClInclude Include="PUIComponent.h" />
     <ClInclude Include="PUIDataManager.h" />
@@ -309,6 +310,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PSprite.cpp" />
     <ClCompile Include="PSpriteManager.cpp" />
     <ClCompile Include="PTexture.cpp" />
+    <ClCompile Include="PTextureManager.cpp" />
     <ClCompile Include="PTimer.cpp" />
     <ClCompile Include="PUIComponent.cpp" />
     <ClCompile Include="PUIDataManager.cpp" />

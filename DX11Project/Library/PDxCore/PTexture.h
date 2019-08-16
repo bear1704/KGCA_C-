@@ -20,7 +20,7 @@ public:
 	void set_texbuf_size(int size);
 
 	//getter
-	PTEXTURE_BUF*				texture_buf();
+	std::vector<PTEXTURE_BUF>&	texture_buf();
 	ID3D11ShaderResourceView*	shader_res_view();
 	int							texbuf_size();
 

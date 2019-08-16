@@ -1,5 +1,4 @@
 #include "PDevice.h"
-#include "PTexture.h"
 
 PDevice::PDevice()
 {

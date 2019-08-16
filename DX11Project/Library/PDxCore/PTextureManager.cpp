@@ -10,7 +10,6 @@ PTextureManager::PTextureManager()
 
 void PTextureManager::LoadTextureFromScript(multibyte_string filepath)
 {
-
 	PParser parser;
 	std::vector<std::pair<string, string>> ret_parse;
 	std::string str;
@@ -24,10 +23,10 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath)
 		{
 			std::wstring texture_name;
 			std::wstring tex_path;
-			int texture_size;
+			int texture_size = 0;
 			std::vector<PTEXTURE_BUF> uv;
 			std::vector<std::string> uv_string;
-			PTexture* texture;
+			PTexture* texture; 
 			while (true)
 			{
 				iter++;
@@ -40,14 +39,15 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath)
 				else if (iter->first == "uv")
 				{
 					uv_string = parser.SplitString(iter->second, ',');
-					uv.push_back(PTEXTURE_BUF{ std::stof(uv_string[0]), std::stof(uv_string[1]) });
+					PTEXTURE_BUF buf = { std::stof(uv_string[0]), std::stof(uv_string[1]) };
+					uv.push_back(buf);
 				}
 				else if (iter->first == "END")
 					break;
 			}
 
 			texture = new PTexture();
-			texture->set_texbuf_size = texture_size;
+			texture->set_texbuf_size(texture_size);
 			texture->set_texture_buf(std::move(uv));
 
 			ID3D11ShaderResourceView* view = texture->shader_res_view();

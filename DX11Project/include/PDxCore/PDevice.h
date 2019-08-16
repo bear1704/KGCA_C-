@@ -6,7 +6,7 @@
 #include <d3d11.h>
 #include <d3dx11.h>
 
-class PTexture;
+
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "d3dx11.lib")
@@ -93,7 +93,7 @@ public:
 	bool		CreateVertexBuffer(const PVERTEX_TEX* vertices, int vertices_size);
 	bool		CreateIndexBuffer(const DWORD* indices, int index_size);
 	bool		CreateConstantBuffer();
-	bool		LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView** view);
+	bool		LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView* view);
 	bool		LoadShaderAndInputLayout(LPCTSTR v_shader_path, LPCTSTR ps_shader_path,LPCSTR v_shader_func_name, LPCSTR ps_shader_func_name);
 				//Layout이 들어가야할듯
 	bool		DevicePreRender();

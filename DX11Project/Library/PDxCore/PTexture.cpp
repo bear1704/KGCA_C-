@@ -24,7 +24,8 @@ void PTexture::set_texture_buf(PTEXTURE_BUF* buf, int size)
 
 void PTexture::set_texture_buf(std::vector<PTEXTURE_BUF>& buf)
 {
-	std::copy(buf.begin(), buf.end(), texture_buf_);
+	//std::copy(buf.begin(), buf.end(), texture_buf_);
+	//error1!1 error   error!!!!!
 }
 
 void PTexture::set_texture_buf(std::vector<PTEXTURE_BUF>&& buf)

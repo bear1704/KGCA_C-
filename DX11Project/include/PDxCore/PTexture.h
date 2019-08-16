@@ -7,19 +7,22 @@ public:
 	PTexture();
 	~PTexture();
 
-public:
-	PTEXTURE_BUF*				texture_buf_;
+private:
+	std::vector<PTEXTURE_BUF>	texture_buf_;
 	int							texbuf_size_;
-	ID3D11ShaderResourceView**	shader_res_view_;
+	ID3D11ShaderResourceView*	shader_res_view_;
 public:
 	//setter
 	void set_texture_buf(PTEXTURE_BUF* buf, int size);
-	void set_shader_res_view(ID3D11ShaderResourceView** view);
+	void set_texture_buf(std::vector<PTEXTURE_BUF>& buf);
+	void set_texture_buf(std::vector<PTEXTURE_BUF>&& buf);
+	void set_shader_res_view(ID3D11ShaderResourceView* view);
+	void set_texbuf_size(int size);
 
 	//getter
-	PTEXTURE_BUF* texture_buf();
-	ID3D11ShaderResourceView** shader_res_view();
-
+	std::vector<PTEXTURE_BUF>&	texture_buf();
+	ID3D11ShaderResourceView*	shader_res_view();
+	int							texbuf_size();
 
 };
 
