@@ -65,3 +65,15 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath)
 		}
 	}
 }
+
+PTexture* PTextureManager::GetTextureFromMap(std::wstring key)
+{
+	auto iter = texture_list_.find(key);
+	if (iter != texture_list_.end())
+	{
+		PTexture* data = (*iter).second;
+		return data;
+	}
+	assert(false);
+	return nullptr;
+}

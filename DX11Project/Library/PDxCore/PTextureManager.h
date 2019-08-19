@@ -15,7 +15,7 @@ private:
 
 public:
 	void LoadTextureFromScript(multibyte_string filepath);
-
+	PTexture* GetTextureFromMap(std::wstring key);
 
 
 };
