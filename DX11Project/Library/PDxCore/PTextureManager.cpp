@@ -8,7 +8,7 @@ PTextureManager::PTextureManager()
 {
 }
 
-void PTextureManager::LoadTextureFromScript(multibyte_string filepath)
+void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Device* current_device)
 {
 	PParser parser;
 	std::vector<std::pair<string, string>> ret_parse;
@@ -47,13 +47,13 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath)
 			}
 
 			texture = new PTexture();
-			texture->set_texbuf_size(texture_size);
-			texture->set_texture_buf(std::move(uv));
+			//texture->set_texbuf_size(texture_size);
+			//texture->set_texture_buf(std::move(uv));
 
 			ID3D11ShaderResourceView* view = texture->shader_res_view();
 
 			HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-				current_device_, texture_name.c_str(), NULL, NULL, &view, NULL
+				current_device, texture_name.c_str(), NULL, NULL, &view, NULL
 			);
 
 			if (FAILED(hr))

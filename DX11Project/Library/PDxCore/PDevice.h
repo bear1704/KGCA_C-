@@ -73,10 +73,7 @@ protected:
 	D3D_DRIVER_TYPE driver_types[3];
 	D3D_FEATURE_LEVEL feature_levels[2];
 
-	ID3D11Buffer*			vertex_buffer_; //버텍스 버퍼
 	ID3D11InputLayout*		input_layout_; //입력 레이아웃
-	ID3D11Buffer*			index_buffer_;
-	ID3D11Buffer*			constant_buffer_;
 
 	ID3D11VertexShader*		vertex_shader_;
 	ID3D11PixelShader*		pixel_shader_;
@@ -90,9 +87,7 @@ public:
 	bool		InitDevice(HWND hwnd, UINT client_width, UINT client_height);
 	bool		CreateSwapChain(HWND hwnd, UINT client_width, UINT client_height);
 	bool		CreateRenderTarget(UINT client_width, UINT client_height);
-	bool		CreateVertexBuffer(const PVERTEX_TEX* vertices, int vertices_size);
-	bool		CreateIndexBuffer(const DWORD* indices, int index_size);
-	bool		CreateConstantBuffer();
+
 	bool		LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView* view);
 	bool		LoadShaderAndInputLayout(LPCTSTR v_shader_path, LPCTSTR ps_shader_path,LPCSTR v_shader_func_name, LPCSTR ps_shader_func_name);
 				//Layout이 들어가야할듯

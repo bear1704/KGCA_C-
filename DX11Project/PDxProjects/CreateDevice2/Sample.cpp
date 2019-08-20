@@ -52,7 +52,7 @@ bool Sample::Init()
 
 
 	InitDevice(hWnd, g_rectangle_client.right, g_rectangle_client.bottom);
-	LoadShaderResourceView(L"../../data/bitmap/hots.png", &shader_res_view_);
+	LoadShaderResourceView(L"../../data/bitmap/hots.png", shader_res_view_);
 	std::shared_ptr<PVERTEX_TEX> sptr_tex_vertices(AssemblyVertAndTex(vertices, tex_uv, sizeof(vertices) / sizeof(vertices[0])));
 
 	CreateRenderTarget(g_rectangle_client.right, g_rectangle_client.bottom);

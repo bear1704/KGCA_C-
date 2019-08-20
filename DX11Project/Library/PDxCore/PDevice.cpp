@@ -113,73 +113,7 @@ bool PDevice::CreateRenderTarget(UINT client_width, UINT client_height)
 	return true;
 }
 
-bool PDevice::CreateVertexBuffer(const PVERTEX_TEX* vertices, int vertices_size)
-{
-	
-	D3D11_BUFFER_DESC buffer_desc;
-	D3D11_SUBRESOURCE_DATA subresource_data;
 
-	buffer_desc.ByteWidth = sizeof(PVERTEX_TEX) * vertices_size;
-	buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-	buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	buffer_desc.CPUAccessFlags = 0;
-	buffer_desc.MiscFlags = 0;
-	buffer_desc.StructureByteStride = 0;
-
-	ZeroMemory(&subresource_data, sizeof(D3D11_SUBRESOURCE_DATA));
-	subresource_data.pSysMem = vertices;
-
-	HRESULT hr = device_->CreateBuffer(&buffer_desc, &subresource_data, &vertex_buffer_); //올려볼까 
-
-	if (SUCCEEDED(hr))
-		return true;
-
-	return false;
-	
-}
-
-bool PDevice::CreateIndexBuffer(const DWORD* indices, int index_size)
-{
-	D3D11_BUFFER_DESC index_buf_desc;
-	index_buf_desc.ByteWidth = sizeof(DWORD) * index_size;
-	index_buf_desc.Usage = D3D11_USAGE_DEFAULT;
-	index_buf_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	index_buf_desc.CPUAccessFlags = 0;
-	index_buf_desc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA index_buf_init_data;
-	ZeroMemory(&index_buf_init_data, sizeof(D3D11_SUBRESOURCE_DATA));
-	index_buf_init_data.pSysMem = indices;
-	
-	HRESULT hr = device_->CreateBuffer(&index_buf_desc, &index_buf_init_data, &index_buffer_);
-
-	if (SUCCEEDED(hr))
-		return true;
-	else
-	{
-		assert(false);
-		return false;
-	}
-}
-
-bool PDevice::CreateConstantBuffer()
-{
-	D3D11_BUFFER_DESC constant_buf_desc;
-	constant_buf_desc.ByteWidth = sizeof(VS_CONSTANT_BUFFER);
-	constant_buf_desc.Usage = D3D11_USAGE_DYNAMIC;
-	constant_buf_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constant_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	constant_buf_desc.MiscFlags = 0;
-	HRESULT hr = device_->CreateBuffer(&constant_buf_desc, NULL, &constant_buffer_);
-	
-	if (SUCCEEDED(hr))
-		return true;
-	else
-		return false;
-
-
-
-}
 
 bool PDevice::LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView* view)
 {
