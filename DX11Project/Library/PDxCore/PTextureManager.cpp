@@ -24,7 +24,7 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 			std::wstring texture_name;
 			std::wstring tex_path;
 			int texture_size = 0;
-			std::vector<PTEXTURE_BUF> uv;
+			std::vector<DX::PTEXTURE_BUF> uv;
 			std::vector<std::string> uv_string;
 			PTexture* texture; 
 			while (true)
@@ -39,7 +39,7 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 				else if (iter->first == "uv")
 				{
 					uv_string = parser.SplitString(iter->second, ',');
-					PTEXTURE_BUF buf = { std::stof(uv_string[0]), std::stof(uv_string[1]) };
+					DX::PTEXTURE_BUF buf = { std::stof(uv_string[0]), std::stof(uv_string[1]) };
 					uv.push_back(buf);
 				}
 				else if (iter->first == "END")

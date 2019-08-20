@@ -117,12 +117,12 @@ namespace DX
 	}
 
 	ID3D11VertexShader* LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path,
-													LPCSTR vs_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr)
+													LPCSTR vs_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
 	{
-		ID3D11VertexShader* ret_vertex_shader;
+		ID3D11VertexShader* ret_vertex_shader = nullptr;
 		HRESULT hr;
-		ID3DBlob* v_shader_blob;
-		ID3DBlob* error_msg;
+		ID3DBlob* v_shader_blob = nullptr;
+		ID3DBlob* error_msg = nullptr;
 		DWORD blob_size = 0;
 		LPCVOID blob_data = 0;
 
@@ -175,6 +175,140 @@ namespace DX
 
 
 		return nullptr;
+	}
+
+	ID3D11VertexShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, 
+													LPCSTR ps_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
+	{
+		ID3D11VertexShader* ret_vertex_shader = nullptr;
+		HRESULT hr;
+		ID3DBlob* ps_shader_blob = nullptr;
+		ID3DBlob* error_msg = nullptr;
+		DWORD blob_size = 0;
+		LPCVOID blob_data = 0;
+
+		if (is_already_compiled == false)
+		{
+			hr = D3DX11CompileFromFile(
+				ps_file_path, NULL, NULL,
+				ps_func_name, "ps_5_0",
+				0, 0, NULL, &ps_shader_blob, &error_msg, NULL);
+
+
+			if (FAILED(hr))
+			{
+				if (error_msg != nullptr)
+				{
+					OutputDebugStringA((char*)error_msg->GetBufferPointer());
+					if (error_msg)  error_msg->Release();
+				}
+				assert(false);
+				return nullptr;
+			}
+			blob_size = ps_shader_blob->GetBufferSize();
+			blob_data = ps_shader_blob->GetBufferPointer();
+		}
+		else //컴파일된 binary blob으로 들어올 경우 
+		{
+			ps_shader_blob = *blob;
+			if (ps_shader_blob == nullptr) return nullptr;
+
+			blob_size = ps_shader_blob->GetBufferSize();
+			blob_data = ps_shader_blob->GetBufferPointer();
+		}
+
+		hr = current_device->CreateVertexShader(blob_data, blob_size, NULL, &ret_vertex_shader);
+
+		if (FAILED(hr))
+		{
+			ps_shader_blob->Release();
+			return nullptr;
+		}
+
+		if (blob == nullptr)
+		{
+			ps_shader_blob->Release();
+		}
+		else
+		{
+			*blob = ps_shader_blob;
+		}
+
+
+		return nullptr;
+	}
+
+	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data, 
+												D3D11_INPUT_ELEMENT_DESC* layout, int element_number)
+	{
+		HRESULT hr;
+		ID3D11InputLayout* input_layout = nullptr;
+
+		hr = current_device->CreateInputLayout(layout, element_number, vs_blob_data, vs_blob_size, &input_layout);
+
+		if (FAILED(hr))
+		{
+			assert(false);
+			return nullptr;
+		}
+	
+		return input_layout;
+
+	}
+
+	PVERTEX_TEX* AssemblyVertAndTex(const PVERTEX* vert, const PTEXTURE_BUF* tex_buf, int size)
+	{
+		PVERTEX_TEX* ret = new PVERTEX_TEX[size];
+
+		for (int i = 0; i < size; i++)
+		{
+			ret[i].posX = vert[i].poxX;
+			ret[i].posY = vert[i].posY;
+			ret[i].posZ = vert[i].posZ;
+			ret[i].u = tex_buf[i].u;
+			ret[i].v = tex_buf[i].v;
+		}
+		return ret;
+	}
+
+
+	void PDxHelper::PreRender(ID3D11DeviceContext* context, int stride_length)
+	{
+		DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
+		context->VSSetConstantBuffers(0, 1, constant_buffer_.GetAddressOf());
+
+
+		if (shader_res_view_ == nullptr)
+			assert(false);
+
+		context->PSSetShaderResources(0, 1, shader_res_view_.GetAddressOf());
+		//context->PSSetShaderResources(1, 1, shader_res_view_.GetAddressOf());
+		context->IASetInputLayout(input_layout_.Get());
+		context->VSSetShader(vertex_shader_.Get(), NULL, 0);
+		context->PSSetShader(pixel_shader_.Get(), NULL, 0);
+
+		UINT stride = stride_length;
+		UINT offset = 0;
+
+		context->IASetVertexBuffers(0, 1, vertex_buffer_.GetAddressOf(), &stride, &offset);
+		context->IASetIndexBuffer(index_buffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
+		context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	}
+
+	void PDxHelper::PostRender(ID3D11DeviceContext* context, int index_count)
+	{
+		if (index_count == 0) index_count = index_count_;
+		
+		if (index_count != 0)
+			context->DrawIndexed(index_count, 0, 0);
+		else
+			context->Draw(vertex_count_, 0);
+	}
+
+	void PDxHelper::set_shader_res_view(ID3D11ShaderResourceView* view)
+	{
+		shader_res_view_ = view;
 	}
 
 }

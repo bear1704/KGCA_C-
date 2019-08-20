@@ -46,6 +46,9 @@
     <Filter Include="소스 파일\Texture">
       <UniqueIdentifier>{bad60905-6a83-46b7-af12-4bc0d702bae5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\System\DXSystem">
+      <UniqueIdentifier>{08203978-d416-494e-8385-f08e2bef32b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -189,22 +192,13 @@
     <ClInclude Include="P2DCamera.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
-    <ClInclude Include="PDevice.h">
-      <Filter>소스 파일\System</Filter>
-    </ClInclude>
     <ClInclude Include="PPlayerStatus.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
     <ClInclude Include="PSprite.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="PSpriteManager.h">
-      <Filter>소스 파일\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="PBitmap.h">
-      <Filter>소스 파일\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="PBitmapManager.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
     <ClInclude Include="PUIDataManager.h">
@@ -225,8 +219,20 @@
     <ClInclude Include="PTextureManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="PBitmapManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PSpriteManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
     <ClInclude Include="PDxHelper.h">
-      <Filter>소스 파일\System</Filter>
+      <Filter>소스 파일\System\DXSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PDxState.h">
+      <Filter>소스 파일\System\DXSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PDevice.h">
+      <Filter>소스 파일\System\DXSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,22 +365,13 @@
     <ClCompile Include="P2DCamera.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
-    <ClCompile Include="PDevice.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
     <ClCompile Include="PPlayerStatus.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PSprite.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="PSpriteManager.cpp">
-      <Filter>소스 파일\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="PBitmap.cpp">
-      <Filter>소스 파일\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="PBitmapManager.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PUIDataManager.cpp">
@@ -395,8 +392,20 @@
     <ClCompile Include="PTextureManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="PBitmapManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PSpriteManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
     <ClCompile Include="PDxHelper.cpp">
-      <Filter>소스 파일\System</Filter>
+      <Filter>소스 파일\System\DXSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PDxState.cpp">
+      <Filter>소스 파일\System\DXSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PDevice.cpp">
+      <Filter>소스 파일\System\DXSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

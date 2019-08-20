@@ -215,6 +215,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PDeadAction.h" />
     <ClInclude Include="PDevice.h" />
     <ClInclude Include="PDxHelper.h" />
+    <ClInclude Include="PDxState.h" />
     <ClInclude Include="PFiniteState.h" />
     <ClInclude Include="PFsm.h" />
     <ClInclude Include="PHitAction.h" />
@@ -281,6 +282,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PDevice.cpp" />
     <ClCompile Include="PDxCore.cpp" />
     <ClCompile Include="PDxHelper.cpp" />
+    <ClCompile Include="PDxState.cpp" />
     <ClCompile Include="PFiniteState.cpp" />
     <ClCompile Include="PFsm.cpp" />
     <ClCompile Include="PHitAction.cpp" />

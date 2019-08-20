@@ -115,62 +115,6 @@ bool PDevice::CreateRenderTarget(UINT client_width, UINT client_height)
 
 
 
-bool PDevice::LoadShaderResourceView(multibyte_string name, OUT_ ID3D11ShaderResourceView* view)
-{
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-		device_, name.c_str(), NULL, NULL, &view, NULL
-	);
-	if (FAILED(hr))
-		return false;
-	else
-		return true;
-}
-
-bool PDevice::LoadShaderAndInputLayout(LPCTSTR v_shader_path, LPCTSTR ps_shader_path ,LPCSTR v_shader_func_name, LPCSTR ps_shader_func_name)
-{
-	ID3DBlob* v_shader_blob;
-	ID3DBlob* error_msg;
-
-	//vertex shader create
-	HRESULT hr = D3DX11CompileFromFile(
-		v_shader_path, NULL, NULL,
-		v_shader_func_name, "vs_5_0",
-		0, 0, NULL, &v_shader_blob, &error_msg, NULL);
-
-	if (FAILED(hr))
-		return false;
-
-	device_->CreateVertexShader(v_shader_blob->GetBufferPointer(), v_shader_blob->GetBufferSize(), NULL, &vertex_shader_);
-
-	
-	//pixel shader crate
-	ID3DBlob* ps_shader_blob;
-	
-	hr = D3DX11CompileFromFile(
-		ps_shader_path, NULL, NULL,
-		ps_shader_func_name, "ps_5_0",
-		0, 0, NULL, &ps_shader_blob, &error_msg, NULL);
-
-	device_->CreatePixelShader(ps_shader_blob->GetBufferPointer(), ps_shader_blob->GetBufferSize(), NULL,&pixel_shader_);
-
-	//input layout
-
-	const D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{"POSITION", 1, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}, //이부분 잘게 필기해서 올려놓을것
-	};
-	
-	int element_number = sizeof(layout) / sizeof(layout[0]);
-
-	hr = device_->CreateInputLayout(layout, element_number, v_shader_blob->GetBufferPointer(), v_shader_blob->GetBufferSize(), &input_layout_);
-
-	if (FAILED(hr))
-		return false;
-
-	return true;
-}
-
 bool PDevice::DeviceRelease()
 {
 	render_target_view_->Release();
@@ -179,47 +123,9 @@ bool PDevice::DeviceRelease()
 	device_->Release();
 
 
-	if (vertex_buffer_)
-		vertex_buffer_->Release();
-	if (vertex_shader_)
-		vertex_shader_->Release();
-	if (pixel_shader_)
-		pixel_shader_->Release();
-	if (input_layout_)
-		input_layout_->Release();
-	if (constant_buffer_)
-		constant_buffer_->Release();
-	if (input_layout_)
-		input_layout_->Release();
-	if (state_solid_frame_)
-		state_solid_frame_->Release();
-	if (shader_res_view_)
-		shader_res_view_->Release();
-
-	vertex_buffer_ = nullptr;
-	vertex_shader_ = nullptr;
-	pixel_shader_ = nullptr;
-	input_layout_ = nullptr;
-
-
-
 	return true;
 }
 
-PVERTEX_TEX* PDevice::AssemblyVertAndTex(const PVERTEX* vert, const PTEXTURE_BUF* tex_buf, int size)
-{
-	PVERTEX_TEX* ret = new PVERTEX_TEX[size];
-	
-	for (int i = 0; i < size; i++)
-	{
-		ret[i].posX = vert[i].poxX;
-		ret[i].posY = vert[i].posY;
-		ret[i].posZ = vert[i].posZ;
-		ret[i].u = tex_buf[i].u;
-		ret[i].v = tex_buf[i].v;
-	}
-	return ret;
-}
 
 
 bool PDevice::DevicePreRender()
@@ -228,30 +134,30 @@ bool PDevice::DevicePreRender()
 	immediate_device_context_->ClearRenderTargetView(render_target_view_, clearColor);
 	return true;
 }
-
-bool PDevice::DeviceRender()
-{
-
-	immediate_device_context_->IASetInputLayout(input_layout_);
-	immediate_device_context_->VSSetShader(vertex_shader_, NULL, 0);
-	immediate_device_context_->PSSetShader(pixel_shader_, NULL, 0);
-
-
-	UINT stride = sizeof(PVERTEX_TEX);
-	UINT offset = 0;
-
-
-	immediate_device_context_->IASetVertexBuffers(0, 1, &vertex_buffer_, &stride, &offset);
-	immediate_device_context_->IASetIndexBuffer(index_buffer_, DXGI_FORMAT_R32_UINT, 0);
-	immediate_device_context_->VSSetConstantBuffers(0, 1, &constant_buffer_);
-	immediate_device_context_->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	immediate_device_context_->PSSetShaderResources(0, 1, &shader_res_view_);
-	immediate_device_context_->RSSetState(state_solid_frame_);
-
-
-	//immediate_device_context_->Draw(3, 0);
-	immediate_device_context_->DrawIndexed(6, 0, 0);
-	swap_chain_->Present(0, 0);
-	return true;
-}
-
+//
+//bool PDevice::DeviceRender()
+//{
+//
+//	immediate_device_context_->IASetInputLayout(input_layout_);
+//	immediate_device_context_->VSSetShader(vertex_shader_, NULL, 0);
+//	immediate_device_context_->PSSetShader(pixel_shader_, NULL, 0);
+//
+//
+//	UINT stride = sizeof(PVERTEX_TEX);
+//	UINT offset = 0;
+//
+//
+//	immediate_device_context_->IASetVertexBuffers(0, 1, &vertex_buffer_, &stride, &offset);
+//	immediate_device_context_->IASetIndexBuffer(index_buffer_, DXGI_FORMAT_R32_UINT, 0);
+//	immediate_device_context_->VSSetConstantBuffers(0, 1, &constant_buffer_);
+//	immediate_device_context_->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//	immediate_device_context_->PSSetShaderResources(0, 1, &shader_res_view_);
+//	immediate_device_context_->RSSetState(state_solid_frame_);
+//
+//
+//	//immediate_device_context_->Draw(3, 0);
+//	immediate_device_context_->DrawIndexed(6, 0, 0);
+//	swap_chain_->Present(0, 0);
+//	return true;
+//}
+//
