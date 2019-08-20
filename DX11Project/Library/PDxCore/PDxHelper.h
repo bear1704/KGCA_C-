@@ -7,6 +7,9 @@
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dx11.lib")
 
+#define OUT_  
+
+
 namespace DX
 {
 	//vertices : 버텍스 버퍼 / vertices_struct_size : 버텍스 버퍼에 사용되는 구조체 사이즈 / vertices_count : 버텍스 개수 / PVERTEX_TEX 구조체 사용
@@ -15,6 +18,8 @@ namespace DX
 	ID3D11Buffer* CreateIndexBuffer(ID3D11Device* current_device, const void* indices, int indices_count, int indices_struct_size, bool is_dynamic);
 	//VS_CONSTANT_BUFFER 구조체 사용
 	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, const void* constants, int constants_count, int constants_struct_size);
+	ID3D11VertexShader* LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path, LPCSTR vs_func_name,
+		 bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 
 	class PDxHelper
 	{

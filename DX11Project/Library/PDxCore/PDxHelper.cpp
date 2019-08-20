@@ -116,4 +116,65 @@ namespace DX
 		
 	}
 
+	ID3D11VertexShader* LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path,
+													LPCSTR vs_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr)
+	{
+		ID3D11VertexShader* ret_vertex_shader;
+		HRESULT hr;
+		ID3DBlob* v_shader_blob;
+		ID3DBlob* error_msg;
+		DWORD blob_size = 0;
+		LPCVOID blob_data = 0;
+
+		if (is_already_compiled == false)
+		{
+			hr = D3DX11CompileFromFile(
+				vs_file_path, NULL, NULL,
+				vs_func_name, "vs_5_0",
+				0, 0, NULL, &v_shader_blob, &error_msg, NULL);
+
+
+			if (FAILED(hr))
+			{
+				if (error_msg != nullptr)
+				{
+					OutputDebugStringA((char*)error_msg->GetBufferPointer());
+					if (error_msg)  error_msg->Release();
+				}
+				assert(false);
+				return nullptr;
+			}
+			blob_size = v_shader_blob->GetBufferSize();
+			blob_data = v_shader_blob->GetBufferPointer();
+		}
+		else //컴파일된 binary blob으로 들어올 경우 
+		{
+			v_shader_blob = *blob;
+			if (v_shader_blob == nullptr) return nullptr;
+
+			blob_size = v_shader_blob->GetBufferSize();
+			blob_data = v_shader_blob->GetBufferPointer();
+		}
+
+		hr = current_device->CreateVertexShader(blob_data, blob_size, NULL, &ret_vertex_shader);
+
+		if (FAILED(hr))
+		{
+			v_shader_blob->Release();
+			return nullptr;
+		}
+
+		if (blob == nullptr)
+		{
+			v_shader_blob->Release();
+		}
+		else
+		{
+			*blob = v_shader_blob;
+		}
+
+
+		return nullptr;
+	}
+
 }
