@@ -1,7 +1,7 @@
 #pragma once
-#include "PRectObject.h"
+#include "PObject.h"
 
-class PUIComponent : public PRectObject
+class PUIComponent : public PObject
 {
 
 

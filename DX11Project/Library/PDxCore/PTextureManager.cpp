@@ -8,6 +8,26 @@ PTextureManager::PTextureManager()
 {
 }
 
+bool PTextureManager::Init()
+{
+	return false;
+}
+
+bool PTextureManager::Frame()
+{
+	return false;
+}
+
+bool PTextureManager::Render()
+{
+	return false;
+}
+
+bool PTextureManager::Release()
+{
+	return false;
+}
+
 void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Device* current_device)
 {
 	PParser parser;
@@ -50,16 +70,17 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 			//texture->set_texbuf_size(texture_size);
 			//texture->set_texture_buf(std::move(uv));
 
-			ID3D11ShaderResourceView* view = texture->shader_res_view();
-
+			ID3D11ShaderResourceView** view = texture->shader_res_view_double_ptr();
+			
+			
 			HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-				current_device, texture_name.c_str(), NULL, NULL, &view, NULL
+				current_device, tex_path.c_str(), NULL, NULL, view, NULL
 			);
 
 			if (FAILED(hr))
-				assert(false);
+				assert(false); //¿©±â ¿À·ù¶ä
 
-			texture_list_.insert(make_pair(texture_name, texture));
+			texture_list_.insert(make_pair(tex_path, texture));
 
 
 		}
@@ -74,6 +95,6 @@ PTexture* PTextureManager::GetTextureFromMap(std::wstring key)
 		PTexture* data = (*iter).second;
 		return data;
 	}
-	assert(false);
+	//assert(false);
 	return nullptr;
 }

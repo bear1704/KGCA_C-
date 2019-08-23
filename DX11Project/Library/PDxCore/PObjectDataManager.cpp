@@ -29,12 +29,12 @@ bool PObjectDataManager::Release()
 	return false;
 }
 
-std::vector<PRectObject*> PObjectDataManager::get_object_list_from_map(std::wstring key)
+std::vector<PObject*> PObjectDataManager::get_object_list_from_map(std::wstring key)
 {
 	auto iter = object_composition_list_.find(key);
 	if (iter != object_composition_list_.end())
 	{
-		std::vector<PRectObject*>& data = (*iter).second;
+		std::vector<PObject*>& data = (*iter).second;
 		return data;
 	}
 
@@ -83,7 +83,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 	PParser parser;
 	parser.XmlParse(str, &ret_parse);
 	
-	std::vector<PRectObject*> object_list;
+	std::vector<PObject*> object_list;
 
 	for (auto iter = ret_parse.begin(); iter != ret_parse.end(); iter++)
 	{
@@ -97,7 +97,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 
 			while (true)
 			{
-				PRectObject* component;
+				PObject* component;
 				iter++;
 				if (iter->first.compare("END") == 0)
 					break;
@@ -126,7 +126,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 					object_name = iter->second;
 					iter++; //COORD È®ÀÎ¿ë
 
-					component =  new PRectObject();
+					component =  new PObject();
 					component->Set(map_path, string_to_multibyte(object_name), pPoint(map_pos.x, map_pos.y));
 					component->set_type_(Type::MAP);
 					component->set_alpha_and_scale_(component->get_alpha_(), component->get_scale_());
@@ -207,7 +207,7 @@ void PObjectDataManager::LoadDataFromScript(multibyte_string filepath)
 					component->set_id(20000); //hard_coded
 
 
-					PRectObject* rect_component = component;
+					PObject* rect_component = component;
 
 
 

@@ -24,7 +24,7 @@ namespace DX
 		}
 		
 		buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		buffer_desc.ByteWidth = sizeof(vertices_struct_size) * vertices_count;
+		buffer_desc.ByteWidth = vertices_struct_size * vertices_count;
 		buffer_desc.MiscFlags = 0;
 		buffer_desc.StructureByteStride = 0;
 
@@ -95,14 +95,14 @@ namespace DX
 
 	}
 
-	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, const void* constants, int constants_count, int constants_struct_size)
+	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, int constants_struct_size)
 	{
 		ID3D11Buffer* ret_constant_buffer;
 		D3D11_BUFFER_DESC constant_buf_desc;
 		ZeroMemory(&constant_buf_desc, sizeof(D3D11_BUFFER_DESC));
 
 
-		constant_buf_desc.ByteWidth = constants_struct_size * constants_count;
+		constant_buf_desc.ByteWidth = constants_struct_size;
 		constant_buf_desc.Usage = D3D11_USAGE_DYNAMIC;
 		constant_buf_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		constant_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -174,13 +174,13 @@ namespace DX
 		}
 
 
-		return nullptr;
+		return ret_vertex_shader;
 	}
 
-	ID3D11VertexShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, 
+	ID3D11PixelShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, 
 													LPCSTR ps_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
 	{
-		ID3D11VertexShader* ret_vertex_shader = nullptr;
+		ID3D11PixelShader* ret_pixel_shader = nullptr;
 		HRESULT hr;
 		ID3DBlob* ps_shader_blob = nullptr;
 		ID3DBlob* error_msg = nullptr;
@@ -217,7 +217,7 @@ namespace DX
 			blob_data = ps_shader_blob->GetBufferPointer();
 		}
 
-		hr = current_device->CreateVertexShader(blob_data, blob_size, NULL, &ret_vertex_shader);
+		hr = current_device->CreatePixelShader(blob_data, blob_size, NULL, &ret_pixel_shader);
 
 		if (FAILED(hr))
 		{
@@ -235,7 +235,7 @@ namespace DX
 		}
 
 
-		return nullptr;
+		return ret_pixel_shader;
 	}
 
 	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data, 
@@ -274,18 +274,7 @@ namespace DX
 
 	void PDxHelper::PreRender(ID3D11DeviceContext* context, int stride_length)
 	{
-		DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
-		context->VSSetConstantBuffers(0, 1, constant_buffer_.GetAddressOf());
-
-
-		if (shader_res_view_ == nullptr)
-			assert(false);
-
-		context->PSSetShaderResources(0, 1, shader_res_view_.GetAddressOf());
-		//context->PSSetShaderResources(1, 1, shader_res_view_.GetAddressOf());
-		context->IASetInputLayout(input_layout_.Get());
-		context->VSSetShader(vertex_shader_.Get(), NULL, 0);
-		context->PSSetShader(pixel_shader_.Get(), NULL, 0);
+		//DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
 
 		UINT stride = stride_length;
 		UINT offset = 0;
@@ -293,6 +282,17 @@ namespace DX
 		context->IASetVertexBuffers(0, 1, vertex_buffer_.GetAddressOf(), &stride, &offset);
 		context->IASetIndexBuffer(index_buffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
 		context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//context->VSSetConstantBuffers(0, 1, constant_buffer_.GetAddressOf());
+
+
+		if (shader_res_view_ == nullptr)
+			assert(false);
+
+		//context->PSSetShaderResources(1, 1, shader_res_view_.GetAddressOf());
+		context->IASetInputLayout(input_layout_.Get());
+		context->VSSetShader(vertex_shader_.Get(), NULL, 0);
+		context->PSSetShader(pixel_shader_.Get(), NULL, 0);
+		context->PSSetShaderResources(0, 1, shader_res_view_.GetAddressOf());
 
 	}
 
@@ -304,6 +304,12 @@ namespace DX
 			context->DrawIndexed(index_count, 0, 0);
 		else
 			context->Draw(vertex_count_, 0);
+	}
+
+	void PDxHelper::Render(ID3D11DeviceContext* context)
+	{
+		PreRender(context, vertex_size_);
+		PostRender(context, index_count_);
 	}
 
 	void PDxHelper::set_shader_res_view(ID3D11ShaderResourceView* view)

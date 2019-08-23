@@ -33,7 +33,7 @@ bool PImageControl::Render()
 
 bool PImageControl::Release()
 {
-	PRectObject::Release();
+	PObject::Release();
 	return true;
 }
 

@@ -198,6 +198,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="framework.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="P2DCamera.h" />
+    <ClInclude Include="P2DSprite.h" />
     <ClInclude Include="PAttackAction.h" />
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
@@ -240,7 +241,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PPlayerCharacter.h" />
     <ClInclude Include="PPlayerState.h" />
     <ClInclude Include="PPlayerStatus.h" />
-    <ClInclude Include="PRectObject.h" />
+    <ClInclude Include="PObject.h" />
     <ClInclude Include="PScene.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
@@ -259,6 +260,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="P2DCamera.cpp" />
+    <ClCompile Include="P2DSprite.cpp" />
     <ClCompile Include="PAttackAction.cpp" />
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />
@@ -307,7 +309,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PPlayerCharacter.cpp" />
     <ClCompile Include="PPlayerState.cpp" />
     <ClCompile Include="PPlayerStatus.cpp" />
-    <ClCompile Include="PRectObject.cpp" />
+    <ClCompile Include="PObject.cpp" />
     <ClCompile Include="PScene.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />

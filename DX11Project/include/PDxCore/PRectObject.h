@@ -6,14 +6,14 @@
 #include "PPhysicsModule.h"
 #include "P2DCamera.h"
 #include "PFsm.h"
+#include "PTextureManager.h"
 
 
-
-class PRectObject
+class PObject
 {
 public:
-	PRectObject();
-	virtual ~PRectObject();
+	PObject();
+	virtual ~PObject();
 protected:
 	PSprite sprite_;
 	std::vector<PSprite*> animation_list_;
@@ -30,12 +30,16 @@ protected:
 	bool is_reversal_;
 	bool invisible_;
 	WORD id_;
-	
+
+	///ÅØ½ºÃÄ
+	DX::PDxHelper dx_helper;
+	PTexture* texture;
 
 public:
 	virtual bool Init();
 	virtual bool Frame();
 	virtual bool Render();
+	virtual bool Render(ID3D11DeviceContext* context);
 	virtual bool Release();
 	virtual void StatusSet(multibyte_string status_path, multibyte_string object_name);
 	virtual void StatusSetForServer(multibyte_string status_path, multibyte_string object_name);

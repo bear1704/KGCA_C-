@@ -10,7 +10,7 @@ namespace DX
 
 	void DX::PDxState::SetState(ID3D11Device* current_device)
 	{
-		if (current_device) return;
+		if (!current_device) return;
 
 		HRESULT hr;
 

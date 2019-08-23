@@ -61,6 +61,11 @@ ID3D11ShaderResourceView* PTexture::shader_res_view()
 	return shader_res_view_;
 }
 
+ID3D11ShaderResourceView** PTexture::shader_res_view_double_ptr()
+{
+	return &shader_res_view_;
+}
+
 //int PTexture::texbuf_size()
 //{
 //	return texbuf_size_;

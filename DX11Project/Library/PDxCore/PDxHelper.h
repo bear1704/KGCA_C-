@@ -62,10 +62,10 @@ namespace DX
 	//DWORD 구조체 사용
 	ID3D11Buffer* CreateIndexBuffer(ID3D11Device* current_device, const void* indices, int indices_count, int indices_struct_size, bool is_dynamic);
 	//VS_CONSTANT_BUFFER 구조체 사용
-	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, const void* constants, int constants_count, int constants_struct_size);
+	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, int constants_struct_size);
 	ID3D11VertexShader* LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path, LPCSTR vs_func_name,
 		 bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
-	ID3D11VertexShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
+	ID3D11PixelShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data,
 												D3D11_INPUT_ELEMENT_DESC* layout, int element_number);
@@ -91,6 +91,7 @@ namespace DX
 		//Render
 		void PreRender(ID3D11DeviceContext* context, int stride_length);
 		void PostRender(ID3D11DeviceContext* context, int index_count);
+		void Render(ID3D11DeviceContext* context);
 
 		void set_shader_res_view(ID3D11ShaderResourceView* view);
 	};

@@ -15,6 +15,11 @@ private:
 
 
 public:
+	bool Init() override;
+	bool Frame() override;
+	bool Render() override;
+	bool Release() override;
+	
 	void LoadTextureFromScript(multibyte_string filepath, ID3D11Device* current_device);
 	PTexture* GetTextureFromMap(std::wstring key);
 

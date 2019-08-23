@@ -29,11 +29,11 @@ namespace DX
 	static void ApplyRasterizerState(ID3D11DeviceContext* context, ID3D11RasterizerState* state)
 	{
 		context->RSSetState(state);
-	}
+	};
 	static void ApplyBlendState(ID3D11DeviceContext* context, ID3D11BlendState* state, const FLOAT blend_factor[] = 0, UINT mask = 0xffffffff)
 	{
 		context->OMSetBlendState(state, blend_factor, mask);
-	}
+	};
 
 
 

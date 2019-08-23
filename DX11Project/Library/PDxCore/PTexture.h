@@ -25,6 +25,8 @@ public:
 	//getter
 	//std::vector<PTEXTURE_BUF>&	texture_buf();
 	ID3D11ShaderResourceView*	shader_res_view();
+	ID3D11ShaderResourceView**	shader_res_view_double_ptr();
+
 	//int							texbuf_size();
 
 };

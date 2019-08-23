@@ -10,6 +10,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice2", "CreateDevice2\CreateDevice2.vcxproj", "{B7581E30-3703-4732-AC8D-BE745E3E7CEC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice3", "CreateDevice3\CreateDevice3.vcxproj", "{1ED08012-9AB8-483E-AED9-07488F7B96BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

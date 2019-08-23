@@ -61,7 +61,7 @@ bool PButtonControl::Render()
 }
 bool PButtonControl::Release()
 {
-	PRectObject::Release();
+	PObject::Release();
 	
 	return true;
 }

@@ -44,12 +44,12 @@ bool PScene::Init()
 		}
 		else if (game_objects_[i]->get_type_() == Type::NPC)
 		{
-			PRectObject* npc = (PRectObject*)game_objects_[i];
+			PObject* npc = (PObject*)game_objects_[i];
 			npc->Init();
 		}
 		else if (game_objects_[i]->get_type_() == Type::MAP)
 		{
-			PRectObject* map = (PRectObject*)game_objects_[i];
+			PObject* map = (PObject*)game_objects_[i];
 			map->Init();
 		}
 		else if (game_objects_[i]->get_type_() == Type::BOSS_MONSTER)
@@ -100,12 +100,12 @@ bool PScene::Frame()
 		}
 		else if (game_objects_[i]->get_type_() == Type::NPC)
 		{
-			PRectObject* npc = (PRectObject*)game_objects_[i];
+			PObject* npc = (PObject*)game_objects_[i];
 			npc->Frame();
 		}
 		else if (game_objects_[i]->get_type_() == Type::MAP)
 		{
-			PRectObject* map = (PRectObject*)game_objects_[i];
+			PObject* map = (PObject*)game_objects_[i];
 			map->Frame();
 		}
 		else if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
@@ -134,7 +134,7 @@ bool PScene::Render()
 	{
 		if (game_objects_[i]->get_type_() == Type::MAP)
 		{
-			PRectObject* map = (PRectObject*)game_objects_[i];
+			PObject* map = (PObject*)game_objects_[i];
 			map->Render();
 		}
 		else if (game_objects_[i]->get_type_() == Type::BOSS_MONSTER)
@@ -164,7 +164,7 @@ bool PScene::Render()
 		}
 		else if (game_objects_[i]->get_type_() == Type::NPC)
 		{
-			PRectObject* npc = (PRectObject*)game_objects_[i];
+			PObject* npc = (PObject*)game_objects_[i];
 			npc->Render();
 		}
 		else if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
@@ -225,12 +225,12 @@ bool PScene::Release()
 		}
 		else if (game_objects_[i]->get_type_() == Type::NPC)
 		{
-			PRectObject* npc = (PRectObject*)game_objects_[i];
+			PObject* npc = (PObject*)game_objects_[i];
 			npc->Release();
 		}
 		else if (game_objects_[i]->get_type_() == Type::MAP)
 		{
-			PRectObject* map = (PRectObject*)game_objects_[i];
+			PObject* map = (PObject*)game_objects_[i];
 			map->Release();
 		}
 		else if (game_objects_[i]->get_type_() == Type::OTHER_PLAYER)
@@ -258,7 +258,7 @@ void PScene::InsertObject(PUIComponent * component)
 	ui_compositions_.push_back(component);
 }
 
-void PScene::InsertObject(std::vector<PRectObject*>& list_component)
+void PScene::InsertObject(std::vector<PObject*>& list_component)
 {
 	game_objects_ = list_component;
 }
@@ -320,12 +320,12 @@ std::vector<PUIComponent*>* PScene::get_ui_compositions_()
 	return &ui_compositions_;
 }
 
-std::vector<PRectObject*>* PScene::get_game_objects()
+std::vector<PObject*>* PScene::get_game_objects()
 {
 	return &game_objects_;
 }
 
-void PScene::AddGameObjects(PRectObject* obj)
+void PScene::AddGameObjects(PObject* obj)
 {
 	if(obj != nullptr)
 		game_objects_.push_back(obj);
@@ -340,15 +340,15 @@ void PScene::AddUiComponents(PUIComponent* ui)
 void PScene::DeleteGameObjectsByCid(WORD cid)
 {
 	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
-		[&cid](PRectObject* obj) ->bool {return obj->get_id() == cid; });
+		[&cid](PObject* obj) ->bool {return obj->get_id() == cid; });
 
 	game_objects_.erase(iter);
 }
 
-PRectObject* PScene::FindObjectByCid(WORD id)
+PObject* PScene::FindObjectByCid(WORD id)
 {
 	auto iter = std::find_if(game_objects_.begin(), game_objects_.end(),
-		[&id](PRectObject* obj) ->bool {return obj->get_id() == id; });
+		[&id](PObject* obj) ->bool {return obj->get_id() == id; });
 
 	if (iter == game_objects_.end())
 		return nullptr;

@@ -31,7 +31,7 @@ void PComponentStorage::InsertObject(PUIComponent * component)
 	ui_compositions_.push_back(component);
 }
 
-void PComponentStorage::InsertObject(std::vector<PRectObject*>& list_component)
+void PComponentStorage::InsertObject(std::vector<PObject*>& list_component)
 {
 	game_objects_ = list_component;
 }

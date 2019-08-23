@@ -1,9 +1,9 @@
 #pragma once
-#include "PRectObject.h"
+#include "PObject.h"
 #include "PPlayerStatus.h"
 
 
-class PCharacter : public PRectObject
+class PCharacter : public PObject
 {
 public:
 	PCharacter();

@@ -123,9 +123,6 @@
     <ClInclude Include="PCharacter.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="PRectObject.h">
-      <Filter>소스 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="PAttackAction.h">
       <Filter>소스 파일\FSM\Character</Filter>
     </ClInclude>
@@ -234,6 +231,12 @@
     <ClInclude Include="PDevice.h">
       <Filter>소스 파일\System\DXSystem</Filter>
     </ClInclude>
+    <ClInclude Include="P2DSprite.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PObject.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -294,9 +297,6 @@
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
     <ClCompile Include="PCharacter.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="PRectObject.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="PAttackAction.cpp">
@@ -406,6 +406,12 @@
     </ClCompile>
     <ClCompile Include="PDevice.cpp">
       <Filter>소스 파일\System\DXSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="P2DSprite.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PObject.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

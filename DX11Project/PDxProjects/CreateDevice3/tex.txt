@@ -1,0 +1,9 @@
+<Texture>
+	<texbuf_size> 4 		</texbuf_size>
+	<tex_name>bk</tex_name>
+	<tex_path> ../../data/texture/bk.bmp	</tex_path>
+	<uv> 0.0f,0.0f </uv> <!-- u ,v -->
+	<uv> 0.5f,0.5f </uv> <!-- u ,v -->
+	<uv> 0.5f,0.5f </uv> <!-- u ,v -->
+	<uv> 0.0f,0.5f </uv> <!-- u ,v -->
+</Texture>

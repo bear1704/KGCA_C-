@@ -3,7 +3,7 @@
 #include <functional>
 
 
-PPlayerStatus::PPlayerStatus(PRectObject* owner)
+PPlayerStatus::PPlayerStatus(PObject* owner)
 {
 	owner_ = owner;
 }
@@ -360,7 +360,7 @@ bool PPlayerStatus::is_dead()
 	return false;
 }
 
-void PPlayerStatus::set_owner(PRectObject* owner)
+void PPlayerStatus::set_owner(PObject* owner)
 {
 	owner_ = owner;
 }

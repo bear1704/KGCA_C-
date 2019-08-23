@@ -72,10 +72,10 @@ void PHitAction::CollisionCheck()
 {
 	if (g_current_scene_)
 	{
-		//std::vector<PRectObject*> game_objects =
+		//std::vector<PObject*> game_objects =
 		//	PObjectDataManager::GetInstance().get_object_list_from_map(g_current_scene_->get_scene_name_()); //MUSHROOMRAND
 
-		std::vector<PRectObject*> game_objects = *g_current_scene_->get_game_objects();
+		std::vector<PObject*> game_objects = *g_current_scene_->get_game_objects();
 
 		//몬스터별 충돌체크(RECT가지고)
 		for (int i = 0; i < game_objects.size(); i++)
