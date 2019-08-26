@@ -3,7 +3,6 @@
 #include <numeric>
 #include <iterator>
 
-#define MYSTRING
 #ifdef MYSTRING
 class MyString
 {

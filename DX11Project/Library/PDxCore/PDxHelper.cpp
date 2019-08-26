@@ -274,7 +274,7 @@ namespace DX
 
 	void PDxHelper::PreRender(ID3D11DeviceContext* context, int stride_length)
 	{
-		//DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
+		DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
 
 		UINT stride = stride_length;
 		UINT offset = 0;
@@ -282,7 +282,7 @@ namespace DX
 		context->IASetVertexBuffers(0, 1, vertex_buffer_.GetAddressOf(), &stride, &offset);
 		context->IASetIndexBuffer(index_buffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
 		context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		//context->VSSetConstantBuffers(0, 1, constant_buffer_.GetAddressOf());
+		context->VSSetConstantBuffers(0, 1, constant_buffer_.GetAddressOf());
 
 
 		if (shader_res_view_ == nullptr)

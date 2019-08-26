@@ -337,3 +337,13 @@ public:
 	virtual bool Release() = 0;
 
 };
+
+namespace DX
+{
+
+	namespace STD
+	{
+
+	}
+
+}

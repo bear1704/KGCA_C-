@@ -3,6 +3,8 @@
 #include "PStd.h"
 #include <assert.h>
 #include "P2DCamera.h"
+#include "PTexture.h"
+#include "PDxHelper.h"
 
 struct SpriteDataInfo
 {
@@ -31,8 +33,14 @@ public:
 
 private:
 
-	vector<FLOAT_RECT> rect_list;
-	vector<FLOAT_RECT> original_size_list;
+
+	PTexture* texture_;
+	
+
+	//renewel
+	vector<DX::PTextureBufSet> tex_boundary_list_;
+	vector<DX::PTextureBufSet> tex_default_boundary_list_;
+	pPoint position_;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
 	float lifetime_;
@@ -42,16 +50,16 @@ private:
 	bool isDead;
 	float alpha_;
 	float scale_;
-	pPoint position_;
 	ANIMATIONTYPE animation_type_;
 	bool automata_;
 	bool is_reversal_for_automata_;//reversal 상태인지 스프라이트가 원래는 알 필요 없지만, 특수 상황(1회용 스프라이트 제작 등..)에서 필요하므로 넣는다.
 							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
 	bool is_dmg_; //데미지를 표시하는 스프라이트인지 체크
-	
+
+
+
 public:
-	PBitmap* bitmap_;
-	PBitmap* bitmap_mask_;
+
 	bool Init();
 	bool Frame();
 	bool Render();

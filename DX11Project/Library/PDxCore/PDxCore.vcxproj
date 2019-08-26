@@ -198,7 +198,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="framework.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="P2DCamera.h" />
-    <ClInclude Include="P2DSprite.h" />
+    <ClInclude Include="PDxSprite.h" />
     <ClInclude Include="PAttackAction.h" />
     <ClInclude Include="PBitmap.h" />
     <ClInclude Include="PBitmapManager.h" />
@@ -260,7 +260,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="P2DCamera.cpp" />
-    <ClCompile Include="P2DSprite.cpp" />
+    <ClCompile Include="PDxSprite.cpp" />
     <ClCompile Include="PAttackAction.cpp" />
     <ClCompile Include="PBitmap.cpp" />
     <ClCompile Include="PBitmapManager.cpp" />

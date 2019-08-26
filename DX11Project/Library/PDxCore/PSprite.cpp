@@ -125,6 +125,9 @@ void PSprite::Draw(bool is_reversal)
 	if (isDead)
 		return;
 
+	DX::
+
+
 	BLENDFUNCTION bf;
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
@@ -149,6 +152,10 @@ void PSprite::Draw(bool is_reversal)
 
 		}
 	}
+
+
+
+
 }
 
 void PSprite::Clone(PSprite* sprite, float alpha, float scale)

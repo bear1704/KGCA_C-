@@ -72,12 +72,10 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 	dx_helper.constant_buffer_.Attach(DX::CreateConstantBuffer(device_, sizeof(DX::VS_CONSTANT_BUFFER)));
 
 	PTextureManager::GetInstance().LoadTextureFromScript(L"tex.txt", device_);
-	PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"../../data/texture/bk.bmp");
+	PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"../../data/texture/aaa.jpg");
 	//dx_helper.shader_res_view_ = texture->shader_res_view();
 	dx_helper.shader_res_view_.Attach(texture->shader_res_view());
 	//dx_helper.set_shader_res_view(texture->shader_res_view());
-	//constbuf ÀÏ´Ü¾È¾¸
-	
 
 
 	return false;
@@ -87,16 +85,16 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 bool PPlaneObject::Frame()
 {
 	
-	//float elapsed_time = g_fGameTimer;
-	//float bounded_time = cosf(elapsed_time) * 0.5f + 0.5f;
-	//D3D11_MAPPED_SUBRESOURCE MappedResource;
-	//immdeidate_context_->Map(dx_helper.constant_buffer_.Get() , 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
-	//DX::VS_CONSTANT_BUFFER* constant_buf = (DX::VS_CONSTANT_BUFFER*)MappedResource.pData;
-	//constant_buf->color = DX::VECTOR4{ cosf(elapsed_time), sinf(elapsed_time), 1.0f - cosf(elapsed_time) , 1.0f };
+	float elapsed_time = g_fGameTimer;
+	float bounded_time = cosf(elapsed_time) * 0.5f + 0.5f;
+	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	immdeidate_context_->Map(dx_helper.constant_buffer_.Get() , 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
+	DX::VS_CONSTANT_BUFFER* constant_buf = (DX::VS_CONSTANT_BUFFER*)MappedResource.pData;
+	constant_buf->color = DX::VECTOR4{ cosf(elapsed_time), sinf(elapsed_time), 1.0f - cosf(elapsed_time) , 1.0f };
 
-	//constant_buf->time = bounded_time;
-	//constant_buf->theta = elapsed_time;
-	//immdeidate_context_->Unmap(dx_helper.constant_buffer_.Get(), 0);
+	constant_buf->time = bounded_time;
+	constant_buf->theta = elapsed_time;
+	immdeidate_context_->Unmap(dx_helper.constant_buffer_.Get(), 0);
 	return false;
 }
 

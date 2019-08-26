@@ -22,7 +22,7 @@ bool Sample::Init()
 
 bool Sample::Frame()
 {
-	
+	obj.Frame();
 	return true;
 }
 

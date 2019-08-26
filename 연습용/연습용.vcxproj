@@ -117,6 +117,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="array.cpp" />
+    <ClCompile Include="constexpr.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ptr.cpp" />
     <ClCompile Include="ref.cpp" />

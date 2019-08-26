@@ -1,5 +1,6 @@
 #pragma once
 #include "PDevice.h"
+#include "PDxHelper.h"
 
 class PTexture
 {
@@ -17,6 +18,7 @@ public:
 	//setter
 	void set_shader_res_view(ID3D11ShaderResourceView* view);
 	void Apply(ID3D11DeviceContext* device_context, UINT slot_num);
+	void Draw(DX::PTextureBufSet bufset, float scale, bool is_reversal);
 	/*void set_texture_buf(PTEXTURE_BUF* buf, int size);
 	void set_texture_buf(std::vector<PTEXTURE_BUF>& buf);
 	void set_texture_buf(std::vector<PTEXTURE_BUF>&& buf);

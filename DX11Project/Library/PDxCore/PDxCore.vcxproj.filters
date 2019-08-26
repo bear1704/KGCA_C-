@@ -231,11 +231,11 @@
     <ClInclude Include="PDevice.h">
       <Filter>소스 파일\System\DXSystem</Filter>
     </ClInclude>
-    <ClInclude Include="P2DSprite.h">
-      <Filter>소스 파일\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="PObject.h">
       <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PDxSprite.h">
+      <Filter>소스 파일\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,11 +407,11 @@
     <ClCompile Include="PDevice.cpp">
       <Filter>소스 파일\System\DXSystem</Filter>
     </ClCompile>
-    <ClCompile Include="P2DSprite.cpp">
-      <Filter>소스 파일\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="PObject.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PDxSprite.cpp">
+      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
