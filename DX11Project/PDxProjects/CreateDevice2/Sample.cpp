@@ -16,7 +16,7 @@ bool Sample::Init()
 	std::string v_shader_func = "VS";
 	std::string ps_shader_func = "PS";
 
-	//PVERTEX_TEX vertices[] =
+	//PVertexAndUV vertices[] =
 	//{
 	//	{-0.5f, 0.5f, 0.5f, 0.0f, 0.0f},
 	//	{0.5f, 0.5f, 0.5f, 0.5f, 0.0f},
@@ -34,7 +34,7 @@ bool Sample::Init()
 
 
 
-	PVERTEX vertices[] =
+	PVertex vertices[] =
 	{
 		{-0.5f, 0.5f, 0.5f},
 		{0.5f, 0.5f, 0.5f},
@@ -53,7 +53,7 @@ bool Sample::Init()
 
 	InitDevice(hWnd, g_rectangle_client.right, g_rectangle_client.bottom);
 	LoadShaderResourceView(L"../../data/bitmap/hots.png", shader_res_view_);
-	std::shared_ptr<PVERTEX_TEX> sptr_tex_vertices(AssemblyVertAndTex(vertices, tex_uv, sizeof(vertices) / sizeof(vertices[0])));
+	std::shared_ptr<PVertexAndUV> sptr_tex_vertices(AssemblyVertAndTex(vertices, tex_uv, sizeof(vertices) / sizeof(vertices[0])));
 
 	CreateRenderTarget(g_rectangle_client.right, g_rectangle_client.bottom);
 	CreateVertexBuffer(sptr_tex_vertices.get(), 4);

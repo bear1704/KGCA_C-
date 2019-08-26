@@ -39,7 +39,7 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 	
 	//createvertexbuffer
 
-	DX::PVERTEX_TEX vertices[] =
+	DX::PVertexAndUV vertices[] =
 	{
 		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
 		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
@@ -51,9 +51,9 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 
 	int vertices_count = sizeof(vertices) / sizeof(vertices[0]);
 
-	dx_helper.vertex_size_ = sizeof(DX::PVERTEX_TEX);
+	dx_helper.vertex_size_ = sizeof(DX::PVertexAndUV);
 	dx_helper.vertex_count_ = vertices_count;
-	dx_helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, vertices, dx_helper.vertex_count_, sizeof(DX::PVERTEX_TEX), false));
+	dx_helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, vertices, dx_helper.vertex_count_, sizeof(DX::PVertexAndUV), false));
 
 	DWORD indices[] =
 	{

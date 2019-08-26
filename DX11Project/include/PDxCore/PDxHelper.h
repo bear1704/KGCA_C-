@@ -22,7 +22,7 @@ namespace DX
 		float w;
 
 	};
-	struct PVERTEX_TEX
+	struct PVertexAndUV
 	{
 		float posX;
 		float posY;
@@ -31,14 +31,14 @@ namespace DX
 		float v;
 	};
 
-	struct PVERTEX
+	struct PVertex
 	{
 		float poxX;
 		float posY;
 		float posZ;
 	};
 
-	struct PTEXTURE_BUF
+	struct PTex_uv
 	{
 		float u;
 		float v;
@@ -57,7 +57,7 @@ namespace DX
 
 
 
-	//vertices : 버텍스 버퍼 / vertices_struct_size : 버텍스 버퍼에 사용되는 구조체 사이즈 / vertices_count : 버텍스 개수 / PVERTEX_TEX 구조체 사용
+	//vertices : 버텍스 버퍼 / vertices_struct_size : 버텍스 버퍼에 사용되는 구조체 사이즈 / vertices_count : 버텍스 개수 / PVertexAndUV 구조체 사용
 	ID3D11Buffer*	CreateVertexBuffer(ID3D11Device* current_device,const void* vertices, int vertices_count, int vertices_struct_size, bool is_dynamic);
 	//DWORD 구조체 사용
 	ID3D11Buffer* CreateIndexBuffer(ID3D11Device* current_device, const void* indices, int indices_count, int indices_struct_size, bool is_dynamic);
@@ -69,7 +69,7 @@ namespace DX
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data,
 												D3D11_INPUT_ELEMENT_DESC* layout, int element_number);
-	PVERTEX_TEX* AssemblyVertAndTex(const PVERTEX* vert, const PTEXTURE_BUF* tex_buf, int size); //나중에 텍스쳐매니져쯤으로 옮겨질 기능 
+	PVertexAndUV* AssemblyVertAndTex(const PVertex* vert, const PTex_uv* tex_buf, int size); //나중에 텍스쳐매니져쯤으로 옮겨질 기능 
 
 	class PDxHelper
 	{

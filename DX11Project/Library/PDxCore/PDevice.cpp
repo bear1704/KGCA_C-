@@ -143,7 +143,7 @@ bool PDevice::DevicePreRender()
 //	immediate_device_context_->PSSetShader(pixel_shader_, NULL, 0);
 //
 //
-//	UINT stride = sizeof(PVERTEX_TEX);
+//	UINT stride = sizeof(PVertexAndUV);
 //	UINT offset = 0;
 //
 //
