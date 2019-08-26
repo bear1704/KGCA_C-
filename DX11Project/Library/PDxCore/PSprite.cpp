@@ -120,41 +120,24 @@ void PSprite::Play()
 	remain_lifetime_ = lifetime_;
 }
 
-void PSprite::Draw(bool is_reversal)
+void PSprite::Draw(ID3D11Device* device,DX::PTextureBufSet& bufset, DX::PVertex* vertices, int vertices_count, DX::PDxHelper& helper, bool is_reversal)
 {
 	if (isDead)
 		return;
 
-	DX::
+	DX::PVertexAndUV* vtuv = DX::AssemblyVertAndTex(vertices, bufset, 4);
 
-
-	BLENDFUNCTION bf;
-	bf.BlendOp = AC_SRC_OVER;
-	bf.BlendFlags = 0;
-	bf.SourceConstantAlpha = alpha_ * 255.f;
-	if (bitmap_->bitmap_info.bmBitsPixel == 32) //ARGB 이미지
-	{
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bitmap_->Draw(position_.x, position_.y,
-			rect_list[current_played_spriteframe_], bf, scale_, is_reversal);
-	}
-	else // RGB 이미지
-	{
-		bf.AlphaFormat = AC_SRC_OVER;
-		if (bitmap_mask_ != nullptr)
-		{
-			Alpha24BitsDraw(*this, alpha_, scale_);
-		}
-		else
-		{
-			bitmap_->Draw(position_.x, position_.y,
-				rect_list[current_played_spriteframe_], SRCCOPY, scale_);
-
-		}
-	}
+	int vertices_count = 4;
 
 
 
+	helper.vertex_size_ = sizeof(DX::PVertexAndUV) * vertices_count;
+	helper.vertex_count_ = vertices_count;
+	helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device, vtuv, helper.vertex_count_, sizeof(DX::PVertexAndUV), false));
+	
+	//오류많을듯
+
+	delete vtuv;
 
 }
 

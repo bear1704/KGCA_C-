@@ -256,9 +256,9 @@ namespace DX
 
 	}
 
-	PVERTEX_TEX* AssemblyVertAndTex(const PVERTEX* vert, const PTEXTURE_BUF* tex_buf, int size)
+	PVertexAndUV* AssemblyVertAndTex(const PVertex* vert, const PTex_uv* tex_buf, int size)
 	{
-		PVERTEX_TEX* ret = new PVERTEX_TEX[size];
+		PVertexAndUV* ret = new PVertexAndUV[size]; //해제해야함
 
 		for (int i = 0; i < size; i++)
 		{
@@ -267,6 +267,21 @@ namespace DX
 			ret[i].posZ = vert[i].posZ;
 			ret[i].u = tex_buf[i].u;
 			ret[i].v = tex_buf[i].v;
+		}
+		return ret;
+	}
+
+	PVertexAndUV* AssemblyVertAndTex(const PVertex* vert, const PTextureBufSet& tex_buf, int size)
+	{
+		PVertexAndUV* ret = new PVertexAndUV[size]; //해제해야함
+
+		for (int i = 0; i < size; i++)
+		{
+			ret[i].posX = vert[i].poxX;
+			ret[i].posY = vert[i].posY;
+			ret[i].posZ = vert[i].posZ;
+			ret[i].u = tex_buf.u[i];
+			ret[i].v = tex_buf.v[i];
 		}
 		return ret;
 	}

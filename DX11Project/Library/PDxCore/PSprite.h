@@ -6,6 +6,7 @@
 #include "PTexture.h"
 #include "PDxHelper.h"
 
+
 struct SpriteDataInfo
 {
 	std::vector<FLOAT_RECT> rect_list;
@@ -68,7 +69,7 @@ public:
 	bool Set(SpriteDataInfo info, float alpha, float scale);
 	bool SetPosition(float x, float y);
 	void Play();
-	void Draw(bool is_reversal);
+	void Draw(ID3D11Device* device ,DX::PTextureBufSet& bufset ,DX::PVertex* vertices ,int vertices_count, DX::PDxHelper& helper, bool is_reversal);
 	void Clone(PSprite* sprite, float alpha, float scale);
 	void AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position);
 	//void Draw(int x, int y);
