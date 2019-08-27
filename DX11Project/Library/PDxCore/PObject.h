@@ -55,8 +55,6 @@ public:
 	virtual void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	
 	//getter
-	PBitmap* get_bitmap_();
-	PBitmap* get_bitmap_mask_();
 	PSprite* get_sprite_();
 	
 	pPoint& get_position_();

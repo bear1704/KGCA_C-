@@ -15,7 +15,6 @@ public:
 	PObject();
 	virtual ~PObject();
 protected:
-	PSprite sprite_;
 	std::vector<PSprite*> animation_list_;
 	pPoint position_;
 	FLOAT_RECT collision_box_;
@@ -30,6 +29,10 @@ protected:
 	bool is_reversal_;
 	bool invisible_;
 	WORD id_;
+
+	// renewel
+
+	PSprite sprite_;
 
 	///ÅØ½ºÃÄ
 	DX::PDxHelper dx_helper;
@@ -52,8 +55,6 @@ public:
 	virtual void Set(multibyte_string data_path, multibyte_string object_name, pPoint position);
 	
 	//getter
-	PBitmap* get_bitmap_();
-	PBitmap* get_bitmap_mask_();
 	PSprite* get_sprite_();
 	
 	pPoint& get_position_();

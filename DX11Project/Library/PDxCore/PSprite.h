@@ -1,16 +1,17 @@
 #pragma once
-#include "PBitmapManager.h"
+#include "PTextureManager.h"
 #include "PStd.h"
 #include <assert.h>
 #include "P2DCamera.h"
 #include "PTexture.h"
 #include "PDxHelper.h"
 
+const int kPlaneVertexNumber = 4;
 
 struct SpriteDataInfo
 {
-	std::vector<FLOAT_RECT> rect_list;
-	std::wstring bitmap_path;
+	vector<DX::PTex_uv4> tex_boundary_list;
+	std::wstring texture_name;
 	int max_frame;
 	float lifetime;
 	float once_playtime;
@@ -23,6 +24,9 @@ struct SpriteDataInfo
 		posX = 100.0f;
 		posY = 100.0f;
 		scale = 1.0f;
+		lifetime = 0.0f;
+		once_playtime = 0.0f;
+		max_frame = 0;
 	}
 };
 
@@ -34,13 +38,11 @@ public:
 
 private:
 
-
 	PTexture* texture_;
-	
 
 	//renewel
-	vector<DX::PTextureBufSet> tex_boundary_list_;
-	vector<DX::PTextureBufSet> tex_default_boundary_list_;
+	vector<DX::PTex_uv4> tex_boundary_list_;
+	vector<DX::PTex_uv4> tex_default_boundary_list_;
 	pPoint position_;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
@@ -63,32 +65,24 @@ public:
 
 	bool Init();
 	bool Frame();
-	bool Render();
+	bool Render(ID3D11Device* device, DX::PTex_uv4& tex_uv, std::vector<DX::PVertex>& vertices,
+		DX::PDxHelper& helper, bool is_reversal);
 	bool Release();
-	bool Load(std::wstring filename);
 	bool Set(SpriteDataInfo info, float alpha, float scale);
 	bool SetPosition(float x, float y);
 	void Play();
-	void Draw(ID3D11Device* device ,DX::PTextureBufSet& bufset ,DX::PVertex* vertices ,int vertices_count, DX::PDxHelper& helper, bool is_reversal);
+
+	/*bufset : uv좌표 세트(4개) :: vertices : 버텍스 좌표 세트(4개) ::
+	Plane Object를 셰이더에 넘겨준다.(직접 그리기 x) */
+	void DrawPlane(ID3D11Device* device , DX::PTex_uv4& tex_uv, std::vector<DX::PVertex>& vertices, 
+		DX::PDxHelper& helper, bool is_reversal);
 	void Clone(PSprite* sprite, float alpha, float scale);
 	void AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position);
-	//void Draw(int x, int y);
-	bool Alpha24BitsDraw(PSprite sprite, float alpha, float scale, HDC colorDC = NULL, HDC maskDC = NULL);
-	void AlphaDrawNotCenter();
-	PBitmap* get_bitmap_();
-	PBitmap* get_bitmap_mask_();
+
+	//getter
 	pPoint get_position_();
-	vector<FLOAT_RECT> get_rect_list_copy();
 	bool get_is_dead_();
 	float get_scale();
-	void set_alpha_(float alpha);
-	void set_scale_(float scale);
-	void set_current_played_spriteframe_(int current);
-	void set_rect_list_size(FLOAT_RECT size);
-	void set_animation_type_(ANIMATIONTYPE type);
-	void set_is_dmg(bool isdmg);
-	vector<FLOAT_RECT>& get_original_size_list();
-	ANIMATIONTYPE get_animation_type_();
 	float get_remain_lifetime_();
 	float get_lifetime_();
 	float get_alpha_();
@@ -96,6 +90,17 @@ public:
 	int get_current_played_frame();
 	float get_allocatetime_for_onesprite();
 	bool get_is_dmg();
+	vector<DX::PTex_uv4> tex_boundary_list();
+	vector<DX::PTex_uv4> tex_default_boundary_list();
+	PTexture* texture();
+
+	//setter
+	void set_alpha_(float alpha);
+	void set_scale_(float scale);
+	void set_current_played_spriteframe_(int current);
+	void set_animation_type_(ANIMATIONTYPE type);
+	void set_is_dmg(bool isdmg);
+	ANIMATIONTYPE get_animation_type_();
 	
 };
 

@@ -44,16 +44,7 @@ bool PObject::Render(ID3D11DeviceContext* context)
 
 bool PObject::Release()
 {
-	if (sprite_.get_bitmap_mask_() != nullptr)
-	{
-		sprite_.get_bitmap_()->Release();
-		delete sprite_.get_bitmap_();
-	}
-	if (sprite_.get_bitmap_mask_() != nullptr)
-	{
-		sprite_.get_bitmap_mask_()->Release();
-		delete sprite_.get_bitmap_mask_();
-	}
+
 	
 	return true;
 }
@@ -95,15 +86,6 @@ void PObject::Set(multibyte_string data_path, multibyte_string object_name, pPoi
 
 }
 
-PBitmap * PObject::get_bitmap_()
-{
-	return sprite_.bitmap_;
-}
-
-PBitmap * PObject::get_bitmap_mask_()
-{
-	return sprite_.bitmap_mask_;
-}
 
 PSprite * PObject::get_sprite_()
 {
@@ -189,11 +171,11 @@ void PObject::set_invisible_(bool invisible)
 
 void PObject::Spawn()
 {
-	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());
-	pPoint origin_pos = sprite_.get_position_();
-	sprite_.SetPosition(scrpos.x, scrpos.y);
-	sprite_.Draw(is_reversal_);
-	sprite_.SetPosition(origin_pos.x, origin_pos.y);
+	//pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(sprite_.get_position_());
+	//pPoint origin_pos = sprite_.get_position_();
+	//sprite_.SetPosition(scrpos.x, scrpos.y);
+	//sprite_.DrawPlane(device_,)
+	//sprite_.SetPosition(origin_pos.x, origin_pos.y);
 }
 
 void PObject::set_gravity_(float gravity)

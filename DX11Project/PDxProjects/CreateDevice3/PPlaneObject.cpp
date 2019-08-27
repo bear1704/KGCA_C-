@@ -71,20 +71,26 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 
 	dx_helper.constant_buffer_.Attach(DX::CreateConstantBuffer(device_, sizeof(DX::VS_CONSTANT_BUFFER)));
 
-	PTextureManager::GetInstance().LoadTextureFromScript(L"tex.txt", device_);
-	PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"../../data/texture/aaa.jpg");
-	//dx_helper.shader_res_view_ = texture->shader_res_view();
-	dx_helper.shader_res_view_.Attach(texture->shader_res_view());
-	//dx_helper.set_shader_res_view(texture->shader_res_view());
+	//PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
+	//PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"bk");
+	
+	//dx_helper.shader_res_view_.Attach(texture->shader_res_view());
+	
+	PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
+	PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"aaa");
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(L"blueplane"), 1.0f, 1.0f);
 
-
+	//dx_helper.shader_res_view_.Attach(texture->shader_res_view());
+	//dx_helper.shader_res_view_ = texture->shader_res_view(); 
+	//ตัดูตส
+	
 	return false;
 }
 
 
 bool PPlaneObject::Frame()
-{
-	
+{	
 	float elapsed_time = g_fGameTimer;
 	float bounded_time = cosf(elapsed_time) * 0.5f + 0.5f;
 	D3D11_MAPPED_SUBRESOURCE MappedResource;
@@ -95,11 +101,32 @@ bool PPlaneObject::Frame()
 	constant_buf->time = bounded_time;
 	constant_buf->theta = elapsed_time;
 	immdeidate_context_->Unmap(dx_helper.constant_buffer_.Get(), 0);
+
+	sprite_.Frame();
 	return false;
 }
 
 bool PPlaneObject::Render(ID3D11DeviceContext* context)
-{
+{	
+	std::vector<DX::PVertex> vertices;
+	vertices.push_back(DX::PVertex{ -0.5f, 0.5f, 0.5f });
+	vertices.push_back(DX::PVertex{  0.5f, 0.5f, 0.5f });
+	vertices.push_back(DX::PVertex{  0.5f, -0.5f, 0.5f });
+	vertices.push_back(DX::PVertex{ -0.5f, -0.5f, 0.5f });
+
+/*
+	DX::PVertexAndUV vertices[] =
+	{
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
+	};*/
+
+
+	
+	sprite_.DrawPlane(device_, sprite_.tex_boundary_list()[0], vertices, dx_helper, false);
+	
 	dx_helper.Render(context);
 	return false;
 }

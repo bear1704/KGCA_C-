@@ -256,26 +256,14 @@ namespace DX
 
 	}
 
-	PVertexAndUV* AssemblyVertAndTex(const PVertex* vert, const PTex_uv* tex_buf, int size)
-	{
-		PVertexAndUV* ret = new PVertexAndUV[size]; //해제해야함
 
-		for (int i = 0; i < size; i++)
-		{
-			ret[i].posX = vert[i].poxX;
-			ret[i].posY = vert[i].posY;
-			ret[i].posZ = vert[i].posZ;
-			ret[i].u = tex_buf[i].u;
-			ret[i].v = tex_buf[i].v;
-		}
-		return ret;
-	}
+	std::vector<PVertexAndUV> AssemblyVertAndTex(const std::vector<PVertex>& vert, const PTex_uv4& tex_buf) noexcept
+	{	
+		std::vector<PVertexAndUV> ret;
 
-	PVertexAndUV* AssemblyVertAndTex(const PVertex* vert, const PTextureBufSet& tex_buf, int size)
-	{
-		PVertexAndUV* ret = new PVertexAndUV[size]; //해제해야함
+		ret.resize(vert.size());
 
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < vert.size(); i++)
 		{
 			ret[i].posX = vert[i].poxX;
 			ret[i].posY = vert[i].posY;
@@ -283,6 +271,7 @@ namespace DX
 			ret[i].u = tex_buf.u[i];
 			ret[i].v = tex_buf.v[i];
 		}
+
 		return ret;
 	}
 

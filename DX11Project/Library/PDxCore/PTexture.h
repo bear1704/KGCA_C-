@@ -18,7 +18,7 @@ public:
 	//setter
 	void set_shader_res_view(ID3D11ShaderResourceView* view);
 	void Apply(ID3D11DeviceContext* device_context, UINT slot_num);
-	void Draw(DX::PTextureBufSet bufset, float scale, bool is_reversal);
+	void Draw(DX::PVertexAndUV vt_uv, float scale, bool is_reversal);
 	/*void set_texture_buf(PTex_uv* buf, int size);
 	void set_texture_buf(std::vector<PTex_uv>& buf);
 	void set_texture_buf(std::vector<PTex_uv>&& buf);

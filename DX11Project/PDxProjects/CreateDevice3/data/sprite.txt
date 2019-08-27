@@ -1,0 +1,11 @@
+<sprite>
+	<name> blueplane </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 777 </once_playtime>
+	<tex_name> aaa </tex_name>
+	<uv1> 0.0f, 0.0f </uv1>
+	<uv2> 1.0f, 0.0f </uv2>
+	<uv3> 1.0f, 1.0f </uv3>
+	<uv4> 0.0f, 1.0f </uv4>
+</sprite>

@@ -237,19 +237,23 @@ void PPlayerStatus::StatusSet(multibyte_string status_path, multibyte_string obj
 		{
 			if (comp_vec[i]->get_object_name().compare(L"hpbar") == 0)
 			{
+
+				/*수정필요 1 : UI사이즈를 API에서는 스프라이트의 RECT와 비트맵 이미지 내의 좌표가 같았기 때문에 
+				바로 size를 리턴받아 사용해도 됐었지만, 이젠 size를 얻으려면 texutre내의 uv좌표를 다시 이미지 좌표로 변경해줘야함.
+				*/
 				hp_image = (PImageControl*)comp_vec[i];
-				hp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+				//hp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
 			}
 
 			else if (comp_vec[i]->get_object_name().compare(L"mpbar") == 0)
 			{
 				mp_image = (PImageControl*)comp_vec[i];
-				mp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+				//mp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
 			}
 			else if (comp_vec[i]->get_object_name().compare(L"expbar") == 0)
 			{
 				exp_image = (PImageControl*)comp_vec[i];
-				exp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+				//exp_image->set_max_rect_size(comp_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
 			}
 		}
 	}
@@ -264,7 +268,7 @@ void PPlayerStatus::StatusSet(multibyte_string status_path, multibyte_string obj
 			if (comp_boss_vec[i]->get_object_name().compare(L"boss_hpbar") == 0)
 			{
 				hp_image = (PImageControl*)comp_boss_vec[i];
-				hp_image->set_max_rect_size(comp_boss_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
+				//hp_image->set_max_rect_size(comp_boss_vec[i]->get_sprite_()->get_original_size_list()[represent_sprite_number]);
 			}
 		}
 	}

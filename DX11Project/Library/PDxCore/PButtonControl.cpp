@@ -56,7 +56,7 @@ bool PButtonControl::Frame()
 }
 bool PButtonControl::Render()
 {
-	sprite_.Draw(is_reversal_);
+	//sprite_.Draw(is_reversal_);
 	return false;
 }
 bool PButtonControl::Release()

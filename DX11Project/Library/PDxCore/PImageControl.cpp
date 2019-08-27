@@ -27,7 +27,7 @@ bool PImageControl::Frame()
 
 bool PImageControl::Render()
 {
-	sprite_.AlphaDrawNotCenter(); ///이미지의 경우, Center에서 그리는 기능을 비활성화해야 함(HP-Bar의 양쪽으로 줄어드는 문제 등..)
+	//sprite_.AlphaDrawNotCenter(); ///이미지의 경우, Center에서 그리는 기능을 비활성화해야 함(HP-Bar의 양쪽으로 줄어드는 문제 등..)
 	return false;
 }
 
@@ -39,7 +39,7 @@ bool PImageControl::Release()
 
 void PImageControl::SetRectListSize(FLOAT_RECT size)
 {
-	sprite_.set_rect_list_size(size);
+	//sprite_.set_rect_list_size(size);
 }
 
 void PImageControl::set_max_rect_size(FLOAT_RECT size)

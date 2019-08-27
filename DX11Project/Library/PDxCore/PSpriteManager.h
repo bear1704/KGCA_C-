@@ -3,7 +3,7 @@
 #include "PSprite.h"
 
 
-
+const int kPlaneTextureUvMax = 4;
 
 class PSpriteManager : public PSingleton<PSpriteManager>
 {//name maxframe lifetime once_playtime path

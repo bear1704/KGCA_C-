@@ -4,6 +4,7 @@
 #include <wrl.h>
 #include <assert.h>
 #include "PDxState.h"
+#include <vector>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dx11.lib")
@@ -44,6 +45,15 @@ namespace DX
 		float v;
 	};
 
+	//사각형 텍스쳐 바운더리
+	struct PTex_uv4
+	{
+		float u[4];
+		float v[4];
+	};
+
+	
+
 
 	struct VS_CONSTANT_BUFFER
 	{
@@ -52,6 +62,11 @@ namespace DX
 		float theta; //c1.y
 		float z; //c1.z
 		float w;  //c1.w
+	};
+
+	struct Plane
+	{
+
 	};
 
 
@@ -69,14 +84,16 @@ namespace DX
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data,
 												D3D11_INPUT_ELEMENT_DESC* layout, int element_number);
-	PVertexAndUV* AssemblyVertAndTex(const PVertex* vert, const PTex_uv* tex_buf, int size); //나중에 텍스쳐매니져쯤으로 옮겨질 기능 
+
+	
+	std::vector<PVertexAndUV> AssemblyVertAndTex(const std::vector<PVertex>& vert, const PTex_uv4& tex_buf) noexcept; //나중에 텍스쳐매니져쯤으로 옮겨질 기능 
 
 	class PDxHelper
 	{
 	public:
 		int vertex_count_;
 		int index_count_;
-		int vertex_size_;
+		int vertex_size_; //버텍스 버퍼 구조체 사이즈
 
 	public:
 		Microsoft::WRL::ComPtr<ID3D11Buffer>				vertex_buffer_;

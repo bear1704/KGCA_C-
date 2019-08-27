@@ -80,7 +80,7 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 			if (FAILED(hr))
 				assert(false); //¿©±â ¿À·ù¶ä
 
-			texture_list_.insert(make_pair(tex_path, texture));
+			texture_list_.insert(make_pair(texture_name, texture));
 
 
 		}
@@ -95,6 +95,6 @@ PTexture* PTextureManager::GetTextureFromMap(std::wstring key)
 		PTexture* data = (*iter).second;
 		return data;
 	}
-	//assert(false);
+	assert(false);
 	return nullptr;
 }

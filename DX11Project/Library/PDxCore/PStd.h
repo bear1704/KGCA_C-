@@ -183,25 +183,25 @@ struct FLOAT_RECT
 	float bottom;
 };
 
-struct PVertex
-{
-	pPoint my_pos;
-	pPoint src_pos;
-
-	PVertex() {}
-
-	PVertex(float my_x, float my_y, float src_x, float src_y)
-	{
-		my_pos.x = my_x; my_pos.y = my_y;
-		src_pos.x = src_x; src_pos.y = src_y;
-	}
-	PVertex(pPoint my, pPoint src)
-	{
-		my_pos = my;
-		src_pos = src;
-	}
-
-};
+//struct PVertex
+//{
+//	pPoint my_pos;
+//	pPoint src_pos;
+//
+//	PVertex() {}
+//
+//	PVertex(float my_x, float my_y, float src_x, float src_y)
+//	{
+//		my_pos.x = my_x; my_pos.y = my_y;
+//		src_pos.x = src_x; src_pos.y = src_y;
+//	}
+//	PVertex(pPoint my, pPoint src)
+//	{
+//		my_pos = my;
+//		src_pos = src;
+//	}
+//
+//};
 
 static ANIMATIONTYPE WstringToAnimationtype(std::wstring wstr)
 {
