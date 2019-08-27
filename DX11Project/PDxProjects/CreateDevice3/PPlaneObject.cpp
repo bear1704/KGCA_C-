@@ -37,24 +37,6 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 			layout, element_count));
 	
 	
-	//createvertexbuffer
-
-	DX::PVertexAndUV vertices[] =
-	{
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
-	};
-
-
-
-	int vertices_count = sizeof(vertices) / sizeof(vertices[0]);
-
-	dx_helper.vertex_size_ = sizeof(DX::PVertexAndUV);
-	dx_helper.vertex_count_ = vertices_count;
-	dx_helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, vertices, dx_helper.vertex_count_, sizeof(DX::PVertexAndUV), false));
-
 	DWORD indices[] =
 	{
 		0,1,2,
@@ -71,19 +53,10 @@ bool PPlaneObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)
 
 	dx_helper.constant_buffer_.Attach(DX::CreateConstantBuffer(device_, sizeof(DX::VS_CONSTANT_BUFFER)));
 
-	//PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
-	//PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"bk");
-	
-	//dx_helper.shader_res_view_.Attach(texture->shader_res_view());
 	
 	PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
-	PTexture* texture = PTextureManager::GetInstance().GetTextureFromMap(L"aaa");
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
-	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(L"blueplane"), 1.0f, 1.0f);
-
-	//dx_helper.shader_res_view_.Attach(texture->shader_res_view());
-	//dx_helper.shader_res_view_ = texture->shader_res_view(); 
-	//ตัดูตส
+	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(L"character_move"), 1.0f, 1.0f);
 	
 	return false;
 }
@@ -108,25 +81,8 @@ bool PPlaneObject::Frame()
 
 bool PPlaneObject::Render(ID3D11DeviceContext* context)
 {	
-	std::vector<DX::PVertex> vertices;
-	vertices.push_back(DX::PVertex{ -0.5f, 0.5f, 0.5f });
-	vertices.push_back(DX::PVertex{  0.5f, 0.5f, 0.5f });
-	vertices.push_back(DX::PVertex{  0.5f, -0.5f, 0.5f });
-	vertices.push_back(DX::PVertex{ -0.5f, -0.5f, 0.5f });
 
-/*
-	DX::PVertexAndUV vertices[] =
-	{
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
-	};*/
-
-
-	
-	sprite_.DrawPlane(device_, sprite_.tex_boundary_list()[0], vertices, dx_helper, false);
-	
+	sprite_.Render(device_, vertices, dx_helper, false);
 	dx_helper.Render(context);
 	return false;
 }

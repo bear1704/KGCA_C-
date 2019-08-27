@@ -63,17 +63,6 @@ bool PSpriteManager::Release()
 	return false;
 }
 
-//SpriteDataInfo * PSpriteManager::get_sprite_data_list_from_map(std::wstring key)
-//{
-//
-//	auto iter = sprite_data_list_.find(key);
-//	if (iter != sprite_data_list_.end())
-//	{
-//		SpriteDataInfo* data =  (*iter).second;
-//		return data;
-//	}
-//	return nullptr;
-//}
 
 PSprite* PSpriteManager::get_sprite_from_map_ex(std::wstring key)
 {
@@ -122,6 +111,9 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 			SpriteDataInfo info;
 			std::wstring sprite_name;
 			std::vector<DX::PTex_uv4> rt;
+
+			PTexture* texture = nullptr;
+
 			while (true)
 			{
 				iter++;
@@ -134,20 +126,49 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 				else if (iter->first.compare("once_playtime") == 0)
 					info.once_playtime = std::atof(iter->second.c_str());
 				else if (iter->first.compare("tex_name") == 0)
-					info.texture_name.assign(iter->second.begin(), iter->second.end());
-				else if (iter->first.compare("uv1") == 0)
 				{
-					DX::PTex_uv4 uv;
+					info.texture_name.assign(iter->second.begin(), iter->second.end());
+					texture = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
+				}
+				else if (iter->first.compare("uv_ltop") == 0)
+				{
+					DX::PTex_uv4 uv4;
+
+					std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
 					
-					for (int i = 0; i < kPlaneTextureUvMax; i++)
-					{
-						std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
-						uv.u[i] = std::atof(uv_vec[0].c_str());
-						uv.v[i] = std::atof(uv_vec[1].c_str());
-						iter++;
-					}
-					iter--;// 마지막 한칸 되돌리기(위에서 한번더 iter++를 하므로)
-					rt.push_back(uv);
+					DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
+						texture->GetImageWidth(), texture->GetImageHeight());
+
+					iter++;
+
+					uv_vec = parser.SplitString(iter->second, ',');
+					DX::PTex_uv right_bottom = ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
+						texture->GetImageWidth(), texture->GetImageHeight());
+
+					uv4.u[0] = left_top.u;
+					uv4.v[0] = left_top.v;
+					uv4.u[1] = right_bottom.u;
+					uv4.v[1] = left_top.v;
+					uv4.u[2] = right_bottom.u;
+					uv4.v[2] = right_bottom.v;
+					uv4.u[3] = left_top.u;
+					uv4.v[3] = right_bottom.v;
+
+					//for (int i = 0; i < 4; i++)
+					//{
+					//	std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
+					//	DX::PTex_uv temp_uv;
+
+					//	temp_uv = ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
+					//		texture->GetImageWidth(), texture->GetImageHeight());
+
+					//	uv4.u[i] = temp_uv.u;
+					//	uv4.v[i] = temp_uv.v;
+					//	iter++;
+					//}
+					//iter--;// 마지막 한칸 되돌리기(위에서 한번더 iter++를 하므로)
+
+					rt.push_back(uv4);
 				}
 				else if (iter->first.compare("END") == 0)
 					break;
@@ -170,6 +191,8 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 			info.lifetime = kDamageFontLifetime;
 			info.once_playtime = kDamageFontLifetime;
 
+			PTexture* texture = nullptr;
+
 			while (true)
 			{
 				iter++;
@@ -178,25 +201,33 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 				else if (iter->first.compare("max_frame") == 0)
 					info.max_frame = std::atoi(iter->second.c_str());					
 				else if (iter->first.compare("tex_name") == 0)
+				{
 					info.texture_name.assign(iter->second.begin(), iter->second.end());
+					texture = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
+				}
 				else if (iter->first.compare("uv1") == 0)
 				{
-					DX::PTex_uv4 uv;
+					DX::PTex_uv4 uv4;
 
 					for (int i = 0; i < 4; i++)
 					{
 						std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
-						uv.u[i] = std::atof(uv_vec[i].c_str());
-						uv.v[i] = std::atof(uv_vec[i].c_str());
+						DX::PTex_uv temp_uv;
+
+						temp_uv = ImageCoordinateToTexCoordinate(std::atof(uv_vec[i].c_str()), std::atof(uv_vec[i].c_str()),
+							texture->GetImageWidth(), texture->GetImageHeight());
+
+						uv4.u[i] = temp_uv.u;
+						uv4.v[i] = temp_uv.v;
 						iter++;
 					}
 					iter--;// 마지막 한칸 되돌리기(위에서 한번더 iter++를 하므로)
-					rt.push_back(uv);
+					rt.push_back(uv4);
 				}
 				else if (iter->first.compare("END") == 0)
 					break;
 			}
-			info.tex_boundary_list = std::move(rt); //오류 예감
+			info.tex_boundary_list = std::move(rt); 
 
 			PSprite* sprite = new PSprite();
 			sprite->Set(info, 1.0, 1.0);
@@ -243,5 +274,15 @@ void PSpriteManager::CreateDamageFontFromInteger(int damage, pPoint firstPos)
 	}
 
 
+}
+
+DX::PTex_uv PSpriteManager::ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height)
+{
+	DX::PTex_uv uv;
+	ZeroMemory(&uv, sizeof(DX::PTex_uv));
+	uv.u = x / image_width;
+	uv.v = y / image_height;
+
+	return uv;
 }
 

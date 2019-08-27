@@ -7,6 +7,15 @@ class PPlaneObject : public PObject
 public:
 	PPlaneObject();
 	~PPlaneObject();
+	
+	std::vector<DX::PVertex> vertices =
+	{
+		{-0.5f, 0.5f, 0.5f},
+		{0.5f, 0.5f, 0.5f},
+		{0.5f, -0.5f, 0.5f},
+		{-0.5f, -0.5f, 0.5f},
+	};
+
 
 public:
 	bool Init() override;

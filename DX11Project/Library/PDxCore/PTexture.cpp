@@ -19,42 +19,22 @@ void PTexture::Apply(ID3D11DeviceContext* device_context, UINT slot_num)
 	device_context->PSSetShaderResources(slot_num, 1, &shader_res_view_);
 }
 
-//
-//void PTexture::set_texture_buf(PTex_uv* buf, int size)
-//{
-//	texture_buf_.resize(size);
-//	for (int i = 0; i < size; i++)
-//	{
-//		texture_buf_[i].u = buf[i].u;
-//		texture_buf_[i].v = buf[i].v;
-//	}
-//	//memcpy(texture_buf_, buf, sizeof(PTex_uv) * size);  //왜안되지
-//	
-//	texbuf_size_ = size;
-//}
-//
-//void PTexture::set_texture_buf(std::vector<PTex_uv>& buf)
-//{
-//	//std::copy(buf.begin(), buf.end(), texture_buf_);
-//	//error1!1 error   error!!!!!
-//}
-//
-//void PTexture::set_texture_buf(std::vector<PTex_uv>&& buf)
-//{
-//	texture_buf_ = buf;
-//}
-//
-//
-//void PTexture::set_texbuf_size(int size)
-//{
-//	texbuf_size_ = size;
-//}
-//
-//
-//std::vector<PTex_uv>& PTexture::texture_buf()
-//{
-//	return texture_buf_;
-//}
+void PTexture::set_uv_coord(std::vector<DX::PTex_uv> vec)
+{
+	for (int i = 0; i < vec.size(); i++)
+	{
+		uv_coord.u[i] = vec[i].u;
+		uv_coord.v[i] = vec[i].v;
+	}
+	
+}
+
+void PTexture::SetImageSize(float width, float height)
+{
+	width_ = width;
+	height_ = height;
+}
+
 
 ID3D11ShaderResourceView* PTexture::shader_res_view()
 {
@@ -66,8 +46,13 @@ ID3D11ShaderResourceView** PTexture::shader_res_view_double_ptr()
 	return &shader_res_view_;
 }
 
-//int PTexture::texbuf_size()
-//{
-//	return texbuf_size_;
-//}
-//
+float PTexture::GetImageWidth()
+{
+	return width_;
+}
+
+float PTexture::GetImageHeight()
+{
+	return height_;
+}
+

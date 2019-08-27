@@ -43,13 +43,13 @@ bool PSprite::Frame()
 	return true;
 }
 
-bool PSprite::Render(ID3D11Device* device, DX::PTex_uv4& tex_uv, std::vector<DX::PVertex>& vertices,
+bool PSprite::Render(ID3D11Device* device, std::vector<DX::PVertex>& vertices,
 	DX::PDxHelper& helper, bool is_reversal)
 {/*
 	pPoint scrpos = P2DCamera::GetInstance().WorldToGamescreen(position_);
 	pPoint origin_pos = (position_);
 	SetPosition(scrpos.x, scrpos.y);*/
-	DrawPlane(device, tex_uv, vertices, helper, is_reversal);
+	DrawPlane(device, vertices, helper, is_reversal);
 	//SetPosition(origin_pos.x, origin_pos.y);
 	return true;
 }
@@ -100,13 +100,15 @@ void PSprite::Play()
 	remain_lifetime_ = lifetime_;
 }
 
-void PSprite::DrawPlane(ID3D11Device* device, DX::PTex_uv4& tex_uv, std::vector<DX::PVertex>& vertices,
+void PSprite::DrawPlane(ID3D11Device* device, std::vector<DX::PVertex>& vertices,
 	DX::PDxHelper& helper, bool is_reversal)
 {
 	if (isDead)
 		return;
 
-	std::vector<DX::PVertexAndUV> vt_uv = DX::AssemblyVertAndTex(vertices, tex_uv);
+	DX::PTex_uv4 tex_coord = tex_boundary_list_[current_played_spriteframe_];
+
+	std::vector<DX::PVertexAndUV> vt_uv = DX::AssemblyVertAndTex(vertices, tex_coord);
 	
 	int vertices_count = kPlaneVertexNumber; //Plane전용이므로 4개
 	
@@ -114,23 +116,6 @@ void PSprite::DrawPlane(ID3D11Device* device, DX::PTex_uv4& tex_uv, std::vector<
 	helper.vertex_count_ = vertices_count;
 	helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device, &vt_uv[0], vertices_count , sizeof(DX::PVertexAndUV), false));
 	helper.shader_res_view_ = texture_->shader_res_view();
-
-	//수리1
-	//DX::PVertexAndUV vertices1[] =
-	//{
-	//	-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-	//	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-	//	0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
-	//	-0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
-	//};
-
-	//int vertices_count = 4;
-	//helper.vertex_size_ = sizeof(DX::PVertexAndUV);
-	//helper.vertex_count_ = vertices_count;
-	//helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device, vertices1, helper.vertex_count_, sizeof(DX::PVertexAndUV), false));
-	//
-	//helper.set_shader_res_view(texture_->shader_res_view());
-	
 
 	//if(helper.shader_res_view_ != nullptr)
 	//	helper.shader_res_view_.Attach(texture_->shader_res_view());

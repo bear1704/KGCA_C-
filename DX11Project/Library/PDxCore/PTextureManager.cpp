@@ -43,19 +43,21 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 		{
 			std::wstring texture_name;
 			std::wstring tex_path;
-			int texture_size = 0;
 			std::vector<DX::PTex_uv> uv;
 			std::vector<std::string> uv_string;
 			PTexture* texture; 
+			float width, height;
 			while (true)
 			{
 				iter++;
 				if (iter->first == "tex_name")
 					texture_name.assign(iter->second.begin(), iter->second.end());
-				else if (iter->first == "texbuf_size")
-					texture_size = std::stoi(iter->second);
 				else if (iter->first == "tex_path")
 					tex_path.assign(iter->second.begin(), iter->second.end());
+				else if (iter->first == "image_width")
+					width = std::stof(iter->second);
+				else if (iter->first == "image_height")
+					height = std::stof(iter->second);
 				else if (iter->first == "uv")
 				{
 					uv_string = parser.SplitString(iter->second, ',');
@@ -67,8 +69,8 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 			}
 
 			texture = new PTexture();
-			//texture->set_texbuf_size(texture_size);
-			//texture->set_texture_buf(std::move(uv));
+			texture->set_uv_coord(uv);
+			texture->SetImageSize(width, height);
 
 			ID3D11ShaderResourceView** view = texture->shader_res_view_double_ptr();
 			

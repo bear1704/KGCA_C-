@@ -30,15 +30,13 @@ public:
 	bool Render() override;
 	bool Release() override;
 
-//	SpriteDataInfo* get_sprite_data_list_from_map(std::wstring key);
 	PSprite* get_sprite_from_map_ex(std::wstring key);
 	PSprite* get_sprite_from_dmgfont_list(std::wstring key);
-//	void LoadDataFromScript(multibyte_string filepath);  //파일에서 스프라이트 정보(Rect 좌표 등...)를 전부 읽어서 맵에 저장한다. name maxframe lifetime once_playtime path
 	void LoadSpriteDataFromScript(multibyte_string filepath, ObjectLoadType type);
 	bool Delete(int key);
 	void AddRenderWaitList(PSprite sprite);
 	void CreateDamageFontFromInteger(int damage, pPoint firstPos);
-	
+	DX::PTex_uv ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height);
 
 };
 
