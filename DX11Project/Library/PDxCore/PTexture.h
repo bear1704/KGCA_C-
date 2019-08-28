@@ -9,8 +9,6 @@ public:
 	~PTexture();
 	
 private:
-	//std::vector<PTex_uv>	texture_buf_; //텍스쳐가 한 장에 여러 그림이 있는 경우를 ㄹ대비
-	//int							texbuf_size_;
 	ID3D11ShaderResourceView*	shader_res_view_;
 	multibyte_string tex_name_;
 	multibyte_string tex_path_;

@@ -95,19 +95,25 @@ namespace DX
 
 	}
 
-	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, int constants_struct_size)
+	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device, const void* constant_data, int data_count,int constants_struct_size)
 	{
 		ID3D11Buffer* ret_constant_buffer;
 		D3D11_BUFFER_DESC constant_buf_desc;
 		ZeroMemory(&constant_buf_desc, sizeof(D3D11_BUFFER_DESC));
 
 
-		constant_buf_desc.ByteWidth = constants_struct_size;
+		constant_buf_desc.ByteWidth = constants_struct_size * data_count;
 		constant_buf_desc.Usage = D3D11_USAGE_DYNAMIC;
 		constant_buf_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		constant_buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		constant_buf_desc.MiscFlags = 0;
-		HRESULT hr = current_device->CreateBuffer(&constant_buf_desc, NULL, &ret_constant_buffer);
+
+		D3D11_SUBRESOURCE_DATA subresource_data;
+		ZeroMemory(&subresource_data, sizeof(D3D11_SUBRESOURCE_DATA));
+		subresource_data.pSysMem = constant_data;
+
+		HRESULT hr = current_device->CreateBuffer(&constant_buf_desc, &subresource_data, &ret_constant_buffer);
+
 
 		if (FAILED(hr))
 			assert(false);

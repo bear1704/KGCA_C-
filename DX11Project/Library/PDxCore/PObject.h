@@ -79,7 +79,7 @@ public:
 	void set_gravity_(float gravity);
 	void set_type_(Type type);
 	void set_animation_list_(std::vector<PSprite*> list);
-	void set_alpha_and_scale_(float alpha, float scale); //주의! 같은 애니메이션 리스트를 사용하는 모든 개체가 변환이 적용되는 문제가 있음.
+	void set_alpha_and_scale_(float alpha, float scale); 
 	void set_id(WORD id);
 	void set_is_reversal(bool isreversal);
 	void set_collision_box_norm(FLOAT_RECT fl);
