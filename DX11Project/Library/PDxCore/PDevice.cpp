@@ -64,7 +64,7 @@ bool PDevice::InitDevice(HWND hwnd, UINT client_width, UINT client_height)
 	if (FAILED(hr))
 		return false;
 
-
+	CreateRenderTarget(g_rectangle_client.right, g_rectangle_client.bottom);
 
 	return true;
 }

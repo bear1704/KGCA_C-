@@ -263,24 +263,6 @@ namespace DX
 	}
 
 
-	std::vector<PVertexAndUV> AssemblyVertAndTex(const std::vector<PVertex>& vert, const PTex_uv4& tex_buf) noexcept
-	{	
-		std::vector<PVertexAndUV> ret;
-
-		ret.resize(vert.size());
-
-		for (int i = 0; i < vert.size(); i++)
-		{
-			ret[i].posX = vert[i].poxX;
-			ret[i].posY = vert[i].posY;
-			ret[i].posZ = vert[i].posZ;
-			ret[i].u = tex_buf.u[i];
-			ret[i].v = tex_buf.v[i];
-		}
-
-		return ret;
-	}
-
 
 	void PDxHelper::PreRender(ID3D11DeviceContext* context, int stride_length)
 	{

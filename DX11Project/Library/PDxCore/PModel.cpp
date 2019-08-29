@@ -43,7 +43,7 @@ bool PModel::Render()
 		data->matView = constant_data_.matView;
 		data->matProj = constant_data_.matProj;
 		data->color[0] = 1.0f;
-		data->etc[0] = 1.0f;
+		data->etc[0] = g_fGameTimer;
 		immediate_context_->Unmap(dx_helper_.constant_buffer_.Get(), 0);
 
 	}
@@ -67,7 +67,17 @@ bool PModel::Release()
 }
 
 
-bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name)
+HRESULT PModel::CreateVertexData()
+{
+	return E_NOTIMPL;
+}
+
+HRESULT PModel::CreateIndexData()
+{
+	return E_NOTIMPL;
+}
+
+bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring tex_name,  std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name)
 {
 	
 
@@ -77,6 +87,8 @@ bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context, std::wst
 		Init(device, context);
 
 	if(FAILED(LoadVertexShaderFromFile(device_, vs_file_path.c_str(), vs_func_name.c_str(), false, nullptr)))
+		return false;
+	if (FAILED(LoadPixelShaderFromFile(device_, ps_file_path.c_str(), ps_func_name.c_str(), false, nullptr)))
 		return false;
 	if (FAILED(CreateInputLayout()))
 		return false;
@@ -90,7 +102,7 @@ bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context, std::wst
 		return false;
 	if (FAILED(CreateConstantBuffer()))
 		return false;
-	if (FAILED(LoadTextures(nullptr)))
+	if (FAILED(LoadTextures(tex_name)))
 		return false;
 
 }
@@ -149,10 +161,15 @@ HRESULT PModel::CreateConstantBuffer()
 HRESULT PModel::LoadTextures(std::wstring tex_name)
 {
 	if (tex_name.empty())
-		return E_FAIL;
+		return S_OK;
 
+	PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
 	texture_ = PTextureManager::GetInstance().GetTextureFromMap(tex_name);
-	dx_helper_.shader_res_view_.Attach(texture_->shader_res_view());
+	
+	if(texture_ != nullptr)
+		dx_helper_.shader_res_view_.Attach(texture_->shader_res_view());
+
+	return S_OK;
 }
 
 HRESULT PModel::LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path, LPCSTR vs_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
@@ -199,5 +216,18 @@ void PModel::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 	D3DXMatrixTranspose(&constant_data_.matView, &matView_);
 	D3DXMatrixTranspose(&constant_data_.matProj, &matProj_);
 
+
+}
+
+void PModel::ChangeTexValue(std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept
+{
+		int count = vert.size();
+
+
+		for (int i = 0; i < count; i++)
+		{
+			vert[i].uv.x = tex_buf.u[i];
+			vert[i].uv.y = tex_buf.v[i];
+		}
 
 }

@@ -237,6 +237,12 @@
     <ClInclude Include="PDxSprite.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="PModel.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PVector.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -412,6 +418,12 @@
     </ClCompile>
     <ClCompile Include="PDxSprite.cpp">
       <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PModel.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PVector.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

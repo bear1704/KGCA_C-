@@ -37,7 +37,9 @@ bool PCore::PostFrame()
 
 bool PCore::PreRender()
 {
-	PatBlt(handle_off_screenDC, 0, 0, rectangle_client.right, rectangle_client.bottom, PATCOPY);
+	//PatBlt(handle_off_screenDC, 0, 0, rectangle_client.right, rectangle_client.bottom, PATCOPY);
+	DevicePreRender();
+	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 	return true;
 }
 
@@ -48,7 +50,8 @@ bool PCore::Render()
 
 bool PCore::PostRender()
 {
-	BitBlt(handle_ScreenDC, 0, 0, rectangle_client.right, rectangle_client.bottom, handle_off_screenDC, 0, 0, SRCCOPY);
+	//BitBlt(handle_ScreenDC, 0, 0, rectangle_client.right, rectangle_client.bottom, handle_off_screenDC, 0, 0, SRCCOPY);
+	swap_chain_->Present(0, 0);
 	return false;
 }
 
@@ -84,6 +87,10 @@ bool PCore::PCoreInit()
 	PObjectInfoManager::GetInstance().Init();
 	PObjectDataManager::GetInstance().Init();
 	PSpriteManager::GetInstance().Init();
+	InitDevice(hWnd, g_rectangle_client.right, g_rectangle_client.bottom);
+	DX::PDxState::SetState(device_);
+	PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
+	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
 
 
 	return Init();
@@ -111,8 +118,8 @@ bool PCore::PCoreRender()
 	
 	PreRender();
 	Render();
+	PostRender();
 	//PSpriteManager::GetInstance().Render();
-	//PostRender();
 	return true;
 }
 

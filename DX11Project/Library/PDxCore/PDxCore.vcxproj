@@ -232,6 +232,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PMobMoveAction.h" />
     <ClInclude Include="PMobReviveAction.h" />
     <ClInclude Include="PMobState.h" />
+    <ClInclude Include="PModel.h" />
     <ClInclude Include="PMonster.h" />
     <ClInclude Include="PMoveAction.h" />
     <ClInclude Include="PObjectDataManager.h" />
@@ -253,6 +254,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PTimer.h" />
     <ClInclude Include="PUIComponent.h" />
     <ClInclude Include="PUIDataManager.h" />
+    <ClInclude Include="PVector.h" />
     <ClInclude Include="PWallAndPlatform.h" />
     <ClInclude Include="PWindow.h" />
     <ClInclude Include="Resource.h" />
@@ -300,6 +302,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PMobMoveAction.cpp" />
     <ClCompile Include="PMobReviveAction.cpp" />
     <ClCompile Include="PMobState.cpp" />
+    <ClCompile Include="PModel.cpp" />
     <ClCompile Include="PMonster.cpp" />
     <ClCompile Include="PMoveAction.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />
@@ -320,6 +323,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PTimer.cpp" />
     <ClCompile Include="PUIComponent.cpp" />
     <ClCompile Include="PUIDataManager.cpp" />
+    <ClCompile Include="PVector.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />
   </ItemGroup>

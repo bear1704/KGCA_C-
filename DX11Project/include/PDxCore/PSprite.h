@@ -1,10 +1,11 @@
 #pragma once
+#include <assert.h>
 #include "PTextureManager.h"
 #include "PStd.h"
-#include <assert.h>
-#include "P2DCamera.h"
 #include "PTexture.h"
 #include "PDxHelper.h"
+#include "PModel.h"
+//#include "P2DCamera.h"
 
 const int kPlaneVertexNumber = 4;
 
@@ -65,7 +66,7 @@ public:
 
 	bool Init();
 	bool Frame();
-	bool Render(ID3D11Device* device, std::vector<DX::PVertex>& vertices,
+	bool Render(ID3D11Device* device, std::vector<Vertex_PNCT>& vertices,
 		DX::PDxHelper& helper, bool is_reversal);
 	bool Release();
 	bool Set(SpriteDataInfo info, float alpha, float scale);
@@ -74,7 +75,7 @@ public:
 
 	/*bufset : uv좌표 세트(4개) :: vertices : 버텍스 좌표 세트(4개) ::
 	Plane Object를 셰이더에 넘겨준다.(직접 그리기 x) */
-	void DrawPlane(ID3D11Device* device , std::vector<DX::PVertex>& vertices, 
+	void DrawPlane(ID3D11Device* device , std::vector<Vertex_PNCT>& vertices,
 		DX::PDxHelper& helper, bool is_reversal);
 	void Clone(PSprite* sprite, float alpha, float scale);
 	void AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position);

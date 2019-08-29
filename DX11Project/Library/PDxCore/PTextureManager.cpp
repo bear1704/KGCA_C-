@@ -30,6 +30,8 @@ bool PTextureManager::Release()
 
 void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Device* current_device)
 {
+	//아즥 1회제한 안걸어놓음
+
 	PParser parser;
 	std::vector<std::pair<string, string>> ret_parse;
 	std::string str;

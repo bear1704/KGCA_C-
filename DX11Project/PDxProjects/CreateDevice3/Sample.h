@@ -30,6 +30,7 @@ public:
 	bool Release() override;
 
 	PPlaneObject obj;
+public:
 
 
 };

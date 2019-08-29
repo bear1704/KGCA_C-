@@ -69,7 +69,7 @@ namespace DX
 												D3D11_INPUT_ELEMENT_DESC* layout, int element_number);
 
 	
-	std::vector<PVertexAndUV> AssemblyVertAndTex(const std::vector<PVertex>& vert, const PTex_uv4& tex_buf) noexcept; //나중에 텍스쳐매니져쯤으로 옮겨질 기능 
+	
 
 	class PDxHelper
 	{

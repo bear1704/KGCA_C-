@@ -14,9 +14,10 @@ PObject::~PObject()
 {
 }
 
+
 bool PObject::Init()
 {
-	return true;
+	return false;
 }
 
 bool PObject::DXInit(ID3D11Device* device, ID3D11DeviceContext* context)

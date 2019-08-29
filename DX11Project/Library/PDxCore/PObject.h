@@ -34,13 +34,13 @@ protected:
 
 	PSprite sprite_;
 
-	///텍스쳐
-	DX::PDxHelper dx_helper;
-	PTexture* texture;
+	/////텍스쳐
+	//DX::PDxHelper dx_helper;
+	//PTexture* texture;
 
-	//디바이스
-	ID3D11Device* device_;
-	ID3D11DeviceContext* immdeidate_context_;
+	////디바이스
+	//ID3D11Device* device_;
+	//ID3D11DeviceContext* immdeidate_context_;
 
 public:
 	virtual bool Init();

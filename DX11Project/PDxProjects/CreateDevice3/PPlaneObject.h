@@ -1,29 +1,27 @@
 #pragma once
-#include "PObject.h"
+#include "PModel.h"
+#include "PSpriteManager.h"
 
-
-class PPlaneObject : public PObject
+class PPlaneObject : public PModel
 {
+
 public:
 	PPlaneObject();
 	~PPlaneObject();
-	
-	std::vector<DX::PVertex> vertices =
-	{
-		{-0.5f, 0.5f, 0.5f},
-		{0.5f, 0.5f, 0.5f},
-		{0.5f, -0.5f, 0.5f},
-		{-0.5f, -0.5f, 0.5f},
-	};
 
+private:
+	PSprite sprite_; 
 
 public:
-	bool Init() override;
-	bool DXInit(ID3D11Device* device, ID3D11DeviceContext* context) override;
-	bool Frame() override;
-	bool Render(ID3D11DeviceContext* context) override;
-	bool Release() override;
+	//bool DXInit(ID3D11Device* device, ID3D11DeviceContext* context) override;
+	bool Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring tex_name,std::wstring sprite_name, 
+		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name);
+	bool Frame();
+	bool Render() override;
 
+public:
+	virtual HRESULT CreateVertexData() override;
+	virtual HRESULT CreateIndexData() override;
 	
 
 
