@@ -224,6 +224,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PInput.h" />
     <ClInclude Include="PJumpAction.h" />
+    <ClInclude Include="PMatrix.h" />
     <ClInclude Include="PMobAttackAction.h" />
     <ClInclude Include="PMobDeadAction.h" />
     <ClInclude Include="PMobHitAction.h" />
@@ -294,6 +295,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PInput.cpp" />
     <ClCompile Include="PJumpAction.cpp" />
+    <ClCompile Include="PMatrix.cpp" />
     <ClCompile Include="PMobAttackAction.cpp" />
     <ClCompile Include="PMobDeadAction.cpp" />
     <ClCompile Include="PMobHitAction.cpp" />

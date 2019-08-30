@@ -65,7 +65,15 @@ namespace DX
 	{
 		float invert = 1.0f / Length();
 
-		return Vector3(x * invert, y* invert, z* invert);
+		float ori_x = x;
+		float ori_y = y;
+		float ori_z = z;
+
+		this->x = x * invert;
+		this->y = y * invert;
+		this->z = z * invert;
+
+		return Vector3(ori_x * invert, ori_y* invert, ori_z* invert);
 	}
 	float Vector3::Angle(Vector3& v)
 	{

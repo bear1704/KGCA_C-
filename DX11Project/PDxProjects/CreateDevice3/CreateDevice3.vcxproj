@@ -128,10 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PCamera.cpp" />
     <ClCompile Include="PPlaneObject.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PCamera.h" />
     <ClInclude Include="PPlaneObject.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>

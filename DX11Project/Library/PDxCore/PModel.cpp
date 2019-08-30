@@ -10,9 +10,9 @@ PModel::~PModel()
 
 bool PModel::Init(ID3D11Device* device, ID3D11DeviceContext* context)
 {
-	D3DXMatrixIdentity(&matWorld_);
-	D3DXMatrixIdentity(&matView_);
-	D3DXMatrixIdentity(&matProj_);
+	matWorld_.Identity();
+	matView_.Identity();
+	matProj_.Identity();
 	device_ = device;
 	immediate_context_ = context;
 	return true;
@@ -137,8 +137,8 @@ HRESULT PModel::CreateIndexBuffer()
 
 HRESULT PModel::CreateConstantBuffer()
 {
-	D3DXMATRIX matWorld;
-	D3DXMatrixIdentity(&matWorld);
+	DX::PMatrix matWorld;
+	matWorld.Identity();
 	
 	
 	VS_CB_WVP constant_buffer;
@@ -203,7 +203,7 @@ HRESULT PModel::CreateInputLayout()
 	return S_OK;
 }
 
-void PModel::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
+void PModel::SetWVPMatrix(DX::PMatrix* world, DX::PMatrix* view, DX::PMatrix* proj)
 {
 	if (world != nullptr)
 		matWorld_ = *world;
@@ -212,9 +212,9 @@ void PModel::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 	if (proj != nullptr)
 		matProj_ = *proj;
 
-	D3DXMatrixTranspose(&constant_data_.matWorld, &matWorld_);
-	D3DXMatrixTranspose(&constant_data_.matView, &matView_);
-	D3DXMatrixTranspose(&constant_data_.matProj, &matProj_);
+	constant_data_.matWorld =  matWorld_.Transpose();
+	constant_data_.matView =  matView_.Transpose();
+	constant_data_.matProj =  matProj_.Transpose();
 
 
 }

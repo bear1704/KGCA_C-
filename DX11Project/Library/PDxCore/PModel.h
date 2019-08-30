@@ -2,6 +2,7 @@
 #include "PDxHelper.h"
 #include "PVector.h"
 #include "PTextureManager.h"
+#include "PMatrix.h"
 #include <string>
 
 struct VECTOR4
@@ -32,9 +33,9 @@ struct VS_CONSTANT_BUFFER
 
 struct VS_CB_WVP
 {
-	D3DXMATRIX matWorld;
-	D3DXMATRIX matView;
-	D3DXMATRIX matProj;
+	DX::PMatrix matWorld;
+	DX::PMatrix matView;
+	DX::PMatrix matProj;  //주의! 이거 D3DXMatrix였는데 문제생기지않을까?
 	float color[4];
 	float etc[4];
 };
@@ -42,9 +43,9 @@ struct VS_CB_WVP
 class PModel
 {
 protected:
-	D3DXMATRIX matWorld_;
-	D3DXMATRIX matView_;
-	D3DXMATRIX matProj_;
+	DX::PMatrix matWorld_;
+	DX::PMatrix matView_;
+	DX::PMatrix matProj_;
 	ID3D11Device* device_;
 	ID3D11DeviceContext* immediate_context_;
 	DX::PDxHelper dx_helper_;
@@ -81,7 +82,7 @@ public:
 	virtual HRESULT LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	virtual HRESULT CreateInputLayout();
-	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr);
+	void SetWVPMatrix(DX::PMatrix* world = nullptr, DX::PMatrix* view = nullptr, DX::PMatrix* proj = nullptr);
 	static void ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept; 
 };
 

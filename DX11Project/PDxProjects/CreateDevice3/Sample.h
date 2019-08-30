@@ -3,6 +3,8 @@
 #include "PTexture.h"
 #include "PPlaneObject.h"
 #include "PDxState.h"
+#include "PMatrix.h"
+#include "PCamera.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -29,9 +31,15 @@ public:
 	bool Render() override;
 	bool Release() override;
 
+
+public:
+	DX::PMatrix mat_obj_world_;
+	PCamera* main_camera_;
+	PCamera  backview_camera_;
+
 	PPlaneObject obj;
 public:
 
 
 };
-PCORE_RUN(L"planeobj", 0, 0, 1024, 768);
+PCORE_RUN(L"planeobj", 0, 0, 800, 600);
