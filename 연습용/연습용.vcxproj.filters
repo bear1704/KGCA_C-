@@ -30,5 +30,8 @@
     <ClCompile Include="constexpr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="fortress.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -13,6 +13,11 @@ public:
 	DX::Vector3 camera_position_;
 	DX::Vector3 vec_view_target_;
 
+	float pitch_angle_;
+	float yaw_angle_;
+	float turn_speed_;
+
+
 	DX::PMatrix matWorld_;
 	DX::PMatrix matView_;
 	DX::PMatrix matProj_;
@@ -25,12 +30,16 @@ public:
 public:
 	void CreateTargetViewMatrix(DX::Vector3 mypos, DX::Vector3 target, DX::Vector3 up);
 	void CreateProjectionMatrix();
-	//void UpdateCameraVec(DX::Vector3 move);
+	void UpdateCameraVec(DX::Vector3 move = DX::Vector3(0,0,0));
 
 	void Forward();
 	void BackWard();
 	void MoveLeft();
 	void MoveRight();
+	void RotateLeft();
+	void RotateRight();
+	void RotateUp();
+	void RotateDown();
 
 public:
 	bool Init();

@@ -54,6 +54,16 @@ bool Sample::Frame()
 	{
 		main_camera_->MoveRight();
 	}
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+		main_camera_->RotateLeft();
+	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+		main_camera_->RotateRight();
+	if (g_InputActionMap.upArrowKey == KEYSTAT::KEY_HOLD)
+		main_camera_->RotateUp();
+	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
+		main_camera_->RotateDown();
+
+
 
 	main_camera_->Frame();
 	obj.Frame();
