@@ -18,10 +18,10 @@
     <ClCompile Include="Sample.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PPlaneObject.cpp">
+    <ClCompile Include="PCamera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PCamera.cpp">
+    <ClCompile Include="PShape.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,10 +29,10 @@
     <ClInclude Include="Sample.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PPlaneObject.h">
+    <ClInclude Include="PCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PCamera.h">
+    <ClInclude Include="PShape.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -106,8 +106,7 @@ void PSprite::DrawPlane(ID3D11Device* device, std::vector<Vertex_PNCT>& vertices
 
 	PModel::ChangeTexValue(vertices, tex_coord);
 	
-
-	int vertices_count = kPlaneVertexNumber; //Plane전용이므로 4개
+	int vertices_count = vertices.size();
 	
 	helper.vertex_size_ = sizeof(Vertex_PNCT);
 	helper.vertex_count_ = vertices_count;

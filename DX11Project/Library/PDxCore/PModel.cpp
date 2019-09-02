@@ -236,8 +236,9 @@ void PModel::ChangeTexValue(std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& 
 
 		for (int i = 0; i < count; i++)
 		{
-			vert[i].uv.x = tex_buf.u[i];
-			vert[i].uv.y = tex_buf.v[i];
+
+			vert[i].uv.x = tex_buf.u[i%4]; //주의!! Box 처리히려고 바꾼거긴 한데 오류날수도, Plane형태로 구성되는 거면 안날텐데 다른거에선 무조건 날듯
+			vert[i].uv.y = tex_buf.v[i%4];
 		}
 
 }

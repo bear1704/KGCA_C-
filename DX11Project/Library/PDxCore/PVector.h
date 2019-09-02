@@ -47,6 +47,8 @@ namespace DX
 		Vector2(const Vector2& v);
 		Vector2(float fx, float fy);
 		~Vector2();
+
+		bool operator==(Vector2 const& v);
 	};
 	class Vector3 : public float3
 	{
@@ -78,6 +80,8 @@ namespace DX
 		Vector4(const Vector4& v);
 		Vector4(float fx, float fy, float fz, float fw);
 		~Vector4();
+		bool operator== (Vector4 const& v);
+
 	};
 
 

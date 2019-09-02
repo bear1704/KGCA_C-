@@ -114,6 +114,23 @@ namespace DX
 	Vector4::~Vector4()
 	{
 	}
+	bool Vector4::operator==(Vector4 const& v)
+	{
+		if (fabs(x - v.x) < kFloatEpsilon)
+		{
+			if (fabs(y - v.y) < kFloatEpsilon)
+			{
+				if (fabs(z - v.z) < kFloatEpsilon)
+				{
+					if (fabs(w - v.w) < kFloatEpsilon)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	Vector2::Vector2()
 	{
 		x = 0.0f;
@@ -131,5 +148,16 @@ namespace DX
 	}
 	Vector2::~Vector2()
 	{
+	}
+	bool Vector2::operator==(Vector2 const& v)
+	{
+		if (fabs(x - v.x) < kFloatEpsilon)
+		{
+			if (fabs(y - v.y) < kFloatEpsilon)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

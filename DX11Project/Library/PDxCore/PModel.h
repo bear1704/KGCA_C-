@@ -19,6 +19,30 @@ struct Vertex_PNCT
 	DX::Vector3 normal;
 	DX::Vector4 color;
 	DX::Vector2 uv;
+
+	bool operator == (const Vertex_PNCT& Vertex)
+	{
+		if (pos == Vertex.pos && normal == Vertex.normal && color == Vertex.color && uv == Vertex.uv)
+			return true;
+
+		return false;
+	}
+
+	Vertex_PNCT() {};
+	Vertex_PNCT(DX::Vector3 v_pos, DX::Vector3 v_normal, DX::Vector4 v_color, DX::Vector2 v_uv) 
+	{
+		pos = v_pos;  normal = v_normal; color = v_color; uv = v_uv;
+	};
+	Vertex_PNCT(DX::Vector3 v_pos, DX::Vector3 v_normal, DX::Vector4 v_color)
+	{
+		pos = v_pos;  normal = v_normal; color = v_color;
+	}
+
+
+
+
+
+
 };
 
 

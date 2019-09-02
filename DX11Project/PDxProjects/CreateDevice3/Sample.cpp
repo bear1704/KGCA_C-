@@ -13,10 +13,13 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
-	
 
-	obj.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa", L"");
+	obj.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"bk");
+	box.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
+
+
 	mat_obj_world_.Identity();
+	mat_box_world_.Identity();
 
 	backview_camera_.Init();
 
@@ -26,6 +29,9 @@ bool Sample::Init()
 
 	backview_camera_.CreateTargetViewMatrix(eye, at, up);
 	backview_camera_.CreateProjectionMatrix();
+
+	//mat_box_world_.YRotate(D3DX_PI / 4);
+	mat_obj_world_._42 = 1.0f;
 
 	main_camera_ = &backview_camera_;
 
@@ -64,18 +70,23 @@ bool Sample::Frame()
 
 	main_camera_->Frame();
 	obj.Frame();
+	box.Frame();
 	return true;
 }
 
 bool Sample::Render()
 {
-	obj.SetWVPMatrix(nullptr, &main_camera_->matView_, &main_camera_->matProj_);
+	obj.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
 	obj.Render();
+	box.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+	box.Render();
 	
 	return true;
 }
 
 bool Sample::Release()
 {
+	obj.Release();
+	box.Release();
 	return true;
 }

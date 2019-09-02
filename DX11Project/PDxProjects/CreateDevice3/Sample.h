@@ -1,9 +1,8 @@
 #pragma once
 #include "PCore.h"
 #include "PTexture.h"
-#include "PPlaneObject.h"
+#include "PShape.h"
 #include "PDxState.h"
-#include "PMatrix.h"
 #include "PCamera.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -34,10 +33,13 @@ public:
 
 public:
 	DX::PMatrix mat_obj_world_;
+	DX::PMatrix mat_box_world_;
+
 	PCamera* main_camera_;
 	PCamera  backview_camera_;
 
 	PPlaneObject obj;
+	PBoxObject box;
 public:
 
 
