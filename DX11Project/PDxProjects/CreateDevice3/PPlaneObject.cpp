@@ -72,8 +72,9 @@ bool PPlaneObject::Frame()
 	return false;
 }
 
-bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring tex_name ,std::wstring sprite_name, 
-	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name)
+bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, 
+	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name ,
+	std::wstring tex_name, std::wstring sprite_name)
 {
 
 	PModel::Init(device, context);
@@ -81,14 +82,20 @@ bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std:
 	//PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
 
 	Create(device_, immediate_context_, tex_name,vs_file_path, vs_func_name, ps_file_path, ps_func_name);
-	sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f, 1.0f);
+	
+	if (sprite_name.compare(L"") != 0)
+	{
+		sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f, 1.0f);
+		be_using_sprite_ = true;
+	}
 	return true;
 }
 
 bool PPlaneObject::Render()
 {	
-
-	sprite_.Render(device_, vertex_list_, dx_helper_, false);
+	if(be_using_sprite_ == true)
+		sprite_.Render(device_, vertex_list_, dx_helper_, false);
+	
 	PModel::Render();
 	
 	return false;

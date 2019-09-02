@@ -23,10 +23,15 @@ void PTexture::set_uv_coord(std::vector<DX::PTex_uv> vec)
 {
 	for (int i = 0; i < vec.size(); i++)
 	{
-		uv_coord.u[i] = vec[i].u;
-		uv_coord.v[i] = vec[i].v;
+		uv_coord_.u[i] = vec[i].u;
+		uv_coord_.v[i] = vec[i].v;
 	}
 	
+}
+
+void PTexture::set_uv_coord(DX::PTex_uv4 uv_coord)
+{
+	uv_coord_ = uv_coord;
 }
 
 void PTexture::SetImageSize(float width, float height)
@@ -44,6 +49,11 @@ ID3D11ShaderResourceView* PTexture::shader_res_view()
 ID3D11ShaderResourceView** PTexture::shader_res_view_double_ptr()
 {
 	return &shader_res_view_;
+}
+
+DX::PTex_uv4& PTexture::uv_coord()
+{
+	return uv_coord_;
 }
 
 float PTexture::GetImageWidth()

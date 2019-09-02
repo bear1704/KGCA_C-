@@ -36,7 +36,7 @@ public:
 	bool Delete(int key);
 	void AddRenderWaitList(PSprite sprite);
 	void CreateDamageFontFromInteger(int damage, pPoint firstPos);
-	DX::PTex_uv ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height);
+
 
 };
 

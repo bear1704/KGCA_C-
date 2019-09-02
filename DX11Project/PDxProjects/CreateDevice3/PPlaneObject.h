@@ -14,8 +14,9 @@ private:
 
 public:
 	//bool DXInit(ID3D11Device* device, ID3D11DeviceContext* context) override;
-	bool Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring tex_name,std::wstring sprite_name, 
-		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name);
+	bool Init(ID3D11Device* device, ID3D11DeviceContext* context, 
+		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
+		std::wstring tex_name = L"", std::wstring sprite_name = L"");
 	bool Frame();
 	bool Render() override;
 

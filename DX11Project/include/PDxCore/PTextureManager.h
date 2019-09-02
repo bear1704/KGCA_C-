@@ -23,6 +23,7 @@ public:
 	void LoadTextureFromScript(multibyte_string filepath, ID3D11Device* current_device);
 	PTexture* GetTextureFromMap(std::wstring key);
 
+	DX::PTex_uv ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height);
 
 };
 

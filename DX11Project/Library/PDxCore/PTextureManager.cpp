@@ -45,10 +45,11 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 		{
 			std::wstring texture_name;
 			std::wstring tex_path;
-			std::vector<DX::PTex_uv> uv;
-			std::vector<std::string> uv_string;
-			PTexture* texture; 
-			float width, height;
+			DX::PTex_uv4 uv4;
+			PTexture* texture = nullptr;
+			float width = 0;
+			float height = 0;
+
 			while (true)
 			{
 				iter++;
@@ -60,18 +61,36 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 					width = std::stof(iter->second);
 				else if (iter->first == "image_height")
 					height = std::stof(iter->second);
-				else if (iter->first == "uv")
+				else if (iter->first == "uv_ltop")
 				{
+
+					std::vector<std::string> uv_string = parser.SplitString(iter->second, ',');
+
+					DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::stof(uv_string[0]), std::stof(uv_string[1]),
+						width, height);
+
+					iter++;
+
 					uv_string = parser.SplitString(iter->second, ',');
-					DX::PTex_uv buf = { std::stof(uv_string[0]), std::stof(uv_string[1]) };
-					uv.push_back(buf);
+					DX::PTex_uv right_bottom = ImageCoordinateToTexCoordinate(std::stof(uv_string[0]), std::stof(uv_string[1]),
+						width, height);
+					
+					uv4.u[0] = left_top.u;
+					uv4.v[0] = left_top.v;
+					uv4.u[1] = right_bottom.u;
+					uv4.v[1] = left_top.v;
+					uv4.u[2] = right_bottom.u;
+					uv4.v[2] = right_bottom.v;
+					uv4.u[3] = left_top.u;
+					uv4.v[3] = right_bottom.v;
+					
 				}
 				else if (iter->first == "END")
 					break;
 			}
 
 			texture = new PTexture();
-			texture->set_uv_coord(uv);
+			texture->set_uv_coord(uv4);
 			texture->SetImageSize(width, height);
 
 			ID3D11ShaderResourceView** view = texture->shader_res_view_double_ptr();
@@ -85,8 +104,6 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 				assert(false); //¿©±â ¿À·ù¶ä
 
 			texture_list_.insert(make_pair(texture_name, texture));
-
-
 		}
 	}
 }
@@ -101,4 +118,15 @@ PTexture* PTextureManager::GetTextureFromMap(std::wstring key)
 	}
 	assert(false);
 	return nullptr;
+}
+
+
+DX::PTex_uv PTextureManager::ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height)
+{
+	DX::PTex_uv uv;
+	ZeroMemory(&uv, sizeof(DX::PTex_uv));
+	uv.u = x / image_width;
+	uv.v = y / image_height;
+
+	return uv;
 }

@@ -3,28 +3,22 @@
 	<tex_path> data/texture/aaa.jpg	</tex_path>
 	<image_width> 991 </image_width> <!-- 무조건 width, height가 uv보다 먼저 나와야 함-->
 	<image_height> 612 </image_height>
-	<uv> 0.0f,0.0f </uv> <!-- u ,v -->
-	<uv> 1.0f,0.0f </uv> <!-- u ,v -->
-	<uv> 1.0f,1.0f </uv> <!-- u ,v -->
-	<uv> 0.0f,1.0f </uv> <!-- u ,v -->
+	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
+	<uv_rbottom> 191.0f, 612.0f </uv_rbottom> <!-- right-bottom -->
 </Texture>
 <Texture>
 	<tex_name>bk</tex_name>
 	<tex_path> data/texture/bk.bmp	</tex_path>
 	<image_width> 800 </image_width>
 	<image_height> 600 </image_height>
-	<uv> 0.0f,0.0f </uv> <!-- u ,v -->
-	<uv> 1.0f,0.0f </uv> <!-- u ,v -->
-	<uv> 1.0f,1.0f </uv> <!-- u ,v -->
-	<uv> 0.0f,1.0f </uv> <!-- u ,v -->
+	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
+	<uv_rbottom> 200.0f, 100.0f </uv_rbottom> <!-- right-bottom -->
 </Texture>
 <Texture>
 	<tex_name>character</tex_name>
 	<tex_path> data/texture/character.bmp	</tex_path>
 	<image_width> 1200 </image_width>
 	<image_height> 475 </image_height>
-	<uv> 0.0f,0.0f </uv> <!-- u ,v -->
-	<uv> 1.0f,0.0f </uv> <!-- u ,v -->
-	<uv> 1.0f,1.0f </uv> <!-- u ,v -->
-	<uv> 0.0f,1.0f </uv> <!-- u ,v -->
+	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
+	<uv_rbottom> 100.0f, 475.0f </uv_rbottom> <!-- right-bottom -->
 </Texture>

@@ -53,7 +53,7 @@ protected:
 	std::vector<DWORD> index_list_;
 	VS_CB_WVP constant_data_;
 	PTexture* texture_; //Sprite를 사용하지 않는 보통 오브젝트에서 사용되는 텍스쳐 
-
+	bool be_using_sprite_;
 
 public:
 	PModel();

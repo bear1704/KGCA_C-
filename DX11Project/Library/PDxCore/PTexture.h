@@ -13,7 +13,7 @@ private:
 	multibyte_string tex_name_;
 	multibyte_string tex_path_;
 	float width_, height_;
-	DX::PTex_uv4 uv_coord;
+	DX::PTex_uv4 uv_coord_;
 
 public:
 	//setter
@@ -21,11 +21,13 @@ public:
 	void Apply(ID3D11DeviceContext* device_context, UINT slot_num);
 	void Draw(DX::PVertexAndUV vt_uv, float scale, bool is_reversal);
 	void set_uv_coord(std::vector<DX::PTex_uv> vec);
+	void set_uv_coord(DX::PTex_uv4 uv_coord);
 	void SetImageSize(float width, float height);
 
 	//getter
 	ID3D11ShaderResourceView*	shader_res_view();
 	ID3D11ShaderResourceView**	shader_res_view_double_ptr();
+	DX::PTex_uv4& uv_coord();
 	float GetImageWidth();
 	float GetImageHeight();
 

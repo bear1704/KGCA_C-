@@ -136,13 +136,13 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 
 					std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
 					
-					DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
+					DX::PTex_uv left_top = PTextureManager::GetInstance().ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
 						texture->GetImageWidth(), texture->GetImageHeight());
 
 					iter++;
 
 					uv_vec = parser.SplitString(iter->second, ',');
-					DX::PTex_uv right_bottom = ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
+					DX::PTex_uv right_bottom = PTextureManager::GetInstance().ImageCoordinateToTexCoordinate(std::atof(uv_vec[0].c_str()), std::atof(uv_vec[1].c_str()),
 						texture->GetImageWidth(), texture->GetImageHeight());
 
 					uv4.u[0] = left_top.u;
@@ -214,7 +214,7 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 						std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
 						DX::PTex_uv temp_uv;
 
-						temp_uv = ImageCoordinateToTexCoordinate(std::atof(uv_vec[i].c_str()), std::atof(uv_vec[i].c_str()),
+						temp_uv = PTextureManager::GetInstance().ImageCoordinateToTexCoordinate(std::atof(uv_vec[i].c_str()), std::atof(uv_vec[i].c_str()),
 							texture->GetImageWidth(), texture->GetImageHeight());
 
 						uv4.u[i] = temp_uv.u;
@@ -274,15 +274,5 @@ void PSpriteManager::CreateDamageFontFromInteger(int damage, pPoint firstPos)
 	}
 
 
-}
-
-DX::PTex_uv PSpriteManager::ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height)
-{
-	DX::PTex_uv uv;
-	ZeroMemory(&uv, sizeof(DX::PTex_uv));
-	uv.u = x / image_width;
-	uv.v = y / image_height;
-
-	return uv;
 }
 

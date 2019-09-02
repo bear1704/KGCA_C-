@@ -14,11 +14,8 @@ Sample::~Sample()
 bool Sample::Init()
 {
 	
-	//InitDevice(hWnd, g_rectangle_client.right, g_rectangle_client.bottom);
-	//CreateRenderTarget(g_rectangle_client.right, g_rectangle_client.bottom);
-	//DX::PDxState::SetState(device_);
-	//obj.DXInit(device_, immediate_device_context_);
-	obj.Init(device_, immediate_device_context_,L"character" ,L"character_move", L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS");
+
+	obj.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa", L"");
 	mat_obj_world_.Identity();
 
 	backview_camera_.Init();

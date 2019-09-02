@@ -2,6 +2,7 @@
 
 PModel::PModel()
 {
+	be_using_sprite_ = false;
 }
 
 PModel::~PModel()
@@ -165,6 +166,15 @@ HRESULT PModel::LoadTextures(std::wstring tex_name)
 
 	PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
 	texture_ = PTextureManager::GetInstance().GetTextureFromMap(tex_name);
+
+	DX::PTex_uv4 tex_coord = texture_->uv_coord();
+
+	PModel::ChangeTexValue(vertex_list_, tex_coord);
+
+	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	dx_helper_.vertex_count_ = vertex_list_.size();
+	dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0),
+		dx_helper_.vertex_count_, dx_helper_.vertex_size_, false));
 	
 	if(texture_ != nullptr)
 		dx_helper_.shader_res_view_.Attach(texture_->shader_res_view());

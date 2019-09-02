@@ -9,7 +9,7 @@ namespace DX
 	const float kFloatEpsilon = static_cast<float>(0.001f);
 	const float kPI = static_cast<float>(3.141592654f);
 
-#define DEGREE_TO_RADIAN(degree) (degree*(3.141592654f/180.0f))
+#define DEGREE_TO_RADIAN(degree) (degree*(kPI/180.0f))
 #define RADIAN_TO_DEGREE(radian) (radian*(180.0f/kPI))
 
 	struct float2
