@@ -11,9 +11,9 @@ PModel::~PModel()
 
 bool PModel::Init(ID3D11Device* device, ID3D11DeviceContext* context)
 {
-	matWorld_.Identity();
-	matView_.Identity();
-	matProj_.Identity();
+	D3DXMatrixIdentity(&matWorld_);
+	D3DXMatrixIdentity(&matView_);
+	D3DXMatrixIdentity(&matProj_);
 	device_ = device;
 	immediate_context_ = context;
 	return true;
@@ -138,8 +138,8 @@ HRESULT PModel::CreateIndexBuffer()
 
 HRESULT PModel::CreateConstantBuffer()
 {
-	DX::PMatrix matWorld;
-	matWorld.Identity();
+	D3DXMATRIX matWorld;
+	D3DXMatrixIdentity(&matWorld);
 	
 	
 	VS_CB_WVP constant_buffer;
@@ -213,7 +213,7 @@ HRESULT PModel::CreateInputLayout()
 	return S_OK;
 }
 
-void PModel::SetWVPMatrix(DX::PMatrix* world, DX::PMatrix* view, DX::PMatrix* proj)
+void PModel::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 {
 	if (world != nullptr)
 		matWorld_ = *world;
@@ -222,10 +222,9 @@ void PModel::SetWVPMatrix(DX::PMatrix* world, DX::PMatrix* view, DX::PMatrix* pr
 	if (proj != nullptr)
 		matProj_ = *proj;
 
-	constant_data_.matWorld =  matWorld_.Transpose();
-	constant_data_.matView =  matView_.Transpose();
-	constant_data_.matProj =  matProj_.Transpose();
-
+	D3DXMatrixTranspose(&constant_data_.matWorld, &matWorld_);
+	D3DXMatrixTranspose(&constant_data_.matView, &matView_);
+	D3DXMatrixTranspose(&constant_data_.matProj, &matProj_);
 
 }
 
@@ -233,10 +232,8 @@ void PModel::ChangeTexValue(std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& 
 {
 		int count = vert.size();
 
-
 		for (int i = 0; i < count; i++)
 		{
-
 			vert[i].uv.x = tex_buf.u[i%4]; //주의!! Box 처리히려고 바꾼거긴 한데 오류날수도, Plane형태로 구성되는 거면 안날텐데 다른거에선 무조건 날듯
 			vert[i].uv.y = tex_buf.v[i%4];
 		}

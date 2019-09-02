@@ -1,8 +1,6 @@
 #pragma once
 #include "PDxHelper.h"
-#include "PVector.h"
 #include "PTextureManager.h"
-#include "PMatrix.h"
 #include <string>
 
 struct VECTOR4
@@ -15,10 +13,10 @@ struct VECTOR4
 };
 struct Vertex_PNCT
 {
-	DX::Vector3 pos;
-	DX::Vector3 normal;
-	DX::Vector4 color;
-	DX::Vector2 uv;
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR4 color;
+	D3DXVECTOR2 uv;
 
 	bool operator == (const Vertex_PNCT& Vertex)
 	{
@@ -29,11 +27,11 @@ struct Vertex_PNCT
 	}
 
 	Vertex_PNCT() {};
-	Vertex_PNCT(DX::Vector3 v_pos, DX::Vector3 v_normal, DX::Vector4 v_color, DX::Vector2 v_uv) 
+	Vertex_PNCT(D3DXVECTOR3 v_pos, D3DXVECTOR3 v_normal, D3DXVECTOR4 v_color, D3DXVECTOR2 v_uv)
 	{
 		pos = v_pos;  normal = v_normal; color = v_color; uv = v_uv;
 	};
-	Vertex_PNCT(DX::Vector3 v_pos, DX::Vector3 v_normal, DX::Vector4 v_color)
+	Vertex_PNCT(D3DXVECTOR3 v_pos, D3DXVECTOR3 v_normal, D3DXVECTOR4 v_color)
 	{
 		pos = v_pos;  normal = v_normal; color = v_color;
 	}
@@ -57,9 +55,9 @@ struct VS_CONSTANT_BUFFER
 
 struct VS_CB_WVP
 {
-	DX::PMatrix matWorld;
-	DX::PMatrix matView;
-	DX::PMatrix matProj;  //주의! 이거 D3DXMatrix였는데 문제생기지않을까?
+	D3DXMATRIX matWorld;
+	D3DXMATRIX matView;
+	D3DXMATRIX matProj;  //주의! 이거 D3DXMatrix였는데 문제생기지않을까?
 	float color[4];
 	float etc[4];
 };
@@ -67,9 +65,9 @@ struct VS_CB_WVP
 class PModel
 {
 protected:
-	DX::PMatrix matWorld_;
-	DX::PMatrix matView_;
-	DX::PMatrix matProj_;
+	D3DXMATRIX matWorld_;
+	D3DXMATRIX matView_;
+	D3DXMATRIX matProj_;
 	ID3D11Device* device_;
 	ID3D11DeviceContext* immediate_context_;
 	DX::PDxHelper dx_helper_;
@@ -106,7 +104,7 @@ public:
 	virtual HRESULT LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	virtual HRESULT CreateInputLayout();
-	void SetWVPMatrix(DX::PMatrix* world = nullptr, DX::PMatrix* view = nullptr, DX::PMatrix* proj = nullptr);
+	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr);
 	static void ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept; 
 };
 

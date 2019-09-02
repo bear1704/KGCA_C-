@@ -1,26 +1,25 @@
 #pragma once
 #include "PStd.h"
-#include "PMatrix.h"
 #include <D3DX11.h>
 #include <D3DX10math.h>
 
 class PCamera
 {
 public:
-	DX::Vector3 vec_look_;
-	DX::Vector3 vec_up_;
-	DX::Vector3 vec_right_;
-	DX::Vector3 camera_position_;
-	DX::Vector3 vec_view_target_;
+	D3DXVECTOR3 vec_look_;
+	D3DXVECTOR3 vec_up_;
+	D3DXVECTOR3 vec_right_;
+	D3DXVECTOR3 camera_position_;
+	D3DXVECTOR3 vec_view_target_;
 
 	float pitch_angle_;
 	float yaw_angle_;
 	float turn_speed_;
 
 
-	DX::PMatrix matWorld_;
-	DX::PMatrix matView_;
-	DX::PMatrix matProj_;
+	D3DXMATRIX matWorld_;
+	D3DXMATRIX matView_;
+	D3DXMATRIX matProj_;
 public:
 	PCamera();
 	~PCamera();
@@ -28,9 +27,9 @@ public:
 
 
 public:
-	void CreateTargetViewMatrix(DX::Vector3 mypos, DX::Vector3 target, DX::Vector3 up);
+	void CreateTargetViewMatrix(D3DXVECTOR3 mypos, D3DXVECTOR3 target, D3DXVECTOR3 up);
 	void CreateProjectionMatrix();
-	void UpdateCameraVec(DX::Vector3 move = DX::Vector3(0,0,0));
+	void UpdateCameraVec(D3DXVECTOR3 move = D3DXVECTOR3(0,0,0));
 
 	void Forward();
 	void BackWard();

@@ -240,12 +240,6 @@
     <ClInclude Include="PModel.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PVector.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PMatrix.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -359,9 +353,6 @@
     <ClCompile Include="PPhysicsModule.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
-    <ClCompile Include="PDxCore.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
     <ClCompile Include="PPlayerCharacter.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
@@ -423,12 +414,6 @@
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PModel.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PVector.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PMatrix.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

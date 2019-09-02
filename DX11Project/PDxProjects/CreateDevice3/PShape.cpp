@@ -45,20 +45,20 @@ bool PPlaneObject::Render()
 HRESULT PPlaneObject::CreateVertexData()
 {
 	vertex_list_.resize(4);
-	vertex_list_[0].pos = DX::Vector3{ -1.0f, 1.0f, 0.5f };
-	vertex_list_[1].pos = DX::Vector3{ 1.0f, 1.0f, 0.5f };
-	vertex_list_[2].pos = DX::Vector3{ 1.0f,-1.0f, 0.5f };
-	vertex_list_[3].pos = DX::Vector3{ -1.0f,-1.0f, 0.5f };
+	vertex_list_[0].pos = D3DXVECTOR3{ -1.0f, 1.0f, 0.5f };
+	vertex_list_[1].pos = D3DXVECTOR3{ 1.0f, 1.0f, 0.5f };
+	vertex_list_[2].pos = D3DXVECTOR3{ 1.0f,-1.0f, 0.5f };
+	vertex_list_[3].pos = D3DXVECTOR3{ -1.0f,-1.0f, 0.5f };
 
-	vertex_list_[0].normal = DX::Vector3{ 0.0f,0.0f, -1.0f };
-	vertex_list_[1].normal = DX::Vector3{ 0.0f,0.0f, -1.0f };
-	vertex_list_[2].normal = DX::Vector3{ 0.0f,0.0f, -1.0f };
-	vertex_list_[3].normal = DX::Vector3{ 0.0f,0.0f, -1.0f };
+	vertex_list_[0].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
+	vertex_list_[1].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
+	vertex_list_[2].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
+	vertex_list_[3].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
 
-	vertex_list_[0].color = DX::Vector4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[1].color = DX::Vector4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[2].color = DX::Vector4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[3].color = DX::Vector4{ 1.0f, 0.0f, 0.0f, 1.0f };
+	vertex_list_[0].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
+	vertex_list_[1].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
+	vertex_list_[2].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
+	vertex_list_[3].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
 
 	return S_OK;
 }
@@ -117,39 +117,39 @@ bool PBoxObject::Render()
 HRESULT PBoxObject::CreateVertexData()
 {
 	vertex_list_.resize(24);
-	vertex_list_[0] = Vertex_PNCT(DX::Vector3(-1.0f, 1.0f, -1.0f), DX::Vector3(0.0f, 0.0f, -1.0f), DX::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	vertex_list_[1] = Vertex_PNCT(DX::Vector3(1.0f, 1.0f, -1.0f), DX::Vector3(0.0f, 0.0f, -1.0f), DX::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	vertex_list_[2] = Vertex_PNCT(DX::Vector3(1.0f, -1.0f, -1.0f), DX::Vector3(0.0f, 0.0f, -1.0f), DX::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	vertex_list_[3] = Vertex_PNCT(DX::Vector3(-1.0f, -1.0f, -1.0f), DX::Vector3(0.0f, 0.0f, -1.0f), DX::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	vertex_list_[0] = Vertex_PNCT(D3DXVECTOR3(-1.0f, 1.0f, -1.0f), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f));
+	vertex_list_[1] = Vertex_PNCT(D3DXVECTOR3(1.0f, 1.0f, -1.0f), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f));
+	vertex_list_[2] = Vertex_PNCT(D3DXVECTOR3(1.0f, -1.0f, -1.0f), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f));
+	vertex_list_[3] = Vertex_PNCT(D3DXVECTOR3(-1.0f, -1.0f, -1.0f), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f));
 	// µÞ¸é
-	vertex_list_[4] = Vertex_PNCT(DX::Vector3(1.0f, 1.0f, 1.0f), DX::Vector3(0.0f, 0.0f, 1.0f), DX::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
-	vertex_list_[5] = Vertex_PNCT(DX::Vector3(-1.0f, 1.0f, 1.0f), DX::Vector3(0.0f, 0.0f, 1.0f), DX::Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-	vertex_list_[6] = Vertex_PNCT(DX::Vector3(-1.0f, -1.0f, 1.0f), DX::Vector3(0.0f, 0.0f, 1.0f), DX::Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-	vertex_list_[7] = Vertex_PNCT(DX::Vector3(1.0f, -1.0f, 1.0f), DX::Vector3(0.0f, 0.0f, 1.0f), DX::Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[4] = Vertex_PNCT(D3DXVECTOR3(1.0f, 1.0f, 1.0f),  D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f));
+	vertex_list_[5] = Vertex_PNCT(D3DXVECTOR3(-1.0f, 1.0f, 1.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[6] = Vertex_PNCT(D3DXVECTOR3(-1.0f, -1.0f, 1.0f),D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[7] = Vertex_PNCT(D3DXVECTOR3(1.0f, -1.0f, 1.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f));
 
 	// ¿À¸¥ÂÊ
-	vertex_list_[8] = Vertex_PNCT(DX::Vector3(1.0f, 1.0f, -1.0f), DX::Vector3(1.0f, 0.0f, 0.0f), DX::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
-	vertex_list_[9] = Vertex_PNCT(DX::Vector3(1.0f, 1.0f, 1.0f), DX::Vector3(1.0f, 0.0f, 0.0f), DX::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
-	vertex_list_[10] = Vertex_PNCT(DX::Vector3(1.0f, -1.0f, 1.0f), DX::Vector3(1.0f, 0.0f, 0.0f), DX::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
-	vertex_list_[11] = Vertex_PNCT(DX::Vector3(1.0f, -1.0f, -1.0f), DX::Vector3(1.0f, 0.0f, 0.0f), DX::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+	vertex_list_[8] =  Vertex_PNCT(D3DXVECTOR3(1.0f, 1.0f, -1.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f));
+	vertex_list_[9] =  Vertex_PNCT(D3DXVECTOR3(1.0f, 1.0f, 1.0f),  D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f));
+	vertex_list_[10] = Vertex_PNCT(D3DXVECTOR3(1.0f, -1.0f, 1.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f));
+	vertex_list_[11] = Vertex_PNCT(D3DXVECTOR3(1.0f, -1.0f, -1.0f),D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f));
 
 	// ¿ÞÂÊ
-	vertex_list_[12] = Vertex_PNCT(DX::Vector3(-1.0f, 1.0f, 1.0f), DX::Vector3(-1.0f, 0.0f, 0.0f), DX::Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-	vertex_list_[13] = Vertex_PNCT(DX::Vector3(-1.0f, 1.0f, -1.0f), DX::Vector3(-1.0f, 0.0f, 0.0f), DX::Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-	vertex_list_[14] = Vertex_PNCT(DX::Vector3(-1.0f, -1.0f, -1.0f), DX::Vector3(-1.0f, 0.0f, 0.0f), DX::Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-	vertex_list_[15] = Vertex_PNCT(DX::Vector3(-1.0f, -1.0f, 1.0f), DX::Vector3(-1.0f, 0.0f, 0.0f), DX::Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[12] = Vertex_PNCT(D3DXVECTOR3(-1.0f, 1.0f, 1.0f),   D3DXVECTOR3(-1.0f, 0.0f, 0.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[13] = Vertex_PNCT(D3DXVECTOR3(-1.0f, 1.0f, -1.0f),  D3DXVECTOR3(-1.0f, 0.0f, 0.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[14] = Vertex_PNCT(D3DXVECTOR3(-1.0f, -1.0f, -1.0f), D3DXVECTOR3(-1.0f, 0.0f, 0.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f));
+	vertex_list_[15] = Vertex_PNCT(D3DXVECTOR3(-1.0f, -1.0f, 1.0f),  D3DXVECTOR3(-1.0f, 0.0f, 0.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f));
 
 	// À­¸é
-	vertex_list_[16] = Vertex_PNCT(DX::Vector3(-1.0f, 1.0f, 1.0f), DX::Vector3(0.0f, 1.0f, 0.0f), DX::Vector4(1.0f, 0.5f, 1.0f, 1.0f));
-	vertex_list_[17] = Vertex_PNCT(DX::Vector3(1.0f, 1.0f, 1.0f), DX::Vector3(0.0f, 1.0f, 0.0f), DX::Vector4(1.0f, 0.5f, 1.0f, 1.0f));
-	vertex_list_[18] = Vertex_PNCT(DX::Vector3(1.0f, 1.0f, -1.0f), DX::Vector3(0.0f, 1.0f, 0.0f), DX::Vector4(1.0f, 0.5f, 1.0f, 1.0f));
-	vertex_list_[19] = Vertex_PNCT(DX::Vector3(-1.0f, 1.0f, -1.0f), DX::Vector3(0.0f, 1.0f, 0.0f), DX::Vector4(1.0f, 0.5f, 1.0f, 1.0f));
+	vertex_list_[16] = Vertex_PNCT(D3DXVECTOR3(-1.0f, 1.0f, 1.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 1.0f));
+	vertex_list_[17] = Vertex_PNCT(D3DXVECTOR3(1.0f, 1.0f, 1.0f),  D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 1.0f));
+	vertex_list_[18] = Vertex_PNCT(D3DXVECTOR3(1.0f, 1.0f, -1.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 1.0f));
+	vertex_list_[19] = Vertex_PNCT(D3DXVECTOR3(-1.0f, 1.0f, -1.0f),D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 1.0f));
 
 	// ¾Æ·§¸é
-	vertex_list_[20] = Vertex_PNCT(DX::Vector3(-1.0f, -1.0f, -1.0f), DX::Vector3(0.0f, -1.0f, 0.0f), DX::Vector4(0.0f, 1.0f, 1.0f, 1.0f));
-	vertex_list_[21] = Vertex_PNCT(DX::Vector3(1.0f, -1.0f, -1.0f), DX::Vector3(0.0f, -1.0f, 0.0f), DX::Vector4(0.0f, 1.0f, 1.0f, 1.0f));
-	vertex_list_[22] = Vertex_PNCT(DX::Vector3(1.0f, -1.0f, 1.0f), DX::Vector3(0.0f, -1.0f, 0.0f), DX::Vector4(0.0f, 1.0f, 1.0f, 1.0f));
-	vertex_list_[23] = Vertex_PNCT(DX::Vector3(-1.0f, -1.0f, 1.0f), DX::Vector3(0.0f, -1.0f, 0.0f), DX::Vector4(0.0f, 1.0f, 1.0f, 1.0f));
+	vertex_list_[20] = Vertex_PNCT(D3DXVECTOR3(-1.0f, -1.0f, -1.0f),D3DXVECTOR3(0.0f, -1.0f, 0.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f));
+	vertex_list_[21] = Vertex_PNCT(D3DXVECTOR3(1.0f, -1.0f, -1.0f), D3DXVECTOR3(0.0f, -1.0f, 0.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f));
+	vertex_list_[22] = Vertex_PNCT(D3DXVECTOR3(1.0f, -1.0f, 1.0f),  D3DXVECTOR3(0.0f, -1.0f, 0.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f));
+	vertex_list_[23] = Vertex_PNCT(D3DXVECTOR3(-1.0f, -1.0f, 1.0f), D3DXVECTOR3(0.0f, -1.0f, 0.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f));
 
 	return S_OK;
 }

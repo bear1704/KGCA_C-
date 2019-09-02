@@ -15,22 +15,21 @@ bool Sample::Init()
 {
 
 	obj.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"bk");
-	box.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
+	box.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa");
 
-
-	mat_obj_world_.Identity();
-	mat_box_world_.Identity();
+	D3DXMatrixIdentity(&mat_obj_world_);
+	D3DXMatrixIdentity(&mat_box_world_);
 
 	backview_camera_.Init();
 
-	DX::Vector3 eye(0.0f, 0.0f, -2.0f);
-	DX::Vector3 at(0.0f, 0.0f, 0.0f);
-	DX::Vector3 up(0.0f, 1.0f, 0.0f);
+	D3DXVECTOR3 eye(0.0f, 0.0f, -2.0f);
+	D3DXVECTOR3 at(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 
 	backview_camera_.CreateTargetViewMatrix(eye, at, up);
 	backview_camera_.CreateProjectionMatrix();
 
-	//mat_box_world_.YRotate(D3DX_PI / 4);
+	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
 	mat_obj_world_._42 = 1.0f;
 
 	main_camera_ = &backview_camera_;

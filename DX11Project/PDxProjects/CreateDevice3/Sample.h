@@ -32,8 +32,8 @@ public:
 
 
 public:
-	DX::PMatrix mat_obj_world_;
-	DX::PMatrix mat_box_world_;
+	D3DXMATRIX mat_obj_world_;
+	D3DXMATRIX mat_box_world_;
 
 	PCamera* main_camera_;
 	PCamera  backview_camera_;

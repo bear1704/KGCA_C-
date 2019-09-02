@@ -224,7 +224,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PInput.h" />
     <ClInclude Include="PJumpAction.h" />
-    <ClInclude Include="PMatrix.h" />
     <ClInclude Include="PMobAttackAction.h" />
     <ClInclude Include="PMobDeadAction.h" />
     <ClInclude Include="PMobHitAction.h" />
@@ -255,7 +254,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PTimer.h" />
     <ClInclude Include="PUIComponent.h" />
     <ClInclude Include="PUIDataManager.h" />
-    <ClInclude Include="PVector.h" />
     <ClInclude Include="PWallAndPlatform.h" />
     <ClInclude Include="PWindow.h" />
     <ClInclude Include="Resource.h" />
@@ -285,7 +283,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PCore.cpp" />
     <ClCompile Include="PDeadAction.cpp" />
     <ClCompile Include="PDevice.cpp" />
-    <ClCompile Include="PDxCore.cpp" />
     <ClCompile Include="PDxHelper.cpp" />
     <ClCompile Include="PDxState.cpp" />
     <ClCompile Include="PFiniteState.cpp" />
@@ -295,7 +292,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PInput.cpp" />
     <ClCompile Include="PJumpAction.cpp" />
-    <ClCompile Include="PMatrix.cpp" />
     <ClCompile Include="PMobAttackAction.cpp" />
     <ClCompile Include="PMobDeadAction.cpp" />
     <ClCompile Include="PMobHitAction.cpp" />
@@ -325,7 +321,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PTimer.cpp" />
     <ClCompile Include="PUIComponent.cpp" />
     <ClCompile Include="PUIDataManager.cpp" />
-    <ClCompile Include="PVector.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />
   </ItemGroup>
