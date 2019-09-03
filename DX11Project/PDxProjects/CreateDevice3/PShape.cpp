@@ -23,7 +23,7 @@ bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 
 	PModel::Init(device, context);
 
-	Create(device_, immediate_context_, tex_name, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
+	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
 
 	if (sprite_name.compare(L"") != 0)
 	{
@@ -37,6 +37,18 @@ bool PPlaneObject::Render()
 {
 	if (be_using_sprite_ == true)
 		sprite_.Render(device_, vertex_list_, dx_helper_, false);
+
+
+	DX::PTex_uv4 uv4 = texture_->uv_coord();
+	ChangeTexValue(vertex_list_, uv4);
+
+	int vertices_count = vertex_list_.size();
+
+	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	dx_helper_.vertex_count_ = vertices_count;
+	dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
+	dx_helper_.shader_res_view_ = texture_->shader_res_view();
+
 
 	PModel::Render();
 	return true;
@@ -88,7 +100,7 @@ bool PBoxObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::w
 
 	PModel::Init(device, context);
 
-	Create(device_, immediate_context_, tex_name, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
+	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
 
 	if (sprite_name.compare(L"") != 0)
 	{
@@ -109,6 +121,18 @@ bool PBoxObject::Render()
 {
 	if (be_using_sprite_ == true)
 		sprite_.Render(device_, vertex_list_, dx_helper_, false);
+
+
+	DX::PTex_uv4 uv4 = texture_->uv_coord();
+	ChangeTexValue(vertex_list_, uv4);
+
+	int vertices_count = vertex_list_.size();
+
+	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	dx_helper_.vertex_count_ = vertices_count;
+	dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
+	dx_helper_.shader_res_view_ = texture_->shader_res_view();
+
 
 	PModel::Render();
 	return true;

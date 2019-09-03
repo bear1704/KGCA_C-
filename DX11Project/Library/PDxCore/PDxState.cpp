@@ -7,6 +7,8 @@ namespace DX
 	ID3D11BlendState* PDxState::blend_state_alphablend_disable_ = 0;
 	ID3D11RasterizerState* PDxState::rs_state_wireframe_ = 0;
 	ID3D11RasterizerState* PDxState::rs_state_solidframe_ = 0;
+	ID3D11SamplerState* PDxState::sampler_state_linear_filter = 0;
+	ID3D11SamplerState* PDxState::sampler_state_anisotropic = 0;
 
 	void DX::PDxState::SetState(ID3D11Device* current_device)
 	{
@@ -66,7 +68,32 @@ namespace DX
 
 
 #pragma endregion Rasterizer
+	
 
+
+#pragma region ID3D11SamplerState
+
+		D3D11_SAMPLER_DESC sd;
+		ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
+		sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		sd.MaxLOD = FLT_MAX;
+		sd.MinLOD = FLT_MIN;
+		sd.MaxAnisotropy = 16;
+
+		hr = current_device->CreateSamplerState(&sd, &sampler_state_linear_filter);
+		if (FAILED(hr))
+			assert(false);
+
+		sd.Filter = D3D11_FILTER_ANISOTROPIC;
+		hr = current_device->CreateSamplerState(&sd, &sampler_state_anisotropic);
+		if (FAILED(hr))
+			assert(false);
+
+
+#pragma endregin ID3D11SamplerState
 
 	}
 

@@ -4,6 +4,7 @@
 #include "PShape.h"
 #include "PDxState.h"
 #include "PCamera.h"
+#include "PMap.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -38,8 +39,9 @@ public:
 	PCamera* main_camera_;
 	PCamera  backview_camera_;
 
-	PPlaneObject obj;
-	PBoxObject box;
+	PPlaneObject obj_;
+	PBoxObject box_;
+	PMap map_;
 public:
 
 

@@ -14,8 +14,9 @@ Sample::~Sample()
 bool Sample::Init()
 {
 
-	obj.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"bk");
-	box.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa");
+	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"bk");
+	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa");
+	map_.Init(device_, immediate_device_context_);
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -29,10 +30,25 @@ bool Sample::Init()
 	backview_camera_.CreateTargetViewMatrix(eye, at, up);
 	backview_camera_.CreateProjectionMatrix();
 
-	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
+	//D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
 	mat_obj_world_._42 = 1.0f;
 
 	main_camera_ = &backview_camera_;
+
+
+	PMapDesc md;
+	md.vertex_cols = 24;
+	md.vertex_rows = 25;
+	md.cell_disatnce = 1;
+	md.vs_path = L"VertexShader.hlsl";
+	md.vs_func = "VS";
+	md.ps_path = L"PixelShader.hlsl";
+	md.ps_func = "PS";
+	md.texture_name = L"terrain";
+
+	if (!map_.Load(md))
+		assert(false);
+
 
 	return true;
 }
@@ -68,24 +84,31 @@ bool Sample::Frame()
 
 
 	main_camera_->Frame();
-	obj.Frame();
-	box.Frame();
+	obj_.Frame();
+	box_.Frame();
+	map_.Frame();
 	return true;
 }
 
 bool Sample::Render()
 {
-	obj.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
-	obj.Render();
-	box.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-	box.Render();
-	
+	DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+
+	obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
+	obj_.Render();
+	box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+	box_.Render();
+	map_.SetWVPMatrix(nullptr, &main_camera_->matView_, &main_camera_->matProj_);
+	map_.Render();
+
 	return true;
 }
 
 bool Sample::Release()
 {
-	obj.Release();
-	box.Release();
+	obj_.Release();
+	box_.Release();
+	map_.Render();
+
 	return true;
 }

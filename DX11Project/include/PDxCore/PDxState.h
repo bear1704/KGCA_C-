@@ -15,6 +15,9 @@ namespace DX
 		static ID3D11RasterizerState* rs_state_wireframe_;
 		static ID3D11RasterizerState* rs_state_solidframe_;
 
+		static ID3D11SamplerState* sampler_state_linear_filter;
+		static ID3D11SamplerState* sampler_state_anisotropic;
+
 		static void SetState(ID3D11Device* current_device);
 		static void Release();
 
@@ -33,6 +36,10 @@ namespace DX
 	static void ApplyBlendState(ID3D11DeviceContext* context, ID3D11BlendState* state, const FLOAT blend_factor[] = 0, UINT mask = 0xffffffff)
 	{
 		context->OMSetBlendState(state, blend_factor, mask);
+	};
+	static void ApplySamplerState(ID3D11DeviceContext* context, ID3D11SamplerState* state, UINT slot = 0, UINT iArray = 1)
+	{
+		context->PSSetSamplers(slot, iArray, &state);
 	};
 
 

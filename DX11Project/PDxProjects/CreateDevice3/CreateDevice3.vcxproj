@@ -129,11 +129,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PCamera.cpp" />
+    <ClCompile Include="PMap.cpp" />
     <ClCompile Include="PShape.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PCamera.h" />
+    <ClInclude Include="PMap.h" />
     <ClInclude Include="PShape.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>

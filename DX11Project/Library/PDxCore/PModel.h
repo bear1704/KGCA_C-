@@ -91,9 +91,10 @@ public:
 
 
 public:
+	bool Create(ID3D11Device* device, ID3D11DeviceContext* context,  std::wstring vs_file_path, std::string vs_func_name, 
+		std::wstring ps_file_path, std::string ps_func_name, std::wstring tex_name = L"");
 	virtual HRESULT CreateVertexData();
 	virtual HRESULT CreateIndexData();
-	bool Create(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring tex_name, std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name);
 	//vertices : 버텍스 버퍼 / vertices_struct_size : 버텍스 버퍼에 사용되는 구조체 사이즈 / vertices_count : 버텍스 개수 / PVertexAndUV 구조체 사용
 	virtual HRESULT CreateVertexBuffer();
 	virtual HRESULT CreateIndexBuffer();
