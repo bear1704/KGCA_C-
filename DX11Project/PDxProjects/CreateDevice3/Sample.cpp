@@ -14,8 +14,8 @@ Sample::~Sample()
 bool Sample::Init()
 {
 
-	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"bk");
-	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa");
+	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"aaa");
+	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"terrain");
 	map_.Init(device_, immediate_device_context_);
 
 	D3DXMatrixIdentity(&mat_obj_world_);
@@ -30,21 +30,22 @@ bool Sample::Init()
 	backview_camera_.CreateTargetViewMatrix(eye, at, up);
 	backview_camera_.CreateProjectionMatrix();
 
-	//D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
+	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
 	mat_obj_world_._42 = 1.0f;
+	mat_box_world_._42 = 1.0f;
 
 	main_camera_ = &backview_camera_;
 
 
 	PMapDesc md;
-	md.vertex_cols = 24;
-	md.vertex_rows = 25;
+	md.vertex_cols = 257;
+	md.vertex_rows = 257;
 	md.cell_disatnce = 1;
 	md.vs_path = L"VertexShader.hlsl";
 	md.vs_func = "VS";
 	md.ps_path = L"PixelShader.hlsl";
 	md.ps_func = "PS";
-	md.texture_name = L"terrain";
+	md.texture_name = L"bk";
 
 	if (!map_.Load(md))
 		assert(false);
@@ -92,7 +93,7 @@ bool Sample::Frame()
 
 bool Sample::Render()
 {
-	DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+	
 
 	obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
 	obj_.Render();

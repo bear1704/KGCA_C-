@@ -66,6 +66,8 @@ bool PDevice::InitDevice(HWND hwnd, UINT client_width, UINT client_height)
 
 	CreateRenderTarget(g_rectangle_client.right, g_rectangle_client.bottom);
 
+
+
 	return true;
 }
 
@@ -102,6 +104,35 @@ bool PDevice::CreateRenderTarget(UINT client_width, UINT client_height)
 
 	immediate_device_context_->OMSetRenderTargets(1, &render_target_view_, NULL);
 
+
+	//Depth, Stencil 버퍼 생성
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
+	D3D11_TEXTURE2D_DESC tex_2d;
+	ZeroMemory(&tex_2d, sizeof(D3D11_TEXTURE2D_DESC));
+	tex_2d.Width = swap_chain_desc_.BufferDesc.Width;
+	tex_2d.Height = swap_chain_desc_.BufferDesc.Height;
+	tex_2d.ArraySize = 1;
+	tex_2d.MipLevels = 1;
+	tex_2d.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	tex_2d.SampleDesc.Count = 1;
+	tex_2d.SampleDesc.Quality = 0;
+	tex_2d.Usage = D3D11_USAGE_DEFAULT;
+	tex_2d.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	hr = device_->CreateTexture2D(&tex_2d, NULL, texture.GetAddressOf());
+	if (FAILED(hr))
+		assert(false);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depth_stencil_desc;
+	ZeroMemory(&depth_stencil_desc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	depth_stencil_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depth_stencil_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+
+	hr = device_->CreateDepthStencilView(texture.Get(), &depth_stencil_desc, &depth_stencil_view_);
+	immediate_device_context_->OMSetRenderTargets(1, &render_target_view_, depth_stencil_view_);
+
+
+	//viewport 생성
 	viewport_.Width = client_width;
 	viewport_.Height = client_height;
 	viewport_.MinDepth = 0;
@@ -110,6 +141,10 @@ bool PDevice::CreateRenderTarget(UINT client_width, UINT client_height)
 	viewport_.TopLeftY = 0;
 	immediate_device_context_->RSSetViewports(1, &viewport_); //래스터라이저에서 화면의 구역을 설정
 						//래스터라이저는 뷰포트 영역 내의 표현할 픽셀을 찾아서 PS로 보내준다. 
+	g_rectangle_client.right = swap_chain_desc_.BufferDesc.Width;
+	g_rectangle_client.bottom = swap_chain_desc_.BufferDesc.Height;
+
+
 	return true;
 }
 
@@ -117,11 +152,20 @@ bool PDevice::CreateRenderTarget(UINT client_width, UINT client_height)
 
 bool PDevice::DeviceRelease()
 {
-	render_target_view_->Release();
-	swap_chain_->Release();
-	immediate_device_context_->Release();
-	device_->Release();
+	if (depth_stencil_view_) depth_stencil_view_->Release();
+	if (render_target_view_) render_target_view_->Release();
+	if (swap_chain_) swap_chain_->Release();
+	if (immediate_device_context_) immediate_device_context_->Release();
+	if (device_) device_->Release();
+	
+	depth_stencil_view_ = nullptr;
+	render_target_view_ = nullptr;
+	swap_chain_ = nullptr;
+	immediate_device_context_ = nullptr;
+	device_ = nullptr;
 
+
+	
 
 	return true;
 }
@@ -132,6 +176,8 @@ bool PDevice::DevicePreRender()
 {
 	float clearColor[] = { 0.88f, 0.66f, 0.95f, 1.0f };
 	immediate_device_context_->ClearRenderTargetView(render_target_view_, clearColor);
+	immediate_device_context_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f, 0);
 	return true;
 }
 //

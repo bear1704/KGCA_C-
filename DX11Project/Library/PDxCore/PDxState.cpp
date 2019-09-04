@@ -9,12 +9,29 @@ namespace DX
 	ID3D11RasterizerState* PDxState::rs_state_solidframe_ = 0;
 	ID3D11SamplerState* PDxState::sampler_state_linear_filter = 0;
 	ID3D11SamplerState* PDxState::sampler_state_anisotropic = 0;
+	ID3D11DepthStencilState* PDxState::depth_stencil_state_enable_ = 0;
+	ID3D11DepthStencilState* PDxState::depth_stencil_state_disable_ = 0;
+
 
 	void DX::PDxState::SetState(ID3D11Device* current_device)
 	{
 		if (!current_device) return;
 
 		HRESULT hr;
+		
+#pragma region ID3D11DepthStencilState
+		D3D11_DEPTH_STENCIL_DESC depth_stencil_desc;
+		ZeroMemory(&depth_stencil_desc, sizeof(CD3D11_DEPTH_STENCIL_DESC));
+		depth_stencil_desc.DepthEnable = TRUE;
+		depth_stencil_desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		depth_stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		current_device->CreateDepthStencilState(&depth_stencil_desc, &depth_stencil_state_enable_);
+		
+		depth_stencil_desc.DepthEnable = FALSE;
+		current_device->CreateDepthStencilState(&depth_stencil_desc, &depth_stencil_state_disable_);
+#pragma endregion
+
+
 
 #pragma region BLEND
 		D3D11_BLEND_DESC blend_desc;
@@ -109,10 +126,27 @@ namespace DX
 		if (rs_state_solidframe_)
 			rs_state_solidframe_->Release();
 
-		rs_state_solidframe_ = 0;
-		rs_state_wireframe_ = 0;
-		blend_state_alphablend_ = 0;
-		blend_state_alphablend_disable_ = 0;
+		if (depth_stencil_state_enable_)
+			depth_stencil_state_enable_->Release();
+		if (depth_stencil_state_disable_)
+			depth_stencil_state_disable_->Release();
+
+		if (sampler_state_anisotropic)
+			sampler_state_anisotropic->Release();
+		if (sampler_state_linear_filter)
+			sampler_state_linear_filter->Release();
+
+
+		rs_state_solidframe_ = nullptr;
+		rs_state_wireframe_ = nullptr;
+		blend_state_alphablend_ = nullptr;
+		blend_state_alphablend_disable_ = nullptr;
+		depth_stencil_state_enable_ = nullptr;
+		depth_stencil_state_disable_ = nullptr;
+		sampler_state_anisotropic = nullptr;
+		sampler_state_linear_filter = nullptr;
+
+
 	}
 
 	DX::PDxState::PDxState()

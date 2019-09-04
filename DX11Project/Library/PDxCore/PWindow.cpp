@@ -37,8 +37,11 @@ bool PWindow::InitWindow(HINSTANCE hInstance, LPCWSTR titleName, int X, int Y, i
 	if (!MyRegisterClass())
 		return false;
 
+	RECT rt = { 0, 0, width, height };
+	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE);
+
 	hWnd = CreateWindow(className, titleName, WS_OVERLAPPEDWINDOW, 
-		X, Y, width, height, NULL, NULL, this->hInstance, NULL);
+		X, Y, rt.right-rt.left, rt.bottom-rt.top, NULL, NULL, this->hInstance, NULL);
 
 	if (hWnd == NULL) return 0;
 

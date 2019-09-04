@@ -5,6 +5,7 @@
 #include <memory>
 #include <d3d11.h>
 #include <d3dx11.h>
+#include <wrl.h>
 
 
 
@@ -28,6 +29,7 @@ protected:
 	ID3D11Device*			device_;
 	ID3D11DeviceContext*	immediate_device_context_;
 	ID3D11RenderTargetView* render_target_view_;
+	ID3D11DepthStencilView* depth_stencil_view_;
 	D3D11_VIEWPORT			viewport_;
 
 	D3D_DRIVER_TYPE driver_types[3];
