@@ -8,6 +8,8 @@ PCamera::PCamera()
 	D3DXMatrixIdentity(&matProj_);
 
 
+
+	radius_ = 5.0f;
 	turn_speed_ = 30.0f;
 
 	camera_position_ = D3DXVECTOR3(0.0f, 0.0f, -2.0f);
@@ -33,7 +35,10 @@ void PCamera::CreateTargetViewMatrix(D3DXVECTOR3 mypos, D3DXVECTOR3 target, D3DX
 	D3DXVec3Normalize(&vec_up_, &vec_up_);
 	D3DXVec3Normalize(&vec_right_, &vec_right_);
 
-	
+	arcball_view_.euler_angle_.y = atan2f(vec_look_.x, vec_look_.z);
+	float length = sqrtf(vec_look_.z * vec_look_.z + vec_look_.x * vec_look_.x);
+	arcball_view_.euler_angle_.x = -atan2f(vec_look_.y, length);
+
 }
 
 void PCamera::CreateProjectionMatrix()
@@ -44,19 +49,14 @@ void PCamera::CreateProjectionMatrix()
 
 
 
-void PCamera::UpdateCameraVec(D3DXVECTOR3 move)
+void PCamera::MoveCameraVec(D3DXVECTOR3 move) 
 {
 	camera_position_ = camera_position_ + move * g_SecondPerFrame * 1.0f;
 
 	float pitch = DEGREE_TO_RADIAN(pitch_angle_);
 	float yaw = DEGREE_TO_RADIAN(yaw_angle_);
 
-
 	vec_view_target_ = camera_position_ + vec_look_;
-
-	D3DXVec3Normalize(&vec_look_, &vec_look_);
-	D3DXVec3Normalize(&vec_up_, &vec_up_);
-	D3DXVec3Normalize(&vec_right_, &vec_right_);
 
 	matView_._11 = vec_right_.x; matView_._12 = vec_up_.x; matView_._13 = vec_look_.x;
 	matView_._21 = vec_right_.y; matView_._22 = vec_up_.y; matView_._23 = vec_look_.y;
@@ -66,51 +66,98 @@ void PCamera::UpdateCameraVec(D3DXVECTOR3 move)
 	matView_ ._41 = -(D3DXVec3Dot(&camera_position_, &vec_up_));
 	matView_ ._41 = -(D3DXVec3Dot(&camera_position_, &vec_look_));
 
-}
-
-void PCamera::Forward()
-{
-	UpdateCameraVec(vec_up_);
+	D3DXVec3Normalize(&vec_look_, &vec_look_);
+	D3DXVec3Normalize(&vec_up_, &vec_up_);
+	D3DXVec3Normalize(&vec_right_, &vec_right_);
 
 }
 
-void PCamera::BackWard()
+void PCamera::UpdateVector()
 {
-	UpdateCameraVec(vec_up_ * -1);
+	vec_look_ = D3DXVECTOR3(matView_._13, matView_._23, matView_._33);
+	vec_up_ = D3DXVECTOR3(matView_._12, matView_._22, matView_._32);
+	vec_right_ = D3DXVECTOR3(matView_._11, matView_._21, matView_._31);
+
+	D3DXVec3Normalize(&vec_look_, &vec_look_);
+	D3DXVec3Normalize(&vec_up_, &vec_up_);
+	D3DXVec3Normalize(&vec_right_, &vec_right_);
+}
+
+void PCamera::UpWard()
+{
+	MoveCameraVec(vec_up_);
+
+}
+
+void PCamera::DownWard()
+{
+	MoveCameraVec(vec_up_ * -1);
 }
 
 void PCamera::MoveLeft()
 {
-	UpdateCameraVec(vec_right_ * -1);
+	MoveCameraVec(vec_right_ * -1);
 }
 
 void PCamera::MoveRight()
 {
-	UpdateCameraVec(vec_right_);
+	MoveCameraVec(vec_right_);
 }
 
 void PCamera::RotateUp()
 {
 	pitch_angle_ += turn_speed_ * g_SecondPerFrame;
-	UpdateCameraVec();
+	MoveCameraVec();
 }
 
 void PCamera::RotateDown()
 {
 	pitch_angle_ += turn_speed_ * g_SecondPerFrame;
-	UpdateCameraVec();
+	MoveCameraVec();
+}
+
+void PCamera::MessageProc(MSG msg)
+{
+	if (msg.message == WM_LBUTTONDOWN ||
+		msg.message == WM_MBUTTONDOWN ||
+		msg.message == WM_RBUTTONDOWN)
+	{
+		int mouse_x = LOWORD(msg.lParam);
+		int mouse_y = HIWORD(msg.lParam);
+		arcball_view_.OnBegin(mouse_x, mouse_y);
+		arcball_world_.OnBegin(mouse_x, mouse_y);
+	}
+	if (msg.message == WM_MOUSEMOVE ||
+		msg.message == WM_MBUTTONDOWN ||
+		msg.message == WM_RBUTTONDOWN)
+	{
+		int mouse_x = LOWORD(msg.lParam);
+		int mouse_y = HIWORD(msg.lParam);
+		arcball_view_.OnMove(mouse_x, mouse_y);
+		arcball_world_.OnMove(mouse_x, mouse_y);
+	}
+	if (msg.message == WM_LBUTTONUP ||
+		msg.message == WM_MBUTTONDOWN ||
+		msg.message == WM_RBUTTONDOWN)
+	{
+		int mouse_y = HIWORD(msg.lParam);
+		int mouse_x = LOWORD(msg.lParam);
+		arcball_view_.OnEnd(mouse_x, mouse_y);
+		arcball_world_.OnEnd(mouse_x, mouse_y);
+	}
+
 }
 
 void PCamera::RotateLeft()
 {
 	yaw_angle_ -= turn_speed_ * g_SecondPerFrame;
-	UpdateCameraVec();
+	MoveCameraVec();
 }
 
 void PCamera::RotateRight()
 {
 	yaw_angle_ += turn_speed_ * g_SecondPerFrame;
-	UpdateCameraVec();
+	MoveCameraVec();
 }
 
 

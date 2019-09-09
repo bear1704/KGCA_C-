@@ -1,6 +1,8 @@
 #include <vector>
 #include <algorithm>	
 
+#ifdef TEST
+
 struct TreeNode {
 	std::vector<TreeNode*> children;
 };
@@ -9,6 +11,7 @@ int longest; //여태까지 찾은 가장 긴 잎-잎 노드의 길이 저장
 
 int height(TreeNode* root)
 {
+
 	std::vector<int> heights; 
 	
 	for (int i = 0; i < root->children.size(); i++) //자식 노드를 가진 만큼 반복한다.
@@ -35,3 +38,5 @@ int solve(TreeNode* root)
 	int h = height(root);
 	return std::max(longest, h);
 }
+
+#endif

@@ -38,7 +38,8 @@ private:
 	bool PCoreFrame();
 	bool PCoreRender();
 	bool PCoreRelease();
-	void MessageProc(MSG msg);
+public:
+	virtual void MessageProc(MSG msg);
 
 public:
 	bool Run();

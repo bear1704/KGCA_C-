@@ -16,6 +16,10 @@ bool Sample::Init()
 	std::string v_shader_func = "VS";
 	std::string ps_shader_func = "PS";
 
+	char* aaa = "222";
+	std::string aaa;
+	
+
 	//PVertexAndUV vertices[] =
 	//{
 	//	{-0.5f, 0.5f, 0.5f, 0.0f, 0.0f},

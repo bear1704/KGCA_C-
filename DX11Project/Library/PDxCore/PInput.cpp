@@ -26,6 +26,7 @@ bool PInput::Frame()
 	g_InputActionMap.fKey = KeyCheck('F');
 	g_InputActionMap.qKey = KeyCheck('Q');
 	g_InputActionMap.wKey = KeyCheck('W');
+	g_InputActionMap.eKey = KeyCheck('E');
 	g_InputActionMap.upArrowKey = KeyCheck(VK_UP);
 	g_InputActionMap.downArrowKey = KeyCheck(VK_DOWN);
 	g_InputActionMap.leftArrowKey = KeyCheck(VK_LEFT);

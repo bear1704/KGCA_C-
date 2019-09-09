@@ -123,6 +123,9 @@
     <ClCompile Include="ptr.cpp" />
     <ClCompile Include="ref.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="template.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

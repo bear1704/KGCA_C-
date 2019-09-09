@@ -152,6 +152,7 @@ struct PInputActionMap
 	KEYSTAT fKey;
 	KEYSTAT qKey;
 	KEYSTAT wKey;
+	KEYSTAT eKey;
 	KEYSTAT leftClick;
 	KEYSTAT rightClick;
 	KEYSTAT middleClick;

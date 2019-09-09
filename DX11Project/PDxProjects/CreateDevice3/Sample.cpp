@@ -21,20 +21,24 @@ bool Sample::Init()
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
 
-	backview_camera_.Init();
+	//backview_camera_.Init();
+	free_camera_.Init();
 
 	D3DXVECTOR3 eye(0.0f, 0.0f, -2.0f);
 	D3DXVECTOR3 at(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 
-	backview_camera_.CreateTargetViewMatrix(eye, at, up);
-	backview_camera_.CreateProjectionMatrix();
+	//backview_camera_.CreateTargetViewMatrix(eye, at, up);
+	//backview_camera_.CreateProjectionMatrix();
+
+	free_camera_.CreateTargetViewMatrix(eye, at, up);
+	free_camera_.CreateProjectionMatrix();
 
 	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
 	mat_obj_world_._42 = 1.0f;
 	mat_box_world_._42 = 1.0f;
 
-	main_camera_ = &backview_camera_;
+	main_camera_ = &free_camera_;
 
 
 	PMapDesc md;
@@ -57,13 +61,13 @@ bool Sample::Init()
 bool Sample::Frame()
 {
 
-	if (g_InputActionMap.wKey == KEYSTAT::KEY_HOLD)
+	if (g_InputActionMap.qKey == KEYSTAT::KEY_HOLD)
 	{
-		main_camera_->Forward();
+		main_camera_->UpWard();
 	}
-	if (g_InputActionMap.sKey == KEYSTAT::KEY_HOLD)
+	if (g_InputActionMap.eKey == KEYSTAT::KEY_HOLD)
 	{
-		main_camera_->BackWard();
+		main_camera_->DownWard();
 	}
 	if (g_InputActionMap.aKey == KEYSTAT::KEY_HOLD)
 	{
@@ -112,4 +116,12 @@ bool Sample::Release()
 	map_.Render();
 
 	return true;
+}
+
+void Sample::MessageProc(MSG msg)
+{
+	PCore::MessageProc(msg);
+	//PInput::GetInstance().MsgProc(msg);
+	if (main_camera_ == nullptr) return;
+	main_camera_->MessageProc(msg);
 }

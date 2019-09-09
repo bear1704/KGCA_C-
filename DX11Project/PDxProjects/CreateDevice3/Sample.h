@@ -5,6 +5,7 @@
 #include "PDxState.h"
 #include "PCamera.h"
 #include "PMap.h"
+#include "PFreeCamera.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -38,12 +39,13 @@ public:
 
 	PCamera* main_camera_;
 	PCamera  backview_camera_;
+	PFreeCamera free_camera_;
 
 	PPlaneObject obj_;
 	PBoxObject box_;
 	PMap map_;
 public:
-
+	void MessageProc(MSG msg) override;
 
 };
 PCORE_RUN(L"planeobj", 0, 0, 800, 600);

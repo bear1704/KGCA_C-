@@ -1,5 +1,7 @@
 #include <iostream>
 
+#ifdef TEST
+
 constexpr int getArraySize() { return 32; }
 
 int main()
@@ -9,3 +11,5 @@ int main()
 
 	int myarr2[getArraySize()];
 }
+
+#endif
