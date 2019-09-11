@@ -128,21 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PArcBall.cpp" />
     <ClCompile Include="PArcBallQ.cpp" />
-    <ClCompile Include="PCamera.cpp" />
-    <ClCompile Include="PFreeCamera.cpp" />
-    <ClCompile Include="PMap.cpp" />
-    <ClCompile Include="PShape.cpp" />
+    <ClCompile Include="PDxRenderTarget.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PArcBall.h" />
     <ClInclude Include="PArcBallQ.h" />
-    <ClInclude Include="PCamera.h" />
-    <ClInclude Include="PFreeCamera.h" />
-    <ClInclude Include="PMap.h" />
-    <ClInclude Include="PShape.h" />
+    <ClInclude Include="PDxRenderTarget.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>

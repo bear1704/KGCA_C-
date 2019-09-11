@@ -1,0 +1,60 @@
+<dmg_sprite>
+	<name> 0 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 9,34,31,35</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 1 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 51,34,24,34</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 2 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 88,35,27,32</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 3 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 128,37,29,31</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 4 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 165,37,31,33</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 5 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 208,37,29,32</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 6 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 250,36,29,33</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 7 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 10,104,29,31</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 8 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 51,102,27,33</coord>
+</dmg_sprite>
+<dmg_sprite>
+	<name> 9 </name>
+	<max_frame> 1 </max_frame>
+	<path> data/UI/sprite/dmgfont.bmp </path>
+	<coord> 90,102,29,32</coord>
+</dmg_sprite>

@@ -45,10 +45,17 @@ bool PModel::Render()
 		data->matProj = constant_data_.matProj;
 		data->color[0] = 1.0f;
 		data->etc[0] = g_fGameTimer;
+
 		immediate_context_->Unmap(dx_helper_.constant_buffer_.Get(), 0);
 
 	}
-		
+	//
+
+		////constant_data_.color[0] = 1.0f;
+		////constant_data_.etc[0] = g_fGameTimer;
+
+		//immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0,
+		//	NULL, &vs, 0, 0); 
 	PreRender();
 	PostRender();
 
@@ -205,7 +212,7 @@ HRESULT PModel::CreateInputLayout()
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0  },
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0  },
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
 	};
 
@@ -230,6 +237,30 @@ void PModel::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 	D3DXMatrixTranspose(&constant_data_.matView, &matView_);
 	D3DXMatrixTranspose(&constant_data_.matProj, &matProj_);
 
+}
+
+void PModel::SetVertexListPos(int count, D3DXVECTOR3 vec)
+{
+	if (vertex_list_.size() <= count)
+		assert(false);
+
+	vertex_list_[count].pos = vec;
+
+}
+
+std::vector<Vertex_PNCT>* PModel::GetVertexListPointer()
+{
+	return &vertex_list_;
+}
+
+std::vector<Vertex_PNCT>& PModel::vertex_list()
+{
+	return vertex_list_;
+}
+
+DX::PDxHelper& PModel::dx_helper()
+{
+	return dx_helper_;
 }
 
 void PModel::ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept

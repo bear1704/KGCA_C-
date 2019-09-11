@@ -8,12 +8,23 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BoxCollision", "BoxCollision\BoxCollision.vcxproj", "{E456373A-C0EE-4C0F-A190-6C9D2EE9D677}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PNetworkLib", "PNetworkLib\PNetworkLib.vcxproj", "{8DEFBB7E-D516-461F-A33B-CE84C988425D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7BD277D4-F7F3-4464-907D-C8AE28181A85} = {7BD277D4-F7F3-4464-907D-C8AE28181A85}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parser", "Parser\Parser.vcxproj", "{87F779BC-3A73-4EBA-A3D8-9CC5493BBC03}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PGameServer", "PGameServer\PGameServer.vcxproj", "{F618F061-457C-4F46-8B89-F070BB772DE5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DEFBB7E-D516-461F-A33B-CE84C988425D} = {8DEFBB7E-D516-461F-A33B-CE84C988425D}
+		{7BD277D4-F7F3-4464-907D-C8AE28181A85} = {7BD277D4-F7F3-4464-907D-C8AE28181A85}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PGameClient", "PGameClient\PGameClient.vcxproj", "{9F4AC91A-39F4-4AD4-952E-B4931D2E839D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DEFBB7E-D516-461F-A33B-CE84C988425D} = {8DEFBB7E-D516-461F-A33B-CE84C988425D}
+		{7BD277D4-F7F3-4464-907D-C8AE28181A85} = {7BD277D4-F7F3-4464-907D-C8AE28181A85}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

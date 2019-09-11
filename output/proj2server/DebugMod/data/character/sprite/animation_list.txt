@@ -1,0 +1,35 @@
+<list> <!-- 플레이어 캐릭터 애니메이션 리스트 -->
+	<name> player </name>
+	<idle> pc_idle </idle>
+	<move> pc_move </move>
+	<jump> pc_jump </jump>
+	<attack> pc_slash </attack>
+	<attack> pc_swing </attack>
+	<attack> pc_pierce </attack>
+	<dead> tomb </dead>
+</list>
+<list> <!-- 타 플레이어 캐릭터 애니메이션 리스트 -->
+	<name> other_player </name>
+	<idle> other_pc_idle </idle>
+	<move> other_pc_move </move>
+	<jump> other_pc_jump </jump>
+	<attack> other_pc_slash </attack>
+	<attack> other_pc_swing </attack>
+	<attack> other_pc_pierce </attack>
+	<dead> tomb </dead>
+</list>
+<list> <!-- 주황버섯 애니메이션 리스트 -->
+	<name> orange_mushroom </name>
+	<idle> orange_mushroom_idle </idle>
+	<move> orange_mushroom_move </move>
+	<jump> orange_mushroom_jump </jump>
+	<hit> orange_mushroom_hit </hit>
+	<attack> orange_mushroom_move </attack> <!-- 주벗은 공격이 move와 같음 -->
+	<dead> orange_mushroom_die </dead> <!-- 각각의 애니메이션 리스트 컴포넌트를 입력 -->
+</list>
+<list> <!-- 자쿰 애니메이션 리스트 -->
+	<name> zakum </name>
+	<idle> zakum_idle </idle>
+	<skillone> zakum_skill </skillone>
+	<skilltwo> zakum_shiny </skilltwo>
+</list>

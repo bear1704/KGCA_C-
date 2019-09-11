@@ -38,7 +38,12 @@ bool PCore::PostFrame()
 bool PCore::PreRender()
 {
 	DevicePreRender();
-	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+	
+	if (is_wireframe_render_)
+		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_wireframe_);
+	else
+		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+
 	//DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
 	DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
 	return true;
@@ -114,13 +119,12 @@ bool PCore::PCoreRender()
 	timer.Render();
 	PInput::GetInstance().Render();
 	PSoundMgr::GetInstance().Render();
-	//P2DCamera::GetInstance().Render();
 
 	
 	PreRender();
 	Render();
 	PostRender();
-	//PSpriteManager::GetInstance().Render();
+	
 	return true;
 }
 
@@ -167,4 +171,14 @@ bool PCore::Run()
 	PCoreRelease();
 
 	return true;
+}
+
+void PCore::set_is_wireframe_render(bool is)
+{
+	is_wireframe_render_ = is;
+}
+
+void PCore::ToggleIsWireframeRender()
+{
+	is_wireframe_render_ = !is_wireframe_render_;
 }

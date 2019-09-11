@@ -1,0 +1,5 @@
+<CHARLIST> <!-- CHARLIST와 같이 구분자 역할을 하는 요소는 second에 들어감! first는 START/END -->
+	<name> MUSHROOMLAND </name>
+	<MAP> map1 </MAP>
+		<COORD> 0,0 </COORD>
+</CHARLIST>

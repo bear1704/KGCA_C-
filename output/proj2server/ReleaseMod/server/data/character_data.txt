@@ -1,0 +1,8 @@
+<character_data>
+	<name> zakum </name>
+	<collision_box> 0,0,322,196 </collision_box>
+	<alpha> 1.0 </alpha>
+	<scale> 1.3 </scale>
+	<init_sprite> zakum_idle </init_sprite>
+	<sprite_path> data/character_coord.txt </sprite_path>
+</character_data>

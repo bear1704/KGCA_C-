@@ -1,5 +1,5 @@
 <Texture>
-	<tex_name>aaa</tex_name>
+	<tex_name>blue</tex_name>
 	<tex_path> data/texture/aaa.jpg	</tex_path>
 	<image_width> 991 </image_width> <!-- 무조건 width, height가 uv보다 먼저 나와야 함-->
 	<image_height> 612 </image_height>
@@ -7,7 +7,7 @@
 	<uv_rbottom> 991.0f, 612.0f </uv_rbottom> <!-- right-bottom -->
 </Texture>
 <Texture>
-	<tex_name>bk</tex_name>
+	<tex_name>green</tex_name>
 	<tex_path> data/texture/bk.bmp	</tex_path>
 	<image_width> 800 </image_width>
 	<image_height> 600 </image_height>
@@ -30,3 +30,23 @@
 	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
 	<uv_rbottom> 256.0f, 256.0f </uv_rbottom> <!-- right-bottom -->
 </Texture>
+<Texture>
+	<tex_name>block1</tex_name>
+	<tex_path> data/texture/018.bmp	</tex_path>
+	<image_width> 256 </image_width>
+	<image_height> 256 </image_height>
+	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
+	<uv_rbottom> 256.0f, 256.0f </uv_rbottom> <!-- right-bottom -->
+</Texture>
+<Texture>
+	<tex_name>grass</tex_name>
+	<tex_path> data/texture/038.bmp	</tex_path>
+	<image_width> 1024 </image_width>
+	<image_height> 1024 </image_height>
+	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
+	<uv_rbottom> 1024.0f, 1024.0f </uv_rbottom> <!-- right-bottom -->
+</Texture>
+
+
+
+

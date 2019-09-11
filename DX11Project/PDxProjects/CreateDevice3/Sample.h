@@ -6,6 +6,7 @@
 #include "PCamera.h"
 #include "PMap.h"
 #include "PFreeCamera.h"
+#include "PDxRenderTarget.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -41,9 +42,14 @@ public:
 	PCamera  backview_camera_;
 	PFreeCamera free_camera_;
 
+	PDxRenderTarget dx_rt_;
+	PDxRenderTarget dx_minimap_rt_;
+
 	PPlaneObject obj_;
 	PBoxObject box_;
 	PMap map_;
+
+	PPlaneObject screen_tex_object_;
 public:
 	void MessageProc(MSG msg) override;
 

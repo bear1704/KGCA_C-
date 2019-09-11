@@ -64,7 +64,7 @@ struct VS_CB_WVP
 
 class PModel
 {
-protected:
+public:
 	D3DXMATRIX matWorld_;
 	D3DXMATRIX matView_;
 	D3DXMATRIX matProj_;
@@ -105,7 +105,15 @@ public:
 	virtual HRESULT LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	virtual HRESULT CreateInputLayout();
-	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr);
 	static void ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept; 
+
+	//setter
+	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr);
+	void SetVertexListPos(int count, D3DXVECTOR3 vec);
+	//getter
+	std::vector<Vertex_PNCT>* GetVertexListPointer();
+	std::vector<Vertex_PNCT>& vertex_list();
+	DX::PDxHelper& dx_helper();
+
 };
 

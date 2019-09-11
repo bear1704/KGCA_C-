@@ -1,0 +1,8 @@
+<sprite>
+	<name> map1 </name>
+	<max_frame> 1 </max_frame>
+	<lifetime> 777 </lifetime>
+	<once_playtime> 1 </once_playtime>
+	<path> data/map/sprite/map_resize.bmp </path>
+	<coord> 0,0,1367,830 </coord>
+</sprite>

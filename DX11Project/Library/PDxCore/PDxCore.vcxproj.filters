@@ -237,8 +237,23 @@
     <ClInclude Include="PDxSprite.h">
       <Filter>소스 파일\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="PModel.h">
+    <ClInclude Include="PArcBall.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PModel.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PShape.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PMap.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PFreeCamera.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="PCamera.h">
+      <Filter>소스 파일\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -413,8 +428,23 @@
     <ClCompile Include="PDxSprite.cpp">
       <Filter>소스 파일\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="PModel.cpp">
+    <ClCompile Include="PArcBall.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PModel.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PShape.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PMap.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PCamera.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="PFreeCamera.cpp">
+      <Filter>소스 파일\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -23,6 +23,9 @@ public:
 	HBRUSH handle_background_brush;
 	HANDLE handle_pen;
 
+private:
+	bool is_wireframe_render_;
+
 public:
 	virtual bool Init();
 	virtual bool PreFrame();
@@ -43,6 +46,11 @@ public:
 
 public:
 	bool Run();
+	void set_is_wireframe_render(bool is);
+	void ToggleIsWireframeRender();
+
+public:
+
 
 
 };

@@ -1,0 +1,46 @@
+<status>
+	<name> player </name>
+	<type> player </type>
+	<level> 10 </level>
+	<max_hp> 930 </max_hp>
+	<max_mp> 120 </max_mp>
+	<current_hp> 930 </current_hp>
+	<current_mp> 120 </current_mp>
+	<current_exp> 12 </current_exp>
+	<str> 860 </str>
+	<dex> 530 </dex>
+</status>
+<status>
+	<name> other_player </name>
+	<type> other_player </type>
+	<level> 10 </level>
+	<max_hp> 930 </max_hp>
+	<max_mp> 120 </max_mp>
+	<current_hp> 930 </current_hp>
+	<current_mp> 120 </current_mp>
+	<current_exp> 12 </current_exp>
+	<str> 10 </str>
+	<dex> 8 </dex>
+</status>
+<status>
+	<name> orange_mushroom </name>
+	<type> monster </type>
+	<level> 8 </level>
+	<max_hp> 65 </max_hp>
+	<max_mp> 0 </max_mp>
+	<current_hp> 65 </current_hp>
+	<current_mp> 0 </current_mp>
+	<reward_exp> 1240 </reward_exp>
+	<body_dmg> 95 </body_dmg>
+</status>
+<status>
+	<name> zakum </name>
+	<type> boss_monster </type> <!-- MonsterTYPE을 써도 되는지 확신이 안 감 -->
+	<level> 150 </level>
+	<max_hp> 320000 </max_hp>
+	<max_mp> 1600 </max_mp>
+	<current_hp> 320000 </current_hp>
+	<current_mp> 1600 </current_mp>
+	<reward_exp> 9500 </reward_exp>
+	<body_dmg> 350 </body_dmg>
+</status>
