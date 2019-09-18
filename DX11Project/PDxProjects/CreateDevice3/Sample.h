@@ -47,7 +47,7 @@ public:
 
 	PPlaneObject obj_;
 	PBoxObject box_;
-	PMap map_;
+	PHeightMap map_;
 
 	PPlaneObject screen_tex_object_;
 public:

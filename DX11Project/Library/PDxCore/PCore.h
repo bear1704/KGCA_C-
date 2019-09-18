@@ -23,7 +23,7 @@ public:
 	HBRUSH handle_background_brush;
 	HANDLE handle_pen;
 
-private:
+protected:
 	bool is_wireframe_render_;
 
 public:

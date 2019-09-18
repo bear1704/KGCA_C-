@@ -2,7 +2,7 @@
 
 PArcBall::PArcBall()
 {
-	mouse_sensitivity_ = 2.0f;
+	mouse_sensitivity_ = 1.0f;
 	is_drag_ = false;
 	screen_drag_angle_.x = 0;
 	screen_drag_angle_.y = 0;

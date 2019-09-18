@@ -10,7 +10,7 @@ PCamera::PCamera()
 	radius_ = 5.0f;
 	turn_speed_ = 15.0f;
 
-	camera_position_ = D3DXVECTOR3(0.0f, 0.0f, -2.0f);
+	camera_position_ = D3DXVECTOR3(0.0f, 50.0f, -2.0f);
 	vec_view_target_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vec_up_ = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 }
@@ -49,7 +49,7 @@ void PCamera::CreateProjectionMatrix()
 
 void PCamera::MoveCameraVec(D3DXVECTOR3 move) 
 {
-	camera_position_ = camera_position_ + move * g_SecondPerFrame * 3.0f;
+	camera_position_ = camera_position_ + move * g_SecondPerFrame * 20.0f;
 
 	float pitch = DEGREE_TO_RADIAN(pitch_angle_);
 	float yaw = DEGREE_TO_RADIAN(yaw_angle_);
@@ -135,7 +135,7 @@ void PCamera::MessageProc(MSG msg)
 		int mouse_x = LOWORD(msg.lParam);
 		int mouse_y = HIWORD(msg.lParam);
 		arcball_view_.OnBegin(mouse_x, mouse_y);
-		arcball_world_.OnBegin(mouse_x, mouse_y);
+		//arcball_world_.OnBegin(mouse_x, mouse_y);
 	}
 	if (msg.message == WM_MOUSEMOVE ||
 		msg.message == WM_MBUTTONDOWN ||
@@ -144,7 +144,7 @@ void PCamera::MessageProc(MSG msg)
 		int mouse_x = LOWORD(msg.lParam);
 		int mouse_y = HIWORD(msg.lParam);
 		arcball_view_.OnMove(mouse_x, mouse_y);
-		arcball_world_.OnMove(mouse_x, mouse_y);
+		//arcball_world_.OnMove(mouse_x, mouse_y);
 	}
 	if (msg.message == WM_LBUTTONUP ||
 		msg.message == WM_MBUTTONDOWN ||
@@ -153,7 +153,7 @@ void PCamera::MessageProc(MSG msg)
 		int mouse_y = HIWORD(msg.lParam);
 		int mouse_x = LOWORD(msg.lParam);
 		arcball_view_.OnEnd(mouse_x, mouse_y);
-		arcball_world_.OnEnd(mouse_x, mouse_y);
+		//arcball_world_.OnEnd(mouse_x, mouse_y);
 	}
 
 }

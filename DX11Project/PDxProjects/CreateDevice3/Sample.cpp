@@ -16,7 +16,7 @@ bool Sample::Init()
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"grass");
-	map_.Init(device_, immediate_device_context_);
+
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -40,16 +40,19 @@ bool Sample::Init()
 
 	main_camera_ = &free_camera_;
 
+	map_.Init(device_, immediate_device_context_);
+	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/HEIGHT_CASTLE.bmp");
 
 	PMapDesc md;
-	md.vertex_cols = 257;
-	md.vertex_rows = 257;
+	md.vertex_cols = map_.vertex_cols();
+	md.vertex_rows = map_.vertex_rows();
 	md.cell_disatnce = 1;
 	md.vs_path = L"VertexShader.hlsl";
 	md.vs_func = "VS";
 	md.ps_path = L"PixelShader.hlsl";
 	md.ps_func = "PS";
 	md.texture_name = L"block1";
+
 
 	if (!map_.Load(md))
 		assert(false);
@@ -112,17 +115,13 @@ bool Sample::Frame()
 bool Sample::Render()
 {
 
-
-		//obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		//obj_.Render();
-		//box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		//box_.Render();
-		//map_.SetWVPMatrix(nullptr, &main_camera_->matView_, &main_camera_->matProj_);
-		//map_.Render();
-
 	dx_rt_.Begin(immediate_device_context_);
 	{
-		//DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_wireframe_);
+		if(is_wireframe_render_) //마우스 휠 여부에 따라 와이어프레임, 솔리드를 가르는 코드
+			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_wireframe_);
+		else
+			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+
 		obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		obj_.Render();
 		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
@@ -138,11 +137,12 @@ bool Sample::Render()
 		&D3DXVECTOR3(0, 0, 0.1),
 		&D3DXVECTOR3(0, 1, 0));
 
-	//DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 
 	dx_minimap_rt_.Begin(immediate_device_context_);
 	{
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+		
 
 		obj_.SetWVPMatrix(&mat_obj_world_, &mat_top_view, &main_camera_->matProj_);
 		obj_.Render();
@@ -163,13 +163,16 @@ bool Sample::Render()
 	screen_tex_object_.vertex_list()[1].uv = D3DXVECTOR2(1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[2].uv = D3DXVECTOR2(1.0f, 1.0f);
 	screen_tex_object_.vertex_list()[3].uv = D3DXVECTOR2(0.0f, 1.0f);
+	
+
+	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 
 	immediate_device_context_->UpdateSubresource(screen_tex_object_.dx_helper().vertex_buffer_.Get(),
 		0, NULL, &screen_tex_object_.vertex_list().at(0), 0, 0);
 	screen_tex_object_.SetWVPMatrix(NULL, NULL, NULL);
-	screen_tex_object_.PreRender();
-	immediate_device_context_->PSSetShaderResources(0, 1, dx_minimap_rt_.shader_res_view_.GetAddressOf());
-	screen_tex_object_.PostRender();
+	//screen_tex_object_.PreRender();
+	//immediate_device_context_->PSSetShaderResources(0, 1, dx_minimap_rt_.shader_res_view_.GetAddressOf());
+	//screen_tex_object_.PostRender();
 
 	screen_tex_object_.vertex_list()[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[1].pos = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
