@@ -24,6 +24,9 @@
     <ClCompile Include="PDxRenderTarget.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PSkyBox.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h">
@@ -35,6 +38,9 @@
     <ClInclude Include="PDxRenderTarget.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PSkyBox.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">
@@ -43,5 +49,10 @@
     <FxCompile Include="VertexShader.hlsl">
       <Filter>헤더 파일</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Skybox.hlsl">
+      <Filter>헤더 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

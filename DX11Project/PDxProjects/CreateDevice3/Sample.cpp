@@ -16,6 +16,8 @@ bool Sample::Init()
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"grass");
+	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
+	//skybox_.Init(device_, immediate_device_context_);
 
 
 	D3DXMatrixIdentity(&mat_obj_world_);
@@ -59,6 +61,9 @@ bool Sample::Init()
 
 	dx_rt_.Create(device_, 1024, 1024);
 	dx_minimap_rt_.Create(device_, 1024, 1024);
+
+	//skybox_.Create(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
+
 
 	return true;
 }
@@ -114,6 +119,13 @@ bool Sample::Frame()
 
 bool Sample::Render()
 {
+	//sky
+	D3DXMATRIX mat_sky_world;
+	D3DXMatrixScaling(&mat_sky_world, 10, 10, 10);
+	D3DXMATRIX mat_sky_view = main_camera_->matView_;
+	mat_sky_view._41 = 0.0f;
+	mat_sky_view._42 = 0.0f;
+	mat_sky_view._43 = 0.0f;
 
 	dx_rt_.Begin(immediate_device_context_);
 	{
@@ -122,12 +134,17 @@ bool Sample::Render()
 		else
 			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 
+		//sky
+		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
+		skybox_.Render();
+
 		obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		obj_.Render();
 		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		box_.Render();
 		map_.SetWVPMatrix(nullptr, &main_camera_->matView_, &main_camera_->matProj_);
 		map_.Render();
+		
 		dx_rt_.End(immediate_device_context_);
 	}
 

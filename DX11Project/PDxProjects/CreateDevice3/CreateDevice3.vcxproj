@@ -130,11 +130,13 @@
   <ItemGroup>
     <ClCompile Include="PArcBallQ.cpp" />
     <ClCompile Include="PDxRenderTarget.cpp" />
+    <ClCompile Include="PSkyBox.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PArcBallQ.h" />
     <ClInclude Include="PDxRenderTarget.h" />
+    <ClInclude Include="PSkyBox.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +146,11 @@
     <FxCompile Include="VertexShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Skybox.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

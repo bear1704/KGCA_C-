@@ -9,6 +9,7 @@ namespace DX
 	ID3D11RasterizerState* PDxState::rs_state_solidframe_ = 0;
 	ID3D11SamplerState* PDxState::sampler_state_linear_filter = 0;
 	ID3D11SamplerState* PDxState::sampler_state_anisotropic = 0;
+	ID3D11SamplerState* PDxState::sampler_state_wrap_point = 0;
 	ID3D11DepthStencilState* PDxState::depth_stencil_state_enable_ = 0;
 	ID3D11DepthStencilState* PDxState::depth_stencil_state_disable_ = 0;
 
@@ -109,6 +110,12 @@ namespace DX
 		if (FAILED(hr))
 			assert(false);
 
+		sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		hr = current_device->CreateSamplerState(&sd, &sampler_state_wrap_point);
+		if (FAILED(hr))
+			assert(false);
+
+
 
 #pragma endregin ID3D11SamplerState
 
@@ -135,7 +142,8 @@ namespace DX
 			sampler_state_anisotropic->Release();
 		if (sampler_state_linear_filter)
 			sampler_state_linear_filter->Release();
-
+		if (sampler_state_wrap_point)
+			sampler_state_wrap_point->Release();
 
 		rs_state_solidframe_ = nullptr;
 		rs_state_wireframe_ = nullptr;
@@ -145,6 +153,7 @@ namespace DX
 		depth_stencil_state_disable_ = nullptr;
 		sampler_state_anisotropic = nullptr;
 		sampler_state_linear_filter = nullptr;
+		sampler_state_wrap_point = nullptr;
 
 
 	}

@@ -17,14 +17,12 @@ namespace DX
 
 		static ID3D11SamplerState* sampler_state_linear_filter;
 		static ID3D11SamplerState* sampler_state_anisotropic;
+		static ID3D11SamplerState* sampler_state_wrap_point;
 
 		static ID3D11DepthStencilState* depth_stencil_state_enable_;
 		static ID3D11DepthStencilState* depth_stencil_state_disable_;
 		
-		
-		
-		
-		
+	
 		static void SetState(ID3D11Device* current_device);
 		static void Release();
 

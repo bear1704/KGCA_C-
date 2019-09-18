@@ -7,6 +7,7 @@
 #include "PMap.h"
 #include "PFreeCamera.h"
 #include "PDxRenderTarget.h"
+#include "PSkyBox.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -50,6 +51,8 @@ public:
 	PHeightMap map_;
 
 	PPlaneObject screen_tex_object_;
+
+	PSkyBox skybox_;
 public:
 	void MessageProc(MSG msg) override;
 
