@@ -276,9 +276,9 @@ namespace DX
 		context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context->VSSetConstantBuffers(0, 1, constant_buffer_.GetAddressOf());
 
-
+/*
 		if (shader_res_view_ == nullptr)
-			assert(false);
+			assert(false);*/
 
 		//context->PSSetShaderResources(1, 1, shader_res_view_.GetAddressOf());
 		context->IASetInputLayout(input_layout_.Get());

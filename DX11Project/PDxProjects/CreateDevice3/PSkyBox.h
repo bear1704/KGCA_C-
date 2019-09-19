@@ -18,7 +18,7 @@ public:
 	virtual bool PostRender() override;
 	virtual bool Render() override;
 
-	HRESULT LoadTextures(std::wstring tex_name = nullptr);
+	virtual HRESULT LoadTextures(std::wstring tex_name = nullptr) override;
 
 };
 

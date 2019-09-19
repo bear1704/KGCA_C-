@@ -15,7 +15,7 @@ bool PSkyBox::PostRender()
 
 	immediate_context_->PSSetShaderResources(1, 6, srv_skybox_texture_[0].GetAddressOf());
 	immediate_context_->DrawIndexed(36, 0, 0);
-	DX::ApplySamplerState(immediate_context_, DX::PDxState::sampler_state_linear_filter);
+	DX::ApplySamplerState(immediate_context_, DX::PDxState::sampler_state_anisotropic);
 
 	return true;
 }
@@ -44,7 +44,7 @@ HRESULT PSkyBox::LoadTextures(std::wstring tex_name)
 		L"dn"
 	};
 
-
+	
 	for (int i = 0; i < kMaxSkyboxTextureCount; i++)
 	{
 		texture = PTextureManager::GetInstance().GetTextureFromMap(list[i]);
