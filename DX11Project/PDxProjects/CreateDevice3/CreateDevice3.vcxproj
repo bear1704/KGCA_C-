@@ -130,17 +130,22 @@
   <ItemGroup>
     <ClCompile Include="PArcBallQ.cpp" />
     <ClCompile Include="PDxRenderTarget.cpp" />
+    <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="PSkyBox.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PArcBallQ.h" />
     <ClInclude Include="PDxRenderTarget.h" />
+    <ClInclude Include="PLightObj.h" />
     <ClInclude Include="PSkyBox.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DiffuseLight.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Terrain.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl">

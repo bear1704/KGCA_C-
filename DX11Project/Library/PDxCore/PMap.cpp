@@ -120,8 +120,10 @@ HRESULT PMap::CreateVertexData()
 			vertex_list_[vert_index].pos.y = 0.0f;
 
 
-			vertex_list_[vert_index].uv.x = col;
-			vertex_list_[vert_index].uv.y = row;
+			vertex_list_[vert_index].uv.x = col * tex_offset_u;
+			vertex_list_[vert_index].uv.y = row * tex_offset_v;
+
+
 
 			vertex_list_[vert_index].normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 			vertex_list_[vert_index].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -227,6 +229,7 @@ bool PHeightMap::CreateHeightMap(ID3D11Device* device, ID3D11DeviceContext* cont
 
 	vertex_rows_ = desc_heightmap.Height;
 	vertex_cols_ = desc_heightmap.Width;
+
 
 	texture_res->Release();
 

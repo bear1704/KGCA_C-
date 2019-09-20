@@ -15,15 +15,17 @@ bool Sample::Init()
 {
 	cb_light_.g_AmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f);
 	cb_light_.g_DiffuseMaterial = D3DXVECTOR4(1.0f,1.0f,1.0f,1.0f);
+	cb_light_.g_SpecularMaterial = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	cb_light_.g_AmbientColor = D3DXVECTOR4(1, 1, 1, 1);
 	cb_light_.g_DiffuseColor = D3DXVECTOR4(1, 1, 1, 1);
+	cb_light_.g_SpecularColor = D3DXVECTOR4(1, 1, 1, 1);
 
 	constant_buffer_light_.Attach(DX::CreateConstantBuffer(device_, &cb_light_, 1, sizeof(LIGHT_CONSTANT_BUFFER), false));
 
 
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"grass");
+	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 	//skybox_.Init(device_, immediate_device_context_);
 
@@ -45,13 +47,16 @@ bool Sample::Init()
 	free_camera_.CreateProjectionMatrix();
 
 	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
+	D3DXMatrixScaling(&mat_box_world_, 4.0f, 4.0f, 10.0f);
+
 	mat_obj_world_._42 = 1.0f;
-	mat_box_world_._42 = 1.0f;
+	mat_box_world_._42 = 70.0f;
+	
 
 	main_camera_ = &free_camera_;
 
 	map_.Init(device_, immediate_device_context_);
-	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/HEIGHT_CASTLE.bmp");
+	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/HEIGHT_TEMPLE.bmp");
 
 	//PMapDesc md;
 	//md.vertex_cols = map_.vertex_cols();
@@ -71,7 +76,7 @@ bool Sample::Init()
 	md.vs_func = "VS";
 	md.ps_path = L"DiffuseLight.hlsl";
 	md.ps_func = "PS";
-	md.texture_name = L"block1";
+	md.texture_name = L"tile";
 
 	if (!map_.Load(md))
 		assert(false);
@@ -87,9 +92,10 @@ bool Sample::Frame()
 {
 
 	D3DXMATRIX light_world, translate, rotation;
-	D3DXMatrixTranslation(&translate, 100.0f, 100.0f, 0.0f);
-	D3DXMatrixRotationY(&rotation, g_fGameTimer * D3DX_PI * 0.1f);
-	D3DXMatrixMultiply(&light_world, &translate, &rotation);
+	D3DXMatrixTranslation(&light_world, 100.0f, 50.0f, 0.0f);
+	//D3DXMatrixRotationY(&rotation, g_fGameTimer * D3DX_PI * 0.1f);
+	//D3DXMatrixMultiply(&light_world, &translate, &rotation);
+
 
 	light_vector_.x = light_world._41;
 	light_vector_.y = light_world._42;
@@ -160,6 +166,16 @@ bool Sample::Render()
 	cb_light_.g_vLightDir.y = light_vector_.y;
 	cb_light_.g_vLightDir.z = light_vector_.z;
 	cb_light_.g_vLightDir.w = 1;
+
+	cb_light_.g_vEyeDir.x = main_camera_->vec_look_.x;
+	cb_light_.g_vEyeDir.y = main_camera_->vec_look_.y;
+	cb_light_.g_vEyeDir.z = main_camera_->vec_look_.z;
+	cb_light_.g_vEyeDir.w = 5.0f; // ºûÀÇ ¹à±â °­µµ
+
+	cb_light_.g_vEyePos.x = main_camera_->camera_position_.x;
+	cb_light_.g_vEyePos.y = main_camera_->camera_position_.y;
+	cb_light_.g_vEyePos.z = main_camera_->camera_position_.z;
+	cb_light_.g_vEyePos.w = 50.0f;
 
 	D3DXMATRIX matInvWorld;
 	D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
