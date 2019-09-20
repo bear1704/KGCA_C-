@@ -13,7 +13,7 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
-	cb_light_.g_AmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f);
+	/*cb_light_.g_AmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f);
 	cb_light_.g_DiffuseMaterial = D3DXVECTOR4(1.0f,1.0f,1.0f,1.0f);
 	cb_light_.g_SpecularMaterial = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 	cb_light_.g_AmbientColor = D3DXVECTOR4(1, 1, 1, 1);
@@ -22,26 +22,24 @@ bool Sample::Init()
 
 	constant_buffer_light_.Attach(DX::CreateConstantBuffer(device_, &cb_light_, 1, sizeof(LIGHT_CONSTANT_BUFFER), false));
 
+*/
+
 
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
-	//skybox_.Init(device_, immediate_device_context_);
 
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
 
-	//backview_camera_.Init();
 	free_camera_.Init();
 
 	D3DXVECTOR3 eye(0.0f, 0.0f, -2.0f);
 	D3DXVECTOR3 at(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 
-	//backview_camera_.CreateTargetViewMatrix(eye, at, up);
-	//backview_camera_.CreateProjectionMatrix();
 
 	free_camera_.CreateTargetViewMatrix(eye, at, up);
 	free_camera_.CreateProjectionMatrix();
@@ -56,17 +54,8 @@ bool Sample::Init()
 	main_camera_ = &free_camera_;
 
 	map_.Init(device_, immediate_device_context_);
-	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/HEIGHT_TEMPLE.bmp");
+	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
 
-	//PMapDesc md;
-	//md.vertex_cols = map_.vertex_cols();
-	//md.vertex_rows = map_.vertex_rows();
-	//md.cell_disatnce = 1;
-	//md.vs_path = L"VertexShader.hlsl";
-	//md.vs_func = "VS";
-	//md.ps_path = L"PixelShader.hlsl";
-	//md.ps_func = "PS";
-	//md.texture_name = L"block1";
 
 	PMapDesc md;
 	md.vertex_cols = map_.vertex_cols();
@@ -76,14 +65,17 @@ bool Sample::Init()
 	md.vs_func = "VS";
 	md.ps_path = L"DiffuseLight.hlsl";
 	md.ps_func = "PS";
-	md.texture_name = L"tile";
+	md.texture_name = L"grass";
 
 	if (!map_.Load(md))
 		assert(false);
 
 	dx_rt_.Create(device_, 1024, 1024);
 	dx_minimap_rt_.Create(device_, 1024, 1024);
-
+	
+	
+	light_obj_.Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
 	
 	return true;
 }
@@ -91,18 +83,19 @@ bool Sample::Init()
 bool Sample::Frame()
 {
 
-	D3DXMATRIX light_world, translate, rotation;
-	D3DXMatrixTranslation(&light_world, 100.0f, 50.0f, 0.0f);
+	light_obj_.Frame();
+	//D3DXMATRIX light_world, translate, rotation;
+	//D3DXMatrixTranslation(&light_world, 100.0f, 50.0f, 0.0f);
 	//D3DXMatrixRotationY(&rotation, g_fGameTimer * D3DX_PI * 0.1f);
 	//D3DXMatrixMultiply(&light_world, &translate, &rotation);
 
 
-	light_vector_.x = light_world._41;
-	light_vector_.y = light_world._42;
-	light_vector_.z = light_world._43;
+	//light_vector_.x = light_world._41;
+	//light_vector_.y = light_world._42;
+	//light_vector_.z = light_world._43;
 
-	D3DXVec3Normalize(&light_vector_, &light_vector_);
-	light_vector_ *= -1.0f;
+	//D3DXVec3Normalize(&light_vector_, &light_vector_);
+	//light_vector_ *= -1.0f;
 
 
 
@@ -156,39 +149,42 @@ bool Sample::Frame()
 bool Sample::Render()
 {
 	//light
-	D3DXMATRIX matWorld, matScale;
-	D3DXMatrixScaling(&matScale, 100, 100, 100);
-	D3DXMatrixRotationY(&matWorld, g_fGameTimer);
-	D3DXMatrixMultiply(&matWorld, &matScale, &matWorld);
-	matWorld._42 = 200.0f; //°ø?
 
-	cb_light_.g_vLightDir.x = light_vector_.x;
-	cb_light_.g_vLightDir.y = light_vector_.y;
-	cb_light_.g_vLightDir.z = light_vector_.z;
-	cb_light_.g_vLightDir.w = 1;
+	light_obj_.Render();
 
-	cb_light_.g_vEyeDir.x = main_camera_->vec_look_.x;
-	cb_light_.g_vEyeDir.y = main_camera_->vec_look_.y;
-	cb_light_.g_vEyeDir.z = main_camera_->vec_look_.z;
-	cb_light_.g_vEyeDir.w = 5.0f; // ºûÀÇ ¹à±â °­µµ
+	//D3DXMATRIX matWorld, matScale;
+	//D3DXMatrixScaling(&matScale, 100, 100, 100);
+	//D3DXMatrixRotationY(&matWorld, g_fGameTimer);
+	//D3DXMatrixMultiply(&matWorld, &matScale, &matWorld);
+	//matWorld._42 = 200.0f; //°ø?
 
-	cb_light_.g_vEyePos.x = main_camera_->camera_position_.x;
-	cb_light_.g_vEyePos.y = main_camera_->camera_position_.y;
-	cb_light_.g_vEyePos.z = main_camera_->camera_position_.z;
-	cb_light_.g_vEyePos.w = 50.0f;
+	//cb_light_.g_vLightDir.x = light_vector_.x;
+	//cb_light_.g_vLightDir.y = light_vector_.y;
+	//cb_light_.g_vLightDir.z = light_vector_.z;
+	//cb_light_.g_vLightDir.w = 1;
 
-	D3DXMATRIX matInvWorld;
-	D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
-	D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-	D3DXMatrixTranspose(&cb_light_.g_matInvWorld, &matInvWorld);
-	
+	//cb_light_.g_vEyeDir.x = main_camera_->vec_look_.x;
+	//cb_light_.g_vEyeDir.y = main_camera_->vec_look_.y;
+	//cb_light_.g_vEyeDir.z = main_camera_->vec_look_.z;
+	//cb_light_.g_vEyeDir.w = 20.0f; // ºûÀÇ ¹à±â °­µµ
+
+	//cb_light_.g_vEyePos.x = main_camera_->camera_position_.x;
+	//cb_light_.g_vEyePos.y = main_camera_->camera_position_.y;
+	//cb_light_.g_vEyePos.z = main_camera_->camera_position_.z;
+	//cb_light_.g_vEyePos.w = 50.0f;
+
+	//D3DXMATRIX matInvWorld;
+	//D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
+	//D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+	//D3DXMatrixTranspose(&cb_light_.g_matInvWorld, &matInvWorld);
+	/*
 	immediate_device_context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);
 	immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_light_.GetAddressOf());
 	immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_light_.GetAddressOf());
 	
 
 	D3DXMatrixIdentity(&cb_light_.g_matInvWorld);
-	immediate_device_context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);
+	immediate_device_context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);*/
 
 
 

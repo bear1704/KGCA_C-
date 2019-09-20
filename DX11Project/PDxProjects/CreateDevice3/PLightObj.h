@@ -36,6 +36,7 @@ class PLightObj
 {
 private:
 	ID3D11Device* device_;
+	ID3D11DeviceContext* context_;
 	LIGHT_CONSTANT_BUFFER cb_light_;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_light_;
 	D3DXVECTOR3 light_position_;
@@ -53,7 +54,8 @@ public:
 
 public:
 	bool Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3DXVECTOR4 diffuse_material,
-		D3DXVECTOR4 diffuse_color, D3DXVECTOR3 light_init_pos,ID3D11Device* device, PCamera* camera);
+		D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color
+		, ID3D11Device* device,ID3D11DeviceContext* context ,PCamera* camera);
 	bool Frame();
 	bool Render();
 	bool Release();
