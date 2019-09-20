@@ -33,7 +33,7 @@ bool PModel::PreRender()
 bool PModel::Render()
 {
 	D3D11_MAPPED_SUBRESOURCE mapped_subresource;
-	HRESULT hr = immediate_context_->Map(
+	/*HRESULT hr = immediate_context_->Map(
 		dx_helper_.constant_buffer_.Get(), 0,
 		D3D11_MAP_WRITE_DISCARD, 0, &mapped_subresource);
 
@@ -48,14 +48,18 @@ bool PModel::Render()
 
 		immediate_context_->Unmap(dx_helper_.constant_buffer_.Get(), 0);
 
-	}
+	}*/
 	//
 
 		////constant_data_.color[0] = 1.0f;
 		////constant_data_.etc[0] = g_fGameTimer;
 
-		//immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0,
-		//	NULL, &vs, 0, 0); 
+	constant_data_.etc[0] = g_fGameTimer;
+
+
+		immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0,
+			NULL, &constant_data_, 0, 0); 
+
 	PreRender();
 	PostRender();
 
@@ -158,7 +162,7 @@ HRESULT PModel::CreateConstantBuffer()
 	constant_buffer.color[0] = 1.0f;
 	constant_buffer.etc[0] = 0.0f;
 
-	dx_helper_.constant_buffer_.Attach(DX::CreateConstantBuffer(device_, &constant_buffer, 1 ,sizeof(VS_CB_WVP)));
+	dx_helper_.constant_buffer_.Attach(DX::CreateConstantBuffer(device_, &constant_buffer, 1 ,sizeof(VS_CB_WVP), false));
 
 	if (dx_helper_.constant_buffer_.Get() == nullptr)
 		return E_FAIL;

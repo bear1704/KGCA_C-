@@ -13,6 +13,14 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
+	cb_light_.g_AmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f);
+	cb_light_.g_DiffuseMaterial = D3DXVECTOR4(1.0f,1.0f,1.0f,1.0f);
+	cb_light_.g_AmbientColor = D3DXVECTOR4(1, 1, 1, 1);
+	cb_light_.g_DiffuseColor = D3DXVECTOR4(1, 1, 1, 1);
+
+	constant_buffer_light_.Attach(DX::CreateConstantBuffer(device_, &cb_light_, 1, sizeof(LIGHT_CONSTANT_BUFFER), false));
+
+
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"grass");
@@ -45,16 +53,25 @@ bool Sample::Init()
 	map_.Init(device_, immediate_device_context_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/HEIGHT_CASTLE.bmp");
 
+	//PMapDesc md;
+	//md.vertex_cols = map_.vertex_cols();
+	//md.vertex_rows = map_.vertex_rows();
+	//md.cell_disatnce = 1;
+	//md.vs_path = L"VertexShader.hlsl";
+	//md.vs_func = "VS";
+	//md.ps_path = L"PixelShader.hlsl";
+	//md.ps_func = "PS";
+	//md.texture_name = L"block1";
+
 	PMapDesc md;
 	md.vertex_cols = map_.vertex_cols();
 	md.vertex_rows = map_.vertex_rows();
 	md.cell_disatnce = 1;
-	md.vs_path = L"VertexShader.hlsl";
+	md.vs_path = L"DiffuseLight.hlsl";
 	md.vs_func = "VS";
-	md.ps_path = L"PixelShader.hlsl";
+	md.ps_path = L"DiffuseLight.hlsl";
 	md.ps_func = "PS";
 	md.texture_name = L"block1";
-
 
 	if (!map_.Load(md))
 		assert(false);
@@ -69,6 +86,21 @@ bool Sample::Init()
 bool Sample::Frame()
 {
 
+	D3DXMATRIX light_world, translate, rotation;
+	D3DXMatrixTranslation(&translate, 100.0f, 100.0f, 0.0f);
+	D3DXMatrixRotationY(&rotation, g_fGameTimer * D3DX_PI * 0.1f);
+	D3DXMatrixMultiply(&light_world, &translate, &rotation);
+
+	light_vector_.x = light_world._41;
+	light_vector_.y = light_world._42;
+	light_vector_.z = light_world._43;
+
+	D3DXVec3Normalize(&light_vector_, &light_vector_);
+	light_vector_ *= -1.0f;
+
+
+
+#pragma region KEY
 	if (g_InputActionMap.qKey == KEYSTAT::KEY_HOLD)
 	{
 		main_camera_->UpWard();
@@ -106,7 +138,7 @@ bool Sample::Frame()
 	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
 		main_camera_->RotateDown();
 
-
+#pragma endregion
 
 	main_camera_->Frame();
 	obj_.Frame();
@@ -117,6 +149,33 @@ bool Sample::Frame()
 
 bool Sample::Render()
 {
+	//light
+	D3DXMATRIX matWorld, matScale;
+	D3DXMatrixScaling(&matScale, 100, 100, 100);
+	D3DXMatrixRotationY(&matWorld, g_fGameTimer);
+	D3DXMatrixMultiply(&matWorld, &matScale, &matWorld);
+	matWorld._42 = 200.0f; //°ø?
+
+	cb_light_.g_vLightDir.x = light_vector_.x;
+	cb_light_.g_vLightDir.y = light_vector_.y;
+	cb_light_.g_vLightDir.z = light_vector_.z;
+	cb_light_.g_vLightDir.w = 1;
+
+	D3DXMATRIX matInvWorld;
+	D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
+	D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+	D3DXMatrixTranspose(&cb_light_.g_matInvWorld, &matInvWorld);
+	
+	immediate_device_context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);
+	immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_light_.GetAddressOf());
+	immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_light_.GetAddressOf());
+	
+
+	D3DXMatrixIdentity(&cb_light_.g_matInvWorld);
+	immediate_device_context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);
+
+
+
 	//sky
 	D3DXMATRIX mat_sky_world;
 	D3DXMatrixScaling(&mat_sky_world, 10, 10, 10);
@@ -145,9 +204,11 @@ bool Sample::Render()
 		obj_.Render();
 		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		box_.Render();
-		map_.SetWVPMatrix(nullptr, &main_camera_->matView_, &main_camera_->matProj_);
+		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
 		map_.Render();
 		
+
+
 		dx_rt_.End(immediate_device_context_);
 	}
 

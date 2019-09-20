@@ -22,6 +22,26 @@
 PScene* g_current_scene_;
 
 
+struct LIGHT_CONSTANT_BUFFER
+{
+	D3DXMATRIX g_matInvWorld;
+
+	D3DXVECTOR4 g_AmbientMaterial;
+	D3DXVECTOR4 g_DiffuseMaterial;
+	D3DXVECTOR4 g_SpecularMaterial;
+	D3DXVECTOR4 g_EmissionMaterial;
+
+	//Light
+	D3DXVECTOR4			g_AmbientColor;
+	D3DXVECTOR4			g_DiffuseColor;
+	D3DXVECTOR4			g_SpecularColor;
+	D3DXVECTOR4			g_vLightDir; // w = light damping(attenuation) : °¨¼è
+	D3DXVECTOR4			g_vLightPos; // w = light radius
+	D3DXVECTOR4			g_vEyeDir;// w = light intensity : °­µµ
+	D3DXVECTOR4			g_vEyePos;// w = light radius	
+
+};
+
 class Sample : public PCore
 {
 public:
@@ -53,6 +73,10 @@ public:
 	PPlaneObject screen_tex_object_;
 
 	PSkyBox skybox_;
+
+	LIGHT_CONSTANT_BUFFER cb_light_;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_light_;
+	D3DXVECTOR3 light_vector_;
 public:
 	void MessageProc(MSG msg) override;
 

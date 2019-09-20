@@ -60,7 +60,7 @@ namespace DX
 	//DWORD 구조체 사용
 	ID3D11Buffer* CreateIndexBuffer(ID3D11Device* current_device, const void* indices, int indices_count, int indices_struct_size, bool is_dynamic);
 	//VS_CONSTANT_BUFFER 구조체 사용
-	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device,const void* constant_data , int data_count,int constants_struct_size);
+	ID3D11Buffer* CreateConstantBuffer(ID3D11Device* current_device,const void* constant_data , int data_count,int constants_struct_size, bool is_dynamic);
 	ID3D11VertexShader* LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path, LPCSTR vs_func_name,
 		 bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	ID3D11PixelShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
