@@ -81,7 +81,7 @@ bool Sample::Init()
 	md.ps_func = "PS";
 	md.texture_name = L"stone_wall";
 
-	//map_.SetNormalTexture(L"stone_wall");
+	map_.SetNormalTexture(L"stone_wall");
 	if (map_.Load(md) == false)
 		assert(false);
 

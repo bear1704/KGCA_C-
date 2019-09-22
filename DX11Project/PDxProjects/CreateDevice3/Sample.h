@@ -80,7 +80,7 @@ public:
 	//D3DXVECTOR3 light_vector_;
 	
 	PLightObj light_obj_;
-	PHeightMap map_;
+	PNormHeightMap map_;
 
 public:
 	void MessageProc(MSG msg) override;
