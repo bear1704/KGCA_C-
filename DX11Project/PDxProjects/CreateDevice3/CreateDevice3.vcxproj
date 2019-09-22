@@ -131,6 +131,8 @@
     <ClCompile Include="PArcBallQ.cpp" />
     <ClCompile Include="PDxRenderTarget.cpp" />
     <ClCompile Include="PLightObj.cpp" />
+    <ClCompile Include="PNormalMapHelper.cpp" />
+    <ClCompile Include="PNormHeightMap.cpp" />
     <ClCompile Include="PSkyBox.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
@@ -138,6 +140,8 @@
     <ClInclude Include="PArcBallQ.h" />
     <ClInclude Include="PDxRenderTarget.h" />
     <ClInclude Include="PLightObj.h" />
+    <ClInclude Include="PNormalMapHelper.h" />
+    <ClInclude Include="PNormHeightMap.h" />
     <ClInclude Include="PSkyBox.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>

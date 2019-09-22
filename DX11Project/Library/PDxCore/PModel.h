@@ -107,9 +107,10 @@ public:
 	virtual HRESULT CreateInputLayout();
 	static void ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept; 
 
+public:
 	//setter
-	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr);
-	void SetVertexListPos(int count, D3DXVECTOR3 vec);
+	virtual void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr);
+	virtual void SetVertexListPos(int count, D3DXVECTOR3 vec);
 	//getter
 	std::vector<Vertex_PNCT>* GetVertexListPointer();
 	std::vector<Vertex_PNCT>& vertex_list();
