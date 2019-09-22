@@ -9,6 +9,7 @@
 #include "PDxRenderTarget.h"
 #include "PSkyBox.h"
 #include "PLightObj.h"
+#include "PNormHeightMap.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -69,7 +70,6 @@ public:
 
 	PPlaneObject obj_;
 	PBoxObject box_;
-	PHeightMap map_;
 
 	PPlaneObject screen_tex_object_;
 
@@ -80,6 +80,8 @@ public:
 	//D3DXVECTOR3 light_vector_;
 	
 	PLightObj light_obj_;
+	PHeightMap map_;
+
 public:
 	void MessageProc(MSG msg) override;
 

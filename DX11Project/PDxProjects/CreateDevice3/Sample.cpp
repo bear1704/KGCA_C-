@@ -53,6 +53,20 @@ bool Sample::Init()
 
 	main_camera_ = &free_camera_;
 
+
+
+
+	dx_rt_.Create(device_, 1024, 1024);
+	dx_minimap_rt_.Create(device_, 1024, 1024);
+	
+	
+	light_obj_.Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
+
+
+
+
+	
 	map_.Init(device_, immediate_device_context_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
 
@@ -67,16 +81,11 @@ bool Sample::Init()
 	md.ps_func = "PS";
 	md.texture_name = L"stone_wall";
 
-	if (!map_.Load(md))
+	//map_.SetNormalTexture(L"stone_wall");
+	if (map_.Load(md) == false)
 		assert(false);
 
-	dx_rt_.Create(device_, 1024, 1024);
-	dx_minimap_rt_.Create(device_, 1024, 1024);
-	
-	
-	light_obj_.Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
-	
+
 	return true;
 }
 

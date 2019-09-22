@@ -65,7 +65,7 @@ bool PLightObj::Frame()
 	cb_light_.g_vEyeDir.x = camera_->vec_look_.x;
 	cb_light_.g_vEyeDir.y = camera_->vec_look_.y;
 	cb_light_.g_vEyeDir.z = camera_->vec_look_.z;
-	cb_light_.g_vEyeDir.w = 10.0f; // ºûÀÇ ¹à±â °­µµ
+	cb_light_.g_vEyeDir.w = 20.0f; // ºûÀÇ ¹à±â °­µµ
 	
 	cb_light_.g_vEyePos.x = camera_->camera_position_.x;
 	cb_light_.g_vEyePos.y = camera_->camera_position_.y;

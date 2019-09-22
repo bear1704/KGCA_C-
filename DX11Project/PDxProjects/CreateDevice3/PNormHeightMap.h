@@ -15,6 +15,7 @@ protected:
 	PNormalMapHelper					 helper_normalmap_;
 	D3DXMATRIX							 mat_normal_; //??
 	PTexture* normal_texture_;
+	
 
 public:
 	bool Render() override;
@@ -24,7 +25,7 @@ public:
 	HRESULT CreateResource();
 	HRESULT LoadTextures(std::wstring tex_name = nullptr) override;
 	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr) override;
-
+	void SetNormalTexture(std::wstring tex_path);
 
 
 
