@@ -65,7 +65,7 @@ bool Sample::Init()
 	md.vs_func = "VS";
 	md.ps_path = L"DiffuseLight.hlsl";
 	md.ps_func = "PS";
-	md.texture_name = L"grass";
+	md.texture_name = L"stone_wall";
 
 	if (!map_.Load(md))
 		assert(false);
