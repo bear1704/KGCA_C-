@@ -115,6 +115,8 @@ bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context,  std::ws
 		return false;
 	if (FAILED(CreateConstantBuffer()))
 		return false;
+	if (!UpdateBuffer())
+		return false;
 	
 	LoadTextures(tex_name); //성공/실패여부 상관없음
 
@@ -192,7 +194,7 @@ HRESULT PModel::LoadTextures(std::wstring tex_name)
 	}
 
 	if(texture_ != nullptr)
-		dx_helper_.shader_res_view_.Attach(texture_->shader_res_view());
+		dx_helper_.shader_res_view_.Attach((texture_->shader_res_view()));
 
 	return S_OK;
 }
@@ -208,6 +210,11 @@ HRESULT PModel::LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps
 {
 	dx_helper_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(device_,ps_file_path, ps_func_name, false));
 	return S_OK;
+}
+
+bool PModel::UpdateBuffer()
+{
+	return true;
 }
 
 HRESULT PModel::CreateInputLayout()

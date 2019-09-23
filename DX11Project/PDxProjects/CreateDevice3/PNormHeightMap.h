@@ -9,7 +9,7 @@ public:
 	PNormHeightMap();
 	~PNormHeightMap();
 
-protected:
+public:
 	std::vector<D3DXVECTOR3>			 tangent_list_;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> tangent_space_vbuffer_;
 	PNormalMapHelper					 helper_normalmap_;
@@ -19,15 +19,18 @@ protected:
 
 public:
 	bool Render() override;
-	bool UpdataBuffer();
-	HRESULT SetInputLayout();
+	bool UpdateBuffer();
+	HRESULT CreateInputLayout() override;
 	HRESULT CreateVertexBuffer() override;
 	HRESULT CreateResource();
-	HRESULT LoadTextures(std::wstring tex_name = nullptr) override;
 	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr) override;
 	void SetNormalTexture(std::wstring tex_path);
 
-
+public:
+	//getter
+	const D3DXMATRIX& ref_mat_normal();
+	Microsoft::WRL::ComPtr<ID3D11Buffer>* tangent_space_vbuffer();
+	PTexture* normal_texture();
 
 };
 

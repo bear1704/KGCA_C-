@@ -142,12 +142,18 @@ namespace DX
 		DWORD blob_size = 0;
 		LPCVOID blob_data = 0;
 
+		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )	
+		dwShaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+
 		if (is_already_compiled == false)
 		{
 			hr = D3DX11CompileFromFile(
 				vs_file_path, NULL, NULL,
 				vs_func_name, "vs_5_0",
-				0, 0, NULL, &v_shader_blob, &error_msg, NULL);
+				dwShaderFlags, 0, NULL, &v_shader_blob, &error_msg, NULL);
 
 
 			if (FAILED(hr))
@@ -205,10 +211,18 @@ namespace DX
 
 		if (is_already_compiled == false)
 		{
+
+
+			DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )	
+			dwShaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+
 			hr = D3DX11CompileFromFile(
 				ps_file_path, NULL, NULL,
 				ps_func_name, "ps_5_0",
-				0, 0, NULL, &ps_shader_blob, &error_msg, NULL);
+				dwShaderFlags, 0, NULL, &ps_shader_blob, &error_msg, NULL);
 
 
 			if (FAILED(hr))

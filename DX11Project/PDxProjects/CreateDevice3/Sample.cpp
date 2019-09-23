@@ -75,16 +75,17 @@ bool Sample::Init()
 	md.vertex_cols = map_.vertex_cols();
 	md.vertex_rows = map_.vertex_rows();
 	md.cell_disatnce = 1;
-	md.vs_path = L"DiffuseLight.hlsl";
+	md.vs_path = L"NormalMap.hlsl";
 	md.vs_func = "VS";
-	md.ps_path = L"DiffuseLight.hlsl";
+	md.ps_path = L"NormalMap.hlsl";
 	md.ps_func = "PS";
 	md.texture_name = L"stone_wall";
 
-	map_.SetNormalTexture(L"stone_wall");
+	map_.SetNormalTexture(L"test");
 	if (map_.Load(md) == false)
 		assert(false);
 
+	CreateConstantBuffer();
 
 	return true;
 }
@@ -105,7 +106,6 @@ bool Sample::Frame()
 
 	//D3DXVec3Normalize(&light_vector_, &light_vector_);
 	//light_vector_ *= -1.0f;
-
 
 
 #pragma region KEY
@@ -147,6 +147,22 @@ bool Sample::Frame()
 		main_camera_->RotateDown();
 
 #pragma endregion
+
+
+
+	D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
+	if (SUCCEEDED(immediate_device_context_->Map((ID3D11Resource*)constant_buffer_changes_everyframe_.Get(), 0, D3D11_MAP_WRITE_DISCARD,
+		0, &MappedFaceDest)))
+	{
+		CB_VS_ChangesEveryFrame* constant_data = (CB_VS_ChangesEveryFrame*)MappedFaceDest.pData;
+
+		constant_data->mat_normal = map_.ref_mat_normal();
+		constant_data->light_pos = light_obj_.light_direction();
+		constant_data->camera_pos = main_camera_->camera_position_;
+		constant_data->vec_look = main_camera_->vec_look_;
+		immediate_device_context_->Unmap(constant_buffer_changes_everyframe_.Get(), 0);
+
+	}
 
 	main_camera_->Frame();
 	obj_.Frame();
@@ -225,10 +241,28 @@ bool Sample::Render()
 		obj_.Render();
 		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		box_.Render();
-		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
-		map_.Render();
-		
 
+
+		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
+		//map_.Render();
+
+
+		immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
+			NULL, &map_.constant_data_, 0, 0);
+		map_.PreRender();
+
+		ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
+		UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
+		UINT offset[2] = { 0,0 };
+
+		immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
+		immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
+		immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		map_.PostRender();
+	
 
 		dx_rt_.End(immediate_device_context_);
 	}
@@ -317,4 +351,33 @@ void Sample::MessageProc(MSG msg)
 	//PInput::GetInstance().MsgProc(msg);
 	if (main_camera_ == nullptr) return;
 	main_camera_->MessageProc(msg);
+}
+
+HRESULT Sample::CreateConstantBuffer()
+{
+	HRESULT hr;
+	D3D11_BUFFER_DESC cb_everyframe_desc;
+	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_ChangesEveryFrame);
+	cb_everyframe_desc.Usage = D3D11_USAGE_DYNAMIC;
+	cb_everyframe_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cb_everyframe_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb_everyframe_desc.MiscFlags = 0;
+	hr = device_->CreateBuffer(&cb_everyframe_desc, NULL, constant_buffer_changes_everyframe_.GetAddressOf());
+
+	if (FAILED(hr))
+		assert(false);
+
+	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_NearlyNotChange);
+	cb_nearly_not_changes_.cb_AmbientLightColor = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
+	cb_nearly_not_changes_.cb_DiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
+	cb_nearly_not_changes_.cb_SpecularLightColor = D3DXVECTOR4(1, 1, 1, 30.0f);
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = &cb_nearly_not_changes_;
+	hr = device_->CreateBuffer(&cb_everyframe_desc, &InitData, constant_buffer_nearly_not_changes_.GetAddressOf());
+	if (FAILED(hr))
+		assert(false);
+
+	return hr;
 }

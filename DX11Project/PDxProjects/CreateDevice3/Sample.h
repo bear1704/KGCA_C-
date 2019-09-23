@@ -23,26 +23,23 @@
 
 PScene* g_current_scene_;
 
-//
-//struct LIGHT_CONSTANT_BUFFER
-//{
-//	D3DXMATRIX g_matInvWorld;
-//
-//	D3DXVECTOR4 g_AmbientMaterial;
-//	D3DXVECTOR4 g_DiffuseMaterial;
-//	D3DXVECTOR4 g_SpecularMaterial;
-//	D3DXVECTOR4 g_EmissionMaterial;
-//
-//	//Light
-//	D3DXVECTOR4			g_AmbientColor;
-//	D3DXVECTOR4			g_DiffuseColor;
-//	D3DXVECTOR4			g_SpecularColor;
-//	D3DXVECTOR4			g_vLightDir; // w = light damping(attenuation) : °¨¼è
-//	D3DXVECTOR4			g_vLightPos; // w = light radius
-//	D3DXVECTOR4			g_vEyeDir;// w = light intensity : °­µµ
-//	D3DXVECTOR4			g_vEyePos;// w = light radius	
-//
-//};
+struct CB_VS_ChangesEveryFrame
+{
+	D3DXMATRIX mat_normal;
+	D3DXVECTOR3 light_pos;
+	float padding1;
+	D3DXVECTOR3 camera_pos;
+	float padding2;
+	D3DXVECTOR3 vec_look;
+	float padding3;
+};
+struct CB_VS_NearlyNotChange
+{
+	D3DXVECTOR4 cb_AmbientLightColor;
+	D3DXVECTOR4 cb_DiffuseLightColor;
+	D3DXVECTOR4 cb_SpecularLightColor;
+};
+
 
 class Sample : public PCore
 {
@@ -81,9 +78,17 @@ public:
 	
 	PLightObj light_obj_;
 	PNormHeightMap map_;
+	//PHeightMap map_;
+
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
+	CB_VS_NearlyNotChange cb_nearly_not_changes_;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
+
 
 public:
 	void MessageProc(MSG msg) override;
+	HRESULT CreateConstantBuffer();
 
 };
-PCORE_RUN(L"planeobj", 0, 0, 800, 600);
+PCORE_RUN(L"normalmap", 0, 0, 800, 600);

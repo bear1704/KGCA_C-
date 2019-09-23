@@ -26,6 +26,8 @@ public:
 
 	//getter
 	ID3D11ShaderResourceView*	shader_res_view();
+	const ID3D11ShaderResourceView*	shader_res_view_const();
+
 	ID3D11ShaderResourceView**	shader_res_view_double_ptr();
 	DX::PTex_uv4& uv_coord();
 	float GetImageWidth();

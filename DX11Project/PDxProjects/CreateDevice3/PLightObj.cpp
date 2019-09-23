@@ -47,7 +47,8 @@ bool PLightObj::Frame()
 {
 	D3DXMatrixTranslation(&light_init_world_, light_trs_.light_trans_.x, light_trs_.light_trans_.y , light_trs_.light_trans_.z);
 	D3DXMATRIX mat_rotation;
-	D3DXMatrixRotationYawPitchRoll(&mat_rotation, light_trs_.light_rot_.x, light_trs_.light_rot_.y, light_trs_.light_rot_.z);
+	//D3DXMatrixRotationYawPitchRoll(&mat_rotation, light_trs_.light_rot_.x, light_trs_.light_rot_.y, light_trs_.light_rot_.z);
+	D3DXMatrixRotationY(&mat_rotation, g_fGameTimer*0.1f);
 	D3DXMatrixMultiply(&light_world_, &light_init_world_, &mat_rotation);
 
 	light_position_.x = light_world_._41;
@@ -95,4 +96,14 @@ bool PLightObj::Release()
 {
 
 	return true;
+}
+
+D3DXVECTOR3 PLightObj::light_direction()
+{
+	return light_direction_;
+}
+
+D3DXVECTOR3 PLightObj::light_position()
+{
+	return light_position_;
 }

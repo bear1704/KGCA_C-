@@ -104,6 +104,7 @@ public:
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	virtual HRESULT LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
+	virtual bool UpdateBuffer();
 	virtual HRESULT CreateInputLayout();
 	static void ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept; 
 

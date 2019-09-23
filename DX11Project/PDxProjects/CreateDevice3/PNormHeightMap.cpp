@@ -15,11 +15,13 @@ bool PNormHeightMap::Render()
 	return true;
 }
 
-bool PNormHeightMap::UpdataBuffer()
+bool PNormHeightMap::UpdateBuffer()
 {
 	D3DXVECTOR3 tangent, binormal, normal;
 
 	int i0, i1, i2, i3, i4, i5;
+
+	tangent_list_.resize(dx_helper_.vertex_count_);
 
 	for (int index = 0; index < dx_helper_.vertex_count_; index += 3)
 	{
@@ -70,7 +72,7 @@ bool PNormHeightMap::UpdataBuffer()
 	return true;
 }
 
-HRESULT PNormHeightMap::SetInputLayout()
+HRESULT PNormHeightMap::CreateInputLayout()
 {
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -105,14 +107,21 @@ HRESULT PNormHeightMap::CreateResource()
 	return E_NOTIMPL;
 }
 
-HRESULT PNormHeightMap::LoadTextures(std::wstring tex_name)
-{
-	return E_NOTIMPL;
-}
-
 void PNormHeightMap::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 {
+	if (world != nullptr)
+		matWorld_ = *world;
+	if (view != nullptr)
+		matView_ = *view;
+	if (proj != nullptr)
+		matProj_ = *proj;
 
+
+	D3DXMatrixInverse(&mat_normal_, NULL, &matWorld_);
+
+	D3DXMatrixTranspose(&constant_data_.matWorld, &matWorld_);
+	D3DXMatrixTranspose(&constant_data_.matView, &matView_);
+	D3DXMatrixTranspose(&constant_data_.matProj, &matProj_);
 }
 
 void PNormHeightMap::SetNormalTexture(std::wstring tex_path)
@@ -122,4 +131,19 @@ void PNormHeightMap::SetNormalTexture(std::wstring tex_path)
 
 	if (normal_texture_ == nullptr)
 		assert(false);
+}
+
+const D3DXMATRIX& PNormHeightMap::ref_mat_normal()
+{
+	return mat_normal_;
+}
+
+Microsoft::WRL::ComPtr<ID3D11Buffer>* PNormHeightMap::tangent_space_vbuffer()
+{
+	return &tangent_space_vbuffer_;
+}
+
+PTexture* PNormHeightMap::normal_texture()
+{
+	return normal_texture_;
 }

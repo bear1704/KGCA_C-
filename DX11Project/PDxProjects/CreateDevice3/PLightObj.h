@@ -61,5 +61,10 @@ public:
 	bool Release();
 	bool Update();  // updateresources
 
+public:
+	D3DXVECTOR3 light_direction();
+	D3DXVECTOR3 light_position();
+
+
 };
 

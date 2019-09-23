@@ -46,6 +46,11 @@ ID3D11ShaderResourceView* PTexture::shader_res_view()
 	return shader_res_view_;
 }
 
+const ID3D11ShaderResourceView* PTexture::shader_res_view_const()
+{
+	return shader_res_view_;
+}
+
 ID3D11ShaderResourceView** PTexture::shader_res_view_double_ptr()
 {
 	return &shader_res_view_;

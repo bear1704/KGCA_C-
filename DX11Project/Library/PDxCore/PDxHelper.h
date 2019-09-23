@@ -3,6 +3,7 @@
 #include <d3dx11.h>
 #include <wrl.h>
 #include <D3DX10math.h>
+#include <D3Dcompiler.h>
 #include <dxgi.h>
 #include <assert.h>
 #include "PDxState.h"
