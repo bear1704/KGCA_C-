@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>C:\Program Files\Autodesk\3ds Max 2019\Plugins</OutDir>
+    <OutDir>C:\Program Files\Autodesk\3ds Max 2019\Plugins\</OutDir>
     <IntDir>../../output/PSCExport</IntDir>
     <TargetExt>.dle</TargetExt>
   </PropertyGroup>
@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PSCWriter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -177,6 +178,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PSCExport.cpp" />
+    <ClCompile Include="PSCWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source.def" />
