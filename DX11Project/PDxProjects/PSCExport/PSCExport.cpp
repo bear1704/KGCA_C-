@@ -1,5 +1,5 @@
 #include "pch.h"
-
+#include "PSCWriter.h"
 
 #define PSCExport_CLASS_ID Class_ID(0x6d2e1efd, 0x19287b4d)
 class PSCExport : public SceneExport
@@ -7,6 +7,9 @@ class PSCExport : public SceneExport
 public:
 	PSCExport() {};
 	~PSCExport() {};
+
+private:
+	PSCWriter psc_writer_;
 
 public:
 
@@ -105,5 +108,7 @@ void PSCExport::ShowAbout(HWND hWnd)
 
 int PSCExport::DoExport(const MCHAR* name, ExpInterface* ei, Interface* i, BOOL suppressPrompts, DWORD options)
 {
+	psc_writer_.Set(name, i);
+	psc_writer_.Export();
 	return TRUE;
 }
