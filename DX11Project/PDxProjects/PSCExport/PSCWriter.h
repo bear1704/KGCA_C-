@@ -16,6 +16,11 @@ struct TriList
 	PNCT  v[3];
 };
 
+struct PMtrl
+{
+	int map_id;
+	TSTR name;
+};
 
 class PSCWriter
 {
@@ -29,6 +34,7 @@ protected:
 	INode*				rootnode_;
 	std::vector<INode*> object_list_;
 	std::vector<TriList> tri_list_;
+	std::vector<PMtrl> tex_list_;
 
 public:
 	void Set(const TCHAR* name, Interface* interface_max);
@@ -37,6 +43,13 @@ public:
 	void AddObject(INode* node);
 	void GetMesh(INode* node);
 	TriObject* GetTriObjectFromNode(INode* node, TimeValue timeval, bool& deleteit);
+	bool IsTmNegativeParity(Matrix3 tm);
+	Point3 GetVertexNormal(Mesh* mesh, int iFace, RVertex* rVertex);
+	void GetMaterial(INode* node);
+	void GetTexture(Mtl* mtl);
+	void CopyPoint3(Point3& dest, Point3& src);
+	
+
 
 };
 

@@ -112,6 +112,11 @@ void PSCWriter::GetMesh(INode* node)
 	if (!triobj) return;
 
 	Mesh* mesh = &triobj->GetMesh();
+	bool is_negscale = IsTmNegativeParity(tm);
+	int custom_v0, custom_v1, custom_v2;
+
+	if (is_negscale) { custom_v0 = 2, custom_v1 = 1; custom_v2 = 0; }
+	else { custom_v0 = 0; custom_v1 = 1; custom_v2 = 2; }
 
 	if (mesh)
 	{
@@ -124,20 +129,14 @@ void PSCWriter::GetMesh(INode* node)
 
 			if (numberof_vert > 0)
 			{
-				Point3 v = mesh->verts[mesh->faces[iFace].v[0]] * tm;
-				tri_list_[iFace].v[0].p.x = v.x;
-				tri_list_[iFace].v[0].p.y = v.y;
-				tri_list_[iFace].v[0].p.z = v.z;
+				Point3 v = mesh->verts[mesh->faces[iFace].v[custom_v0]] * tm;
+				CopyPoint3(tri_list_[iFace].v[0].p, v);
+				
+				v = mesh->verts[mesh->faces[iFace].v[custom_v1]] * tm;
+				CopyPoint3(tri_list_[iFace].v[1].p, v);
 
-				v = mesh->verts[mesh->faces[iFace].v[2]] * tm;
-				tri_list_[iFace].v[1].p.x = v.x;
-				tri_list_[iFace].v[1].p.y = v.y;
-				tri_list_[iFace].v[1].p.z = v.z;
-
-				v = mesh->verts[mesh->faces[iFace].v[1]] * tm;
-				tri_list_[iFace].v[2].p.x = v.x;
-				tri_list_[iFace].v[2].p.y = v.y;
-				tri_list_[iFace].v[2].p.z = v.z;
+				v = mesh->verts[mesh->faces[iFace].v[custom_v2]] * tm;
+				CopyPoint3(tri_list_[iFace].v[2].p, v);
 			}
 
 			int numberof_color = mesh->getNumVertCol();
@@ -146,32 +145,45 @@ void PSCWriter::GetMesh(INode* node)
 			tri_list_[iFace].v[2].c = Point4(1, 1, 1, 1);
 			if (numberof_color > 0)
 			{
-				tri_list_[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[0]];
-				tri_list_[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[2]];
-				tri_list_[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[1]];
+				tri_list_[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v0]];
+				tri_list_[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v2]];
+				tri_list_[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v1]];
 			}
 
 			int numberof_tex = mesh->getNumTVerts();
 			if (numberof_tex)
 			{
-				Point2 uv = (Point2)mesh->tVerts[mesh->tvFace[iFace].t[0]];
+				Point2 uv = (Point2)mesh->tVerts[mesh->tvFace[iFace].t[custom_v0]];
 				tri_list_[iFace].v[0].t.x = uv.x;
 				tri_list_[iFace].v[0].t.y = 1.0f - uv.y;
 
-				uv = (Point2)mesh->tVerts[mesh->tvFace[iFace].t[2]];
+				uv = (Point2)mesh->tVerts[mesh->tvFace[iFace].t[custom_v2]];
 				tri_list_[iFace].v[1].t.x = uv.x;
 				tri_list_[iFace].v[1].t.y = 1.0f - uv.y;
 				
-				uv = (Point2)mesh->tVerts[mesh->tvFace[iFace].t[1]];
+				uv = (Point2)mesh->tVerts[mesh->tvFace[iFace].t[custom_v1]];
 				tri_list_[iFace].v[2].t.x = uv.x;
 				tri_list_[iFace].v[2].t.y = 1.0f - uv.y;
 			}
 
-			tri_list_[iFace].v[0].n = Point3(1, 1, 1);
-			tri_list_[iFace].v[1].n = Point3(1, 1, 1);
-			tri_list_[iFace].v[2].n = Point3(1, 1, 1);
-		}
+			mesh->buildNormals();
+			int vert = mesh->faces[iFace].getVert(custom_v0);
+			RVertex* rvertex = mesh->getRVertPtr(vert);
+			Point3 vn = GetVertexNormal(mesh, iFace, rvertex);
+			CopyPoint3(tri_list_[iFace].v[custom_v0].n, vn);
 
+			vert = mesh->faces[iFace].getVert(custom_v1);
+			rvertex = mesh->getRVertPtr(vert);
+			vn = GetVertexNormal(mesh, iFace, rvertex);
+			CopyPoint3(tri_list_[iFace].v[custom_v1].n, vn);
+
+			vert = mesh->faces[iFace].getVert(custom_v2);
+			rvertex = mesh->getRVertPtr(vert);
+			vn = GetVertexNormal(mesh, iFace, rvertex);
+			CopyPoint3(tri_list_[iFace].v[custom_v2].n, vn);
+
+
+		}
 
 	}
 
@@ -190,4 +202,90 @@ TriObject* PSCWriter::GetTriObjectFromNode(INode* node, TimeValue timeval, bool&
 	}
 
 	return nullptr;
+}
+
+bool PSCWriter::IsTmNegativeParity(Matrix3 tm)
+{
+	Point3 v0 = tm.GetRow(0);
+	Point3 v1 = tm.GetRow(1);
+	Point3 v2 = tm.GetRow(2);
+	Point3 vec_cross = CrossProd(v0, v1);
+
+	return (DotProd(vec_cross, v2) < 0.0f) ? true : false;
+}
+
+Point3 PSCWriter::GetVertexNormal(Mesh* mesh, int iFace, RVertex* rVertex)
+{
+	Face* face = &mesh->faces[iFace];
+	int smoothing_group = face->smGroup;
+
+	int numberof_normals = rVertex->rFlags & NORCT_MASK;
+
+	Point3 vertex_normal;
+	if (rVertex->rFlags & SPECIFIED_NORMAL)
+	{
+		vertex_normal = rVertex->rn.getNormal();
+	}
+	else if (numberof_normals & smoothing_group)
+	{
+		if (numberof_normals == 1)
+		{
+			vertex_normal = rVertex->rn.getNormal();
+		}
+		else
+		{
+			for (int i = 0; i < numberof_normals; i++)
+			{
+				if (rVertex->ern[i].getSmGroup() & smoothing_group)
+				{
+					vertex_normal = rVertex->ern[i].getNormal();
+				}
+			}
+		}
+	}
+	else
+		vertex_normal = mesh->getFaceNormal(iFace);
+
+	return vertex_normal;
+
+	return Point3();
+}
+
+void PSCWriter::GetMaterial(INode* node)
+{
+	Mtl* mtl = node->GetMtl();
+	GetTexture(mtl);
+}
+
+void PSCWriter::GetTexture(Mtl* mtl)
+{
+	int numberof_map = mtl->NumSubTexmaps();
+
+	for (int i = 0; i < numberof_map; i++)
+	{
+		Texmap* tex = mtl->GetSubTexmap(i);
+
+		if (!tex) break;
+
+		if (tex->ClassID() == Class_ID(BMTEX_CLASS_ID, 0X00))
+		{
+			PMtrl mtl;
+			mtl.map_id = i;
+
+			TSTR full_name;
+			TSTR map_name = ((BitmapTex*)(tex))->GetMapName();
+			SplitPathFile(map_name, &full_name, &mtl.name);
+			tex_list_.push_back(mtl);
+		}
+
+
+	}
+
+}
+
+void PSCWriter::CopyPoint3(Point3& dest, Point3& src)
+{
+	dest.x = src.x;
+	dest.y = src.z;
+	dest.z = src.y;
 }
