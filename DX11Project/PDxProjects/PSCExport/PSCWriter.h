@@ -11,14 +11,14 @@ struct PNCT
 
 };
 
-struct TriList
+struct TriComponent
 {
 	PNCT  v[3];
 };
 
-struct PMtrl
+struct PMtl
 {
-	int map_id;
+	int mtl_id;
 	TSTR name;
 };
 
@@ -33,8 +33,8 @@ protected:
 	std::wstring		filename_;
 	INode*				rootnode_;
 	std::vector<INode*> object_list_;
-	std::vector<TriList> tri_list_;
-	std::vector<PMtrl> tex_list_;
+	std::vector<TriComponent> tri_list_;
+	std::vector<PMtl> pmaterial_list_;
 
 public:
 	void Set(const TCHAR* name, Interface* interface_max);

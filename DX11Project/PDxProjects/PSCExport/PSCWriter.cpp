@@ -269,13 +269,13 @@ void PSCWriter::GetTexture(Mtl* mtl)
 
 		if (tex->ClassID() == Class_ID(BMTEX_CLASS_ID, 0X00))
 		{
-			PMtrl mtl;
-			mtl.map_id = i;
+			PMtl mtl;
+			mtl.mtl_id = i;
 
 			TSTR full_name;
 			TSTR map_name = ((BitmapTex*)(tex))->GetMapName();
 			SplitPathFile(map_name, &full_name, &mtl.name);
-			tex_list_.push_back(mtl);
+			pmaterial_list_.push_back(mtl);
 		}
 
 

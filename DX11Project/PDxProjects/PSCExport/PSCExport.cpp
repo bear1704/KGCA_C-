@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PSCWriter.h"
 
-#define PSCExport_CLASS_ID Class_ID(0x6d2e1efd, 0x19287b4d)
+#define PSCExport_CLASS_ID Class_ID(0x68cb6630, 0x455161f0)
 class PSCExport : public SceneExport
 {
 public:

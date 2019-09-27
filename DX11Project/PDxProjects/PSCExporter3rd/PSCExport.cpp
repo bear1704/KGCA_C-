@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PSCWriter.h"
 
-#define PSCExport_CLASS_ID Class_ID(0x6cdc3f6e, 0x346722e2)
+#define PSCExport_CLASS_ID Class_ID(0x5d65297, 0x36192bf7)
 class PSCExport : public SceneExport
 {
 public:
@@ -64,7 +64,7 @@ int PSCExport::ExtCount()
 
 const MCHAR* PSCExport::Ext(int n)
 {
-	return _T("rehello");
+	return _T("png");
 }
 
 const MCHAR* PSCExport::LongDesc()
