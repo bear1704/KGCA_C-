@@ -1,6 +1,21 @@
 #include "pch.h"
 #include "PSCWriter.h"
 
+struct AscendingSort
+{
+	bool operator()(TriComponent& rpStart, TriComponent& rpEnd)
+	{
+		return rpStart.tri_index < rpEnd.tri_index;
+	}
+};
+static int g_search_index = 0;
+struct IsSameInt // find_to와 같은지 판단해 주는 함수자   
+{
+	bool operator()(TriComponent& value)
+	{
+		return value.tri_index == g_search_index;
+	}
+};
 PSCWriter::PSCWriter()
 {
 }
@@ -73,44 +88,79 @@ bool PSCWriter::Export()
 
 	for (int imesh = 0; imesh < mesh_list_.size(); imesh++)
 	{
-		_ftprintf(file, _T("\n%s %d %d %d"),
+		_ftprintf(file, _T("\n%s %s %d %d %d"),
 			mesh_list_[imesh].name,
+			mesh_list_[imesh].parent_name,
 			mesh_list_[imesh].material_id,
 			mesh_list_[imesh].buffer_list.size(),
 			mesh_list_[imesh].tri_list.size());
 
+		_ftprintf(file, _T("\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f"),
+			mesh_list_[imesh].world_d3d._11,
+			mesh_list_[imesh].world_d3d._12,
+			mesh_list_[imesh].world_d3d._13,
+			mesh_list_[imesh].world_d3d._14,
+
+			mesh_list_[imesh].world_d3d._21,
+			mesh_list_[imesh].world_d3d._22,
+			mesh_list_[imesh].world_d3d._23,
+			mesh_list_[imesh].world_d3d._24,
+
+			mesh_list_[imesh].world_d3d._31,
+			mesh_list_[imesh].world_d3d._32,
+			mesh_list_[imesh].world_d3d._33,
+			mesh_list_[imesh].world_d3d._34,
+
+			mesh_list_[imesh].world_d3d._41,
+			mesh_list_[imesh].world_d3d._42,
+			mesh_list_[imesh].world_d3d._43,
+			mesh_list_[imesh].world_d3d._44);
+
 		auto subtri_list = mesh_list_[imesh].buffer_list;
 		for (int iSubTri = 0; iSubTri < subtri_list.size(); iSubTri++)
 		{
-			vector<TriComponent>& trilist = mesh_list_[imesh].buffer_list[iSubTri];
-			for (int itri = 0; itri < trilist.size(); itri++)
+			std::vector<PNCT>& vertex_list = mesh_list_[imesh].vertex_list[iSubTri];
+			_ftprintf(file, _T("\nVertexList %d"), vertex_list.size());
+
+			for (int iver = 0; iver < vertex_list.size(); iver++)
 			{
-				for (int iver = 0; iver < 3; iver++)
-				{
+	
 					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f"),
-						trilist[itri].v[iver].p.x,
-						trilist[itri].v[iver].p.y,
-						trilist[itri].v[iver].p.z);
+						vertex_list[iver].p.x,
+						vertex_list[iver].p.y,
+						vertex_list[iver].p.z);
 
 					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f"),
-						trilist[itri].v[iver].n.x,
-						trilist[itri].v[iver].n.y,
-						trilist[itri].v[iver].n.z);
+						vertex_list[iver].n.x,
+						vertex_list[iver].n.y,
+						vertex_list[iver].n.z);
 
-					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f"),
-						trilist[itri].v[iver].c.x,
-						trilist[itri].v[iver].c.y,
-						trilist[itri].v[iver].c.z);
+					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f %10.4f"),
+						vertex_list[iver].c.x,
+						vertex_list[iver].c.y,
+						vertex_list[iver].c.z,
+						vertex_list[iver].c.w);
 
-					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f"),
-						trilist[itri].v[iver].t.x,
-						trilist[itri].v[iver].t.y);
-				}
+					_ftprintf(file, _T("\n%10.4f %10.4f"),
+						vertex_list[iver].t.x,
+						vertex_list[iver].t.y);
 			}
+
+			std::vector<int> index_list = mesh_list_[imesh].index_list[iSubTri];
+			_ftprintf(file, _T("\nIndexList %d", index_list.size()));
+
+			for (int index = 0; index < index_list.size(); index+=3)
+			{
+				_ftprintf(file, _T("\n%d %d %d"),
+					index_list[index + 0],
+					index_list[index + 1],
+					index_list[index + 2]);
+			}
+
 		}
 	}
 
-	fclose(file);
+	::fclose(file);
 
 	MessageBox(GetActiveWindow(), filename_.c_str(),
 		_T("Succeed!"), MB_OK);
@@ -175,8 +225,9 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 	{
 		int numberof_face = mesh->getNumFaces();
 		
-		std::vector<TriComponent> trilist;
+		std::vector<TriComponent> trilist = pmesh.tri_list;
 		trilist.resize(numberof_face);
+		pmesh.buffer_list.resize(pmesh.numberof_submesh);
 
 		for (int iFace = 0; iFace < numberof_face; iFace++)
 		{
@@ -227,20 +278,39 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 			Point3 vn = GetVertexNormal(mesh, iFace, rvertex);
 			CopyPoint3(trilist[iFace].v[custom_v0].n, vn);
 
-			vert = mesh->faces[iFace].getVert(custom_v1);
+			vert = mesh->faces[iFace].getVert(custom_v2);
 			rvertex = mesh->getRVertPtr(vert);
 			vn = GetVertexNormal(mesh, iFace, rvertex);
 			CopyPoint3(trilist[iFace].v[custom_v1].n, vn);
 
-			vert = mesh->faces[iFace].getVert(custom_v2);
+			vert = mesh->faces[iFace].getVert(custom_v1);
 			rvertex = mesh->getRVertPtr(vert);
 			vn = GetVertexNormal(mesh, iFace, rvertex);
 			CopyPoint3(trilist[iFace].v[custom_v2].n, vn);
 
 			trilist[iFace].tri_index = mesh->faces[iFace].getMatID();
+
+			if (pmtl_list_[pmesh.material_id].submaterial_list.size() <= 0)
+			{
+				trilist[iFace].tri_index = 0;
+			}
+
+			pmesh.buffer_list[trilist[iFace].tri_index].push_back(trilist[iFace]);
+
+
 		}
 		
-		pmesh.buffer_list.push_back(trilist);
+		std::sort(trilist.begin(), trilist.end(), AscendingSort());
+		int iFace;
+
+		for (int i = 0; i < pmesh.numberof_submesh; i++)
+		{
+			g_search_index = i;
+			iFace = count_if(trilist.begin(), trilist.end(), IsSameInt());
+		}
+
+	//	pmesh.buffer_list.push_back(trilist);
+		SetUniqueBuffer(pmesh);
 	}
 
 	if (deleteit) delete triobj;
@@ -281,7 +351,7 @@ Point3 PSCWriter::GetVertexNormal(Mesh* mesh, int iFace, RVertex* rVertex)
 	{
 		vertex_normal = rVertex->rn.getNormal();
 	}
-	else if (numberof_normals & smoothing_group)
+	else if (numberof_normals && smoothing_group)
 	{
 		if (numberof_normals == 1)
 		{
@@ -302,8 +372,6 @@ Point3 PSCWriter::GetVertexNormal(Mesh* mesh, int iFace, RVertex* rVertex)
 		vertex_normal = mesh->getFaceNormal(iFace);
 
 	return vertex_normal;
-
-	return Point3();
 }
 
 void PSCWriter::GetMaterial(INode* node)
@@ -369,7 +437,7 @@ void PSCWriter::AddMaterial(INode* node)
 
 	std::vector<Mtl*>::iterator iter = std::find(material_list_.begin(), material_list_.end(), mtl);
 
-	if (iter == material_list_.end())
+	if (iter == material_list_.end()) //중복이 없다면,
 	{
 		material_list_.push_back(mtl);
 		GetMaterial(node);
@@ -437,9 +505,128 @@ bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vecto
 		INode* node = object_list[i];
 		PMesh mesh;
 		mesh.name = FixupName(node->GetName());
-		GetMesh(node, mesh);
+		INode* parent_node = node->GetParentNode();
+
+		if (parent_node && parent_node->IsRootNode() == false) 
+			mesh.parent_name = FixupName(parent_node->GetName());
+		
+		Matrix3 world_3dsmax = node->GetNodeTM(0);
+		CopyMatrix3(mesh.world_d3d, world_3dsmax);
+
 		mesh.material_id = FindMaterialIndex(node);
+
+		if (pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //해당 ID를 가진 메테리얼이 서브메테리얼을 가지고 있을 경우
+		{
+			mesh.numberof_submesh = pmtl_list_[mesh.material_id].submaterial_list.size();
+		}
+		GetMesh(node, mesh);
 		mesh_list.push_back(mesh);
 	}
 	return true;
+}
+
+bool PSCWriter::EqualPoint2(Point2 p1, Point2 p2)
+{
+	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
+		return false;
+	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
+		return false;
+	return true;
+}
+
+bool PSCWriter::EqualPoint3(Point3 p1, Point3 p2)
+{
+	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
+		return false;
+	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
+		return false;
+	if (fabs(p1.z - p2.z) > ALMOST_ZERO)
+		return false;
+	return true;
+}
+
+bool PSCWriter::EqualPoint4(Point4 p1, Point4 p2)
+{
+	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
+		return false;
+	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
+		return false;
+	if (fabs(p1.z - p2.z) > ALMOST_ZERO)
+		return false;
+	if (fabs(p1.w - p2.w) > ALMOST_ZERO)
+		return false;
+	return false;
+}
+
+int PSCWriter::IsEqualVertexAndVertexList(PNCT& vertex, std::vector<PNCT>& vertex_list)
+{
+	for (int i = 0; i < vertex_list.size(); i++)
+	{
+		if (EqualPoint3(vertex.p, vertex_list[i].p) &&
+			EqualPoint3(vertex.n, vertex_list[i].n) &&
+			EqualPoint4(vertex.c, vertex_list[i].c) &&
+			EqualPoint2(vertex.t, vertex_list[i].t))
+		{
+			return i; //vertex_list의 I번째 버텍스와 중복이 있다.
+		}
+	}
+	
+
+	return -1;  //중복하지 않는다
+}
+
+void PSCWriter::CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld)
+{
+	Point3 row;
+	row = matWorld.GetRow(0);
+	d3d_world._11 = row.x;
+	d3d_world._12 = row.z;
+	d3d_world._13 = row.y;
+	d3d_world._14 = 0.0f;
+	row = matWorld.GetRow(2);
+	d3d_world._21 = row.x;
+	d3d_world._22 = row.z;
+	d3d_world._23 = row.y;
+	d3d_world._24 = 0.0f;
+	row = matWorld.GetRow(1);
+	d3d_world._31 = row.x;
+	d3d_world._32 = row.z;
+	d3d_world._33 = row.y;
+	d3d_world._34 = 0.0f;
+	row = matWorld.GetRow(3);
+	d3d_world._41 = row.x;
+	d3d_world._42 = row.z;
+	d3d_world._43 = row.y;
+	d3d_world._44 = 1.0f;
+
+}
+
+void PSCWriter::SetUniqueBuffer(PMesh& mesh)
+{
+	mesh.vertex_list.resize(mesh.buffer_list.size());
+	mesh.index_list.resize(mesh.buffer_list.size());
+
+	for (int i = 0; i < mesh.buffer_list.size(); i++)
+	{
+		std::vector<TriComponent>& tri_array = mesh.buffer_list[i];
+		std::vector<PNCT>& vertex_list = mesh.vertex_list[i];
+		std::vector<int>& index_list = mesh.index_list[i];
+		for (int iFace = 0; iFace < mesh.buffer_list[i].size(); iFace++)
+		{
+			TriComponent comp = tri_array[iFace];
+			for (int iver = 0; iver < 3; iver++)
+			{
+				int pos = IsEqualVertexAndVertexList(comp.v[iver], vertex_list);
+				if (pos < 0) //겹치는게 없는 경우
+				{
+					vertex_list.push_back(comp.v[iver]);  //버텍스리스트에 버텍스 추가 
+					pos = vertex_list.size() - 1; //index = 현재까지 버텍스 들어간 갯수 - 1(1이면 0, 2이면 1..)
+				}
+				index_list.push_back(pos); //index 추가  (3개씩)
+			}
+
+		}
+
+	}
+
 }

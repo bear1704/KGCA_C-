@@ -5,6 +5,18 @@
 #define OUT_
 using namespace std;
 
+typedef struct _D3D_MATRIX {
+	union {
+		struct {
+			float        _11, _12, _13, _14;
+			float        _21, _22, _23, _24;
+			float        _31, _32, _33, _34;
+			float        _41, _42, _43, _44;
+		};
+		float m[4][4];
+	};
+}D3D_MATRIX;
+
 struct PNCT
 {
 	Point3 p;
@@ -39,9 +51,26 @@ struct PMtl
 struct PMesh
 {
 	TSTR name;
+	TSTR parent_name;
+	Matrix3 world_tm;
+	D3D_MATRIX world_d3d;
 	vector<TriComponent> tri_list; //dummy code?
 	vector<vector<TriComponent>> buffer_list;
 	int material_id;
+	int numberof_submesh;
+
+	vector<vector<PNCT>> vertex_list;
+	vector<vector<int>> index_list;
+
+	PMesh()
+	{
+		name = L"none";
+		parent_name = L"none";
+		material_id = -1;
+		numberof_submesh = 1;
+
+	}
+
 };
 
 
@@ -79,7 +108,13 @@ public:
 	Mtl* FindMaterial(INode* node);
 	TCHAR* FixupName(MSTR name);
 	bool SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vector<PMesh>& mesh_list);
-	
+
+	bool EqualPoint2(Point2 p1, Point2 p2);
+	bool EqualPoint3(Point3 p1, Point3 p2);
+	bool EqualPoint4(Point4 pq, Point4 p2);
+	int IsEqualVertexAndVertexList(PNCT& vertex, std::vector<PNCT>& vertex_list);
+	void CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld);
+	void SetUniqueBuffer(PMesh& mesh);
 
 
 };
