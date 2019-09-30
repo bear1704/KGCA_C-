@@ -7,9 +7,9 @@
 #include <list>
 #include <memory>
 #include <cmath>
-#include "PParser.h"
 
 class PScene;
+
 
 using namespace std;
 
@@ -142,6 +142,7 @@ enum class ObjectType
 	ITEM,
 	ERROR_OCCUR,
 };
+
 
 
 struct PInputActionMap

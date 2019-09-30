@@ -1,6 +1,7 @@
 #pragma once
 #include "PTexture.h"
 #include "PDxHelper.h"
+#include "PParser.h"
 
 class PTextureManager : public PSingleton<PTextureManager>
 {

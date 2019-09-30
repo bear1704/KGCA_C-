@@ -14,14 +14,11 @@ Sample::~Sample()
 bool Sample::Init()
 {
 
-	//PParser pars;
-	//MaxExportInfo info;
-	//pars.MaxExportParse(info, "vvv.PNG");
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
-
+	ship_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS", "data/obj/vvv.PNG");
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -179,6 +176,8 @@ bool Sample::Render()
 		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		box_.Render();
 
+		ship_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		ship_.Render();
 
 		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
 		//map_.Render();
@@ -200,6 +199,7 @@ bool Sample::Render()
 		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
 		map_.PostRender();
 	
+
 
 		dx_rt_.End(immediate_device_context_);
 	}

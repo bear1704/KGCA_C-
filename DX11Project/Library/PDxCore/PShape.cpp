@@ -137,11 +137,6 @@ bool PBoxObject::Render()
 
 	int vertices_count = vertex_list_.size();
 
-
-	
-
-
-
 	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
 	dx_helper_.vertex_count_ = vertices_count;
 	//dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
@@ -217,14 +212,84 @@ PImportObject::~PImportObject()
 }
 
 bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, 
-	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring tex_name, std::wstring sprite_name)
+	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::string object_path)
 {
 	PModel::Init(device, context);
+	PParser parse;
+	parse.MaxExportParse(info, object_path);
 
-	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
+	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
+
+	return true;
+}
+
+HRESULT PImportObject::CreateVertexBuffer()
+{
+	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	dx_helper_.vertex_count_ = vertices_list_[0].size();
+	dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertices_list_[0].at(0), dx_helper_.vertex_count_,
+		dx_helper_.vertex_size_, false));
+
+	return S_OK;
+}
+
+HRESULT PImportObject::CreateIndexBuffer()
+{
+
+	dx_helper_.index_count_ = indices_list_[0].size();
+	dx_helper_.index_buffer_.Attach(DX::CreateIndexBuffer(
+		device_, &indices_list_[0].at(0), dx_helper_.index_count_, sizeof(int), false));
 
 
+	return S_OK;
+}
 
+HRESULT PImportObject::CreateVertexData()
+{
+	vertices_list_.resize(info.submaterial_list_size);
+	for (int i = 0; i < info.submaterial_list_size; i++)
+	{
+		vertices_list_[i] = std::move(info.vertex_list[i]);
+	}
 
+	return S_OK;
+}
+
+HRESULT PImportObject::CreateIndexData()
+{
+	indices_list_.resize(info.submaterial_list_size);
+	for (int i = 0; i < info.submaterial_list_size; i++)
+	{
+		indices_list_[i] = std::move(info.index_list[i]);
+	}
+	
+	return S_OK;
+}
+
+bool PImportObject::Render()
+{
+	PreRender();
+
+	//for (int i = 0; i < info.submaterial_list_size; i++)
+	//{
+
+	//	int vertices_count = info.numberof_vertices[i];
+	//	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	//	dx_helper_.vertex_count_ = vertices_count;
+	//	immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
+	//		0, NULL, &vertices_list_[i].at(0), 0, 0);
+
+	//	dx_helper_.index_count_ = info.numberof_indicies[i];
+	//	//dx_helper_.shader_res_view_ = texture_->shader_res_view();
+	//}
+	int vertices_count = info.numberof_vertices[0];
+	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	dx_helper_.vertex_count_ = vertices_count;
+	immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
+		0, NULL, &vertices_list_[0].at(0), 0, 0);
+
+	dx_helper_.index_count_ = info.numberof_indicies[0];
+
+	PostRender();
 	return true;
 }

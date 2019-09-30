@@ -1,6 +1,7 @@
 #pragma once
 #include <assert.h>
 #include "PSprite.h"
+#include "PParser.h"
 
 
 const int kPlaneTextureUvMax = 4;

@@ -1,5 +1,7 @@
 #pragma once
 #include "PStd.h"
+#include "PParser.h"
+
 class PWallAndPlatform : public PSingleton<PWallAndPlatform>
 {
 private:

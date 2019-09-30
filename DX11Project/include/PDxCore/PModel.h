@@ -11,37 +11,6 @@ struct VECTOR4
 	float w;
 
 };
-struct Vertex_PNCT
-{
-	D3DXVECTOR3 pos;
-	D3DXVECTOR3 normal;
-	D3DXVECTOR4 color;
-	D3DXVECTOR2 uv;
-
-	bool operator == (const Vertex_PNCT& Vertex)
-	{
-		if (pos == Vertex.pos && normal == Vertex.normal && color == Vertex.color && uv == Vertex.uv)
-			return true;
-
-		return false;
-	}
-
-	Vertex_PNCT() {};
-	Vertex_PNCT(D3DXVECTOR3 v_pos, D3DXVECTOR3 v_normal, D3DXVECTOR4 v_color, D3DXVECTOR2 v_uv)
-	{
-		pos = v_pos;  normal = v_normal; color = v_color; uv = v_uv;
-	};
-	Vertex_PNCT(D3DXVECTOR3 v_pos, D3DXVECTOR3 v_normal, D3DXVECTOR4 v_color)
-	{
-		pos = v_pos;  normal = v_normal; color = v_color;
-	}
-
-
-
-
-
-
-};
 
 
 struct VS_CONSTANT_BUFFER

@@ -1,22 +1,14 @@
 #pragma once
-#include <string>
-#include <map>
 #include <fstream>
 #include <regex>
 #include <iostream>
 #include <sstream>
+#include "PStd.h"
+#include "PDxHelper.h"
 
 #define OUT_  
 
 using namespace std;
-
-struct PNCT
-{
-	float p[3];
-	float n[3];
-	float c[4];
-	float t[2];
-};
 
 struct MaxExportInfo
 {
@@ -56,7 +48,7 @@ struct MaxExportInfo
 	//VECTOR
 	vector<Submaterial> submaterial;
 	
-	vector<vector<PNCT>> vertex_list;
+	vector<vector<Vertex_PNCT>> vertex_list;
 	vector<int> numberof_vertices;
 	vector<vector<int>> index_list;
 	vector<int> numberof_indicies;

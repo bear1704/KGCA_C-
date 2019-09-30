@@ -213,33 +213,33 @@ int PParser::MaxExportParse(OUT_ MaxExportInfo& info, std::string path)
 
 				info.numberof_vertices.push_back(numberof_vertices);
 				
-				vector<PNCT> vertices;
+				vector<Vertex_PNCT> vertices;
 				vertices.reserve(numberof_vertices);
 
 				for (int i = 0; i < numberof_vertices; i++)
 				{
-					PNCT pnct;
+					Vertex_PNCT pnct;
 					stringstream sstr;
 
 					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
 					sstr.clear();
 					sstr.str(str);
-					sstr >> pnct.p[0] >> pnct.p[1] >> pnct.p[2];
+					sstr >> pnct.pos.x >> pnct.pos.y >> pnct.pos.z;
 
 					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
 					sstr.clear();
 					sstr.str(str);
-					sstr >> pnct.n[0] >> pnct.n[1] >> pnct.n[2];
+					sstr >> pnct.normal.x >> pnct.normal.y >> pnct.normal.z;
 
 					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
 					sstr.clear();
 					sstr.str(str);
-					sstr >> pnct.c[0] >> pnct.c[1] >> pnct.c[2] >> pnct.c[3];
+					sstr >> pnct.color.x >> pnct.color.y >> pnct.color.z >> pnct.color.w;
 
 					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
 					sstr.clear();
 					sstr.str(str);
-					sstr >> pnct.t[0] >> pnct.t[1];
+					sstr >> pnct.uv.x >> pnct.uv.y;
 					vertices.push_back(pnct);
 				}
 				info.vertex_list.push_back(vertices);
