@@ -13,6 +13,10 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
+
+	PParser pars;
+	MaxExportInfo info;
+	pars.MaxExportParse(info, "vvv.PNG");
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");

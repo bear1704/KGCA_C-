@@ -9,7 +9,7 @@ struct AscendingSort
 	}
 };
 static int g_search_index = 0;
-struct IsSameInt // find_to¿Í °°ÀºÁö ÆÇ´ÜÇØ ÁÖ´Â ÇÔ¼öÀÚ   
+struct IsSameInt // find_toì™€ ê°™ì€ì§€ íŒë‹¨í•´ ì£¼ëŠ” í•¨ìˆ˜ì   
 {
 	bool operator()(TriComponent& value)
 	{
@@ -34,24 +34,27 @@ void PSCWriter::Set(const TCHAR* name, Interface* interface_max)
 
 bool PSCWriter::Export()
 {
+
+
 	SwitchAllNodeToMesh(object_list_, mesh_list_);
 
 	FILE* file = nullptr;
 	_wfopen_s(&file, filename_.c_str(), _T("wb"));
-	_ftprintf(file, _T("%s %d"), _T("PSCExporter100"), object_list_.size());
+	_ftprintf(file, _T("%s %d"), _T("ExporterObj"), object_list_.size());
 
-	_ftprintf(file, _T("\n%s"), L"#HEADER INFO");
+	_ftprintf(file, _T("\n%s"), L"#HEADER INFO  [MeshListSize/PMaterialListSize]  ");
 	_ftprintf(file, _T("\n%d %d"), mesh_list_.size(), pmtl_list_.size());
 
-	_ftprintf(file, _T("\n%s"), L"#METERIAL INFO");
+	_ftprintf(file, _T("\n%s"), L"#MATERIAL INFO  [PMaterialListName/SubMaterialListSize] Sub-> [SubMaterialName/TexSize] // [TexmapID/TexmapName] ");
 	for (int i = 0; i < pmtl_list_.size(); i++)
 	{
-		_ftprintf(file, _T("\n%s %d"), pmtl_list_[i].name, pmtl_list_[i].submaterial_list.size());
+		_ftprintf(file, _T("\n%s %d"),
+			pmtl_list_[i].name, pmtl_list_[i].submaterial_list.size());
 
 		if (pmtl_list_[i].submaterial_list.size() > 0)
 		{
-
 			auto current_submaterial_list = pmtl_list_[i].submaterial_list;
+
 			for (int isub = 0; isub < current_submaterial_list.size(); isub++)
 			{
 				_ftprintf(file, _T("\n%s %d"), pmtl_list_[i].submaterial_list[isub].name,
@@ -70,6 +73,7 @@ bool PSCWriter::Export()
 		}
 		else
 		{
+			_ftprintf(file, _T("\n [PMaterialListName/TexListSize] // [TexmapID/TexmapName] "));
 			_ftprintf(file, _T("\n%s %d"),
 				pmtl_list_[i].name,
 				pmtl_list_[i].tex_list.size());
@@ -84,7 +88,7 @@ bool PSCWriter::Export()
 	}
 
 	//mesh list
-	_ftprintf(file, _T("\n%s"), L"#OJBECT INFO");
+	_ftprintf(file, _T("\n%s"), L"#OBJECT INFO [MeshListName/ParentName/MaterialID/BufferListSize/TriListSize]");
 
 	for (int imesh = 0; imesh < mesh_list_.size(); imesh++)
 	{
@@ -94,7 +98,7 @@ bool PSCWriter::Export()
 			mesh_list_[imesh].material_id,
 			mesh_list_[imesh].buffer_list.size(),
 			mesh_list_[imesh].tri_list.size());
-
+		_ftprintf(file, _T("\n#WORLD MATRIX"));
 		_ftprintf(file, _T("\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f"),
 			mesh_list_[imesh].world_d3d._11,
 			mesh_list_[imesh].world_d3d._12,
@@ -147,7 +151,7 @@ bool PSCWriter::Export()
 			}
 
 			std::vector<int> index_list = mesh_list_[imesh].index_list[iSubTri];
-			_ftprintf(file, _T("\nIndexList %d", index_list.size()));
+			_ftprintf(file, _T("\nIndexList %d"), index_list.size());
 
 			for (int index = 0; index < index_list.size(); index+=3)
 			{
@@ -378,7 +382,7 @@ void PSCWriter::GetMaterial(INode* node)
 {
 	Mtl* mtl = node->GetMtl();
 	PMtl material;
-	material.name = FixupName(mtl->GetName());// FixupName µé¾î°¥°÷
+	material.name = FixupName(mtl->GetName());// FixupName ë“¤ì–´ê°ˆê³³
 	
 	int numberof_submtl = mtl->NumSubMtls();
 	if (numberof_submtl > 0)
@@ -437,7 +441,7 @@ void PSCWriter::AddMaterial(INode* node)
 
 	std::vector<Mtl*>::iterator iter = std::find(material_list_.begin(), material_list_.end(), mtl);
 
-	if (iter == material_list_.end()) //Áßº¹ÀÌ ¾ø´Ù¸é,
+	if (iter == material_list_.end()) //ì¤‘ë³µì´ ì—†ë‹¤ë©´,
 	{
 		material_list_.push_back(mtl);
 		GetMaterial(node);
@@ -515,7 +519,7 @@ bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vecto
 
 		mesh.material_id = FindMaterialIndex(node);
 
-		if (pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //ÇØ´ç ID¸¦ °¡Áø ¸ŞÅ×¸®¾óÀÌ ¼­ºê¸ŞÅ×¸®¾óÀ» °¡Áö°í ÀÖÀ» °æ¿ì
+		if (pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //í•´ë‹¹ IDë¥¼ ê°€ì§„ ë©”í…Œë¦¬ì–¼ì´ ì„œë¸Œë©”í…Œë¦¬ì–¼ì„ ê°€ì§€ê³  ìˆì„ ê²½ìš°
 		{
 			mesh.numberof_submesh = pmtl_list_[mesh.material_id].submaterial_list.size();
 		}
@@ -547,7 +551,7 @@ bool PSCWriter::EqualPoint3(Point3 p1, Point3 p2)
 
 bool PSCWriter::EqualPoint4(Point4 p1, Point4 p2)
 {
-	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
+	if (fabs(p1.x - p2.x) > ALMOST_ZERO) 
 		return false;
 	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
 		return false;
@@ -555,7 +559,7 @@ bool PSCWriter::EqualPoint4(Point4 p1, Point4 p2)
 		return false;
 	if (fabs(p1.w - p2.w) > ALMOST_ZERO)
 		return false;
-	return false;
+	return true;
 }
 
 int PSCWriter::IsEqualVertexAndVertexList(PNCT& vertex, std::vector<PNCT>& vertex_list)
@@ -567,12 +571,12 @@ int PSCWriter::IsEqualVertexAndVertexList(PNCT& vertex, std::vector<PNCT>& verte
 			EqualPoint4(vertex.c, vertex_list[i].c) &&
 			EqualPoint2(vertex.t, vertex_list[i].t))
 		{
-			return i; //vertex_listÀÇ I¹øÂ° ¹öÅØ½º¿Í Áßº¹ÀÌ ÀÖ´Ù.
+			return i; //vertex_listì˜ Ië²ˆì§¸ ë²„í…ìŠ¤ì™€ ì¤‘ë³µì´ ìˆë‹¤.
 		}
 	}
 	
 
-	return -1;  //Áßº¹ÇÏÁö ¾Ê´Â´Ù
+	return -1;  //ì¤‘ë³µí•˜ì§€ ì•ŠëŠ”ë‹¤
 }
 
 void PSCWriter::CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld)
@@ -617,12 +621,12 @@ void PSCWriter::SetUniqueBuffer(PMesh& mesh)
 			for (int iver = 0; iver < 3; iver++)
 			{
 				int pos = IsEqualVertexAndVertexList(comp.v[iver], vertex_list);
-				if (pos < 0) //°ãÄ¡´Â°Ô ¾ø´Â °æ¿ì
+				if (pos < 0) //ê²¹ì¹˜ëŠ”ê²Œ ì—†ëŠ” ê²½ìš°
 				{
-					vertex_list.push_back(comp.v[iver]);  //¹öÅØ½º¸®½ºÆ®¿¡ ¹öÅØ½º Ãß°¡ 
-					pos = vertex_list.size() - 1; //index = ÇöÀç±îÁö ¹öÅØ½º µé¾î°£ °¹¼ö - 1(1ÀÌ¸é 0, 2ÀÌ¸é 1..)
+					vertex_list.push_back(comp.v[iver]);  //ë²„í…ìŠ¤ë¦¬ìŠ¤íŠ¸ì— ë²„í…ìŠ¤ ì¶”ê°€ 
+					pos = vertex_list.size() - 1; //index = í˜„ì¬ê¹Œì§€ ë²„í…ìŠ¤ ë“¤ì–´ê°„ ê°¯ìˆ˜ - 1(1ì´ë©´ 0, 2ì´ë©´ 1..)
 				}
-				index_list.push_back(pos); //index Ãß°¡  (3°³¾¿)
+				index_list.push_back(pos); //index ì¶”ê°€  (3ê°œì”©)
 			}
 
 		}

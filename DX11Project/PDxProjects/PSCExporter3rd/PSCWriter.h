@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <locale>
+#include <codecvt>
+#include <fstream>
 
 #define OUT_
 using namespace std;

@@ -119,6 +119,8 @@
     <ClCompile Include="array.cpp" />
     <ClCompile Include="constexpr.cpp" />
     <ClCompile Include="fortress.cpp" />
+    <ClCompile Include="lightweight.cpp" />
+    <ClCompile Include="locality.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ptr.cpp" />
     <ClCompile Include="ref.cpp" />
