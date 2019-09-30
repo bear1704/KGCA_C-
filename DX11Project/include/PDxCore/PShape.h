@@ -48,3 +48,16 @@ public:
 };
 
 
+class PImportObject : public PModel
+{
+public:
+	PImportObject();
+	~PImportObject();
+
+private:
+
+
+public:
+
+
+};

@@ -198,3 +198,11 @@ HRESULT PBoxObject::CreateIndexData()
 
 	return S_OK;
 }
+
+PImportObject::PImportObject()
+{
+}
+
+PImportObject::~PImportObject()
+{
+}
