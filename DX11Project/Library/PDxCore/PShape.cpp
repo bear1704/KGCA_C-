@@ -47,7 +47,9 @@ bool PPlaneObject::Render()
 
 		dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
 		dx_helper_.vertex_count_ = vertices_count;
-		dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
+		//dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
+		immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
+			0, NULL, &vertex_list_.at(0), 0, 0);
 		dx_helper_.shader_res_view_ = texture_->shader_res_view();
 
 	}
@@ -135,9 +137,16 @@ bool PBoxObject::Render()
 
 	int vertices_count = vertex_list_.size();
 
+
+	
+
+
+
 	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
 	dx_helper_.vertex_count_ = vertices_count;
-	dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
+	//dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
+	immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
+		0, NULL, &vertex_list_.at(0), 0, 0);
 	dx_helper_.shader_res_view_ = texture_->shader_res_view();
 
 
@@ -205,4 +214,17 @@ PImportObject::PImportObject()
 
 PImportObject::~PImportObject()
 {
+}
+
+bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, 
+	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring tex_name, std::wstring sprite_name)
+{
+	PModel::Init(device, context);
+
+	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
+
+
+
+
+	return true;
 }
