@@ -20,13 +20,6 @@ struct MaxExportInfo
 		string texmap_name;
 	};
 
-	struct MATRIX4 {
-		float        _11, _12, _13, _14;
-		float        _21, _22, _23, _24;
-		float        _31, _32, _33, _34;
-		float        _41, _42, _43, _44;
-	};
-
 
 	//FIRSTLINE
 	string obj_name;
@@ -43,7 +36,7 @@ struct MaxExportInfo
 	int bufferlist_size;
 	int trilist_size;
 
-	MATRIX4 world_mat;
+	D3DXMATRIX world_mat;
 
 	//VECTOR
 	vector<Submaterial> submaterial;

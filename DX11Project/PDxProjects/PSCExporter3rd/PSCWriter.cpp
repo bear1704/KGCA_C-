@@ -134,18 +134,18 @@ bool PSCWriter::Export()
 						vertex_list[iver].p.y,
 						vertex_list[iver].p.z);
 
-					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f"),
+					_ftprintf(file, _T(" %10.4f %10.4f %10.4f"),
 						vertex_list[iver].n.x,
 						vertex_list[iver].n.y,
 						vertex_list[iver].n.z);
 
-					_ftprintf(file, _T("\n%10.4f %10.4f %10.4f %10.4f"),
+					_ftprintf(file, _T(" %10.4f %10.4f %10.4f %10.4f"),
 						vertex_list[iver].c.x,
 						vertex_list[iver].c.y,
 						vertex_list[iver].c.z,
 						vertex_list[iver].c.w);
 
-					_ftprintf(file, _T("\n%10.4f %10.4f"),
+					_ftprintf(file, _T(" %10.4f %10.4f"),
 						vertex_list[iver].t.x,
 						vertex_list[iver].t.y);
 			}

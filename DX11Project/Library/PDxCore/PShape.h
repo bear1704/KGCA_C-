@@ -54,9 +54,9 @@ class PImportObject : public PModel
 public:
 	PImportObject();
 	~PImportObject();
+	MaxExportInfo info;
 
 private:
-	MaxExportInfo info;
 
 	std::vector<std::vector<Vertex_PNCT>> vertices_list_;
 	std::vector<std::vector<int>> indices_list_;

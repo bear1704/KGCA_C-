@@ -214,11 +214,13 @@ PImportObject::~PImportObject()
 bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, 
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::string object_path)
 {
+
 	PModel::Init(device, context);
 	PParser parse;
 	parse.MaxExportParse(info, object_path);
 
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
+
 
 	return true;
 }
@@ -268,28 +270,29 @@ HRESULT PImportObject::CreateIndexData()
 
 bool PImportObject::Render()
 {
-	PreRender();
+	
 
-	//for (int i = 0; i < info.submaterial_list_size; i++)
-	//{
+	for (int i = 0; i < info.submaterial_list_size; i++)
+	{
+		PreRender();
+		int vertices_count = info.numberof_vertices[i];
+		dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+		dx_helper_.vertex_count_ = vertices_count;
+		immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
+			0, NULL, &vertices_list_[i].at(0), 0, 0);
 
-	//	int vertices_count = info.numberof_vertices[i];
-	//	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
-	//	dx_helper_.vertex_count_ = vertices_count;
-	//	immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
-	//		0, NULL, &vertices_list_[i].at(0), 0, 0);
+		dx_helper_.index_count_ = info.numberof_indicies[i];
+		//dx_helper_.shader_res_view_ = texture_->shader_res_view();
 
-	//	dx_helper_.index_count_ = info.numberof_indicies[i];
-	//	//dx_helper_.shader_res_view_ = texture_->shader_res_view();
-	//}
-	int vertices_count = info.numberof_vertices[0];
-	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
-	dx_helper_.vertex_count_ = vertices_count;
-	immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
-		0, NULL, &vertices_list_[0].at(0), 0, 0);
+		PostRender();
+	}
+	//int vertices_count = info.numberof_vertices[0];
+	//dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
+	//dx_helper_.vertex_count_ = vertices_count;
+	//immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
+	//	0, NULL, &vertices_list_[0].at(0), 0, 0);
 
-	dx_helper_.index_count_ = info.numberof_indicies[0];
+	//dx_helper_.index_count_ = info.numberof_indicies[0];
 
-	PostRender();
 	return true;
 }

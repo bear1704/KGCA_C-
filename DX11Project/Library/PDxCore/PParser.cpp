@@ -109,16 +109,13 @@ int PParser::MaxExportParse(OUT_ MaxExportInfo& info, std::string path)
 	std::wstring wstr;
 	std::vector<std::string> split_str;
 	std::string::size_type n;
-	
 
-
-	//std::ifstream in_stream(path);
-	//getline(in_stream, str);
 
 	wchar_t wch[256];
 	const int kWcharMaxSize = 256;
 
-	std::wifstream in_stream(path, std::ios::binary);
+	//std::wifstream in_stream(path, std::ios::binary);
+	std::wifstream in_stream(path);
 
 	in_stream.imbue(std::locale(in_stream.getloc(),
 		new std::codecvt_utf16<wchar_t, 0x10ffff, std::little_endian>));
@@ -207,6 +204,7 @@ int PParser::MaxExportParse(OUT_ MaxExportInfo& info, std::string path)
 			}
 			else if (str.find("VertexList") != std::string::npos)
 			{
+
 				split_str = SplitString(str, ' ');
 
 				int numberof_vertices = stoi(split_str[1]);
@@ -216,61 +214,56 @@ int PParser::MaxExportParse(OUT_ MaxExportInfo& info, std::string path)
 				vector<Vertex_PNCT> vertices;
 				vertices.reserve(numberof_vertices);
 
+				wstringstream wsstr;
+				
 				for (int i = 0; i < numberof_vertices; i++)
 				{
 					Vertex_PNCT pnct;
-					stringstream sstr;
+					wsstr.str(L"");
+					wsstr.clear();
+					in_stream.getline(wch, kWcharMaxSize); 
+					wsstr.str(wch);
+					wsstr >> pnct.pos.x; wsstr >> pnct.pos.y; wsstr >> pnct.pos.z; wsstr >> pnct.normal.x; wsstr >> pnct.normal.y; wsstr >> pnct.normal.z;
+					wsstr >> pnct.color.x; wsstr >> pnct.color.y; wsstr >> pnct.color.z; wsstr >> pnct.color.w;
+					wsstr >> pnct.uv.x; wsstr >> pnct.uv.y;
 
-					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
-					sstr.clear();
-					sstr.str(str);
-					sstr >> pnct.pos.x >> pnct.pos.y >> pnct.pos.z;
-
-					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
-					sstr.clear();
-					sstr.str(str);
-					sstr >> pnct.normal.x >> pnct.normal.y >> pnct.normal.z;
-
-					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
-					sstr.clear();
-					sstr.str(str);
-					sstr >> pnct.color.x >> pnct.color.y >> pnct.color.z >> pnct.color.w;
-
-					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
-					sstr.clear();
-					sstr.str(str);
-					sstr >> pnct.uv.x >> pnct.uv.y;
 					vertices.push_back(pnct);
 				}
 				info.vertex_list.push_back(vertices);
 				vertex_count++;
+
+				//1.6s
 			}
 			else if (str.find("IndexList") != std::string::npos)
 			{
-				split_str = SplitString(str, ' ');
 
-				int numberof_indicies = std::stoi(split_str[1]);
+			split_str = SplitString(str, ' ');
 
-				info.numberof_indicies.push_back(numberof_indicies);
+			int numberof_indicies = std::stoi(split_str[1]);
 
-				vector<int> index_list;
-				index_list.resize(numberof_indicies);
+			info.numberof_indicies.push_back(numberof_indicies);
 
-				for (int i = 0 ; i < numberof_indicies ; i+=3)
-				{
-					str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
-					stringstream sstr;
-					sstr.str(str);
-					
-					sstr >> index_list[i]; sstr >> index_list[i + 1]; sstr >> index_list[i + 2];
-					sstr.clear();
-				}
-				info.index_list.push_back(index_list);
-				index_count++;
+			vector<int> index_list;
+			index_list.resize(numberof_indicies);
+
+			for (int i = 0 ; i < numberof_indicies ; i+=3)
+			{
+				str = Utf16ToString(wch, kWcharMaxSize, &in_stream);
+				stringstream sstr;
+				sstr.str(str);
+				
+				sstr >> index_list[i]; sstr >> index_list[i + 1]; sstr >> index_list[i + 2];
+				sstr.clear();
+			}
+			info.index_list.push_back(index_list);
+			index_count++;
+
+
 			}		
 		}
 
 	}
+
 	return 0;
 }
 
@@ -302,6 +295,7 @@ std::string PParser::Utf16ToString(wchar_t* wchar, int max_size, std::wifstream*
 	std::wstring wstr(wchar);
 	std::string str;
 	str.append(wstr.begin(), wstr.end());
+
 	return str;
 }
 

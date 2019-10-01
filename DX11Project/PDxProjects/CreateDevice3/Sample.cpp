@@ -1,5 +1,6 @@
 #include "Sample.h"
 
+
 Sample::Sample()
 {
 	
@@ -13,12 +14,52 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
+	std::wstring path = L"data/obj/filetest.PNG";
+	FILE* pStream = nullptr;
+	const wchar_t* wt = path.c_str();
+	_tfopen_s(&pStream, wt, _T("rt"));
+	float x, y, z, w;
+
+	clock_t start, end;
+	start = clock();
+	for (int i = 0; i < 1996; i++)
+	{
+		fscanf(pStream, "%f %f %f", &x, &y, &z);
+		fscanf(pStream, "%f %f %f", &x, &y, &z);
+		fscanf(pStream, "%f %f %f %f", &x, &y, &z, &w);
+		fscanf(pStream, "%f %f", &x, &y);
+	}
+	end = clock();
+	double ret1 = (double)(end - start) / CLOCKS_PER_SEC;
+
+	std::ifstream in;
+	in.open("data/obj/filetest.PNG");
+	wchar_t wch[256];
+	const int kWcharMaxSize = 256;
+
+	std::wifstream in_stream(path);
+
+	clock_t start1, end1;
+	start1 = clock();
+	while (!in_stream.eof())
+	{
+
+	in_stream.getline(wch, kWcharMaxSize);
+	
+	
+	}
+	end1 = clock();
+	double ret2 = (double)(end1 - start1) / CLOCKS_PER_SEC;
+
 
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
+	
+
 	ship_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS", "data/obj/vvv.PNG");
+
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -167,7 +208,9 @@ bool Sample::Render()
 		DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_wrap_point);
-		
+
+
+
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
 
@@ -176,11 +219,10 @@ bool Sample::Render()
 		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
 		box_.Render();
 
-		ship_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		ship_.SetWVPMatrix(&ship_.info.world_mat, &main_camera_->matView_, &main_camera_->matProj_);
 		ship_.Render();
 
 		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
-		//map_.Render();
 
 
 		immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,

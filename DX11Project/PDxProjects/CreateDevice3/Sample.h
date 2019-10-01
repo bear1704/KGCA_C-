@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include "PCore.h"
 #include "PTexture.h"
 #include "PShape.h"
@@ -19,6 +20,7 @@
 
 #pragma comment (lib, "fmod_vc.lib")
 #pragma comment (lib, "winmm.lib")
+
 
 
 PScene* g_current_scene_;
