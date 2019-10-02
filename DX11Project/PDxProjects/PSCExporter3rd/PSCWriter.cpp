@@ -256,8 +256,8 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 			if (numberof_color > 0)
 			{
 				trilist[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v0]];
-				trilist[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v2]];
-				trilist[iFace].v[0].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v1]];
+				trilist[iFace].v[1].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v2]];
+				trilist[iFace].v[2].c = mesh->vertCol[mesh->vcFace[iFace].t[custom_v1]];
 			}
 
 			int numberof_tex = mesh->getNumTVerts();

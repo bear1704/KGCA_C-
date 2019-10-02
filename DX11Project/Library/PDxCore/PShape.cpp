@@ -214,10 +214,17 @@ PImportObject::~PImportObject()
 bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, 
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path)
 {
+	std::vector<MaxExportInfo> info;
 
 	PModel::Init(device, context);
 	PParser parse;
 	parse.MaxExportParse(info, object_path);
+	
+	object_list_.resize(info.size());
+	for (int i = 0; i < info.size(); i++)
+	{
+		object_list_[i].info = std::move(info[i]);
+	}
 
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
 
@@ -227,72 +234,99 @@ bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std
 
 HRESULT PImportObject::CreateVertexBuffer()
 {
-	dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
-	dx_helper_.vertex_count_ = vertices_list_[0].size();
-	dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertices_list_[0].at(0), dx_helper_.vertex_count_,
-		dx_helper_.vertex_size_, false));
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		object_list_[obj].helper_list_.resize(object_list_[obj].info.submaterial_list_size);
+		
+		for (int i = 0; i < object_list_[obj].info.submaterial_list_size; i++)
+		{
+			auto cur_dxhelper = object_list_[obj].helper_list_[i];
+			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCT);
+			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list_[i].size();
+			
+			cur_dxhelper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_,
+				&object_list_[obj].vertices_list_[i].at(0),
+				cur_dxhelper.vertex_count_, 
+				cur_dxhelper.vertex_size_, false));
 
+			if (cur_dxhelper.vertex_buffer_.Get() == nullptr)
+				return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
 HRESULT PImportObject::CreateIndexBuffer()
 {
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
 
-	dx_helper_.index_count_ = indices_list_[0].size();
-	dx_helper_.index_buffer_.Attach(DX::CreateIndexBuffer(
-		device_, &indices_list_[0].at(0), dx_helper_.index_count_, sizeof(int), false));
+		for (int i = 0; i < object_list_[obj].info.submaterial_list_size; i++)
+		{
+			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
+			cur_dxhelper.index_count_ = object_list_[obj].indices_list_[i].size();
+			cur_dxhelper.index_buffer_.Attach(DX::CreateIndexBuffer(device_,
+				&object_list_[obj].indices_list_[i].at(0),
+				cur_dxhelper.index_count_,
+				sizeof(int),false));
 
-
+			if (cur_dxhelper.index_buffer_.Get() == nullptr)
+				return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
 HRESULT PImportObject::CreateVertexData()
 {
-	vertices_list_.resize(info.submaterial_list_size);
-	for (int i = 0; i < info.submaterial_list_size; i++)
-	{
-		vertices_list_[i] = std::move(info.vertex_list[i]);
-	}
+	int object_size = object_list_.size();
 
+	for (int obj = 0; obj < object_size; obj++)
+	{
+		auto& cur_object = object_list_[obj];
+		cur_object.vertices_list_.resize(cur_object.info.submaterial_list_size);
+		for (int i = 0; i < cur_object.info.submaterial_list_size; i++)
+		{
+			cur_object.vertices_list_[i] = std::move(cur_object.info.vertex_list[i]);
+		}
+	}
 	return S_OK;
 }
 
 HRESULT PImportObject::CreateIndexData()
 {
-	indices_list_.resize(info.submaterial_list_size);
-	for (int i = 0; i < info.submaterial_list_size; i++)
+	int object_size = object_list_.size();
+
+	for (int obj = 0; obj < object_size; obj++)
 	{
-		indices_list_[i] = std::move(info.index_list[i]);
+		auto& cur_object = object_list_[obj];
+		cur_object.indices_list_.resize(cur_object.info.submaterial_list_size);
+		for (int i = 0; i < cur_object.info.submaterial_list_size; i++)
+		{
+			cur_object.indices_list_[i] = std::move(cur_object.info.index_list[i]);
+		}
 	}
-	
 	return S_OK;
+}
+
+bool PImportObject::PostRender()
+{
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		int root_index = object_list_[obj].info.material_id;
+
+		//if(root_index >= 0 && material_l)
+
+
+
+	}
+
+
+	return false;
 }
 
 bool PImportObject::Render()
 {
-	
-
-	for (int i = 0; i < info.submaterial_list_size; i++)
-	{
-		PreRender();
-		int vertices_count = info.numberof_vertices[i];
-		dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
-		dx_helper_.vertex_count_ = vertices_count;
-		immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
-			0, NULL, &vertices_list_[i].at(0), 0, 0);
-
-		dx_helper_.index_count_ = info.numberof_indicies[i];
-		//dx_helper_.shader_res_view_ = texture_->shader_res_view();
-
-		PostRender();
-	}
-	//int vertices_count = info.numberof_vertices[0];
-	//dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
-	//dx_helper_.vertex_count_ = vertices_count;
-	//immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
-	//	0, NULL, &vertices_list_[0].at(0), 0, 0);
-
-	//dx_helper_.index_count_ = info.numberof_indicies[0];
 
 	return true;
 }
