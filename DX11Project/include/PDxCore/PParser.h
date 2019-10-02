@@ -74,9 +74,10 @@ private:
 
 public:
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
-	int MaxExportParse(OUT_ MaxExportInfo& info, std::string path);
+	int MaxExportParse(OUT_ MaxExportInfo& info, std::wstring path);
 	std::vector<std::string> SplitString(std::string str, char delimiter);
-	std::string Utf16ToString(wchar_t* wchar, int max_size, std::wifstream* in);
+	std::vector<std::string> SplitString(std::wstring str, char delimiter);
+	
 
 
 };

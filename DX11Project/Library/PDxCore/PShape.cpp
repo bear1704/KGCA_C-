@@ -212,7 +212,7 @@ PImportObject::~PImportObject()
 }
 
 bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, 
-	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::string object_path)
+	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path)
 {
 
 	PModel::Init(device, context);

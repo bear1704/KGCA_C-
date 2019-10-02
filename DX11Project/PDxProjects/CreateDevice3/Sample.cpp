@@ -14,43 +14,6 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
-	std::wstring path = L"data/obj/filetest.PNG";
-	FILE* pStream = nullptr;
-	const wchar_t* wt = path.c_str();
-	_tfopen_s(&pStream, wt, _T("rt"));
-	float x, y, z, w;
-
-	clock_t start, end;
-	start = clock();
-	for (int i = 0; i < 1996; i++)
-	{
-		fscanf(pStream, "%f %f %f", &x, &y, &z);
-		fscanf(pStream, "%f %f %f", &x, &y, &z);
-		fscanf(pStream, "%f %f %f %f", &x, &y, &z, &w);
-		fscanf(pStream, "%f %f", &x, &y);
-	}
-	end = clock();
-	double ret1 = (double)(end - start) / CLOCKS_PER_SEC;
-
-	std::ifstream in;
-	in.open("data/obj/filetest.PNG");
-	wchar_t wch[256];
-	const int kWcharMaxSize = 256;
-
-	std::wifstream in_stream(path);
-
-	clock_t start1, end1;
-	start1 = clock();
-	while (!in_stream.eof())
-	{
-
-	in_stream.getline(wch, kWcharMaxSize);
-	
-	
-	}
-	end1 = clock();
-	double ret2 = (double)(end1 - start1) / CLOCKS_PER_SEC;
-
 
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
@@ -58,7 +21,7 @@ bool Sample::Init()
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 	
 
-	ship_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS", "data/obj/vvv.PNG");
+	ship_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS", L"data/obj/vvv.PNG");
 
 
 	D3DXMatrixIdentity(&mat_obj_world_);
