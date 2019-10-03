@@ -48,6 +48,7 @@ public:
 
 };
 
+
 struct PGeoMesh  //오브젝트별 geomesh
 {
 	std::vector<std::vector<Vertex_PNCT>> vertices_list_;
@@ -56,24 +57,26 @@ struct PGeoMesh  //오브젝트별 geomesh
 	MaxExportInfo info;
 };
 
+
+
 class PImportObject : public PModel
 {
 public:
 	PImportObject();
 	~PImportObject();
 
-private:
+public:
 	std::vector<PGeoMesh> object_list_;
+	std::vector<Material> material_list_;
 public:
 	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
-		std::wstring object_path = L"");
+		std::wstring object_path = L"", std::wstring texcomp_path = L"");
 
 	virtual HRESULT CreateVertexBuffer() override;
 	virtual HRESULT CreateIndexBuffer() override;
 	virtual HRESULT CreateVertexData() override;
 	virtual HRESULT CreateIndexData() override;
 	virtual bool PostRender() override;
-	bool Render() override;
 
 };

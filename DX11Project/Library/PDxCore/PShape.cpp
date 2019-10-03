@@ -212,19 +212,23 @@ PImportObject::~PImportObject()
 }
 
 bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path, 
-	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path)
+	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path, std::wstring texcomp_path)
 {
 	std::vector<MaxExportInfo> info;
+	std::vector<Material> matrl_info;
 
 	PModel::Init(device, context);
 	PParser parse;
-	parse.MaxExportParse(info, object_path);
+	parse.MaxExportParse(info, matrl_info, object_path, texcomp_path, device);
 	
 	object_list_.resize(info.size());
-	for (int i = 0; i < info.size(); i++)
+	for (int i = 0; i < info.size(); i++) //오브젝트 정보 이식
 	{
 		object_list_[i].info = std::move(info[i]);
 	}
+	material_list_ = std::move(matrl_info); //머터리얼 정보 이식
+
+
 
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
 
@@ -236,9 +240,9 @@ HRESULT PImportObject::CreateVertexBuffer()
 {
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
-		object_list_[obj].helper_list_.resize(object_list_[obj].info.submaterial_list_size);
+		object_list_[obj].helper_list_.resize(object_list_[obj].info.vertex_list.size());
 		
-		for (int i = 0; i < object_list_[obj].info.submaterial_list_size; i++)
+		for (int i = 0; i < object_list_[obj].info.vertex_list.size(); i++)
 		{
 			auto cur_dxhelper = object_list_[obj].helper_list_[i];
 			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCT);
@@ -261,7 +265,7 @@ HRESULT PImportObject::CreateIndexBuffer()
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
 
-		for (int i = 0; i < object_list_[obj].info.submaterial_list_size; i++)
+		for (int i = 0; i < object_list_[obj].info.index_list.size(); i++)
 		{
 			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
 			cur_dxhelper.index_count_ = object_list_[obj].indices_list_[i].size();
@@ -284,8 +288,8 @@ HRESULT PImportObject::CreateVertexData()
 	for (int obj = 0; obj < object_size; obj++)
 	{
 		auto& cur_object = object_list_[obj];
-		cur_object.vertices_list_.resize(cur_object.info.submaterial_list_size);
-		for (int i = 0; i < cur_object.info.submaterial_list_size; i++)
+		cur_object.vertices_list_.resize(cur_object.info.vertex_list.size());
+		for (int i = 0; i < cur_object.info.vertex_list.size(); i++)
 		{
 			cur_object.vertices_list_[i] = std::move(cur_object.info.vertex_list[i]);
 		}
@@ -300,8 +304,8 @@ HRESULT PImportObject::CreateIndexData()
 	for (int obj = 0; obj < object_size; obj++)
 	{
 		auto& cur_object = object_list_[obj];
-		cur_object.indices_list_.resize(cur_object.info.submaterial_list_size);
-		for (int i = 0; i < cur_object.info.submaterial_list_size; i++)
+		cur_object.indices_list_.resize(cur_object.info.index_list.size());
+		for (int i = 0; i < cur_object.info.index_list.size(); i++)
 		{
 			cur_object.indices_list_[i] = std::move(cur_object.info.index_list[i]);
 		}
@@ -313,20 +317,49 @@ bool PImportObject::PostRender()
 {
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
-		int root_index = object_list_[obj].info.material_id;
+		int root_index = object_list_[obj].info.meshinfo.material_id;
+		if (root_index >= 0 && material_list_[root_index].sub_material_list.size() > 0)
+		{
+			for (int submatl = 0; submatl < object_list_[obj].info.meshinfo.numberof_submesh; submatl++)
+			{
+				std::wstring key = material_list_[root_index].sub_material_list[submatl].own_material_texname;
+				immediate_context_->PSSetShaderResources(0, 1, PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr());
 
-		//if(root_index >= 0 && material_l)
+				UINT stride = object_list_[obj].helper_list_[submatl].vertex_count_;
+				UINT offset = 0;
+
+				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[submatl].vertex_buffer_.GetAddressOf(),
+					&stride, &offset);
+
+				immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list_[submatl].index_buffer_.Get(),
+					DXGI_FORMAT_R32_UINT, 0);
+
+				immediate_context_->DrawIndexed(object_list_[obj].indices_list_[submatl].size(), 0, 0);
+
+			}	
+
+		}
+		else
+		{
+			immediate_context_->PSSetShaderResources(0, 1, dx_helper_.shader_res_view_.GetAddressOf());
+			UINT stride = dx_helper_.vertex_size_;
+			if (stride <= 0)
+				assert(false);
+			UINT offset = 0;
+
+			immediate_context_->IASetVertexBuffers(0, 1, dx_helper_.vertex_buffer_.GetAddressOf(), 
+				&stride, &offset);
+			immediate_context_->IASetIndexBuffer(dx_helper_.index_buffer_.Get(),
+				DXGI_FORMAT_R32_UINT, 0);
+
+			immediate_context_->DrawIndexed(index_list_.size(), 0, 0);
+		}
 
 
 
 	}
 
 
-	return false;
-}
-
-bool PImportObject::Render()
-{
-
 	return true;
 }
+

@@ -32,7 +32,6 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 {
 	//아즥 1회제한 안걸어놓음
 
-	PParser parser;
 	std::vector<std::pair<string, string>> ret_parse;
 	std::string str;
 	str.assign(filepath.begin(), filepath.end());
@@ -106,6 +105,56 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 			texture_list_.insert(make_pair(texture_name, texture));
 		}
 	}
+}
+
+void PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Device* current_device)
+{
+	if (info.tex_path.empty()) return;
+
+	TCHAR Drive[MAX_PATH] = { 0, };
+	TCHAR Dir[MAX_PATH] = { 0, };
+	TCHAR Name[MAX_PATH] = { 0, };
+	TCHAR Ext[MAX_PATH] = { 0, };
+
+	_tsplitpath_s(info.tex_path.c_str(), Drive, Dir, Name, Ext);
+
+	std::wstring str(Name);
+	
+	if (texture_list_.find(str) != texture_list_.end()) //중복임
+	{
+		return;
+	}
+
+	DX::PTex_uv4 uv4;
+	std::vector<std::string>&& ltop = parser.SplitString(info.uv_ltop, ',');
+	DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::stof(ltop[0]), std::stof(ltop[1]),
+		info.width, info.height);
+
+	std::vector<std::string>&& rbottom = parser.SplitString(info.uv_rbottom, ','); //가능?
+	DX::PTex_uv right_bottom = ImageCoordinateToTexCoordinate(std::stof(rbottom[0]), std::stof(rbottom[1]),
+		info.width, info.height);
+
+	uv4.u[0] = left_top.u;     uv4.v[0] = left_top.v;
+	uv4.u[1] = right_bottom.u; uv4.v[1] = left_top.v;
+	uv4.u[2] = right_bottom.u; uv4.v[2] = right_bottom.v;
+	uv4.u[3] = left_top.u;     uv4.v[3] = right_bottom.v;
+
+	PTexture* texture = new PTexture;
+	texture->set_uv_coord(uv4);
+	texture->SetImageSize(info.width, info.height);
+
+	ID3D11ShaderResourceView** view = texture->shader_res_view_double_ptr();
+
+
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
+		current_device, info.tex_path.c_str(), NULL, NULL, view, NULL
+	);
+
+	if (FAILED(hr))
+		assert(false); //여기 오류뜸
+
+	texture_list_.insert(make_pair(info.tex_name, texture));
+
 }
 
 PTexture* PTextureManager::GetTextureFromMap(std::wstring key)
