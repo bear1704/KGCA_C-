@@ -49,7 +49,7 @@ void PCamera::CreateProjectionMatrix()
 
 void PCamera::MoveCameraVec(D3DXVECTOR3 move) 
 {
-	camera_position_ = camera_position_ + move * g_SecondPerFrame * 20.0f;
+	camera_position_ = camera_position_ + move * g_SecondPerFrame * 50.0f;
 
 	float pitch = DEGREE_TO_RADIAN(pitch_angle_);
 	float yaw = DEGREE_TO_RADIAN(yaw_angle_);

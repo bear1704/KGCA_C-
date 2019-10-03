@@ -27,7 +27,6 @@ struct Material
 	int texmap_size;
 	std::vector<PTexMap> tex_list; //unused
 	std::vector<Material> sub_material_list;
-	TCHAR own_material_texname[kMaxTexname];
 };
 
 //오브젝트마다 가지는 메시 정보 모음

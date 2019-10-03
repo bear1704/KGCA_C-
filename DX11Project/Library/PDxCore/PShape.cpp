@@ -244,7 +244,7 @@ HRESULT PImportObject::CreateVertexBuffer()
 		
 		for (int i = 0; i < object_list_[obj].info.vertex_list.size(); i++)
 		{
-			auto cur_dxhelper = object_list_[obj].helper_list_[i];
+			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
 			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCT);
 			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list_[i].size();
 			
@@ -322,10 +322,11 @@ bool PImportObject::PostRender()
 		{
 			for (int submatl = 0; submatl < object_list_[obj].info.meshinfo.numberof_submesh; submatl++)
 			{
-				std::wstring key = material_list_[root_index].sub_material_list[submatl].own_material_texname;
-				immediate_context_->PSSetShaderResources(0, 1, PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr());
+				std::wstring key = material_list_[root_index].sub_material_list[submatl].tex_list[0].texname;
+				ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
+				immediate_context_->PSSetShaderResources(0, 1, srv);
 
-				UINT stride = object_list_[obj].helper_list_[submatl].vertex_count_;
+				UINT stride = object_list_[obj].helper_list_[submatl].vertex_size_;
 				UINT offset = 0;
 
 				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[submatl].vertex_buffer_.GetAddressOf(),

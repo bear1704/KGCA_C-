@@ -88,7 +88,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	vOut.p = mul(vOut.p, WIDEN(matView));
 	vOut.p = mul(vOut.p, WIDEN(matProj));
 	vOut.n = normalize(mul(vIn.n, (float3x3)g_matWorldInverse));
-	vOut.t = vIn.t * 10;
+	vOut.t = vIn.t;
 	vOut.c.x = dot(vOut.n, normalize(-g_vLightDir));
 	vOut.c.y = dot(vOut.n, normalize(-g_vLightDir));// vIn.c * g_MeshColor;
 	vOut.c.z = dot(vOut.n, normalize(-g_vLightDir));

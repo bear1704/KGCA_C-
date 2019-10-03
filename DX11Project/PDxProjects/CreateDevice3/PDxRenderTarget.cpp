@@ -55,7 +55,7 @@ bool PDxRenderTarget::Begin(ID3D11DeviceContext* context)
 	context->RSSetViewports(1, &viewport_);
 
 	context->ClearRenderTargetView(
-		render_target_view_.Get(), D3DXVECTOR4(1, 1, 1, 1));
+		render_target_view_.Get(), D3DXVECTOR4(0, 0, 0.3, 1));
 
 	context->ClearDepthStencilView(
 		depth_stencil_view_.Get(),

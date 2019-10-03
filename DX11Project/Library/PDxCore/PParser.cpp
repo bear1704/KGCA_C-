@@ -167,8 +167,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 						submaterial.texmap_size = std::stoi(split_str[1]);
 
 
-						submaterial.tex_list.resize(submaterial.texmap_size);
-
+						
 						for (int texcount = 0; texcount < submaterial.texmap_size; texcount++)
 						{
 							_fgetts(ch, kCharMaxSize, infile);
@@ -180,14 +179,13 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 
 							PTexMap texmap;
 							texmap.texmap_id = std::stof(split_str[0]);
-							_tcscpy_s(texmap.texname, _countof(submaterial.own_material_texname),
+							_tcscpy_s(texmap.texname, _countof(texmap.texname),
 								wstr.c_str());   //텍스트리스트에 추가하게 될 텍스트 이름값  (아래와 서로같음)
 
 							submaterial.tex_list.push_back(texmap);			
-							//texmap은 현재 미사용으로 추정됨.
 
-							_tcscpy_s(submaterial.own_material_texname, _countof(submaterial.own_material_texname),
-								wstr.c_str()); //서브마테리얼이 담당하게 될 텍스트 이름값
+							//_tcscpy_s(submaterial.own_material_texname, _countof(submaterial.own_material_texname),
+							//	wstr.c_str()); //서브마테리얼이 담당하게 될 텍스트 이름값
 							TextureInfo texinfo;
 							texinfo.width = 1.0f; texinfo.height = 1.0f;
 							texinfo.uv_ltop = std::string("0.0f, 0.0f");
