@@ -294,7 +294,7 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 
 			trilist[iFace].tri_index = mesh->faces[iFace].getMatID();
 
-			if (pmtl_list_[pmesh.material_id].submaterial_list.size() <= 0)
+			if (pmesh.material_id < 0 || pmtl_list_[pmesh.material_id].submaterial_list.size() <= 0)
 			{
 				trilist[iFace].tri_index = 0;
 			}
@@ -519,7 +519,7 @@ bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vecto
 
 		mesh.material_id = FindMaterialIndex(node);
 
-		if (pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //해당 ID를 가진 메테리얼이 서브메테리얼을 가지고 있을 경우
+		if(mesh.material_id >= 0 && pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //해당 ID를 가진 메테리얼이 서브메테리얼을 가지고 있을 경우
 		{
 			mesh.numberof_submesh = pmtl_list_[mesh.material_id].submaterial_list.size();
 		}
