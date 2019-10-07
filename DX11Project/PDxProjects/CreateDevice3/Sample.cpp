@@ -19,7 +19,7 @@ bool Sample::Init()
 	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 
-	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"data/obj/skull/skull.PNG", L"data/obj/skull/");
+	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"data/obj/final.PNG", L"data/obj/");
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);

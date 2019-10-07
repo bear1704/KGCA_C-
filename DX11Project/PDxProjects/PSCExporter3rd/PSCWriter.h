@@ -50,6 +50,12 @@ struct PMtl
 
 };
 
+struct PAnimTrack
+{
+	int tick;
+	Point3 p;
+	Quat q;
+};
 
 struct PMesh
 {
@@ -65,6 +71,12 @@ struct PMesh
 	vector<vector<PNCT>> vertex_list;
 	vector<vector<int>> index_list;
 
+	bool animation_enable[3]; //translate, rotate, scale 애니메이션 존재여부
+	std::vector<PAnimTrack> anim_pos;
+	std::vector<PAnimTrack> anim_rot;
+	std::vector<PAnimTrack> anim_scale;
+
+
 	PMesh()
 	{
 		name = L"none";
@@ -77,6 +89,17 @@ struct PMesh
 };
 
 
+struct PScene
+{
+	int first_frame; // 0
+	int last_frame; // 100
+	int frame_rate; // 30
+	int tick_per_frame; // 160
+	int numberof_meshes;
+	int numberof_materials;
+};
+
+
 class PSCWriter
 {
 public:
@@ -84,15 +107,20 @@ public:
 	~PSCWriter();
 
 protected:
+	FILE* file;
 	Interface*			interface_max_;
 	std::wstring		filename_;
 	INode*				rootnode_;
+	PScene				scene_;
+
+
 	std::vector<INode*> object_list_;
 	std::vector<PMesh> mesh_list_;
 
 	std::vector<Mtl*> material_list_;
 	std::vector<PMtl> pmtl_list_;
 
+	Interval interval_;
 
 public:
 	void Set(const TCHAR* name, Interface* interface_max);
@@ -118,6 +146,9 @@ public:
 	int IsEqualVertexAndVertexList(PNCT& vertex, std::vector<PNCT>& vertex_list);
 	void CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld);
 	void SetUniqueBuffer(PMesh& mesh);
+
+	void GetAnimation(INode* node, PMesh& mesh);
+	void ExportAnimaion(PMesh& mesh);
 
 
 };

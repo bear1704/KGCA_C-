@@ -9,7 +9,7 @@ struct AscendingSort
 	}
 };
 static int g_search_index = 0;
-struct IsSameInt // find_to와 같은지 판단해 주는 함수자   
+struct IsSameInt // find_to와 같은지 판단해 주는 함수
 {
 	bool operator()(TriComponent& value)
 	{
@@ -18,6 +18,7 @@ struct IsSameInt // find_to와 같은지 판단해 주는 함수자
 };
 PSCWriter::PSCWriter()
 {
+	file = nullptr;
 }
 
 PSCWriter::~PSCWriter()
@@ -29,21 +30,29 @@ void PSCWriter::Set(const TCHAR* name, Interface* interface_max)
 	interface_max_ = interface_max;
 	filename_ = name;
 	rootnode_ = interface_max_->GetRootNode();
+	interval_ = interface_max_->GetAnimRange();
+
+	scene_.first_frame = interval_.Start() / GetTicksPerFrame();
+	scene_.last_frame = interval_.End() / GetTicksPerFrame();
+	scene_.frame_rate = GetFrameRate();
+	scene_.tick_per_frame = GetTicksPerFrame();
+
 	PreProcess(rootnode_);
 }
 
 bool PSCWriter::Export()
 {
-
-
 	SwitchAllNodeToMesh(object_list_, mesh_list_);
 
-	FILE* file = nullptr;
+	scene_.numberof_materials = pmtl_list_.size();
+	scene_.numberof_meshes = mesh_list_.size();
+
 	_wfopen_s(&file, filename_.c_str(), _T("wb"));
 	_ftprintf(file, _T("%s %d"), _T("ExporterObj"), object_list_.size());
 
-	_ftprintf(file, _T("\n%s"), L"#HEADER INFO  [MeshListSize/PMaterialListSize]  ");
-	_ftprintf(file, _T("\n%d %d"), mesh_list_.size(), pmtl_list_.size());
+	_ftprintf(file, _T("\n%s"), L"#HEADER INFO  [FirstFrame/LastFrame/FrameRate/TickPerFrame/MeshListSize/PMaterialListSize]  ");
+	_ftprintf(file, _T("\n%d %d %d %d %d %d"), scene_.first_frame, scene_.last_frame, scene_.frame_rate, scene_.tick_per_frame 
+		,mesh_list_.size(), pmtl_list_.size());
 
 	_ftprintf(file, _T("\n%s"), L"#MATERIAL INFO  [PMaterialListName/SubMaterialListSize] Sub-> [SubMaterialName/TexSize] // [TexmapID/TexmapName] ");
 	for (int i = 0; i < pmtl_list_.size(); i++)
@@ -214,7 +223,7 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 	Matrix3 tm = node->GetObjTMAfterWSM(0);
 	
 	bool deleteit = false;
-	TriObject* triobj = GetTriObjectFromNode(node, 0, deleteit);
+	TriObject* triobj = GetTriObjectFromNode(node, interval_.Start(), deleteit);
 	
 	if (!triobj) return;
 
@@ -514,7 +523,7 @@ bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vecto
 		if (parent_node && parent_node->IsRootNode() == false) 
 			mesh.parent_name = FixupName(parent_node->GetName());
 		
-		Matrix3 world_3dsmax = node->GetNodeTM(0);
+		Matrix3 world_3dsmax = node->GetNodeTM(interval_.Start());
 		CopyMatrix3(mesh.world_d3d, world_3dsmax);
 
 		mesh.material_id = FindMaterialIndex(node);
@@ -524,6 +533,7 @@ bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vecto
 			mesh.numberof_submesh = pmtl_list_[mesh.material_id].submaterial_list.size();
 		}
 		GetMesh(node, mesh);
+		GetAnimation(node, mesh);
 		mesh_list.push_back(mesh);
 	}
 	return true;
@@ -633,4 +643,150 @@ void PSCWriter::SetUniqueBuffer(PMesh& mesh)
 
 	}
 
+}
+
+void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
+{
+	mesh.animation_enable[0] = false;
+	mesh.animation_enable[1] = false;
+	mesh.animation_enable[2] = false;
+
+	TimeValue start_frame = interval_.Start();
+
+	//tm = selfTm * parentTm * Inverse(parentTm)
+	Matrix3 tm = node->GetNodeTM(start_frame) * Inverse(node->GetParentTM(start_frame));
+
+	//행렬 분해(SRT)
+	AffineParts start_ap;
+	decomp_affine(tm, &start_ap);
+	
+	//quarternion -> 축, 앵글로 변환
+	Point3 start_rotate_axis;
+	float  start_rotate_value; 
+
+	AngAxisFromQ(start_ap.q, &start_rotate_value, start_rotate_axis);
+
+	PAnimTrack start_animtrack;
+	start_animtrack.tick = start_frame;
+	start_animtrack.p = start_ap.t;
+	start_animtrack.q = start_ap.q;
+
+	mesh.anim_pos.push_back(start_animtrack);
+	mesh.anim_rot.push_back(start_animtrack);
+	
+	start_animtrack.p = start_ap.k;
+	start_animtrack.q = start_ap.u;
+	mesh.anim_scale.push_back(start_animtrack);
+
+	TimeValue start = interval_.Start() + GetTicksPerFrame(); //start + 1프레임
+	TimeValue end = interval_.End();
+
+	for (TimeValue t = start; t <= end; t += GetTicksPerFrame())
+	{
+		Matrix3 tm = node->GetNodeTM(t) * Inverse(node->GetParentTM(t));
+
+		AffineParts frame_ap;
+		decomp_affine(tm, &frame_ap);
+		PAnimTrack anim;
+		ZeroMemory(&anim, sizeof(PAnimTrack));
+
+		anim.tick = t;
+		anim.p = frame_ap.t;
+		anim.q = frame_ap.q;
+		mesh.anim_pos.push_back(anim);
+		mesh.anim_rot.push_back(anim);
+
+		anim.p = frame_ap.k;
+		anim.q = frame_ap.u;
+		mesh.anim_scale.push_back(anim);
+
+		Point3 frame_rotate_axis;
+		float  frame_rotate_value;
+		AngAxisFromQ(frame_ap.q, &frame_rotate_value, frame_rotate_axis);
+
+		
+		//animation이 존재하는지 체크
+		if (mesh.animation_enable[0] == false)
+		{
+			if (EqualPoint3(start_ap.t, frame_ap.t))
+			{
+				mesh.animation_enable[0] = true;
+			}
+		}
+
+		if (mesh.animation_enable[1] == false)
+		{
+			if (EqualPoint3(start_rotate_axis, frame_rotate_axis))
+			{
+				mesh.animation_enable[1] = true;
+			}
+			else
+			{
+				if (start_rotate_value != frame_rotate_value)
+					mesh.animation_enable[1] = true;
+			}
+		}
+
+		if (mesh.animation_enable[2] == false)
+		{
+			if (EqualPoint3(start_ap.k, frame_ap.k))
+			{
+				mesh.animation_enable[2] = true;
+			}
+		}
+
+	}
+
+}
+
+void PSCWriter::ExportAnimaion(PMesh& mesh)
+{
+	_ftprintf(file, _T("\n#AnimationData [translate_size/rot_size/scale_size] // [cur_track / cur_tick / 컴포넌트별 값]"));
+	_ftprintf(file, _T("\n%d %d %d"),
+		(mesh.animation_enable[0]) ? mesh.anim_pos.size() : 0,
+		(mesh.animation_enable[1]) ? mesh.anim_rot.size() : 0,
+		(mesh.animation_enable[2]) ? mesh.anim_scale.size() : 0);
+
+
+	if (mesh.animation_enable[0])
+	{
+		for (int i = 0; i < mesh.anim_pos.size(); i++)
+		{
+			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f"),
+				i,
+				mesh.anim_pos[i].tick,
+				mesh.anim_pos[i].p.x,
+				mesh.anim_pos[i].p.z,
+				mesh.anim_pos[i].p.y);
+		}
+	}
+	if (mesh.animation_enable[1])
+	{
+		for (int i = 0; i < mesh.anim_rot.size(); i++)
+		{
+			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f %10.4f"),
+				i,
+				mesh.anim_pos[i].tick,
+				mesh.anim_pos[i].q.x,
+				mesh.anim_pos[i].q.z,
+				mesh.anim_pos[i].q.y,
+				mesh.anim_pos[i].q.w);
+		}
+	}
+	if (mesh.animation_enable[2])
+	{
+		for (int i = 0; i < mesh.anim_scale.size(); i++)
+		{
+			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f"),
+				i,
+				mesh.anim_pos[i].tick,
+				mesh.anim_pos[i].p.x,
+				mesh.anim_pos[i].p.z,
+				mesh.anim_pos[i].p.y,
+				mesh.anim_pos[i].q.x,
+				mesh.anim_pos[i].q.z,
+				mesh.anim_pos[i].q.y,
+				mesh.anim_pos[i].q.w);
+		}
+	}
 }

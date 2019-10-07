@@ -69,7 +69,7 @@ const MCHAR* PSCExport::Ext(int n)
 
 const MCHAR* PSCExport::LongDesc()
 {
-	return _T("PSC exporter v1");
+	return _T("PSC exporter v2");
 }
 
 const MCHAR* PSCExport::ShortDesc()
