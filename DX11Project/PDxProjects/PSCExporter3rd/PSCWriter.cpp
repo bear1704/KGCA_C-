@@ -76,15 +76,12 @@ bool PSCWriter::Export()
 						current_texlist[i].map_id,
 						current_texlist[i].name);
 				}
-
-
 			}
 		}
 		else
 		{
-			_ftprintf(file, _T("\n [PMaterialListName/TexListSize] // [TexmapID/TexmapName] "));
 			_ftprintf(file, _T("\n%s %d"),
-				pmtl_list_[i].name,
+				L"NotExistSubMtrl",
 				pmtl_list_[i].tex_list.size());
 
 			for (int itex = 0; itex < pmtl_list_[i].tex_list.size(); itex++)
@@ -169,8 +166,8 @@ bool PSCWriter::Export()
 					index_list[index + 1],
 					index_list[index + 2]);
 			}
-
 		}
+		ExportAnimation(mesh_list_[imesh]);
 	}
 
 	::fclose(file);
@@ -739,9 +736,9 @@ void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 
 }
 
-void PSCWriter::ExportAnimaion(PMesh& mesh)
+void PSCWriter::ExportAnimation(PMesh& mesh)
 {
-	_ftprintf(file, _T("\n#AnimationData [translate_size/rot_size/scale_size] // [cur_track / cur_tick / 컴포넌트별 값]"));
+	_ftprintf(file, _T("\n#AnimationData [translate_size/rot_size/scale_size] // [cur_track / cur_tick / values by components]"));
 	_ftprintf(file, _T("\n%d %d %d"),
 		(mesh.animation_enable[0]) ? mesh.anim_pos.size() : 0,
 		(mesh.animation_enable[1]) ? mesh.anim_rot.size() : 0,
@@ -766,11 +763,11 @@ void PSCWriter::ExportAnimaion(PMesh& mesh)
 		{
 			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f %10.4f"),
 				i,
-				mesh.anim_pos[i].tick,
-				mesh.anim_pos[i].q.x,
-				mesh.anim_pos[i].q.z,
-				mesh.anim_pos[i].q.y,
-				mesh.anim_pos[i].q.w);
+				mesh.anim_rot[i].tick,
+				mesh.anim_rot[i].q.x,
+				mesh.anim_rot[i].q.z,
+				mesh.anim_rot[i].q.y,
+				mesh.anim_rot[i].q.w);
 		}
 	}
 	if (mesh.animation_enable[2])
@@ -779,14 +776,14 @@ void PSCWriter::ExportAnimaion(PMesh& mesh)
 		{
 			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f"),
 				i,
-				mesh.anim_pos[i].tick,
-				mesh.anim_pos[i].p.x,
-				mesh.anim_pos[i].p.z,
-				mesh.anim_pos[i].p.y,
-				mesh.anim_pos[i].q.x,
-				mesh.anim_pos[i].q.z,
-				mesh.anim_pos[i].q.y,
-				mesh.anim_pos[i].q.w);
+				mesh.anim_scale[i].tick,
+				mesh.anim_scale[i].p.x,
+				mesh.anim_scale[i].p.z,
+				mesh.anim_scale[i].p.y,
+				mesh.anim_scale[i].q.x,
+				mesh.anim_scale[i].q.z,
+				mesh.anim_scale[i].q.y,
+				mesh.anim_scale[i].q.w);
 		}
 	}
 }

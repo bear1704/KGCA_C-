@@ -148,7 +148,7 @@ public:
 	void SetUniqueBuffer(PMesh& mesh);
 
 	void GetAnimation(INode* node, PMesh& mesh);
-	void ExportAnimaion(PMesh& mesh);
+	void ExportAnimation(PMesh& mesh);
 
 
 };
