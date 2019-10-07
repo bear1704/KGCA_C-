@@ -200,6 +200,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="P2DCamera.h" />
     <ClInclude Include="PArcBall.h" />
     <ClInclude Include="PCamera.h" />
+    <ClInclude Include="PDxRenderTarget.h" />
     <ClInclude Include="PDxSprite.h" />
     <ClInclude Include="PAttackAction.h" />
     <ClInclude Include="PBitmap.h" />
@@ -239,6 +240,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PModel.h" />
     <ClInclude Include="PMonster.h" />
     <ClInclude Include="PMoveAction.h" />
+    <ClInclude Include="PNormalMapHelper.h" />
+    <ClInclude Include="PNormHeightMap.h" />
     <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
     <ClInclude Include="PParser.h" />
@@ -249,6 +252,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PObject.h" />
     <ClInclude Include="PScene.h" />
     <ClInclude Include="PShape.h" />
+    <ClInclude Include="PSkyBox.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
     <ClInclude Include="PSprite.h" />
@@ -268,6 +272,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="P2DCamera.cpp" />
     <ClCompile Include="PArcBall.cpp" />
     <ClCompile Include="PCamera.cpp" />
+    <ClCompile Include="PDxRenderTarget.cpp" />
     <ClCompile Include="PDxSprite.cpp" />
     <ClCompile Include="PAttackAction.cpp" />
     <ClCompile Include="PBitmap.cpp" />
@@ -312,6 +317,8 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PModel.cpp" />
     <ClCompile Include="PMonster.cpp" />
     <ClCompile Include="PMoveAction.cpp" />
+    <ClCompile Include="PNormalMapHelper.cpp" />
+    <ClCompile Include="PNormHeightMap.cpp" />
     <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />
     <ClCompile Include="PParser.cpp" />
@@ -322,6 +329,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PObject.cpp" />
     <ClCompile Include="PScene.cpp" />
     <ClCompile Include="PShape.cpp" />
+    <ClCompile Include="PSkyBox.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />
     <ClCompile Include="PSprite.cpp" />
