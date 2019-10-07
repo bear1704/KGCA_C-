@@ -115,16 +115,13 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 	int index_count = 0;
 
 
-	wchar_t ch[kCharMaxSize];
-
 	FILE* infile = nullptr;
 
 	_tfopen_s(&infile, exportfile_path.c_str(), _T("rb"));
 
-	_fgetts(ch, kCharMaxSize, infile);
+	_fgetts(wch_t, kCharMaxSize, infile);
 
-
-	wstr = ch;
+	wstr = wch_t;
 
 	split_str = SplitString(wstr, ' ');  //FIRST LINE (오브젝트네임, 오브젝트사이즈) --> 무시
 	//info_list[obj].obj_name = split_str[0];   //objname은 사용하지 않음
@@ -135,21 +132,28 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 
 	for (int obj = 0; obj < numberof_obj ; obj++)
 	{
-		while (_fgetts(ch, kCharMaxSize, infile) != NULL)
+		while (_fgetts(wch_t, kCharMaxSize, infile) != NULL)
 		{
-			wstr = ch;
+			wstr = wch_t;
 
 			if (wstr.find(L"#HEADER INFO") != std::string::npos)
 			{
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch; //header info_list[obj]. 들어가는 공간
+
+				ReadNextLineAndSplit(split_str, infile);
+
+				info_list[obj].max_scene.first_frame =			std::stoi(split_str[0]);
+				info_list[obj].max_scene.last_frame =			std::stoi(split_str[1]);
+				info_list[obj].max_scene.frame_rate =			std::stoi(split_str[2]);
+				info_list[obj].max_scene.tick_per_frame =		std::stoi(split_str[3]);
+				info_list[obj].max_scene.numberof_meshes =		std::stoi(split_str[4]);
+				info_list[obj].max_scene.numberof_materials =	std::stoi(split_str[5]);
 			}
 			else if (wstr.find(L"#MATERIAL INFO") != std::string::npos)
 			{
 				Material material;
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch;
-				split_str = SplitString(wstr, ' ');
+
+				ReadNextLineAndSplit(split_str, infile);
+
 				material.material_name = split_str[0];
 				material.submaterial_list_size = std::stoi(split_str[1]);
 
@@ -160,22 +164,18 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 					{
 						Material submaterial;
 
-						_fgetts(ch, kCharMaxSize, infile);
-						wstr = ch;
-						split_str = SplitString(wstr, ' ');
+						ReadNextLineAndSplit(split_str, infile);
+
 						submaterial.material_name = split_str[0];
 						submaterial.texmap_size = std::stoi(split_str[1]);
-
-
-						
+					
 						for (int texcount = 0; texcount < submaterial.texmap_size; texcount++)
 						{
-							_fgetts(ch, kCharMaxSize, infile);
-							wstr = ch;
+							_fgetts(wch_t, kCharMaxSize, infile);
+							wstr = wch_t;
 							wstr.erase(std::remove(wstr.begin(), wstr.end(), '\n'), wstr.end());
 							split_str = SplitString(wstr, ' ');
-							wstr.clear();
-							wstr.append(split_str[1].begin(), split_str[1].end());
+							wstr.assign(split_str[1].begin(), split_str[1].end());
 
 							PTexMap texmap;
 							texmap.texmap_id = std::stof(split_str[0]);
@@ -205,19 +205,19 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 				{
 					Material material;
 
-					_fgetts(ch, kCharMaxSize, infile);
-					wstr = ch;
-					split_str = SplitString(wstr, ' ');
+					ReadNextLineAndSplit(split_str, infile);
+
 					material.material_name = split_str[0];
 					material.texmap_size = std::stoi(split_str[1]);
 
 
 					for (int texcount = 0; texcount < material.texmap_size; texcount++)
 					{
-						_fgetts(ch, kCharMaxSize, infile);
-						wstr = ch;
+						_fgetts(wch_t, kCharMaxSize, infile);
+						wstr = wch_t;
+						wstr.erase(std::remove(wstr.begin(), wstr.end(), '\n'), wstr.end());
 						split_str = SplitString(wstr, ' ');
-						wstr.append(split_str[1].begin(), split_str[1].end());
+						wstr.assign(split_str[1].begin(), split_str[1].end());
 
 						PTexMap texmap;
 						texmap.texmap_id = std::stof(split_str[0]);
@@ -231,17 +231,17 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 						texinfo.uv_rbottom = std::string("1.0f, 1.0f");
 
 						texinfo.tex_name = texmap.texname;
-						texinfo.tex_path = texfile_path;
+						texinfo.tex_path = texfile_path + texmap.texname;
 
 						PTextureManager::GetInstance().LoadTextureWithoutScript(texinfo, device);
 					}
+					material_list.push_back(material);
 				}
 			}
 			else if (wstr.find(L"#OBJECT INFO") != std::string::npos)
 			{
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch;
-				split_str = SplitString(wstr, ' ');
+				ReadNextLineAndSplit(split_str, infile);
+
 				info_list[obj].meshinfo.meshlist_name = split_str[0];
 				info_list[obj].meshinfo.parent_name = split_str[1];
 				info_list[obj].meshinfo.material_id = std::stoi(split_str[2]);
@@ -254,27 +254,27 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 
 				wstringstream sstr;
 
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch;
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
 				sstr.str(wstr);
 				sstr >> world_mat._11; sstr >> world_mat._12; sstr >> world_mat._13; sstr >> world_mat._14;
 
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch;
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
 				sstr.clear();
 				sstr.str(wstr);
 
 				sstr >> world_mat._21; sstr >> world_mat._22; sstr >> world_mat._23; sstr >> world_mat._24;
 
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch;
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
 				sstr.clear();
 				sstr.str(wstr);
 
 				sstr >> world_mat._31; sstr >> world_mat._32; sstr >> world_mat._33; sstr >>world_mat._34;
 
-				_fgetts(ch, kCharMaxSize, infile);
-				wstr = ch;
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
 				sstr.clear();
 				sstr.str(wstr);
 
@@ -300,9 +300,10 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 					Vertex_PNCT pnct;
 					wsstr.str(L"");
 					wsstr.clear();
-					_fgetts(ch, kCharMaxSize, infile);
-					wstr = ch;
+					_fgetts(wch_t, kCharMaxSize, infile);
+					wstr = wch_t;
 					wsstr.str(wstr);
+				
 					wsstr >> pnct.pos.x; wsstr >> pnct.pos.y; wsstr >> pnct.pos.z; wsstr >> pnct.normal.x; wsstr >> pnct.normal.y; wsstr >> pnct.normal.z;
 					wsstr >> pnct.color.x; wsstr >> pnct.color.y; wsstr >> pnct.color.z; wsstr >> pnct.color.w;
 					wsstr >> pnct.uv.x; wsstr >> pnct.uv.y;
@@ -328,8 +329,8 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 
 				for (int i = 0; i < numberof_indicies; i += 3)
 				{
-					_fgetts(ch, kCharMaxSize, infile);
-					wstr = ch;
+					_fgetts(wch_t, kCharMaxSize, infile);
+					wstr = wch_t;
 					wstringstream sstr;
 					sstr.str(wstr);
 
@@ -338,16 +339,58 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 				}
 				info_list[obj].index_list.push_back(index_list);
 				index_count++;
+			}
+			else if (wstr.find(L"#ANIMATION DATA") != std::string::npos)
+			{
+			
+				ReadNextLineAndSplit(split_str, infile);
 
+				std::vector<PAnimTrack>& anim_pos = info_list[obj].animlist_pos;
+				std::vector<PAnimTrack>& anim_rot = info_list[obj].animlist_rot;
+				std::vector<PAnimTrack>& anim_scale = info_list[obj].animlist_scale;
+				anim_pos.resize(std::stoi(split_str[0]));
+				anim_rot.resize(std::stoi(split_str[1]));
+				anim_scale.resize(std::stoi(split_str[2]));
+				
+				int index = 0;
+				
+				for (int i = 0; i < anim_pos.size(); i++)
+				{
+					_fgetts(wch_t, kCharMaxSize, infile);
+					wstr = wch_t;
+					wstringstream sstr;
+					sstr.clear();
+					sstr.str(wstr);
 
+					sstr >> index; sstr >> anim_pos[i].tick; sstr >> anim_pos[i].p.x; sstr >> anim_pos[i].p.y; sstr >> anim_pos[i].p.z;
+				}
+				for (int i = 0; i < anim_rot.size(); i++)
+				{
+					_fgetts(wch_t, kCharMaxSize, infile);
+					wstr = wch_t;
+					wstringstream sstr;
+					sstr.clear();
+					sstr.str(wstr);
+
+					sstr >> index; sstr >> anim_rot[i].tick; sstr >> anim_rot[i].q.x; sstr >> anim_rot[i].q.y; sstr >> anim_rot[i].q.z;
+					sstr >> anim_rot[i].q.w;
+				}
+				for (int i = 0; i < anim_scale.size(); i++)
+				{
+					_fgetts(wch_t, kCharMaxSize, infile);
+					wstr = wch_t;
+					wstringstream sstr;
+					sstr.clear();
+					sstr.str(wstr);
+
+					sstr >> index; sstr >> anim_scale[i].tick; sstr >> anim_scale[i].p.x; sstr >> anim_scale[i].p.y; sstr >> anim_scale[i].p.z;
+					sstr >> anim_scale[i].q.x; sstr >> anim_scale[i].q.y; sstr >> anim_scale[i].q.z; sstr >> anim_scale[i].q.w;
+
+				}			
 			}
 		}
-
+			fclose(infile);
 	}
-
-
-	
-
 	return 0;
 }
 

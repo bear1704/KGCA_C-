@@ -738,7 +738,7 @@ void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 
 void PSCWriter::ExportAnimation(PMesh& mesh)
 {
-	_ftprintf(file, _T("\n#AnimationData [translate_size/rot_size/scale_size] // [cur_track / cur_tick / values by components]"));
+	_ftprintf(file, _T("\n#ANIMATION DATA [translate_size/rot_size/scale_size] // [cur_track / cur_tick / values by components]"));
 	_ftprintf(file, _T("\n%d %d %d"),
 		(mesh.animation_enable[0]) ? mesh.anim_pos.size() : 0,
 		(mesh.animation_enable[1]) ? mesh.anim_rot.size() : 0,

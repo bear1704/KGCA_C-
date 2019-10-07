@@ -219,8 +219,9 @@ bool PImportObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std
 
 	PModel::Init(device, context);
 	PParser parse;
+
 	parse.MaxExportParse(info, matrl_info, object_path, texcomp_path, device);
-	
+
 	object_list_.resize(info.size());
 	for (int i = 0; i < info.size(); i++) //오브젝트 정보 이식
 	{
@@ -342,18 +343,20 @@ bool PImportObject::PostRender()
 		}
 		else
 		{
-			immediate_context_->PSSetShaderResources(0, 1, dx_helper_.shader_res_view_.GetAddressOf());
-			UINT stride = dx_helper_.vertex_size_;
+			std::wstring key = material_list_[0].tex_list[0].texname;
+			ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
+			immediate_context_->PSSetShaderResources(0, 1, srv);
+			UINT stride = object_list_[obj].helper_list_[0].vertex_size_;
 			if (stride <= 0)
 				assert(false);
 			UINT offset = 0;
 
-			immediate_context_->IASetVertexBuffers(0, 1, dx_helper_.vertex_buffer_.GetAddressOf(), 
+			immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[0].vertex_buffer_.GetAddressOf(), 
 				&stride, &offset);
-			immediate_context_->IASetIndexBuffer(dx_helper_.index_buffer_.Get(),
+			immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list_[0].index_buffer_.Get(),
 				DXGI_FORMAT_R32_UINT, 0);
 
-			immediate_context_->DrawIndexed(index_list_.size(), 0, 0);
+			immediate_context_->DrawIndexed(object_list_[obj].indices_list_[0].size(), 0, 0);
 		}
 
 

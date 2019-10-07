@@ -68,6 +68,9 @@ public:
 public:
 	std::vector<PGeoMesh> object_list_;
 	std::vector<Material> material_list_;
+
+	
+
 public:
 	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,

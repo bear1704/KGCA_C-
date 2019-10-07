@@ -23,6 +23,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PSCExporter3rd", "PSCExporter3rd\PSCExporter3rd.vcxproj", "{979B7762-2C2A-4F16-8D9F-1CAAF5E26F0D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice4", "CreateDevice4\CreateDevice4.vcxproj", "{F4EC6733-E30A-4FCF-9185-60F7A27687BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

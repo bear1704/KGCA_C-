@@ -19,7 +19,8 @@ bool Sample::Init()
 	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 
-	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"data/obj/animbox.PNG", L"data/obj/");
+	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", 
+		"PS", L"data/obj/animbox/animbox.PNG", L"data/obj/animbox/");
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -188,19 +189,19 @@ bool Sample::Render()
 
 		immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
 			NULL, &map_.constant_data_, 0, 0);
-		map_.PreRender();
-
-		ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
-		UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
-		UINT offset[2] = { 0,0 };
-
-		immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
-		immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
-		immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		map_.PostRender();
+		//map_.PreRender();
+		//
+		//ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
+		//UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
+		//UINT offset[2] = { 0,0 };
+		//
+		//immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
+		//immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
+		//immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		//immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		//immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		//immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		//map_.PostRender();
 	
 
 

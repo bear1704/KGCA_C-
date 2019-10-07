@@ -40,6 +40,24 @@ struct MeshinfoByObject
 	D3DXMATRIX world_mat;
 };
 
+struct PAnimTrack
+{
+	int				tick;
+	D3DXVECTOR3		p;
+	D3DXQUATERNION	q;
+};
+
+struct MaxScene
+{
+	int first_frame; // 0
+	int last_frame; // 100
+	int frame_rate; // 30
+	int tick_per_frame; // 160
+	int numberof_meshes;
+	int numberof_materials;
+};
+
+
 //오브젝트당 필요한 정보 모음
 struct MaxExportInfo
 {
@@ -49,6 +67,11 @@ struct MaxExportInfo
 	vector<int> numberof_vertices;
 	vector<vector<int>> index_list;
 	vector<int> numberof_indicies;
+
+	std::vector<PAnimTrack> animlist_pos;
+	std::vector<PAnimTrack> animlist_rot;
+	std::vector<PAnimTrack> animlist_scale;
+	MaxScene max_scene;
 
 	MaxExportInfo()
 	{
@@ -70,15 +93,18 @@ public:
 	PParser();
 	~PParser();
 private:
-
+	wchar_t wch_t[kCharMaxSize];
 public:
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
 	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list , 
 		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device);
 	std::vector<std::string> SplitString(std::string str, char delimiter);
 	std::vector<std::string> SplitString(std::wstring str, char delimiter);
-	
-
-
+	inline void ReadNextLineAndSplit(OUT_ std::vector<std::string>& strvec, FILE* infile)
+	{
+		_fgetts(wch_t, kCharMaxSize, infile);
+		std::wstring wstr = wch_t;
+		strvec = std::move(SplitString(wstr, ' '));
+	}
 };
 
