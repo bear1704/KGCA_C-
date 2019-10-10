@@ -53,6 +53,8 @@ int main()
 
 #endif
 
+
+#ifdef TEST
 class GameEntity
 {
 private:
@@ -101,3 +103,5 @@ int main()
 	}
 
 }
+
+#endif

@@ -102,7 +102,7 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 
 }
 
-int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list,
+int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene,
 	std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device)
 {
 
@@ -130,88 +130,47 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 	int numberof_obj = std::stoi(split_str[1]);
 	info_list.resize(numberof_obj);
 
-	for (int obj = 0; obj < numberof_obj ; obj++)
+	int obj = -1;
+
+	while (_fgetts(wch_t, kCharMaxSize, infile) != NULL)
 	{
-		while (_fgetts(wch_t, kCharMaxSize, infile) != NULL)
+		wstr = wch_t;
+
+		if (wstr.find(L"#HEADER INFO") != std::string::npos)
 		{
-			wstr = wch_t;
 
-			if (wstr.find(L"#HEADER INFO") != std::string::npos)
+			ReadNextLineAndSplit(split_str, infile);
+
+			scene.first_frame =			std::stoi(split_str[0]);
+			scene.last_frame =			std::stoi(split_str[1]);
+			scene.frame_rate =			std::stoi(split_str[2]);
+			scene.tick_per_frame =		std::stoi(split_str[3]);
+			scene.numberof_meshes =		std::stoi(split_str[4]);
+			scene.numberof_materials =	std::stoi(split_str[5]);
+		}
+		else if (wstr.find(L"#MATERIAL INFO") != std::string::npos)
+		{
+			Material material;
+
+			ReadNextLineAndSplit(split_str, infile);
+
+			material.material_name = split_str[0];
+			material.submaterial_list_size = std::stoi(split_str[1]);
+
+			if (material.submaterial_list_size > 0) //하나이상 서브마테리얼이 있음(서브마테리얼이 렌더에 필요한 정보를 가짐)
 			{
-
-				ReadNextLineAndSplit(split_str, infile);
-
-				info_list[obj].max_scene.first_frame =			std::stoi(split_str[0]);
-				info_list[obj].max_scene.last_frame =			std::stoi(split_str[1]);
-				info_list[obj].max_scene.frame_rate =			std::stoi(split_str[2]);
-				info_list[obj].max_scene.tick_per_frame =		std::stoi(split_str[3]);
-				info_list[obj].max_scene.numberof_meshes =		std::stoi(split_str[4]);
-				info_list[obj].max_scene.numberof_materials =	std::stoi(split_str[5]);
-			}
-			else if (wstr.find(L"#MATERIAL INFO") != std::string::npos)
-			{
-				Material material;
-
-				ReadNextLineAndSplit(split_str, infile);
-
-				material.material_name = split_str[0];
-				material.submaterial_list_size = std::stoi(split_str[1]);
-
-				if (material.submaterial_list_size > 0) //하나이상 서브마테리얼이 있음(서브마테리얼이 렌더에 필요한 정보를 가짐)
+				material.material_id = -1;
+				material.texmap_size = -1;
+				for (int i = 0; i < material.submaterial_list_size; i++)
 				{
-
-					for (int i = 0; i < material.submaterial_list_size; i++)
-					{
-						Material submaterial;
-
-						ReadNextLineAndSplit(split_str, infile);
-
-						submaterial.material_name = split_str[0];
-						submaterial.texmap_size = std::stoi(split_str[1]);
-					
-						for (int texcount = 0; texcount < submaterial.texmap_size; texcount++)
-						{
-							_fgetts(wch_t, kCharMaxSize, infile);
-							wstr = wch_t;
-							wstr.erase(std::remove(wstr.begin(), wstr.end(), '\n'), wstr.end());
-							split_str = SplitString(wstr, ' ');
-							wstr.assign(split_str[1].begin(), split_str[1].end());
-
-							PTexMap texmap;
-							texmap.texmap_id = std::stof(split_str[0]);
-							_tcscpy_s(texmap.texname, _countof(texmap.texname),
-								wstr.c_str());   //텍스트리스트에 추가하게 될 텍스트 이름값  (아래와 서로같음)
-
-							submaterial.tex_list.push_back(texmap);			
-
-							//_tcscpy_s(submaterial.own_material_texname, _countof(submaterial.own_material_texname),
-							//	wstr.c_str()); //서브마테리얼이 담당하게 될 텍스트 이름값
-							TextureInfo texinfo;
-							texinfo.width = 1.0f; texinfo.height = 1.0f;
-							texinfo.uv_ltop = std::string("0.0f, 0.0f");
-							texinfo.uv_rbottom = std::string("1.0f, 1.0f");
-
-							//texinfo.tex_name = submaterial.own_material_texname;
-							texinfo.tex_name = texmap.texname;
-							texinfo.tex_path = texfile_path + texmap.texname;
-
-							PTextureManager::GetInstance().LoadTextureWithoutScript(texinfo, device);
-						}
-						material.sub_material_list.push_back(submaterial);
-					}
-					material_list.push_back(material);
-				}
-				else //서브마테리얼 없이 루트마테리얼이 정보를 가짐
-				{
-					Material material;
+					Material submaterial;
 
 					ReadNextLineAndSplit(split_str, infile);
 
-					material.material_name = split_str[0];
-					material.texmap_size = std::stoi(split_str[1]);
-
-
-					for (int texcount = 0; texcount < material.texmap_size; texcount++)
+					submaterial.material_name = split_str[0];
+					submaterial.texmap_size = std::stoi(split_str[1]);
+				
+					for (int texcount = 0; texcount < submaterial.texmap_size; texcount++)
 					{
 						_fgetts(wch_t, kCharMaxSize, infile);
 						wstr = wch_t;
@@ -221,176 +180,220 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 
 						PTexMap texmap;
 						texmap.texmap_id = std::stof(split_str[0]);
-						_tcscpy_s(texmap.texname, _countof(texmap.texname), wstr.c_str());
+						_tcscpy_s(texmap.texname, _countof(texmap.texname),
+							wstr.c_str());   //텍스트리스트에 추가하게 될 텍스트 이름값  (아래와 서로같음)
 
-						material.tex_list.push_back(texmap);
+						submaterial.tex_list.push_back(texmap);			
 
+						//_tcscpy_s(submaterial.own_material_texname, _countof(submaterial.own_material_texname),
+						//	wstr.c_str()); //서브마테리얼이 담당하게 될 텍스트 이름값
 						TextureInfo texinfo;
 						texinfo.width = 1.0f; texinfo.height = 1.0f;
 						texinfo.uv_ltop = std::string("0.0f, 0.0f");
 						texinfo.uv_rbottom = std::string("1.0f, 1.0f");
 
+						//texinfo.tex_name = submaterial.own_material_texname;
 						texinfo.tex_name = texmap.texname;
 						texinfo.tex_path = texfile_path + texmap.texname;
 
 						PTextureManager::GetInstance().LoadTextureWithoutScript(texinfo, device);
 					}
-					material_list.push_back(material);
+					material.sub_material_list.push_back(submaterial);
 				}
+				material_list.push_back(material);
 			}
-			else if (wstr.find(L"#OBJECT INFO") != std::string::npos)
+			else //서브마테리얼 없이 루트마테리얼이 정보를 가짐
 			{
+				Material material;
+
 				ReadNextLineAndSplit(split_str, infile);
 
-				info_list[obj].meshinfo.meshlist_name = split_str[0];
-				info_list[obj].meshinfo.parent_name = split_str[1];
-				info_list[obj].meshinfo.material_id = std::stoi(split_str[2]);
-				info_list[obj].meshinfo.numberof_submesh = std::stoi(split_str[3]);
-				info_list[obj].meshinfo.trilist_size = std::stoi(split_str[4]);
-			}
-			else if (wstr.find(L"#WORLD MATRIX") != std::string::npos)
-			{
-				auto& world_mat = info_list[obj].meshinfo.world_mat;
+				material.material_name = split_str[0];
+				material.texmap_size = std::stoi(split_str[1]);
 
-				wstringstream sstr;
 
-				_fgetts(wch_t, kCharMaxSize, infile);
-				wstr = wch_t;
-				sstr.str(wstr);
-				sstr >> world_mat._11; sstr >> world_mat._12; sstr >> world_mat._13; sstr >> world_mat._14;
-
-				_fgetts(wch_t, kCharMaxSize, infile);
-				wstr = wch_t;
-				sstr.clear();
-				sstr.str(wstr);
-
-				sstr >> world_mat._21; sstr >> world_mat._22; sstr >> world_mat._23; sstr >> world_mat._24;
-
-				_fgetts(wch_t, kCharMaxSize, infile);
-				wstr = wch_t;
-				sstr.clear();
-				sstr.str(wstr);
-
-				sstr >> world_mat._31; sstr >> world_mat._32; sstr >> world_mat._33; sstr >>world_mat._34;
-
-				_fgetts(wch_t, kCharMaxSize, infile);
-				wstr = wch_t;
-				sstr.clear();
-				sstr.str(wstr);
-
-				sstr >>world_mat._41; sstr >> world_mat._42; sstr >> world_mat._43; sstr >>world_mat._44;
-
-			}
-			else if (wstr.find(L"VertexList") != std::string::npos)
-			{
-
-				split_str = SplitString(wstr, ' ');
-
-				int numberof_vertices = stoi(split_str[1]);
-
-				info_list[obj].numberof_vertices.push_back(numberof_vertices);
-
-				vector<Vertex_PNCT> vertices;
-				vertices.reserve(numberof_vertices);
-
-				wstringstream wsstr;
-
-				for (int i = 0; i < numberof_vertices; i++)
+				for (int texcount = 0; texcount < material.texmap_size; texcount++)
 				{
-					Vertex_PNCT pnct;
-					wsstr.str(L"");
-					wsstr.clear();
 					_fgetts(wch_t, kCharMaxSize, infile);
 					wstr = wch_t;
-					wsstr.str(wstr);
-				
-					wsstr >> pnct.pos.x; wsstr >> pnct.pos.y; wsstr >> pnct.pos.z; wsstr >> pnct.normal.x; wsstr >> pnct.normal.y; wsstr >> pnct.normal.z;
-					wsstr >> pnct.color.x; wsstr >> pnct.color.y; wsstr >> pnct.color.z; wsstr >> pnct.color.w;
-					wsstr >> pnct.uv.x; wsstr >> pnct.uv.y;
+					wstr.erase(std::remove(wstr.begin(), wstr.end(), '\n'), wstr.end());
+					split_str = SplitString(wstr, ' ');
+					wstr.assign(split_str[1].begin(), split_str[1].end());
 
-					vertices.push_back(pnct);
+					PTexMap texmap;
+					texmap.texmap_id = std::stof(split_str[0]);
+					_tcscpy_s(texmap.texname, _countof(texmap.texname), wstr.c_str());
+
+					material.tex_list.push_back(texmap);
+
+					TextureInfo texinfo;
+					texinfo.width = 1.0f; texinfo.height = 1.0f;
+					texinfo.uv_ltop = std::string("0.0f, 0.0f");
+					texinfo.uv_rbottom = std::string("1.0f, 1.0f");
+
+					texinfo.tex_name = texmap.texname;
+					texinfo.tex_path = texfile_path + texmap.texname;
+
+					PTextureManager::GetInstance().LoadTextureWithoutScript(texinfo, device);
 				}
-				info_list[obj].vertex_list.push_back(vertices);
-				vertex_count++;
-
-				//1.6s
-			}
-			else if (wstr.find(L"IndexList") != std::string::npos)
-			{
-
-				split_str = SplitString(wstr, ' ');
-
-				int numberof_indicies = std::stoi(split_str[1]);
-
-				info_list[obj].numberof_indicies.push_back(numberof_indicies);
-
-				vector<int> index_list;
-				index_list.resize(numberof_indicies);
-
-				for (int i = 0; i < numberof_indicies; i += 3)
-				{
-					_fgetts(wch_t, kCharMaxSize, infile);
-					wstr = wch_t;
-					wstringstream sstr;
-					sstr.str(wstr);
-
-					sstr >> index_list[i]; sstr >> index_list[i + 1]; sstr >> index_list[i + 2];
-					sstr.clear();
-				}
-				info_list[obj].index_list.push_back(index_list);
-				index_count++;
-			}
-			else if (wstr.find(L"#ANIMATION DATA") != std::string::npos)
-			{
-			
-				ReadNextLineAndSplit(split_str, infile);
-
-				std::vector<PAnimTrack>& anim_pos = info_list[obj].animlist_pos;
-				std::vector<PAnimTrack>& anim_rot = info_list[obj].animlist_rot;
-				std::vector<PAnimTrack>& anim_scale = info_list[obj].animlist_scale;
-				anim_pos.resize(std::stoi(split_str[0]));
-				anim_rot.resize(std::stoi(split_str[1]));
-				anim_scale.resize(std::stoi(split_str[2]));
-				
-				int index = 0;
-				
-				for (int i = 0; i < anim_pos.size(); i++)
-				{
-					_fgetts(wch_t, kCharMaxSize, infile);
-					wstr = wch_t;
-					wstringstream sstr;
-					sstr.clear();
-					sstr.str(wstr);
-
-					sstr >> index; sstr >> anim_pos[i].tick; sstr >> anim_pos[i].p.x; sstr >> anim_pos[i].p.y; sstr >> anim_pos[i].p.z;
-				}
-				for (int i = 0; i < anim_rot.size(); i++)
-				{
-					_fgetts(wch_t, kCharMaxSize, infile);
-					wstr = wch_t;
-					wstringstream sstr;
-					sstr.clear();
-					sstr.str(wstr);
-
-					sstr >> index; sstr >> anim_rot[i].tick; sstr >> anim_rot[i].q.x; sstr >> anim_rot[i].q.y; sstr >> anim_rot[i].q.z;
-					sstr >> anim_rot[i].q.w;
-				}
-				for (int i = 0; i < anim_scale.size(); i++)
-				{
-					_fgetts(wch_t, kCharMaxSize, infile);
-					wstr = wch_t;
-					wstringstream sstr;
-					sstr.clear();
-					sstr.str(wstr);
-
-					sstr >> index; sstr >> anim_scale[i].tick; sstr >> anim_scale[i].p.x; sstr >> anim_scale[i].p.y; sstr >> anim_scale[i].p.z;
-					sstr >> anim_scale[i].q.x; sstr >> anim_scale[i].q.y; sstr >> anim_scale[i].q.z; sstr >> anim_scale[i].q.w;
-
-				}			
+				material_list.push_back(material);
 			}
 		}
-			fclose(infile);
+		else if (wstr.find(L"#OBJECT INFO") != std::string::npos)
+		{
+			ReadNextLineAndSplit(split_str, infile);
+
+			obj++;
+			info_list[obj].meshinfo.meshlist_name = split_str[0];
+			info_list[obj].meshinfo.parent_name = split_str[1];
+			info_list[obj].meshinfo.material_id = std::stoi(split_str[2]);
+			info_list[obj].meshinfo.numberof_submesh = std::stoi(split_str[3]);
+			info_list[obj].meshinfo.trilist_size = std::stoi(split_str[4]);
+			
+		}
+		else if (wstr.find(L"#WORLD MATRIX") != std::string::npos)
+		{
+			auto& world_mat = info_list[obj].meshinfo.world_mat;
+
+			wstringstream sstr;
+
+			_fgetts(wch_t, kCharMaxSize, infile);
+			wstr = wch_t;
+			sstr.str(wstr);
+			sstr >> world_mat._11; sstr >> world_mat._12; sstr >> world_mat._13; sstr >> world_mat._14;
+
+			_fgetts(wch_t, kCharMaxSize, infile);
+			wstr = wch_t;
+			sstr.clear();
+			sstr.str(wstr);
+
+			sstr >> world_mat._21; sstr >> world_mat._22; sstr >> world_mat._23; sstr >> world_mat._24;
+
+			_fgetts(wch_t, kCharMaxSize, infile);
+			wstr = wch_t;
+			sstr.clear();
+			sstr.str(wstr);
+
+			sstr >> world_mat._31; sstr >> world_mat._32; sstr >> world_mat._33; sstr >>world_mat._34;
+
+			_fgetts(wch_t, kCharMaxSize, infile);
+			wstr = wch_t;
+			sstr.clear();
+			sstr.str(wstr);
+
+			sstr >>world_mat._41; sstr >> world_mat._42; sstr >> world_mat._43; sstr >>world_mat._44;
+
+		}
+		else if (wstr.find(L"VertexList") != std::string::npos)
+		{
+
+			split_str = SplitString(wstr, ' ');
+
+			int numberof_vertices = stoi(split_str[1]);
+
+			info_list[obj].numberof_vertices.push_back(numberof_vertices);
+
+			vector<Vertex_PNCT> vertices;
+			vertices.reserve(numberof_vertices);
+
+			wstringstream wsstr;
+
+			for (int i = 0; i < numberof_vertices; i++)
+			{
+				Vertex_PNCT pnct;
+				wsstr.str(L"");
+				wsstr.clear();
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
+				wsstr.str(wstr);
+			
+				wsstr >> pnct.pos.x; wsstr >> pnct.pos.y; wsstr >> pnct.pos.z; wsstr >> pnct.normal.x; wsstr >> pnct.normal.y; wsstr >> pnct.normal.z;
+				wsstr >> pnct.color.x; wsstr >> pnct.color.y; wsstr >> pnct.color.z; wsstr >> pnct.color.w;
+				wsstr >> pnct.uv.x; wsstr >> pnct.uv.y;
+
+				vertices.push_back(pnct);
+			}
+			info_list[obj].vertex_list.push_back(vertices);
+			vertex_count++;
+
+			//1.6s
+		}
+		else if (wstr.find(L"IndexList") != std::string::npos)
+		{
+
+			split_str = SplitString(wstr, ' ');
+
+			int numberof_indicies = std::stoi(split_str[1]);
+
+			info_list[obj].numberof_indicies.push_back(numberof_indicies);
+
+			vector<int> index_list;
+			index_list.resize(numberof_indicies);
+
+			for (int i = 0; i < numberof_indicies; i += 3)
+			{
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
+				wstringstream sstr;
+				sstr.str(wstr);
+
+				sstr >> index_list[i]; sstr >> index_list[i + 1]; sstr >> index_list[i + 2];
+				sstr.clear();
+			}
+			info_list[obj].index_list.push_back(index_list);
+			index_count++;
+		}
+		else if (wstr.find(L"#ANIMATION DATA") != std::string::npos)
+		{
+		
+			ReadNextLineAndSplit(split_str, infile);
+
+			std::vector<PAnimTrack>& anim_pos = info_list[obj].animlist_pos;
+			std::vector<PAnimTrack>& anim_rot = info_list[obj].animlist_rot;
+			std::vector<PAnimTrack>& anim_scale = info_list[obj].animlist_scale;
+			anim_pos.resize(std::stoi(split_str[0]));
+			anim_rot.resize(std::stoi(split_str[1]));
+			anim_scale.resize(std::stoi(split_str[2]));
+			
+			int index = 0;
+			
+			for (int i = 0; i < anim_pos.size(); i++)
+			{
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
+				wstringstream sstr;
+				sstr.clear();
+				sstr.str(wstr);
+
+				sstr >> index; sstr >> anim_pos[i].tick; sstr >> anim_pos[i].p.x; sstr >> anim_pos[i].p.y; sstr >> anim_pos[i].p.z;
+			}
+			for (int i = 0; i < anim_rot.size(); i++)
+			{
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
+				wstringstream sstr;
+				sstr.clear();
+				sstr.str(wstr);
+
+				sstr >> index; sstr >> anim_rot[i].tick; sstr >> anim_rot[i].q.x; sstr >> anim_rot[i].q.y; sstr >> anim_rot[i].q.z;
+				sstr >> anim_rot[i].q.w;
+			}
+			for (int i = 0; i < anim_scale.size(); i++)
+			{
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
+				wstringstream sstr;
+				sstr.clear();
+				sstr.str(wstr);
+
+				sstr >> index; sstr >> anim_scale[i].tick; sstr >> anim_scale[i].p.x; sstr >> anim_scale[i].p.y; sstr >> anim_scale[i].p.z;
+				sstr >> anim_scale[i].q.x; sstr >> anim_scale[i].q.y; sstr >> anim_scale[i].q.z; sstr >> anim_scale[i].q.w;
+
+			}			
+		}
 	}
+		fclose(infile);
+	
 	return 0;
 }
 

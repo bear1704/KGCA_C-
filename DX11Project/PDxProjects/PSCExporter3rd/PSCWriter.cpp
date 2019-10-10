@@ -54,9 +54,10 @@ bool PSCWriter::Export()
 	_ftprintf(file, _T("\n%d %d %d %d %d %d"), scene_.first_frame, scene_.last_frame, scene_.frame_rate, scene_.tick_per_frame 
 		,mesh_list_.size(), pmtl_list_.size());
 
-	_ftprintf(file, _T("\n%s"), L"#MATERIAL INFO  [PMaterialListName/SubMaterialListSize] Sub-> [SubMaterialName/TexSize] // [TexmapID/TexmapName] ");
+	
 	for (int i = 0; i < pmtl_list_.size(); i++)
 	{
+		_ftprintf(file, _T("\n%s"), L"#MATERIAL INFO  [PMaterialListName/SubMaterialListSize] Sub-> [SubMaterialName/TexSize] // [TexmapID/TexmapName] ");
 		_ftprintf(file, _T("\n%s %d"),
 			pmtl_list_[i].name, pmtl_list_[i].submaterial_list.size());
 
@@ -73,8 +74,8 @@ bool PSCWriter::Export()
 				for (int itex = 0; itex < current_texlist.size(); itex++)
 				{
 					_ftprintf(file, _T("\n%d %s"),
-						current_texlist[i].map_id,
-						current_texlist[i].name);
+						current_texlist[itex].map_id,
+						current_texlist[itex].name);
 				}
 			}
 		}
@@ -93,11 +94,11 @@ bool PSCWriter::Export()
 		}
 	}
 
-	//mesh list
-	_ftprintf(file, _T("\n%s"), L"#OBJECT INFO [MeshListName/ParentName/MaterialID/BufferListSize/TriListSize]");
 
 	for (int imesh = 0; imesh < mesh_list_.size(); imesh++)
 	{
+		//mesh list
+		_ftprintf(file, _T("\n%s"), L"#OBJECT INFO [MeshListName/ParentName/MaterialID/BufferListSize/TriListSize]");
 		_ftprintf(file, _T("\n%s %s %d %d %d"),
 			mesh_list_[imesh].name,
 			mesh_list_[imesh].parent_name,
@@ -208,6 +209,9 @@ void PSCWriter::AddObject(INode* node)
 			case GEOMOBJECT_CLASS_ID:
 				object_list_.push_back(node);
 				break;
+			case HELPER_CLASS_ID:
+				object_list_.push_back(node);
+				break;
 			default:
 				break;
 		}
@@ -235,7 +239,7 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 	{
 		int numberof_face = mesh->getNumFaces();
 		
-		std::vector<TriComponent> trilist = pmesh.tri_list;
+		std::vector<TriComponent>& trilist = pmesh.tri_list;
 		trilist.resize(numberof_face);
 		pmesh.buffer_list.resize(pmesh.numberof_submesh);
 
@@ -303,6 +307,12 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 			if (pmesh.material_id < 0 || pmtl_list_[pmesh.material_id].submaterial_list.size() <= 0)
 			{
 				trilist[iFace].tri_index = 0;
+			}
+
+			if (trilist[iFace].tri_index > pmesh.buffer_list.size())
+			{
+				continue;
+				//trilist[iFace].tri_index = 0;
 			}
 
 			pmesh.buffer_list[trilist[iFace].tri_index].push_back(trilist[iFace]);
@@ -705,7 +715,7 @@ void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 		//animation이 존재하는지 체크
 		if (mesh.animation_enable[0] == false)
 		{
-			if (EqualPoint3(start_ap.t, frame_ap.t))
+			if (EqualPoint3(start_ap.t, frame_ap.t) == false)
 			{
 				mesh.animation_enable[0] = true;
 			}
@@ -713,20 +723,20 @@ void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 
 		if (mesh.animation_enable[1] == false)
 		{
-			if (EqualPoint3(start_rotate_axis, frame_rotate_axis))
+			if (EqualPoint3(start_rotate_axis, frame_rotate_axis) == false)
 			{
 				mesh.animation_enable[1] = true;
 			}
 			else
-			{
-				if (start_rotate_value != frame_rotate_value)
+			{ //두 숫자(0프레임의 로테이션, 현재프레임의 로테이션)이 서로 다르다면(애니메이션 존재)
+				if (fabs(start_rotate_value - frame_rotate_value) >= ALMOST_ZERO)
 					mesh.animation_enable[1] = true;
 			}
 		}
 
 		if (mesh.animation_enable[2] == false)
 		{
-			if (EqualPoint3(start_ap.k, frame_ap.k))
+			if (EqualPoint3(start_ap.k, frame_ap.k) == false)
 			{
 				mesh.animation_enable[2] = true;
 			}

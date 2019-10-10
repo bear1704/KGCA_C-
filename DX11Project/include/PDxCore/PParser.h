@@ -55,6 +55,17 @@ struct MaxScene
 	int tick_per_frame; // 160
 	int numberof_meshes;
 	int numberof_materials;
+
+	MaxScene()
+	{
+		first_frame = 0;
+		last_frame = 0;
+		frame_rate = 0;
+		tick_per_frame = 0;
+		numberof_meshes = 0;
+		numberof_materials = 0;
+
+	}
 };
 
 
@@ -71,7 +82,6 @@ struct MaxExportInfo
 	std::vector<PAnimTrack> animlist_pos;
 	std::vector<PAnimTrack> animlist_rot;
 	std::vector<PAnimTrack> animlist_scale;
-	MaxScene max_scene;
 
 	MaxExportInfo()
 	{
@@ -96,7 +106,7 @@ private:
 	wchar_t wch_t[kCharMaxSize];
 public:
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
-	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list , 
+	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene, 
 		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device);
 	std::vector<std::string> SplitString(std::string str, char delimiter);
 	std::vector<std::string> SplitString(std::wstring str, char delimiter);

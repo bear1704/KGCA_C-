@@ -55,14 +55,6 @@
 	<uv_rbottom> 64.0f, 64.0f </uv_rbottom> <!-- right-bottom -->
 </Texture>
 <Texture>
-	<tex_name>tile</tex_name>
-	<tex_path> data/texture/017.bmp	</tex_path>
-	<image_width> 64 </image_width>
-	<image_height> 64 </image_height>
-	<uv_ltop> 0.0f, 0.0f </uv_ltop> <!-- 무조건 최하단에 존재해야함!정확히는 name보다 아래에 존재 -->
-	<uv_rbottom> 64.0f, 64.0f </uv_rbottom> <!-- right-bottom -->
-</Texture>
-<Texture>
 	<tex_name>env</tex_name>
 	<tex_path> data/texture/grassenvmap1024.dds	</tex_path>
 	<image_width> 1024 </image_width>

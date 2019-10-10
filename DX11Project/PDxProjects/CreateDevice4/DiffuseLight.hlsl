@@ -71,7 +71,7 @@ float4 Specular(float3 vNormal)
 	fPower = pow(saturate(dot(R, -g_vEyeDir)), g_fIntensity);
 #else
 	float3 vHalf = normalize(-g_vLightDir + -g_vEyeDir);
-	fPower = pow(saturate(dot(vNormal, vHalf)), 50.0f);
+	fPower = pow(saturate(dot(vNormal, vHalf)), 30.0f);
 #endif
 	float4 specular = g_cSpecularMaterial * g_cSpecularLightColor * fPower;
 	//float4 specular = float4(fPower, fPower, fPower,1.0f);
@@ -99,9 +99,9 @@ VS_OUTPUT VS(VS_INPUT vIn)
 
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
+	
 	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
 	float4 vFinalColor = vTexColor * (Diffuse(vIn.n) + Specular(vIn.n)) * vIn.c;
-	//float4 vFinalColor = vTexColor * (Specular(vIn.n)) * vIn.c;
 	vFinalColor.a = 1.0f;
 	return vFinalColor;
 }

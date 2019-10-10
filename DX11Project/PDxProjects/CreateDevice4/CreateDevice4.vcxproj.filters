@@ -13,14 +13,29 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{4dc6be5f-1cab-40f8-9be5-2fcfcf8eda14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="DiffuseLight.hlsl" />
-    <FxCompile Include="NormalMap.hlsl" />
-    <FxCompile Include="PixelShader.hlsl" />
-    <FxCompile Include="Skybox.hlsl" />
-    <FxCompile Include="Terrain.hlsl" />
-    <FxCompile Include="VertexShader.hlsl" />
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DiffuseLight.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Skybox.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Terrain.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PLightObj.cpp">

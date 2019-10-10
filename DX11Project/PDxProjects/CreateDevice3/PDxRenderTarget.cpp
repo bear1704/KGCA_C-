@@ -48,24 +48,36 @@ bool PDxRenderTarget::Begin(ID3D11DeviceContext* context)
 	context->OMGetRenderTargets(1, render_target_view_old_.GetAddressOf(),
 		depth_stencil_view_old_.GetAddressOf());
 
+	context->ClearRenderTargetView(
+		render_target_view_.Get(), D3DXVECTOR4(0, 0, 0.3f, 1));
+
+	context->ClearDepthStencilView(
+		depth_stencil_view_.Get(),
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+
+	ID3D11RenderTargetView* rtvs = NULL;
+	ID3D11DepthStencilView* dsv = NULL;
+	context->OMSetRenderTargets(1, &rtvs, dsv);
+
 	context->OMSetRenderTargets(1,
 		render_target_view_.GetAddressOf(),
 		depth_stencil_view_.Get());
 
 	context->RSSetViewports(1, &viewport_);
 
-	context->ClearRenderTargetView(
-		render_target_view_.Get(), D3DXVECTOR4(0, 0, 0.3, 1));
-
-	context->ClearDepthStencilView(
-		depth_stencil_view_.Get(),
-		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	return true;
 }
 
 bool PDxRenderTarget::End(ID3D11DeviceContext* context)
 {
+
+
+	ID3D11RenderTargetView* rtvs = NULL;
+	ID3D11DepthStencilView* dsv = NULL;
+	context->OMSetRenderTargets(1, &rtvs, dsv);
+
 	context->RSSetViewports(numberof_view_port_, &viewport_old_);
 	context->OMSetRenderTargets(1, render_target_view_old_.GetAddressOf(),
 		depth_stencil_view_old_.Get());

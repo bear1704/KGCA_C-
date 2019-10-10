@@ -96,4 +96,4 @@ public:
 	HRESULT CreateConstantBuffer();
 
 };
-PCORE_RUN(L"normalmap", 0, 0, 800, 600);
+PCORE_RUN(L"Animation", 0, 0, 800, 600);

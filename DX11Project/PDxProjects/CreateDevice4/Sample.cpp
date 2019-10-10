@@ -16,11 +16,12 @@ bool Sample::Init()
 {
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	box_.Init(device_, immediate_device_context_, L"Terrain.hlsl", "VS", L"Terrain.hlsl", "PS", L"env");
+	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"blue");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 
 	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", 
-		"PS", L"data/obj/animbox/animbox.PNG", L"data/obj/animbox/");
+		"PS", L"data/obj/ship.PNG", L"data/obj/");
+	
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -45,12 +46,12 @@ bool Sample::Init()
 	main_camera_ = &free_camera_;
 
 
-	dx_rt_.Create(device_, 1024, 1024);
-	dx_minimap_rt_.Create(device_, 1024, 1024);
+	dx_rt_.Create(device_, 800, 600);
+	dx_minimap_rt_.Create(device_, 800, 600);
 	
 	
-	light_obj_.Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
+	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
 
 	map_.Init(device_, immediate_device_context_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
@@ -60,11 +61,11 @@ bool Sample::Init()
 	md.vertex_cols = map_.vertex_cols();
 	md.vertex_rows = map_.vertex_rows();
 	md.cell_disatnce = 1;
-	md.vs_path = L"NormalMap.hlsl";
+	md.vs_path = L"DiffuseLight.hlsl";
 	md.vs_func = "VS";
-	md.ps_path = L"NormalMap.hlsl";
+	md.ps_path = L"DiffuseLight.hlsl";
 	md.ps_func = "PS";
-	md.texture_name = L"stone_wall";
+	md.texture_name = L"tile";
 
 	map_.SetNormalTexture(L"test");
 	if (map_.Load(md) == false)
@@ -140,6 +141,7 @@ bool Sample::Frame()
 	obj_.Frame();
 	box_.Frame();
 	map_.Frame();
+	ship_.Frame();
 	return true;
 }
 
@@ -160,13 +162,14 @@ bool Sample::Render()
 
 	dx_rt_.Begin(immediate_device_context_);
 	{
+		DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
+
 		if(is_wireframe_render_) //마우스 휠 여부에 따라 와이어프레임, 솔리드를 가르는 코드
 			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_wireframe_);
 		else
 			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 		//sky
 
-		DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_wrap_point);
 
@@ -208,13 +211,17 @@ bool Sample::Render()
 		dx_rt_.End(immediate_device_context_);
 	}
 
-	D3DXMATRIX mat_top_view;
-	D3DXMatrixLookAtLH(&mat_top_view,
-		&D3DXVECTOR3(0, 70, 0),
-		&D3DXVECTOR3(0, 0, 0.1),
-		&D3DXVECTOR3(0, 1, 0));
+#pragma region MINIMAP
 
-	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+	//D3DXMATRIX mat_top_view;
+	//D3DXMatrixLookAtLH(&mat_top_view,
+	//	&D3DXVECTOR3(0, 70, 0),
+	//	&D3DXVECTOR3(0, 0, 0.1),
+	//	&D3DXVECTOR3(0, 1, 0));
+
+	//DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+
+
 
 	//dx_minimap_rt_.Begin(immediate_device_context_);
 	//{		
@@ -225,28 +232,33 @@ bool Sample::Render()
 	//	//skybox_.Render();
 
 
-	//	obj_.SetWVPMatrix(&mat_obj_world_, &mat_top_view, &main_camera_->matProj_);
-	//	obj_.Render();
-	//	box_.SetWVPMatrix(&mat_box_world_, &mat_top_view, &main_camera_->matProj_);
-	//	box_.Render();
-	//	map_.SetWVPMatrix(nullptr, &mat_top_view, &main_camera_->matProj_);
-	//	map_.Render();
+	//	/*obj_.SetWVPMatrix(&mat_obj_world_, &mat_top_view, &main_camera_->matProj_);
+	//	obj_.Render();*/
+	//	/*box_.SetWVPMatrix(&mat_box_world_, &mat_top_view, &main_camera_->matProj_);
+	//	box_.Render();*/
+	//	//map_.SetWVPMatrix(nullptr, &mat_top_view, &main_camera_->matProj_);
+	//	//map_.Render();
+
+	//	ship_.SetWVPMatrix(&ship_.object_list_[0].info.meshinfo.world_mat, &main_camera_->matView_, &main_camera_->matProj_);
+	//	//ship_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+	//	ship_.Render();
+
 	//	dx_minimap_rt_.End(immediate_device_context_);
 	//}
 
 
-	screen_tex_object_.vertex_list()[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
-	screen_tex_object_.vertex_list()[1].pos = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	screen_tex_object_.vertex_list()[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	screen_tex_object_.vertex_list()[3].pos = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+	//screen_tex_object_.vertex_list()[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
+	//screen_tex_object_.vertex_list()[1].pos = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	//screen_tex_object_.vertex_list()[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//screen_tex_object_.vertex_list()[3].pos = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
 
-	screen_tex_object_.vertex_list()[0].uv = D3DXVECTOR2(0.0f, 0.0f);
-	screen_tex_object_.vertex_list()[1].uv = D3DXVECTOR2(1.0f, 0.0f);
-	screen_tex_object_.vertex_list()[2].uv = D3DXVECTOR2(1.0f, 1.0f);
-	screen_tex_object_.vertex_list()[3].uv = D3DXVECTOR2(0.0f, 1.0f);
-	
+	//screen_tex_object_.vertex_list()[0].uv = D3DXVECTOR2(0.0f, 0.0f);
+	//screen_tex_object_.vertex_list()[1].uv = D3DXVECTOR2(1.0f, 0.0f);
+	//screen_tex_object_.vertex_list()[2].uv = D3DXVECTOR2(1.0f, 1.0f);
+	//screen_tex_object_.vertex_list()[3].uv = D3DXVECTOR2(0.0f, 1.0f);
+	//
 
-	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
+
 
 	//immediate_device_context_->UpdateSubresource(screen_tex_object_.dx_helper().vertex_buffer_.Get(),
 	//	0, NULL, &screen_tex_object_.vertex_list().at(0), 0, 0);
@@ -255,6 +267,9 @@ bool Sample::Render()
 	//immediate_device_context_->PSSetShaderResources(0, 1, dx_minimap_rt_.shader_res_view_.GetAddressOf());
 	//screen_tex_object_.PostRender();
 
+#pragma endregion
+
+	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 	screen_tex_object_.vertex_list()[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[1].pos = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[2].pos = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
@@ -267,6 +282,7 @@ bool Sample::Render()
 
 	immediate_device_context_->UpdateSubresource(screen_tex_object_.dx_helper().vertex_buffer_.Get(),
 		0, NULL, &screen_tex_object_.vertex_list().at(0), 0, 0);
+
 
 	screen_tex_object_.SetWVPMatrix(NULL, NULL, NULL);
 	screen_tex_object_.PreRender();
