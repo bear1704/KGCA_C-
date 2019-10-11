@@ -38,7 +38,7 @@ cbuffer cb1: register(b1)
 //--------------------------------------------------------------------------------------
 struct VS_INPUT
 {
-	float4 p : POSITION;
+	float3 p : POSITION;
 	float3 n : NORMAL;
 	float4 c : COLOR;
 	float2 t : TEXCOORD;
@@ -84,7 +84,9 @@ float4 Specular(float3 vNormal)
 VS_OUTPUT VS(VS_INPUT vIn)
 {
 	VS_OUTPUT vOut = (VS_OUTPUT)0;
-	vOut.p = mul(vIn.p, WIDEN(matWorld));
+	
+	vOut.p = mul(float4(vIn.p, 1.0f), WIDEN(matWorld));
+	//vOut.p = mul(vOut.p, WIDEN(matWorld));
 	vOut.p = mul(vOut.p, WIDEN(matView));
 	vOut.p = mul(vOut.p, WIDEN(matProj));
 	vOut.n = normalize(mul(vIn.n, (float3x3)g_matWorldInverse));
@@ -99,7 +101,6 @@ VS_OUTPUT VS(VS_INPUT vIn)
 
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
-	
 	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
 	float4 vFinalColor = vTexColor * (Diffuse(vIn.n) + Specular(vIn.n)) * vIn.c;
 	vFinalColor.a = 1.0f;

@@ -16,7 +16,7 @@ bool Sample::Init()
 {
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"blue");
+	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"tile");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 
 	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", 
@@ -61,9 +61,9 @@ bool Sample::Init()
 	md.vertex_cols = map_.vertex_cols();
 	md.vertex_rows = map_.vertex_rows();
 	md.cell_disatnce = 1;
-	md.vs_path = L"DiffuseLight.hlsl";
+	md.vs_path = L"NormalMap.hlsl";
 	md.vs_func = "VS";
-	md.ps_path = L"DiffuseLight.hlsl";
+	md.ps_path = L"NormalMap.hlsl";
 	md.ps_func = "PS";
 	md.texture_name = L"tile";
 
@@ -159,10 +159,10 @@ bool Sample::Render()
 	mat_sky_view._42 = 0.0f;
 	mat_sky_view._43 = 0.0f;
 
-
+#pragma region SCREEN
 	dx_rt_.Begin(immediate_device_context_);
 	{
-		DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
+		//DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
 
 		if(is_wireframe_render_) //마우스 휠 여부에 따라 와이어프레임, 솔리드를 가르는 코드
 			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_wireframe_);
@@ -172,6 +172,7 @@ bool Sample::Render()
 
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_wrap_point);
+		
 
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
@@ -192,24 +193,30 @@ bool Sample::Render()
 
 		immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
 			NULL, &map_.constant_data_, 0, 0);
-		//map_.PreRender();
-		//
-		//ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
-		//UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
-		//UINT offset[2] = { 0,0 };
-		//
-		//immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
-		//immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
-		//immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		//immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		//immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		//immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		//map_.PostRender();
+		map_.PreRender();
+		
+		ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
+		UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
+		UINT offset[2] = { 0,0 };
+		
+		immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
+		immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
+		immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		map_.PostRender();
 	
 
 
 		dx_rt_.End(immediate_device_context_);
 	}
+#pragma endregion
+
+
+
+
+
 
 #pragma region MINIMAP
 

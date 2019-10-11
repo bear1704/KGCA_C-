@@ -42,7 +42,7 @@ void PCamera::CreateTargetViewMatrix(D3DXVECTOR3 mypos, D3DXVECTOR3 target, D3DX
 void PCamera::CreateProjectionMatrix()
 {
 	D3DXMatrixPerspectiveFovLH(&matProj_, D3DX_PI / 4, (float)g_rectangle_client.right / (float)g_rectangle_client.bottom,
-	0.0001f, 3000.0f);
+	0.01f, 3000.0f);
 }
 
 

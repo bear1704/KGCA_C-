@@ -195,7 +195,7 @@ HRESULT PBoxObject::CreateIndexData()
 	int iIndex = 0;
 	index_list_[iIndex++] = 0; 	index_list_[iIndex++] = 1; 	index_list_[iIndex++] = 2; 	index_list_[iIndex++] = 0;	index_list_[iIndex++] = 2; 	index_list_[iIndex++] = 3;
 	index_list_[iIndex++] = 4; 	index_list_[iIndex++] = 5; 	index_list_[iIndex++] = 6; 	index_list_[iIndex++] = 4;	index_list_[iIndex++] = 6; 	index_list_[iIndex++] = 7;
-	index_list_[iIndex++] = 8; 	index_list_[iIndex++] = 9; 	index_list_[iIndex++] = 10; index_list_[iIndex++] = 8;	index_list_[iIndex++] = 10; index_list_[iIndex++] = 11;
+	index_list_[iIndex++] = 8; 	index_list_[iIndex++] = 9;	index_list_[iIndex++] = 10;  index_list_[iIndex++] = 8;	index_list_[iIndex++] = 10; index_list_[iIndex++] = 11;
 	index_list_[iIndex++] = 12; index_list_[iIndex++] = 13; index_list_[iIndex++] = 14; index_list_[iIndex++] = 12;	index_list_[iIndex++] = 14; index_list_[iIndex++] = 15;
 	index_list_[iIndex++] = 16; index_list_[iIndex++] = 17; index_list_[iIndex++] = 18; index_list_[iIndex++] = 16;	index_list_[iIndex++] = 18; index_list_[iIndex++] = 19;
 	index_list_[iIndex++] = 20; index_list_[iIndex++] = 21; index_list_[iIndex++] = 22; index_list_[iIndex++] = 20;	index_list_[iIndex++] = 22; index_list_[iIndex++] = 23;
@@ -419,7 +419,6 @@ bool PImportObject::PostRender()
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
 
-		
 		//constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
 		constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
 

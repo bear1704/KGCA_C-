@@ -44,8 +44,11 @@ bool PCore::PreRender()
 	else
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 
-	//DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
+	
+	DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_); //재진수정
+	
 	DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+
 	return true;
 }
 

@@ -17,6 +17,7 @@ public:
 	//virtual bool Create(ID3D11Device* device, std::wstring shader_file_path, std::wstring );
 	virtual bool PostRender() override;
 	virtual bool Render() override;
+	virtual HRESULT CreateIndexData() override;
 
 	virtual HRESULT LoadTextures(std::wstring tex_name = nullptr) override;
 
