@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="array.cpp" />
     <ClCompile Include="bi.cpp" />
+    <ClCompile Include="chars.cpp" />
     <ClCompile Include="constexpr.cpp" />
     <ClCompile Include="fortress.cpp" />
     <ClCompile Include="lightweight.cpp" />

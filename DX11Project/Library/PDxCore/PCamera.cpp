@@ -59,14 +59,6 @@ void PCamera::MoveCameraVec(D3DXVECTOR3 move)
 	matView_._11 = vec_right_.x; matView_._12 = vec_up_.x; matView_._13 = vec_look_.x;
 	matView_._21 = vec_right_.y; matView_._22 = vec_up_.y; matView_._23 = vec_look_.y;
 	matView_._31 = vec_right_.z; matView_._32 = vec_up_.z; matView_._33 = vec_look_.z;
-	
-	matView_ ._41 = -(D3DXVec3Dot(&camera_position_, &vec_right_));
-	matView_ ._41 = -(D3DXVec3Dot(&camera_position_, &vec_up_));
-	matView_ ._41 = -(D3DXVec3Dot(&camera_position_, &vec_look_));
-
-	D3DXVec3Normalize(&vec_look_, &vec_look_);
-	D3DXVec3Normalize(&vec_up_, &vec_up_);
-	D3DXVec3Normalize(&vec_right_, &vec_right_);
 
 }
 

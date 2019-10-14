@@ -10,6 +10,7 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 
+
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 #include <istdplug.h>
 #include <iparamb2.h>

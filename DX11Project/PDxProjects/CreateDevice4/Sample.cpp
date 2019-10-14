@@ -14,18 +14,19 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
+
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"tile");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 
+
 	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", 
-		"PS", L"data/obj/ship.PNG", L"data/obj/");
-	
+		"PS", L"data/obj/turret/turret8.PNG", L"data/obj/turret/");
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
-
+	
 	free_camera_.Init();
 
 	D3DXVECTOR3 eye(0.0f, 0.0f, -2.0f);
@@ -44,7 +45,7 @@ bool Sample::Init()
 	
 
 	main_camera_ = &free_camera_;
-
+	
 
 	dx_rt_.Create(device_, 800, 600);
 	dx_minimap_rt_.Create(device_, 800, 600);
@@ -52,6 +53,7 @@ bool Sample::Init()
 	
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
 		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
+
 
 	map_.Init(device_, immediate_device_context_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
