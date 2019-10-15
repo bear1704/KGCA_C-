@@ -8,6 +8,15 @@
 #define OUT_
 using namespace std;
 
+const enum class OBJECT_TYPE
+{
+	CLASS_GEOM = 0,
+	CLASS_BONE,
+	CLASS_DUMMY,
+	CLASS_BIPED,
+	CLASS_ERROR,
+};
+
 typedef struct _D3D_MATRIX {
 	union {
 		struct {
@@ -57,14 +66,22 @@ struct PAnimTrack
 	Quat q;
 };
 
+
+
 struct PMesh
 {
 	TSTR name;
 	TSTR parent_name;
+	Box3 bounding_box;
+	OBJECT_TYPE type;
+
 	Matrix3 world_tm;
 	D3D_MATRIX world_d3d;
+	D3D_MATRIX world_d3d_inv;
+
 	vector<TriComponent> tri_list; //dummy code?
 	vector<vector<TriComponent>> buffer_list;
+
 	int material_id;
 	int numberof_submesh;
 
@@ -83,7 +100,7 @@ struct PMesh
 		parent_name = L"none";
 		material_id = -1;
 		numberof_submesh = 1;
-
+		type = OBJECT_TYPE::CLASS_GEOM;
 	}
 
 };

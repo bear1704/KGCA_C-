@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "PSCWriter.h"
 #include "PSkinExp.h"
+#include "PMatrixExp.h"
 #include "resource.h"
+
 
 #define PSCExport_CLASS_ID Class_ID(0x2d8540f6, 0x48ab7160)
 
@@ -38,6 +40,8 @@ public:
 	}
 	virtual void SelectionSetChanged(Interface* ip, IUtil* iu) override
 	{
+		PMatrixExp::GetInstance().Set(NULL, ip);
+
 		PSkinExp::GetInstance().object_list_.clear();
 		PSkinExp::GetInstance().material_list_.clear();
 		PSkinExp::GetInstance().pmtl_list_.clear();
@@ -118,8 +122,13 @@ INT_PTR CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}break;
 		case IDC_MATRIXEXP:
 		{
-			MessageBox(GetActiveWindow(), _T("Exp!"),
-				_T("IDC_MATRIXEXP!"), MB_OK);
+			TSTR exp_file = PMatrixExp::GetInstance().SaveFileDialog(L"mat", L"MatrixWriter");
+			if (exp_file != NULL)
+			{
+				PMatrixExp::GetInstance().Set(exp_file, tbsExport::GetInstance()->interface_);
+				PMatrixExp::GetInstance().Export();
+			}
+
 		}break;
 		case IDC_KGCEXP:
 		{

@@ -21,9 +21,6 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PExportStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PSCWriter.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -31,6 +28,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="PSkinExp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PMatrixExp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PExpStd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,6 +51,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="tbsExport.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PMatrixExp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

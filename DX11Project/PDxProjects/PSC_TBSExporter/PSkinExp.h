@@ -1,5 +1,5 @@
 #pragma once
-#include "PExportStd.h"
+#include "PSCWriter.h"
 
 struct PNCTWI
 {
@@ -7,8 +7,10 @@ struct PNCTWI
 	Point3 n;
 	Point4 c;
 	Point2 t;
-	float index[4];
-	float weight[4];
+	float index1[4];
+	float weight1[4];
+	float index2[4];
+	float weight2[4];
 };
 
 struct PBipedVertex
@@ -35,6 +37,7 @@ struct PBipedMesh
 	TSTR parent_name;
 	Matrix3 world_tm;
 	D3D_MATRIX world_d3d;
+	D3D_MATRIX world_d3d_inv;
 	vector<BipedTricomponent> tri_list; //dummy code?
 	vector<vector<BipedTricomponent>> buffer_list;
 	vector<PBipedVertex> biped_list;
@@ -50,7 +53,6 @@ struct PBipedMesh
 	std::vector<PAnimTrack> anim_rot;
 	std::vector<PAnimTrack> anim_scale;
 
-
 	PBipedMesh()
 	{
 		name = L"none";
@@ -62,10 +64,12 @@ struct PBipedMesh
 
 };
 
-class PSkinExp
+class PSkinExp : public PSCWriter
 {
 private:
 	PSkinExp();
+	std::vector<PBipedMesh> biped_mesh_list_;
+
 public:
 	virtual ~PSkinExp();
 
@@ -76,51 +80,13 @@ public:
 	}
 
 public:
-	FILE*			    file;
-	Interface*		    interface_max_;
-	std::wstring		filename_;
-	INode*				rootnode_;
-	PScene				scene_;
-
-	std::vector<INode*> biped_list_;
-	std::vector<INode*> object_list_;
-	std::vector<PBipedMesh> mesh_list_;
-
-	std::vector<Mtl*> material_list_;
-	std::vector<PMtl> pmtl_list_;
-
-	Interval interval_;
-
-public:
-	void Set(const TCHAR* name, Interface* interface_max);
-	bool Export();
-	void PreProcess(INode* node);
-	void AddObject(INode* node);
+	void Set(const TCHAR* name, Interface* interface_max) override;
+	bool Export() override;
+	void PreProcess(INode* node) override;
 	void GetMesh(INode* node, OUT_  PBipedMesh& pmesh);
-	TriObject* GetTriObjectFromNode(INode* node, TimeValue timeval, bool& deleteit);
-	bool IsTmNegativeParity(Matrix3 tm);
-	Point3 GetVertexNormal(Mesh* mesh, int iFace, RVertex* rVertex);
-	void GetTexture(PMtl& pmtl, Mtl* mtl);
-	void CopyPoint3(Point3& dest, Point3& src);
-	void GetMaterial(INode* node);
-	void AddMaterial(INode* node);
-	int FindMaterialIndex(INode* node);
-	Mtl* FindMaterial(INode* node);
-	TCHAR* FixupName(MSTR name);
 	bool SwitchAllNodeToMesh();
-
-	bool EqualPoint2(Point2 p1, Point2 p2);
-	bool EqualPoint3(Point3 p1, Point3 p2);
-	bool EqualPoint4(Point4 pq, Point4 p2);
 	int IsEqualVertexAndVertexList(PNCTWI& vertex, std::vector<PNCTWI>& vertex_list);
-	void CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld);
 	void SetUniqueBuffer(PBipedMesh& mesh);
-
-	void GetAnimation(INode* node, PBipedMesh& mesh);
-	void ExportAnimation(PBipedMesh& mesh);
-
-	TCHAR* SaveFileDialog(TCHAR* extension, TCHAR* title);
-
 public:
 	void SetBipedInfo(INode* node, PBipedMesh& bmesh);
 	Modifier* FindModifier(INode* node, Class_ID classid);

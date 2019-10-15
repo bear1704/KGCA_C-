@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PSkinExp.h"
+#include "PMatrixExp.h"
 
 PSkinExp::PSkinExp()
 {
@@ -38,7 +39,7 @@ void PSkinExp::Set(const TCHAR* name, Interface* interface_max)
 	scene_.frame_rate = GetFrameRate();
 	scene_.tick_per_frame = GetTicksPerFrame();
 
-	PreProcess(rootnode_);
+	biped_mesh_list_.clear();
 }
 
 bool PSkinExp::Export()
@@ -46,7 +47,7 @@ bool PSkinExp::Export()
 	SwitchAllNodeToMesh();
 
 	scene_.numberof_materials = pmtl_list_.size();
-	scene_.numberof_meshes = mesh_list_.size();
+	scene_.numberof_meshes = biped_mesh_list_.size();
 
 	_wfopen_s(&file, filename_.c_str(), _T("wb"));
 	_ftprintf(file, _T("%s %d"), _T("ExporterSkin"), object_list_.size());
@@ -57,8 +58,8 @@ bool PSkinExp::Export()
 		scene_.last_frame, 
 		scene_.frame_rate, 
 		scene_.tick_per_frame,
-		mesh_list_.size(),
-		pmtl_list_.size());
+		scene_.numberof_meshes,
+		scene_.numberof_materials);
 
 
 	for (int i = 0; i < pmtl_list_.size(); i++)
@@ -101,42 +102,42 @@ bool PSkinExp::Export()
 	}
 
 
-	for (int imesh = 0; imesh < mesh_list_.size(); imesh++)
+	for (int imesh = 0; imesh < biped_mesh_list_.size(); imesh++)
 	{
 		//mesh list
 		_ftprintf(file, _T("\n%s"), L"#OBJECT INFO [MeshListName/ParentName/MaterialID/BufferListSize/TriListSize]");
 		_ftprintf(file, _T("\n%s %s %d %d %d"),
-			mesh_list_[imesh].name,
-			mesh_list_[imesh].parent_name,
-			mesh_list_[imesh].material_id,
-			mesh_list_[imesh].buffer_list.size(),
-			mesh_list_[imesh].tri_list.size());
+			biped_mesh_list_[imesh].name,
+			biped_mesh_list_[imesh].parent_name,
+			biped_mesh_list_[imesh].material_id,
+			biped_mesh_list_[imesh].buffer_list.size(),
+			biped_mesh_list_[imesh].tri_list.size());
 		_ftprintf(file, _T("\n#WORLD MATRIX"));
 		_ftprintf(file, _T("\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f"),
-			mesh_list_[imesh].world_d3d._11,
-			mesh_list_[imesh].world_d3d._12,
-			mesh_list_[imesh].world_d3d._13,
-			mesh_list_[imesh].world_d3d._14,
+			biped_mesh_list_[imesh].world_d3d._11,
+			biped_mesh_list_[imesh].world_d3d._12,
+			biped_mesh_list_[imesh].world_d3d._13,
+			biped_mesh_list_[imesh].world_d3d._14,
 
-			mesh_list_[imesh].world_d3d._21,
-			mesh_list_[imesh].world_d3d._22,
-			mesh_list_[imesh].world_d3d._23,
-			mesh_list_[imesh].world_d3d._24,
+			biped_mesh_list_[imesh].world_d3d._21,
+			biped_mesh_list_[imesh].world_d3d._22,
+			biped_mesh_list_[imesh].world_d3d._23,
+			biped_mesh_list_[imesh].world_d3d._24,
 
-			mesh_list_[imesh].world_d3d._31,
-			mesh_list_[imesh].world_d3d._32,
-			mesh_list_[imesh].world_d3d._33,
-			mesh_list_[imesh].world_d3d._34,
+			biped_mesh_list_[imesh].world_d3d._31,
+			biped_mesh_list_[imesh].world_d3d._32,
+			biped_mesh_list_[imesh].world_d3d._33,
+			biped_mesh_list_[imesh].world_d3d._34,
 
-			mesh_list_[imesh].world_d3d._41,
-			mesh_list_[imesh].world_d3d._42,
-			mesh_list_[imesh].world_d3d._43,
-			mesh_list_[imesh].world_d3d._44);
+			biped_mesh_list_[imesh].world_d3d._41,
+			biped_mesh_list_[imesh].world_d3d._42,
+			biped_mesh_list_[imesh].world_d3d._43,
+			biped_mesh_list_[imesh].world_d3d._44);
 
-		auto subtri_list = mesh_list_[imesh].buffer_list;
+		auto subtri_list = biped_mesh_list_[imesh].buffer_list;
 		for (int iSubTri = 0; iSubTri < subtri_list.size(); iSubTri++)
 		{
-			std::vector<PNCTWI>& vertex_list = mesh_list_[imesh].vertex_list[iSubTri];
+			std::vector<PNCTWI>& vertex_list = biped_mesh_list_[imesh].vertex_list[iSubTri];
 			_ftprintf(file, _T("\nVertexList %d"), vertex_list.size());
 
 			for (int iver = 0; iver < vertex_list.size(); iver++)
@@ -163,20 +164,31 @@ bool PSkinExp::Export()
 					vertex_list[iver].t.y);
 
 				_ftprintf(file, _T(" %10.4f %10.4f %10.4f %10.4f"),
-					vertex_list[iver].index[0],
-					vertex_list[iver].index[1],
-					vertex_list[iver].index[2],
-					vertex_list[iver].index[3]);
+					vertex_list[iver].index1[0],
+					vertex_list[iver].index1[1],
+					vertex_list[iver].index1[2],
+					vertex_list[iver].index1[3]);
 
 				_ftprintf(file, _T(" %10.4f %10.4f %10.4f %10.4f"),
-					vertex_list[iver].weight[0],
-					vertex_list[iver].weight[1],
-					vertex_list[iver].weight[2],
-					vertex_list[iver].weight[3]);
+					vertex_list[iver].weight1[0],
+					vertex_list[iver].weight1[1],
+					vertex_list[iver].weight1[2],
+					vertex_list[iver].weight1[3]);
+				
+				_ftprintf(file, _T(" %10.4f %10.4f %10.4f %10.4f"),
+					vertex_list[iver].index2[0],
+					vertex_list[iver].index2[1],
+					vertex_list[iver].index2[2],
+					vertex_list[iver].index2[3]);
 
+				_ftprintf(file, _T(" %10.4f %10.4f %10.4f %10.4f"),
+					vertex_list[iver].weight2[0],
+					vertex_list[iver].weight2[1],
+					vertex_list[iver].weight2[2],
+					vertex_list[iver].weight2[3]);
 			}
 
-			std::vector<int> index_list = mesh_list_[imesh].index_list[iSubTri];
+			std::vector<int> index_list = biped_mesh_list_[imesh].index_list[iSubTri];
 			_ftprintf(file, _T("\nIndexList %d"), index_list.size());
 
 			for (int index = 0; index < index_list.size(); index += 3)
@@ -187,7 +199,33 @@ bool PSkinExp::Export()
 					index_list[index + 2]);
 			}
 		}
-		//ExportAnimation(mesh_list_[imesh]);
+	}
+
+
+	for (int obj = 0; obj < PMatrixExp::GetInstance().mesh_list_.size(); obj++)
+	{
+		_ftprintf(file, _T("\n%s"), L"#GETNODETM INVERSE");
+		_ftprintf(file,
+			_T("\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f"),
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._11,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._12,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._13,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._14,
+
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._21,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._22,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._23,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._24,
+
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._31,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._32,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._33,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._34,
+
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._41,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._42,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._43,
+			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._44);
 	}
 
 	::fclose(file);
@@ -208,32 +246,6 @@ void PSkinExp::PreProcess(INode* node)
 	{
 		INode* child = node->GetChildNode(i);
 		PreProcess(child);
-	}
-
-}
-
-void PSkinExp::AddObject(INode* node)
-{
-	ObjectState os = node->EvalWorldState(0);
-
-	if (!os.obj)
-		return;
-
-	if (os.obj->ClassID() == Class_ID(TARGET_CLASS_ID, 0))
-		return;
-	else
-	{
-		switch (os.obj->SuperClassID())
-		{
-		case GEOMOBJECT_CLASS_ID:
-			biped_list_.push_back(node);
-			break;
-		case HELPER_CLASS_ID:
-			biped_list_.push_back(node);
-			break;
-		default:
-			break;
-		}
 	}
 
 }
@@ -328,24 +340,54 @@ void PSkinExp::GetMesh(INode* node, OUT_  PBipedMesh& pmesh)
 			//aff_count = affected_count index 갯수
 			for (int aff_count = 0; aff_count < pmesh.biped_list[V0].numberof_weight ; aff_count++)
 			{
-				trilist[iFace].v[custom_v0].index[aff_count] = 
-					pmesh.biped_list[V0].index_list[aff_count];
-				trilist[iFace].v[custom_v0].weight[aff_count] =
-					pmesh.biped_list[V0].weight_list[aff_count];
+				if (aff_count < 4)
+				{
+					trilist[iFace].v[custom_v0].index1[aff_count] =
+						pmesh.biped_list[V0].index_list[aff_count];
+					trilist[iFace].v[custom_v0].weight1[aff_count] =
+						pmesh.biped_list[V0].weight_list[aff_count];
+				}
+				else
+				{
+					trilist[iFace].v[custom_v0].index2[aff_count - 4] =
+						pmesh.biped_list[V0].index_list[aff_count];
+					trilist[iFace].v[custom_v0].weight2[aff_count - 4] =
+						pmesh.biped_list[V0].weight_list[aff_count];
+				}
 			}
 			for (int aff_count = 0; aff_count < pmesh.biped_list[V2].numberof_weight; aff_count++)
 			{
-				trilist[iFace].v[custom_v1].index[aff_count] = 
-					pmesh.biped_list[V2].index_list[aff_count];
-				trilist[iFace].v[custom_v1].weight[aff_count] =
-					pmesh.biped_list[V2].weight_list[aff_count];
+				if (aff_count < 4)
+				{
+					trilist[iFace].v[custom_v1].index1[aff_count] =
+						pmesh.biped_list[V2].index_list[aff_count];
+					trilist[iFace].v[custom_v1].weight1[aff_count] =
+						pmesh.biped_list[V2].weight_list[aff_count];
+				}
+				else
+				{
+					trilist[iFace].v[custom_v1].index2[aff_count - 4] =
+						pmesh.biped_list[V2].index_list[aff_count];
+					trilist[iFace].v[custom_v1].weight2[aff_count - 4] =
+						pmesh.biped_list[V2].weight_list[aff_count];
+				}
 			}
 			for (int aff_count = 0; aff_count < pmesh.biped_list[V1].numberof_weight; aff_count++)
 			{
-				trilist[iFace].v[custom_v2].index[aff_count] = 
-					pmesh.biped_list[V1].index_list[aff_count];
-				trilist[iFace].v[custom_v2].weight[aff_count] = 
-					pmesh.biped_list[V1].weight_list[aff_count];
+				if (aff_count < 4)
+				{
+					trilist[iFace].v[custom_v2].index1[aff_count] =
+						pmesh.biped_list[V1].index_list[aff_count];
+					trilist[iFace].v[custom_v2].weight1[aff_count] =
+						pmesh.biped_list[V1].weight_list[aff_count];
+				}
+				else
+				{
+					trilist[iFace].v[custom_v2].index2[aff_count - 4] =
+						pmesh.biped_list[V1].index_list[aff_count];
+					trilist[iFace].v[custom_v2].weight2[aff_count - 4] =
+						pmesh.biped_list[V1].weight_list[aff_count];
+				}
 			}
 
 
@@ -383,188 +425,6 @@ void PSkinExp::GetMesh(INode* node, OUT_  PBipedMesh& pmesh)
 	if (deleteit) delete triobj;
 }
 
-TriObject* PSkinExp::GetTriObjectFromNode(INode* node, TimeValue timeval, bool& deleteit)
-{
-	Object* obj = node->EvalWorldState(timeval).obj;
-	if (obj->CanConvertToType(Class_ID(TRIOBJ_CLASS_ID, 0)))
-	{
-		TriObject* tri = (TriObject*)obj->ConvertToType(timeval, Class_ID(TRIOBJ_CLASS_ID, 0));
-		if (obj != tri) deleteit = true;
-		return tri;
-	}
-
-	return nullptr;
-}
-
-bool PSkinExp::IsTmNegativeParity(Matrix3 tm)
-{
-	Point3 v0 = tm.GetRow(0);
-	Point3 v1 = tm.GetRow(1);
-	Point3 v2 = tm.GetRow(2);
-	Point3 vec_cross = CrossProd(v0, v1);
-
-	return (DotProd(vec_cross, v2) < 0.0f) ? true : false;
-}
-
-Point3 PSkinExp::GetVertexNormal(Mesh* mesh, int iFace, RVertex* rVertex)
-{
-	Face* face = &mesh->faces[iFace];
-	int smoothing_group = face->smGroup;
-
-	int numberof_normals = rVertex->rFlags & NORCT_MASK;
-
-	Point3 vertex_normal;
-	if (rVertex->rFlags & SPECIFIED_NORMAL)
-	{
-		vertex_normal = rVertex->rn.getNormal();
-	}
-	else if (numberof_normals && smoothing_group)
-	{
-		if (numberof_normals == 1)
-		{
-			vertex_normal = rVertex->rn.getNormal();
-		}
-		else
-		{
-			for (int i = 0; i < numberof_normals; i++)
-			{
-				if (rVertex->ern[i].getSmGroup() & smoothing_group)
-				{
-					vertex_normal = rVertex->ern[i].getNormal();
-				}
-			}
-		}
-	}
-	else
-		vertex_normal = mesh->getFaceNormal(iFace);
-
-	return vertex_normal;
-}
-
-void PSkinExp::GetMaterial(INode* node)
-{
-	Mtl* mtl = node->GetMtl();
-	PMtl material;
-	material.name = FixupName(mtl->GetName());// FixupName 들어갈곳
-
-	int numberof_submtl = mtl->NumSubMtls();
-	if (numberof_submtl > 0)
-	{
-		for (int i = 0; i < numberof_submtl; i++)
-		{
-			Mtl* sub_material = mtl->GetSubMtl(i);
-			PMtl sub_pmtl;
-			sub_pmtl.name = FixupName(sub_material->GetName());
-			GetTexture(sub_pmtl, sub_material);
-			material.submaterial_list.push_back(sub_pmtl);
-		}
-	}
-	else
-		GetTexture(material, mtl);
-
-	pmtl_list_.push_back(material);
-
-}
-
-void PSkinExp::GetTexture(PMtl& pmtl, Mtl* mtl)
-{
-	int numberof_map = mtl->NumSubTexmaps();
-
-	for (int i = 0; i < numberof_map; i++)
-	{
-		Texmap* tex = mtl->GetSubTexmap(i);
-
-		if (!tex) continue;
-
-		if (tex->ClassID() == Class_ID(BMTEX_CLASS_ID, 0X00))
-		{
-			PTextureMap texmap;
-			texmap.map_id = i;
-
-			TSTR full_name;
-			TSTR map_name = ((BitmapTex*)(tex))->GetMapName();
-			SplitPathFile(map_name, &full_name, &texmap.name);
-			pmtl.tex_list.push_back(texmap);
-		}
-	}
-}
-
-void PSkinExp::CopyPoint3(Point3& dest, Point3& src)
-{
-	dest.x = src.x;
-	dest.y = src.z;
-	dest.z = src.y;
-}
-
-void PSkinExp::AddMaterial(INode* node)
-{
-	Mtl* mtl = node->GetMtl();
-
-	if (!mtl) return;
-
-	std::vector<Mtl*>::iterator iter = std::find(material_list_.begin(), material_list_.end(), mtl);
-
-	if (iter == material_list_.end()) //중복이 없다면,
-	{
-		material_list_.push_back(mtl);
-		GetMaterial(node);
-	}
-
-
-}
-
-int PSkinExp::FindMaterialIndex(INode* node)
-{
-	Mtl* mtl = node->GetMtl();
-	if (!mtl) return -1;
-
-	for (int i = 0; i < material_list_.size(); i++)
-	{
-		if (material_list_[i] == mtl)
-		{
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-Mtl* PSkinExp::FindMaterial(INode* node)
-{
-	Mtl* mtl = node->GetMtl();
-	if (!mtl) return nullptr;
-
-	std::vector<Mtl*>::iterator iter = std::find(material_list_.begin(), material_list_.end(), mtl);
-
-	if (iter != material_list_.end())
-	{
-		return *iter;
-	}
-
-	assert(false);
-	return nullptr;
-}
-
-TCHAR* PSkinExp::FixupName(MSTR name)
-{
-	TCHAR tmp_buffer[MAX_PATH] = { 0, };
-	ZeroMemory(tmp_buffer, sizeof(tmp_buffer));
-
-	TCHAR* cPtr;
-	_tcscpy_s(tmp_buffer, name);
-	cPtr = tmp_buffer;
-
-	while (*cPtr)
-	{
-		if (*cPtr == '"')* cPtr = SINGLE_QUOTE;
-		else if (*cPtr == ' ' || *cPtr <= CTL_CHARS)
-			* cPtr = _T('_');
-		cPtr++;
-	}
-	return tmp_buffer;
-
-}
-
 bool PSkinExp::SwitchAllNodeToMesh()
 {
 	for (int i = 0; i < object_list_.size(); i++)
@@ -578,11 +438,16 @@ bool PSkinExp::SwitchAllNodeToMesh()
 			mesh.parent_name = FixupName(parent_node->GetName());
 
 		SetBipedInfo(node, mesh);
-
+		
 		Matrix3 world_3dsmax = node->GetNodeTM(interval_.Start());
 		CopyMatrix3(mesh.world_d3d, world_3dsmax);
+		Matrix3 world_3dsmax_inv = Inverse(world_3dsmax);
+		CopyMatrix3(mesh.world_d3d_inv, world_3dsmax_inv);
 
-		mesh.material_id = FindMaterialIndex(node);
+		Mtl* mtl = node->GetMtl();
+		
+		if (mtl)
+			mesh.material_id = FindMaterialIndex(node);
 
 		if (mesh.material_id >= 0 && pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //해당 ID를 가진 메테리얼이 서브메테리얼을 가지고 있을 경우
 		{
@@ -590,44 +455,11 @@ bool PSkinExp::SwitchAllNodeToMesh()
 		}
 
 		GetMesh(node, mesh);
-		GetAnimation(node, mesh);
-		mesh_list_.push_back(mesh);
+		biped_mesh_list_.push_back(mesh);
 	}
 	return true;
 }
 
-bool PSkinExp::EqualPoint2(Point2 p1, Point2 p2)
-{
-	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
-		return false;
-	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
-		return false;
-	return true;
-}
-
-bool PSkinExp::EqualPoint3(Point3 p1, Point3 p2)
-{
-	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
-		return false;
-	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
-		return false;
-	if (fabs(p1.z - p2.z) > ALMOST_ZERO)
-		return false;
-	return true;
-}
-
-bool PSkinExp::EqualPoint4(Point4 p1, Point4 p2)
-{
-	if (fabs(p1.x - p2.x) > ALMOST_ZERO)
-		return false;
-	if (fabs(p1.y - p2.y) > ALMOST_ZERO)
-		return false;
-	if (fabs(p1.z - p2.z) > ALMOST_ZERO)
-		return false;
-	if (fabs(p1.w - p2.w) > ALMOST_ZERO)
-		return false;
-	return true;
-}
 
 int PSkinExp::IsEqualVertexAndVertexList(PNCTWI& vertex, std::vector<PNCTWI>& vertex_list)
 {
@@ -646,31 +478,6 @@ int PSkinExp::IsEqualVertexAndVertexList(PNCTWI& vertex, std::vector<PNCTWI>& ve
 	return -1;  //중복하지 않는다
 }
 
-void PSkinExp::CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld)
-{
-	Point3 row;
-	row = matWorld.GetRow(0);
-	d3d_world._11 = row.x;
-	d3d_world._12 = row.z;
-	d3d_world._13 = row.y;
-	d3d_world._14 = 0.0f;
-	row = matWorld.GetRow(2);
-	d3d_world._21 = row.x;
-	d3d_world._22 = row.z;
-	d3d_world._23 = row.y;
-	d3d_world._24 = 0.0f;
-	row = matWorld.GetRow(1);
-	d3d_world._31 = row.x;
-	d3d_world._32 = row.z;
-	d3d_world._33 = row.y;
-	d3d_world._34 = 0.0f;
-	row = matWorld.GetRow(3);
-	d3d_world._41 = row.x;
-	d3d_world._42 = row.z;
-	d3d_world._43 = row.y;
-	d3d_world._44 = 1.0f;
-
-}
 
 void PSkinExp::SetUniqueBuffer(PBipedMesh& mesh)
 {
@@ -702,185 +509,6 @@ void PSkinExp::SetUniqueBuffer(PBipedMesh& mesh)
 
 }
 
-void PSkinExp::GetAnimation(INode* node, PBipedMesh& mesh)
-{
-	mesh.animation_enable[0] = false;
-	mesh.animation_enable[1] = false;
-	mesh.animation_enable[2] = false;
-
-	TimeValue start_frame = interval_.Start();
-
-	//tm = selfTm * parentTm * Inverse(parentTm)
-	Matrix3 tm = node->GetNodeTM(start_frame) * Inverse(node->GetParentTM(start_frame));
-
-	//행렬 분해(SRT)
-	AffineParts start_ap;
-	decomp_affine(tm, &start_ap);
-
-	//quarternion -> 축, 앵글로 변환
-	Point3 start_rotate_axis;
-	float  start_rotate_value;
-
-	AngAxisFromQ(start_ap.q, &start_rotate_value, start_rotate_axis);
-
-	PAnimTrack start_animtrack;
-	start_animtrack.tick = start_frame;
-	start_animtrack.p = start_ap.t;
-	start_animtrack.q = start_ap.q;
-
-	mesh.anim_pos.push_back(start_animtrack);
-	mesh.anim_rot.push_back(start_animtrack);
-
-	start_animtrack.p = start_ap.k;
-	start_animtrack.q = start_ap.u;
-	mesh.anim_scale.push_back(start_animtrack);
-
-	TimeValue start = interval_.Start() + GetTicksPerFrame(); //start + 1프레임
-	TimeValue end = interval_.End();
-
-	for (TimeValue t = start; t <= end; t += GetTicksPerFrame())
-	{
-		Matrix3 tm = node->GetNodeTM(t) * Inverse(node->GetParentTM(t));
-
-		AffineParts frame_ap;
-		decomp_affine(tm, &frame_ap);
-		PAnimTrack anim;
-		ZeroMemory(&anim, sizeof(PAnimTrack));
-
-		anim.tick = t;
-		anim.p = frame_ap.t;
-		anim.q = frame_ap.q;
-		mesh.anim_pos.push_back(anim);
-		mesh.anim_rot.push_back(anim);
-
-		anim.p = frame_ap.k;
-		anim.q = frame_ap.u;
-		mesh.anim_scale.push_back(anim);
-
-		Point3 frame_rotate_axis;
-		float  frame_rotate_value;
-		AngAxisFromQ(frame_ap.q, &frame_rotate_value, frame_rotate_axis);
-
-
-		//animation이 존재하는지 체크
-		if (mesh.animation_enable[0] == false)
-		{
-			if (EqualPoint3(start_ap.t, frame_ap.t) == false)
-			{
-				mesh.animation_enable[0] = true;
-			}
-		}
-
-		if (mesh.animation_enable[1] == false)
-		{
-			if (EqualPoint3(start_rotate_axis, frame_rotate_axis) == false)
-			{
-				mesh.animation_enable[1] = true;
-			}
-			else
-			{ //두 숫자(0프레임의 로테이션, 현재프레임의 로테이션)이 서로 다르다면(애니메이션 존재)
-				if (fabs(start_rotate_value - frame_rotate_value) >= ALMOST_ZERO)
-					mesh.animation_enable[1] = true;
-			}
-		}
-
-		if (mesh.animation_enable[2] == false)
-		{
-			if (EqualPoint3(start_ap.k, frame_ap.k) == false)
-			{
-				mesh.animation_enable[2] = true;
-			}
-		}
-
-	}
-
-}
-
-void PSkinExp::ExportAnimation(PBipedMesh& mesh)
-{
-	_ftprintf(file, _T("\n#ANIMATION DATA [translate_size/rot_size/scale_size] // [cur_track / cur_tick / values by components]"));
-	_ftprintf(file, _T("\n%d %d %d"),
-		(mesh.animation_enable[0]) ? mesh.anim_pos.size() : 0,
-		(mesh.animation_enable[1]) ? mesh.anim_rot.size() : 0,
-		(mesh.animation_enable[2]) ? mesh.anim_scale.size() : 0);
-
-
-	if (mesh.animation_enable[0])
-	{
-		for (int i = 0; i < mesh.anim_pos.size(); i++)
-		{
-			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f"),
-				i,
-				mesh.anim_pos[i].tick,
-				mesh.anim_pos[i].p.x,
-				mesh.anim_pos[i].p.z,
-				mesh.anim_pos[i].p.y);
-		}
-	}
-	if (mesh.animation_enable[1])
-	{
-		for (int i = 0; i < mesh.anim_rot.size(); i++)
-		{
-			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f %10.4f"),
-				i,
-				mesh.anim_rot[i].tick,
-				mesh.anim_rot[i].q.x,
-				mesh.anim_rot[i].q.z,
-				mesh.anim_rot[i].q.y,
-				mesh.anim_rot[i].q.w);
-		}
-	}
-	if (mesh.animation_enable[2])
-	{
-		for (int i = 0; i < mesh.anim_scale.size(); i++)
-		{
-			_ftprintf(file, _T("\n%d %d %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f"),
-				i,
-				mesh.anim_scale[i].tick,
-				mesh.anim_scale[i].p.x,
-				mesh.anim_scale[i].p.z,
-				mesh.anim_scale[i].p.y,
-				mesh.anim_scale[i].q.x,
-				mesh.anim_scale[i].q.z,
-				mesh.anim_scale[i].q.y,
-				mesh.anim_scale[i].q.w);
-		}
-	}
-}
-
-TCHAR* PSkinExp::SaveFileDialog(TCHAR* extension, TCHAR* title)
-{
-	TCHAR szFile[MAX_PATH] = { 0, };
-	TCHAR szFileTitleFile[MAX_PATH] = { 0, };
-	static TCHAR* szFilter;
-	OPENFILENAME ofn;
-	ZeroMemory(&ofn, sizeof(OPENFILENAME));
-	_tcscpy_s(szFile, _T("*."));
-	_tcscat_s(szFile, extension);
-	_tcscat_s(szFile, _T("\0"));
-
-	ofn.lStructSize = sizeof(OPENFILENAME);
-	ofn.hwndOwner = GetActiveWindow();
-	ofn.lpstrFilter = szFilter;
-	ofn.lpstrCustomFilter = NULL;
-	ofn.nMaxCustFilter = 0L;
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFileTitle = szFileTitleFile;
-	ofn.nMaxFileTitle = sizeof(szFileTitleFile);
-	ofn.lpstrInitialDir = NULL;
-	ofn.lpstrTitle = title;
-	ofn.Flags = 0L;
-	ofn.nFileOffset = 0;
-	ofn.nFileExtension = 0;
-	ofn.lpstrDefExt = extension;
-	if (!GetSaveFileName(&ofn))
-	{
-		return NULL;
-	}
-	return szFile;
-}
 
 void PSkinExp::SetBipedInfo(INode* node, PBipedMesh& bmesh)
 {
@@ -987,13 +615,36 @@ void PSkinExp::ExportPhysiqueData(INode* node, Modifier* modi, PBipedMesh& mesh)
 
 void PSkinExp::ExportSkinData(INode* node, Modifier* modi, PBipedMesh& mesh)
 {
+	ISkin* skin = (ISkin*)modi->GetInterface(I_SKIN);
+	ISkinContextData* skin_data = skin->GetContextInterface(node);
+
+	if (!skin || !skin_data) return;
+
+	//affvtx = affectex vertex : (주변 노드들에)영향받는 버텍스
+	int numberof_affvtx = skin_data->GetNumPoints();
+	mesh.biped_list.resize(numberof_affvtx);
+
+	for (int i = 0; i < numberof_affvtx; i++)
+	{
+		mesh.biped_list[i].numberof_weight = skin_data->GetNumAssignedBones(i);
+		for (int bones_count = 0; bones_count < mesh.biped_list[i].numberof_weight; bones_count++)
+		{
+			int bone_id = skin_data->GetAssignedBone(i, bones_count);
+			INode* node = skin->GetBone(bone_id);
+			mesh.biped_list[i].index_list.push_back(GetFindIndex(node));
+			mesh.biped_list[i].weight_list.push_back(skin_data->GetBoneWeight(i, bones_count));
+		}
+
+
+	}
+
 }
 
 int PSkinExp::GetFindIndex(INode* node)
 {
-	for (int i = 0; i < biped_list_.size(); i++)
+	for (int i = 0; i < PMatrixExp::GetInstance().object_list_.size(); i++)
 	{
-		if (biped_list_[i] == node)
+		if (PMatrixExp::GetInstance().object_list_[i] == node)
 			return i;
 	}
 	return -1;

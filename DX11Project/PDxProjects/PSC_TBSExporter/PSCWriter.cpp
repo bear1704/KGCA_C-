@@ -27,8 +27,12 @@ PSCWriter::~PSCWriter()
 
 void PSCWriter::Set(const TCHAR* name, Interface* interface_max)
 {
+
 	interface_max_ = interface_max;
-	filename_ = name;
+	
+	if(name != nullptr)
+		filename_ = name;
+
 	rootnode_ = interface_max_->GetRootNode();
 	interval_ = interface_max_->GetAnimRange();
 
