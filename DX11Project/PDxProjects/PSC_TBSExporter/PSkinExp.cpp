@@ -202,30 +202,38 @@ bool PSkinExp::Export()
 	}
 
 
-	for (int obj = 0; obj < PMatrixExp::GetInstance().mesh_list_.size(); obj++)
+	for (int obj = 0; obj < PMatrixExp::GetInstance().object_list_.size(); obj++)
 	{
-		_ftprintf(file, _T("\n%s"), L"#GETNODETM INVERSE");
+
+		INode* node = PMatrixExp::GetInstance().object_list_[obj];
+		Matrix3 tm = node->GetNodeTM(interval_.Start());
+		Matrix3 tm_inv = Inverse(tm);
+
+		D3D_MATRIX world_inv_startframe;
+		CopyMatrix3(world_inv_startframe, tm_inv);
+
+		_ftprintf(file, _T("\n%s"), L"#GET NODETM INVERSE");
 		_ftprintf(file,
 			_T("\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f"),
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._11,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._12,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._13,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._14,
+			world_inv_startframe._11,
+			world_inv_startframe._12,
+			world_inv_startframe._13,
+			world_inv_startframe._14,
 
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._21,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._22,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._23,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._24,
+			world_inv_startframe._21,
+			world_inv_startframe._22,
+			world_inv_startframe._23,
+			world_inv_startframe._24,
 
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._31,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._32,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._33,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._34,
+			world_inv_startframe._31,
+			world_inv_startframe._32,
+			world_inv_startframe._33,
+			world_inv_startframe._34,
 
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._41,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._42,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._43,
-			PMatrixExp::GetInstance().mesh_list_[obj].world_d3d_inv._44);
+			world_inv_startframe._41,
+			world_inv_startframe._42,
+			world_inv_startframe._43,
+			world_inv_startframe._44);
 	}
 
 	::fclose(file);
@@ -284,13 +292,13 @@ void PSkinExp::GetMesh(INode* node, OUT_  PBipedMesh& pmesh)
 
 			if (numberof_vert > 0)
 			{
-				Point3 v = mesh->verts[mesh->faces[iFace].v[custom_v0]] * tm;
+				Point3 v = mesh->verts[V0] * tm;
 				CopyPoint3(trilist[iFace].v[0].p, v);
 
-				v = mesh->verts[mesh->faces[iFace].v[custom_v2]] * tm;
+				v = mesh->verts[V1] * tm;
 				CopyPoint3(trilist[iFace].v[1].p, v);
 
-				v = mesh->verts[mesh->faces[iFace].v[custom_v1]] * tm;
+				v = mesh->verts[V2] * tm;
 				CopyPoint3(trilist[iFace].v[2].p, v);
 			}
 
@@ -355,38 +363,38 @@ void PSkinExp::GetMesh(INode* node, OUT_  PBipedMesh& pmesh)
 						pmesh.biped_list[V0].weight_list[aff_count];
 				}
 			}
-			for (int aff_count = 0; aff_count < pmesh.biped_list[V2].numberof_weight; aff_count++)
-			{
-				if (aff_count < 4)
-				{
-					trilist[iFace].v[custom_v1].index1[aff_count] =
-						pmesh.biped_list[V2].index_list[aff_count];
-					trilist[iFace].v[custom_v1].weight1[aff_count] =
-						pmesh.biped_list[V2].weight_list[aff_count];
-				}
-				else
-				{
-					trilist[iFace].v[custom_v1].index2[aff_count - 4] =
-						pmesh.biped_list[V2].index_list[aff_count];
-					trilist[iFace].v[custom_v1].weight2[aff_count - 4] =
-						pmesh.biped_list[V2].weight_list[aff_count];
-				}
-			}
 			for (int aff_count = 0; aff_count < pmesh.biped_list[V1].numberof_weight; aff_count++)
 			{
 				if (aff_count < 4)
 				{
-					trilist[iFace].v[custom_v2].index1[aff_count] =
+					trilist[iFace].v[custom_v1].index1[aff_count] =
 						pmesh.biped_list[V1].index_list[aff_count];
-					trilist[iFace].v[custom_v2].weight1[aff_count] =
+					trilist[iFace].v[custom_v1].weight1[aff_count] =
 						pmesh.biped_list[V1].weight_list[aff_count];
 				}
 				else
 				{
-					trilist[iFace].v[custom_v2].index2[aff_count - 4] =
+					trilist[iFace].v[custom_v1].index2[aff_count - 4] =
 						pmesh.biped_list[V1].index_list[aff_count];
-					trilist[iFace].v[custom_v2].weight2[aff_count - 4] =
+					trilist[iFace].v[custom_v1].weight2[aff_count - 4] =
 						pmesh.biped_list[V1].weight_list[aff_count];
+				}
+			}
+			for (int aff_count = 0; aff_count < pmesh.biped_list[V2].numberof_weight; aff_count++)
+			{
+				if (aff_count < 4)
+				{
+					trilist[iFace].v[custom_v2].index1[aff_count] =
+						pmesh.biped_list[V2].index_list[aff_count];
+					trilist[iFace].v[custom_v2].weight1[aff_count] =
+						pmesh.biped_list[V2].weight_list[aff_count];
+				}
+				else
+				{
+					trilist[iFace].v[custom_v2].index2[aff_count - 4] =
+						pmesh.biped_list[V2].index_list[aff_count];
+					trilist[iFace].v[custom_v2].weight2[aff_count - 4] =
+						pmesh.biped_list[V2].weight_list[aff_count];
 				}
 			}
 

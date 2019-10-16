@@ -38,7 +38,7 @@ bool PMatrixExp::Export()
 	{
 		//mesh list
 		_ftprintf(file, _T("\n%s"), L"#OBJECT INFO [MeshListName/ParentName/TRILISTSIZE/Box max xzy/Box min xzy]");
-		_ftprintf(file, _T("\n%s %s %d %d %d"),
+		_ftprintf(file, _T("\n%s %s %d %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f"),
 			mesh_list_[imesh].name,
 			mesh_list_[imesh].parent_name,
 			mesh_list_[imesh].tri_list.size(),
@@ -166,6 +166,32 @@ bool PMatrixExp::SwitchAllNodeToMesh()
 	}
 	return true;
 
+}
+
+void PMatrixExp::SetUniqueBuffer(PMesh& mesh)
+{
+
+	mesh.vertex_list.resize(1);
+	mesh.index_list.resize(1);
+	
+	std::vector<TriComponent>& tri_array = mesh.tri_list;
+	std::vector<PNCT>& vertex_list = mesh.vertex_list[0];
+	std::vector<int>& index_list = mesh.index_list[0];
+	for (int iFace = 0; iFace < mesh.tri_list.size(); iFace++)
+	{
+		TriComponent& comp = tri_array[iFace];
+		for (int iver = 0; iver < 3; iver++)
+		{
+			int pos = IsEqualVertexAndVertexList(comp.v[iver], vertex_list);
+			if (pos < 0) //겹치는게 없는 경우
+			{
+				vertex_list.push_back(comp.v[iver]);  //버텍스리스트에 버텍스 추가 
+				pos = vertex_list.size() - 1; //index = 현재까지 버텍스 들어간 갯수 - 1(1이면 0, 2이면 1..)
+			}
+			index_list.push_back(pos); //index 추가  (3개씩)
+		}
+
+	}
 }
 
 PMatrixExp::PMatrixExp()

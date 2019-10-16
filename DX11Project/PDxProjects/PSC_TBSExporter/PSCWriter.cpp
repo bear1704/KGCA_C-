@@ -41,6 +41,12 @@ void PSCWriter::Set(const TCHAR* name, Interface* interface_max)
 	scene_.frame_rate = GetFrameRate();
 	scene_.tick_per_frame = GetTicksPerFrame();
 
+
+	object_list_.clear();
+	mesh_list_.clear();
+	material_list_.clear();
+	pmtl_list_.clear();
+
 	PreProcess(rootnode_);
 }
 

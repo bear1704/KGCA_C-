@@ -8,6 +8,7 @@ public:
 	void PreProcess(INode* node) override; 
 	bool Export() override;
 	bool SwitchAllNodeToMesh();
+	void SetUniqueBuffer(PMesh& mesh) override;
 
 public:
 	static PMatrixExp& GetInstance()
