@@ -103,7 +103,7 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 }
 
 int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene,
-	std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device)
+	std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, int extension_type)
 {
 
 	std::string str;
@@ -307,9 +307,19 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 				wstr = wch_t;
 				wsstr.str(wstr);
 			
+				float iwvalue[16];
 				wsstr >> pnct.pos.x; wsstr >> pnct.pos.y; wsstr >> pnct.pos.z; wsstr >> pnct.normal.x; wsstr >> pnct.normal.y; wsstr >> pnct.normal.z;
 				wsstr >> pnct.color.x; wsstr >> pnct.color.y; wsstr >> pnct.color.z; wsstr >> pnct.color.w;
 				wsstr >> pnct.uv.x; wsstr >> pnct.uv.y;
+				
+				
+				if (extension_type == 1)  //skm 확장자일때만 적용
+				{
+					wsstr >> iwvalue[0]; wsstr >> iwvalue[1]; wsstr >> iwvalue[2]; wsstr >> iwvalue[3];
+					wsstr >> iwvalue[4]; wsstr >> iwvalue[5]; wsstr >> iwvalue[6]; wsstr >> iwvalue[7];
+					wsstr >> iwvalue[8]; wsstr >> iwvalue[9]; wsstr >> iwvalue[10]; wsstr >> iwvalue[11];
+					wsstr >> iwvalue[12]; wsstr >> iwvalue[13]; wsstr >> iwvalue[14]; wsstr >> iwvalue[15];
+				}
 
 				vertices.push_back(pnct);
 			}

@@ -1,0 +1,193 @@
+#include "Sample.h"
+
+
+Sample::Sample()
+{
+	
+}
+
+Sample::~Sample()
+{
+
+}
+
+
+bool Sample::Init()
+{
+	Load();
+	free_camera_.Init();
+	free_camera_.camera_position_ = D3DXVECTOR3(0.0f, 10.0f, -50.0f);
+	free_camera_.vec_view_target_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	free_camera_.CreateTargetViewMatrix(free_camera_.camera_position_, 
+		free_camera_.vec_view_target_, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	free_camera_.CreateProjectionMatrix();
+	main_camera_ = &free_camera_;
+
+	return true;
+}
+
+bool Sample::Frame()
+{
+
+
+#pragma region KEY
+	if (g_InputActionMap.qKey == KEYSTAT::KEY_HOLD)
+	{
+		main_camera_->UpWard();
+	}
+	if (g_InputActionMap.eKey == KEYSTAT::KEY_HOLD)
+	{
+		main_camera_->DownWard();
+	}
+	if (g_InputActionMap.aKey == KEYSTAT::KEY_HOLD)
+	{
+		main_camera_->MoveLeft();
+	}
+	if (g_InputActionMap.dKey == KEYSTAT::KEY_HOLD)
+	{
+		main_camera_->MoveRight();
+	}
+	if (g_InputActionMap.wKey == KEYSTAT::KEY_HOLD)
+	{
+		main_camera_->MoveFoward();
+	}
+	if (g_InputActionMap.sKey == KEYSTAT::KEY_HOLD)
+	{
+		main_camera_->MoveBackward();
+	}
+	if (g_InputActionMap.middleClick == KEYSTAT::KEY_PUSH)
+	{
+		ToggleIsWireframeRender();
+	}
+
+
+#pragma endregion
+
+
+	main_camera_->Frame();
+
+	return true;
+}
+
+bool Sample::Render()
+{
+	DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		object_list_[obj]->SetWVPMatrix(nullptr, (D3DXMATRIX*)&main_camera_->matView_, (D3DXMATRIX*)&main_camera_->matProj_);
+		object_list_[obj]->Render();
+	}
+	return true;
+
+}
+
+bool Sample::Release()
+{
+
+	return true;
+}
+
+void Sample::MessageProc(MSG msg)
+{
+	PCore::MessageProc(msg);
+	//PInput::GetInstance().MsgProc(msg);
+	if (main_camera_ == nullptr) return;
+	main_camera_->MessageProc(msg);
+}
+
+bool Sample::Load()
+{
+	int file_type = LoadFileDialog(L"*", L"ModelView");
+	PModel* model = nullptr;
+
+	if (file_type == 0)
+		model = new PKgcObj;
+	else if (file_type == 1)
+		model = new PSkmObj;
+
+	int load_index = loadfiles_dir_.size() - 1;
+	if (!model->Load(loadfiles_dir_[load_index], device_, L"modelview.hlsl", L"VS", L"modelview.hlsl", L"PS"))
+	{
+		return false;
+	}
+	object_list_.push_back(model);
+	return true;
+}
+
+int Sample::LoadFileDialog(const TCHAR* extension, const TCHAR* title)
+{
+	OPENFILENAME    ofn;
+	TCHAR           szFile[MAX_PATH] = { 0, };
+	TCHAR			szFileTitle[MAX_PATH] = { 0, };
+	static TCHAR* szFilter;
+
+	TCHAR lpCurBuffer[256] = { 0, };
+	GetCurrentDirectory(256, lpCurBuffer);
+
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	_tcscpy_s(szFile, _T("*."));
+	_tcscat_s(szFile, extension);
+	_tcscat_s(szFile, _T("\0"));
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = GetActiveWindow();
+	ofn.lpstrFilter = szFilter;
+	ofn.lpstrCustomFilter = NULL;
+	ofn.nMaxCustFilter = 0L;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrFileTitle = szFileTitle;
+	ofn.nMaxFileTitle = MAX_PATH;
+	ofn.lpstrInitialDir = _T("../../data/Obj/");
+	ofn.lpstrTitle = title;
+	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+	ofn.nFileOffset = 0;
+	ofn.nFileExtension = 0;
+	ofn.lpstrDefExt = extension;
+
+	if (!GetOpenFileName(&ofn))
+	{
+		return -1;
+	}
+	TCHAR* load = _tcstok(szFile, _T("\n"));
+	multibyte_string dir = szFile;
+	load = &load[_tcslen(load) + 1];
+	if (*load == 0)
+	{
+		loadfiles_dir_.push_back(dir);
+	}
+
+	while (*load != 0)
+	{
+		multibyte_string dir = szFile;
+		load = _tcstok(load, _T("\n"));
+		dir += _T("\\");
+		dir += load;
+		loadfiles_dir_.push_back(dir);
+		load = &load[_tcslen(load) + 1];
+	}
+	SetCurrentDirectory(lpCurBuffer);
+
+	TCHAR szFileName[256];
+	TCHAR Drive[MAX_PATH];
+	TCHAR Dir[MAX_PATH];
+	TCHAR FName[MAX_PATH];
+	TCHAR Ext[MAX_PATH];
+	_tsplitpath_s(loadfiles_dir_[loadfiles_dir_.size() - 1].c_str(),
+		Drive, Dir, FName, Ext);
+	Ext[4] = 0;
+	_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
+
+	multibyte_string FileExt = Ext;
+	multibyte_string FileKgcExt = L".kgc";
+	multibyte_string FileSkmExt = L".skm";
+	multibyte_string FileMatExt = L".mat";
+	if (FileExt == FileKgcExt) return 0;
+	if (FileExt == FileSkmExt) return 1;
+	if (FileExt == FileMatExt) return 2;
+	
+	return -1;
+	
+}

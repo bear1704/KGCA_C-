@@ -99,6 +99,10 @@ const int kCharMaxSize = 256;
 
 class PParser
 {
+	//0 = kgc
+	//1 = skm
+	//2 = mat
+
 public:
 	PParser();
 	~PParser();
@@ -107,7 +111,7 @@ private:
 public:
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
 	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene, 
-		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device);
+		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, int extension_type);
 	std::vector<std::string> SplitString(std::string str, char delimiter);
 	std::vector<std::string> SplitString(std::wstring str, char delimiter);
 	inline void ReadNextLineAndSplit(OUT_ std::vector<std::string>& strvec, FILE* infile)

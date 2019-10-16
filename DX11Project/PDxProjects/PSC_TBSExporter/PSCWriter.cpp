@@ -236,9 +236,28 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 	bool deleteit = false;
 	TriObject* triobj = GetTriObjectFromNode(node, interval_.Start(), deleteit);
 
-	if (!triobj) return;
+	if (triobj == nullptr)
+	{
+		Object* object = node->GetObjectRef();
+		if (object && object->ClassID() == Class_ID(BONE_CLASS_ID, 0))
+		{
+			pmesh.type = OBJECT_TYPE::CLASS_BONE;
+		}
+		if (object && object->ClassID() == Class_ID(DUMMY_CLASS_ID, 0))
+		{
+			pmesh.type = OBJECT_TYPE::CLASS_DUMMY;
+		}
+		Object* helper_obj = node->EvalWorldState(interval_.Start()).obj;
+		helper_obj->GetDeformBBox(0, pmesh.bounding_box, &node->GetObjectTM(0));
+
+		return;
+	}
 
 	Mesh* mesh = &triobj->GetMesh();
+
+	mesh->buildBoundingBox();
+	pmesh.bounding_box = mesh->getBoundingBox(&tm);
+
 	bool is_negscale = IsTmNegativeParity(tm);
 	int custom_v0, custom_v1, custom_v2;
 

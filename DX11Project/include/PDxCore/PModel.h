@@ -31,6 +31,27 @@ struct VS_CB_WVP
 	float etc[4];
 };
 
+struct PGeoMesh  //오브젝트별 geomesh
+{
+	std::vector<std::vector<Vertex_PNCT>> vertices_list_;
+	std::vector<std::vector<int>> indices_list_;
+	std::vector<DX::PDxHelper> helper_list_;
+	MaxExportInfo info;
+	PGeoMesh* parent_geomesh;
+
+	D3DXMATRIX mat_inverse_world;  //GetNodeTm Inv
+	D3DXMATRIX mat_calculation;
+	D3DXMATRIX mat_world_self;
+	D3DXMATRIX mat_pos;
+	D3DXMATRIX mat_rot;
+	D3DXMATRIX mat_scale;
+
+	D3DXVECTOR3 pos_track;
+	D3DXVECTOR3 scale_track;
+	D3DXQUATERNION rot_track;
+
+};
+
 class PModel
 {
 public:
@@ -44,6 +65,7 @@ public:
 	std::vector<DWORD> index_list_;
 	VS_CB_WVP constant_data_;
 	PTexture* texture_; //Sprite를 사용하지 않는 보통 오브젝트에서 사용되는 텍스쳐 
+	FILE* file_;
 	bool be_using_sprite_;
 
 public:
@@ -88,6 +110,9 @@ public:
 	std::vector<Vertex_PNCT>* GetVertexListPointer();
 	std::vector<Vertex_PNCT>& vertex_list();
 	DX::PDxHelper& dx_helper();
+	virtual bool Load(multibyte_string filename, ID3D11Device* device,
+		const TCHAR* vs_path, const TCHAR* vs_func, const TCHAR* ps_path, const TCHAR* ps_func);
+
 
 };
 

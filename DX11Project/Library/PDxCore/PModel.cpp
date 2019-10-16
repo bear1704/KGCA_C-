@@ -279,6 +279,27 @@ DX::PDxHelper& PModel::dx_helper()
 	return dx_helper_;
 }
 
+bool PModel::Load(multibyte_string filename, ID3D11Device* device,
+	const TCHAR* vs_path, const TCHAR* vs_func, const TCHAR* ps_path, const TCHAR* ps_func)
+{
+	std::wstring vs_func_str = vs_func;
+	std::wstring ps_func_str = ps_func;
+	std::string vs;
+	std::string ps;
+	vs.assign(vs_func_str.begin(), vs_func_str.end());
+	ps.assign(ps_func_str.begin(), ps_func_str.end());
+
+	_tfopen_s(&file_, filename.c_str(), _T("rb"));
+	if (file_ && !Create(device, immediate_context_, vs_path, vs, ps_path, ps))
+	{
+		fclose(file_);
+		return false;
+	}
+
+	fclose(file_);
+	return true;
+}
+
 void PModel::ChangeTexValue(OUT_ std::vector<Vertex_PNCT>& vert, const DX::PTex_uv4& tex_buf) noexcept
 {
 		int count = vert.size();

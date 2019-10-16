@@ -29,6 +29,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice4", "CreateDevi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PSC_TBSExporter", "PSC_TBSExporter\PSC_TBSExporter.vcxproj", "{3B317E03-0B65-4633-9521-DC0ABEFAFC53}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelViewer", "ModelViewer\ModelViewer.vcxproj", "{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -109,6 +114,14 @@ Global
 		{3B317E03-0B65-4633-9521-DC0ABEFAFC53}.Release|x64.Build.0 = Release|x64
 		{3B317E03-0B65-4633-9521-DC0ABEFAFC53}.Release|x86.ActiveCfg = Release|Win32
 		{3B317E03-0B65-4633-9521-DC0ABEFAFC53}.Release|x86.Build.0 = Release|Win32
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Debug|x64.ActiveCfg = Debug|x64
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Debug|x64.Build.0 = Debug|x64
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Debug|x86.ActiveCfg = Debug|Win32
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Debug|x86.Build.0 = Debug|Win32
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Release|x64.ActiveCfg = Release|x64
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Release|x64.Build.0 = Release|x64
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Release|x86.ActiveCfg = Release|Win32
+		{782B3B16-6FA8-4192-A3C4-94B5A801E2FC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
