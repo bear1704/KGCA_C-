@@ -160,6 +160,11 @@
     <ClInclude Include="PSkmObj.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ModelView.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,5 +1,13 @@
 #include "PKgcObj.h"
 
+PKgcObj::PKgcObj()
+{
+}
+
+PKgcObj::~PKgcObj()
+{
+}
+
 bool PKgcObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path,
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path, std::wstring texcomp_path)
 {
@@ -10,7 +18,7 @@ bool PKgcObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstr
 	PModel::Init(device, context);
 	PParser parse;
 
-	parse.MaxExportParse(info, matrl_info, scene, object_path, texcomp_path, device);
+	parse.MaxExportParse(info, matrl_info, scene, object_path, texcomp_path, device, FILE_EXTENSION_TYPE::KGC);
 
 	object_list_.resize(info.size());
 
@@ -117,22 +125,22 @@ HRESULT PKgcObj::CreateVertexBuffer()
 {
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
-		object_list_[obj].helper_list_.resize(object_list_[obj].info.vertex_list.size());
+		object_list_[obj].helper_list.resize(object_list_[obj].info.vertex_list.size());
 
 		for (int i = 0; i < object_list_[obj].info.vertex_list.size(); i++)
 		{
-			if (object_list_[obj].vertices_list_[i].size() == 0)
+			if (object_list_[obj].vertices_list[i].size() == 0)
 			{
 				continue;
 			}
 
-			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
+			auto& cur_dxhelper = object_list_[obj].helper_list[i];
 			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCT);
-			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list_[i].size();
+			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list[i].size();
 
 
 			cur_dxhelper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_,
-				&object_list_[obj].vertices_list_[i].at(0),
+				&object_list_[obj].vertices_list[i].at(0),
 				cur_dxhelper.vertex_count_,
 				cur_dxhelper.vertex_size_, false));
 
@@ -150,15 +158,15 @@ HRESULT PKgcObj::CreateIndexBuffer()
 
 		for (int i = 0; i < object_list_[obj].info.index_list.size(); i++)
 		{
-			if (object_list_[obj].indices_list_[i].size() == 0)
+			if (object_list_[obj].indices_list[i].size() == 0)
 			{
 				continue;
 			}
 
-			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
-			cur_dxhelper.index_count_ = object_list_[obj].indices_list_[i].size();
+			auto& cur_dxhelper = object_list_[obj].helper_list[i];
+			cur_dxhelper.index_count_ = object_list_[obj].indices_list[i].size();
 			cur_dxhelper.index_buffer_.Attach(DX::CreateIndexBuffer(device_,
-				&object_list_[obj].indices_list_[i].at(0),
+				&object_list_[obj].indices_list[i].at(0),
 				cur_dxhelper.index_count_,
 				sizeof(int), false));
 
@@ -176,10 +184,10 @@ HRESULT PKgcObj::CreateVertexData()
 	for (int obj = 0; obj < object_size; obj++)
 	{
 		auto& cur_object = object_list_[obj];
-		cur_object.vertices_list_.resize(cur_object.info.vertex_list.size());
+		cur_object.vertices_list.resize(cur_object.info.vertex_list.size());
 		for (int i = 0; i < cur_object.info.vertex_list.size(); i++)
 		{
-			cur_object.vertices_list_[i] = std::move(cur_object.info.vertex_list[i]);
+			cur_object.vertices_list[i] = std::move(cur_object.info.vertex_list[i]);
 		}
 	}
 	return S_OK;
@@ -192,10 +200,10 @@ HRESULT PKgcObj::CreateIndexData()
 	for (int obj = 0; obj < object_size; obj++)
 	{
 		auto& cur_object = object_list_[obj];
-		cur_object.indices_list_.resize(cur_object.info.index_list.size());
+		cur_object.indices_list.resize(cur_object.info.index_list.size());
 		for (int i = 0; i < cur_object.info.index_list.size(); i++)
 		{
-			cur_object.indices_list_[i] = std::move(cur_object.info.index_list[i]);
+			cur_object.indices_list[i] = std::move(cur_object.info.index_list[i]);
 		}
 	}
 	return S_OK;
@@ -223,23 +231,23 @@ bool PKgcObj::PostRender()
 		{
 			for (int submatl = 0; submatl < object_list_[obj].info.meshinfo.numberof_submesh; submatl++)
 			{
-				if (object_list_[obj].helper_list_[submatl].vertex_size_ == 0)
+				if (object_list_[obj].helper_list[submatl].vertex_size_ == 0)
 					continue;
 
 				std::wstring key = material_list_[root_index].sub_material_list[submatl].tex_list[0].texname;
 				ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
 				immediate_context_->PSSetShaderResources(0, 1, srv);
 
-				UINT stride = object_list_[obj].helper_list_[submatl].vertex_size_;
+				UINT stride = object_list_[obj].helper_list[submatl].vertex_size_;
 				UINT offset = 0;
 
-				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[submatl].vertex_buffer_.GetAddressOf(),
+				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list[submatl].vertex_buffer_.GetAddressOf(),
 					&stride, &offset);
 
-				immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list_[submatl].index_buffer_.Get(),
+				immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list[submatl].index_buffer_.Get(),
 					DXGI_FORMAT_R32_UINT, 0);
 
-				immediate_context_->DrawIndexed(object_list_[obj].indices_list_[submatl].size(), 0, 0);
+				immediate_context_->DrawIndexed(object_list_[obj].indices_list[submatl].size(), 0, 0);
 
 			}
 
@@ -249,17 +257,17 @@ bool PKgcObj::PostRender()
 			std::wstring key = material_list_[0].tex_list[0].texname;
 			ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
 			immediate_context_->PSSetShaderResources(0, 1, srv);
-			UINT stride = object_list_[obj].helper_list_[0].vertex_size_;
+			UINT stride = object_list_[obj].helper_list[0].vertex_size_;
 			if (stride <= 0)
 				assert(false);
 			UINT offset = 0;
 
-			immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[0].vertex_buffer_.GetAddressOf(),
+			immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list[0].vertex_buffer_.GetAddressOf(),
 				&stride, &offset);
-			immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list_[0].index_buffer_.Get(),
+			immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list[0].index_buffer_.Get(),
 				DXGI_FORMAT_R32_UINT, 0);
 
-			immediate_context_->DrawIndexed(object_list_[obj].indices_list_[0].size(), 0, 0);
+			immediate_context_->DrawIndexed(object_list_[obj].indices_list[0].size(), 0, 0);
 		}
 
 

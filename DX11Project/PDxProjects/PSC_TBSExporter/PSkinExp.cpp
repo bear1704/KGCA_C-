@@ -202,6 +202,7 @@ bool PSkinExp::Export()
 	}
 
 
+	_ftprintf(file, _T("\n%s %d"), L"#GET_NODETM_INVERSE", PMatrixExp::GetInstance().object_list_.size());
 	for (int obj = 0; obj < PMatrixExp::GetInstance().object_list_.size(); obj++)
 	{
 
@@ -212,7 +213,6 @@ bool PSkinExp::Export()
 		D3D_MATRIX world_inv_startframe;
 		CopyMatrix3(world_inv_startframe, tm_inv);
 
-		_ftprintf(file, _T("\n%s"), L"#GET NODETM INVERSE");
 		_ftprintf(file,
 			_T("\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f\n\t%10.4f %10.4f %10.4f %10.4f"),
 			world_inv_startframe._11,

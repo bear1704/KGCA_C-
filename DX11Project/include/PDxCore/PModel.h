@@ -31,11 +31,13 @@ struct VS_CB_WVP
 	float etc[4];
 };
 
+
+
 struct PGeoMesh  //오브젝트별 geomesh
 {
-	std::vector<std::vector<Vertex_PNCT>> vertices_list_;
-	std::vector<std::vector<int>> indices_list_;
-	std::vector<DX::PDxHelper> helper_list_;
+	std::vector<std::vector<Vertex_PNCT>> vertices_list;
+	std::vector<std::vector<int>> indices_list;
+	std::vector<DX::PDxHelper> helper_list;
 	MaxExportInfo info;
 	PGeoMesh* parent_geomesh;
 
@@ -49,8 +51,29 @@ struct PGeoMesh  //오브젝트별 geomesh
 	D3DXVECTOR3 pos_track;
 	D3DXVECTOR3 scale_track;
 	D3DXQUATERNION rot_track;
+};
+
+struct PSkinMesh
+{
+	std::vector<std::vector<Vertex_PNCTW8I8>> vertices_list;
+	std::vector<std::vector<int>> indices_list;
+	std::vector<DX::PDxHelper> helper_list;
+	D3DXMATRIX mat_inverse_world;
+	D3DXMATRIX mat_calculation;
+	PSkinMesh* parent_skinmesh;
+	MaxExportSkinInfo info;
+
+	D3DXMATRIX mat_world_self;
+	D3DXMATRIX mat_pos;
+	D3DXMATRIX mat_rot;
+	D3DXMATRIX mat_scale;
+
+	D3DXVECTOR3 pos_track;
+	D3DXVECTOR3 scale_track;
+	D3DXQUATERNION rot_track;
 
 };
+
 
 class PModel
 {

@@ -1,16 +1,24 @@
 #include "PSkmObj.h"
 
+PSkmObj::PSkmObj()
+{
+}
+
+PSkmObj::~PSkmObj()
+{
+}
+
 bool PSkmObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path,
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path, std::wstring texcomp_path)
 {
-	std::vector<MaxExportInfo> info;
+	std::vector<MaxExportSkinInfo> info;
 	std::vector<Material> matrl_info;
 	MaxScene scene;
 
 	PModel::Init(device, context);
 	PParser parse;
 
-	parse.MaxExportParse(info, matrl_info, scene, object_path, texcomp_path, device);
+	parse.MaxExportParse(info, matrl_info, scene, object_path, texcomp_path, device, FILE_EXTENSION_TYPE::SKM);
 
 	object_list_.resize(info.size());
 
@@ -22,12 +30,12 @@ bool PSkmObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstr
 	for (int i = 0; i < info.size(); i++) //오브젝트별 부모 정보 이식
 	{
 		auto it = std::find_if(object_list_.begin(), object_list_.end(),
-			[&](const PGeoMesh& mesh) {return mesh.info.meshinfo.meshlist_name == object_list_[i].info.meshinfo.parent_name; });
+			[&](const PSkinMesh& mesh) {return mesh.info.meshinfo.meshlist_name == object_list_[i].info.meshinfo.parent_name; });
 
 		if (it == object_list_.end())
-			object_list_[i].parent_geomesh = nullptr;
+			object_list_[i].parent_skinmesh = nullptr;
 		else
-			object_list_[i].parent_geomesh = &(*it);
+			object_list_[i].parent_skinmesh = &(*it);
 
 	}
 
@@ -37,9 +45,9 @@ bool PSkmObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstr
 		D3DXMATRIX mat_parent, mat_inv_parent;
 		D3DXMatrixIdentity(&mat_parent);
 
-		if (object_list_[i].parent_geomesh != nullptr)
+		if (object_list_[i].parent_skinmesh != nullptr)
 		{
-			mat_parent = object_list_[i].parent_geomesh->info.meshinfo.world_mat;
+			mat_parent = object_list_[i].parent_skinmesh->info.meshinfo.world_mat;
 		}
 
 		D3DXMatrixInverse(&mat_inv_parent, NULL, &mat_parent);
@@ -100,9 +108,9 @@ bool PSkmObj::Frame()
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
 
-		if (object_list_[obj].parent_geomesh) // parent node가 존재할 경우(상속되는 본 애니메이션)
+		if (object_list_[obj].parent_skinmesh) // parent node가 존재할 경우(상속되는 본 애니메이션)
 		{
-			Interpolate(object_list_[obj], object_list_[obj].parent_geomesh->mat_calculation, elapsed_time_);
+			Interpolate(object_list_[obj], object_list_[obj].parent_skinmesh->mat_calculation, elapsed_time_);
 		}
 		else
 		{
@@ -117,22 +125,22 @@ HRESULT PSkmObj::CreateVertexBuffer()
 {
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
-		object_list_[obj].helper_list_.resize(object_list_[obj].info.vertex_list.size());
+		object_list_[obj].helper_list.resize(object_list_[obj].info.vertex_list.size());
 
 		for (int i = 0; i < object_list_[obj].info.vertex_list.size(); i++)
 		{
-			if (object_list_[obj].vertices_list_[i].size() == 0)
+			if (object_list_[obj].vertices_list[i].size() == 0)
 			{
 				continue;
 			}
 
-			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
+			auto& cur_dxhelper = object_list_[obj].helper_list[i];
 			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCT);
-			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list_[i].size();
+			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list[i].size();
 
 
 			cur_dxhelper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_,
-				&object_list_[obj].vertices_list_[i].at(0),
+				&object_list_[obj].vertices_list[i].at(0),
 				cur_dxhelper.vertex_count_,
 				cur_dxhelper.vertex_size_, false));
 
@@ -150,15 +158,15 @@ HRESULT PSkmObj::CreateIndexBuffer()
 
 		for (int i = 0; i < object_list_[obj].info.index_list.size(); i++)
 		{
-			if (object_list_[obj].indices_list_[i].size() == 0)
+			if (object_list_[obj].indices_list[i].size() == 0)
 			{
 				continue;
 			}
 
-			auto& cur_dxhelper = object_list_[obj].helper_list_[i];
-			cur_dxhelper.index_count_ = object_list_[obj].indices_list_[i].size();
+			auto& cur_dxhelper = object_list_[obj].helper_list[i];
+			cur_dxhelper.index_count_ = object_list_[obj].indices_list[i].size();
 			cur_dxhelper.index_buffer_.Attach(DX::CreateIndexBuffer(device_,
-				&object_list_[obj].indices_list_[i].at(0),
+				&object_list_[obj].indices_list[i].at(0),
 				cur_dxhelper.index_count_,
 				sizeof(int), false));
 
@@ -176,10 +184,10 @@ HRESULT PSkmObj::CreateVertexData()
 	for (int obj = 0; obj < object_size; obj++)
 	{
 		auto& cur_object = object_list_[obj];
-		cur_object.vertices_list_.resize(cur_object.info.vertex_list.size());
+		cur_object.vertices_list.resize(cur_object.info.vertex_list.size());
 		for (int i = 0; i < cur_object.info.vertex_list.size(); i++)
 		{
-			cur_object.vertices_list_[i] = std::move(cur_object.info.vertex_list[i]);
+			cur_object.vertices_list[i] = std::move(cur_object.info.vertex_list[i]);
 		}
 	}
 	return S_OK;
@@ -192,13 +200,70 @@ HRESULT PSkmObj::CreateIndexData()
 	for (int obj = 0; obj < object_size; obj++)
 	{
 		auto& cur_object = object_list_[obj];
-		cur_object.indices_list_.resize(cur_object.info.index_list.size());
+		cur_object.indices_list.resize(cur_object.info.index_list.size());
 		for (int i = 0; i < cur_object.info.index_list.size(); i++)
 		{
-			cur_object.indices_list_[i] = std::move(cur_object.info.index_list[i]);
+			cur_object.indices_list[i] = std::move(cur_object.info.index_list[i]);
 		}
 	}
 	return S_OK;
+}
+
+HRESULT PSkmObj::CreateConstantBuffer()
+{
+	PModel::CreateConstantBuffer();
+
+	D3D11_BUFFER_DESC desc;
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.ByteWidth = sizeof(CB_BoneAnimation);
+	HRESULT hr = device_->CreateBuffer(&desc, NULL, cbuffer_bone_anim_.GetAddressOf());
+
+	if (hr == E_FAIL)
+		assert(false);
+
+	return hr;
+}
+
+HRESULT PSkmObj::CreateInputLayout()
+{
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+
+		//index,weight data  : 즉 8개의 index, 8개의 weight이 정점에 영향을 끼칠 수 있다.
+		{"TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+
+	};
+
+	int element_count = sizeof(layout) / sizeof(layout[0]);
+	dx_helper_.input_layout_.Attach(DX::CreateInputLayout(device_,
+		dx_helper_.vertex_blob_->GetBufferSize(), dx_helper_.vertex_blob_->GetBufferPointer(),
+		layout, element_count));
+
+	return S_OK;
+}
+
+bool PSkmObj::PreRender()
+{
+	//주의! : 다 띄우고 난 다음 의미없는 코드일경우 지울 것
+	dx_helper_.PreRender(immediate_context_, dx_helper_.vertex_size_); 
+	
+	D3D11_MAPPED_SUBRESOURCE map_subres;
+	immediate_context_->Map(cbuffer_bone_anim_.Get(), 0, D3D11_MAP_WRITE_DISCARD,
+		0, &map_subres);
+	immediate_context_->Unmap(cbuffer_bone_anim_.Get(), 0);
+
+	immediate_context_->VSSetConstantBuffers(1, 1, cbuffer_bone_anim_.GetAddressOf());
+	return true;
 }
 
 bool PSkmObj::PostRender()
@@ -223,23 +288,23 @@ bool PSkmObj::PostRender()
 		{
 			for (int submatl = 0; submatl < object_list_[obj].info.meshinfo.numberof_submesh; submatl++)
 			{
-				if (object_list_[obj].helper_list_[submatl].vertex_size_ == 0)
+				if (object_list_[obj].helper_list[submatl].vertex_size_ == 0)
 					continue;
 
 				std::wstring key = material_list_[root_index].sub_material_list[submatl].tex_list[0].texname;
 				ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
 				immediate_context_->PSSetShaderResources(0, 1, srv);
 
-				UINT stride = object_list_[obj].helper_list_[submatl].vertex_size_;
+				UINT stride = object_list_[obj].helper_list[submatl].vertex_size_;
 				UINT offset = 0;
 
-				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[submatl].vertex_buffer_.GetAddressOf(),
+				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list[submatl].vertex_buffer_.GetAddressOf(),
 					&stride, &offset);
 
-				immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list_[submatl].index_buffer_.Get(),
+				immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list[submatl].index_buffer_.Get(),
 					DXGI_FORMAT_R32_UINT, 0);
 
-				immediate_context_->DrawIndexed(object_list_[obj].indices_list_[submatl].size(), 0, 0);
+				immediate_context_->DrawIndexed(object_list_[obj].indices_list[submatl].size(), 0, 0);
 
 			}
 
@@ -249,17 +314,17 @@ bool PSkmObj::PostRender()
 			std::wstring key = material_list_[0].tex_list[0].texname;
 			ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
 			immediate_context_->PSSetShaderResources(0, 1, srv);
-			UINT stride = object_list_[obj].helper_list_[0].vertex_size_;
+			UINT stride = object_list_[obj].helper_list[0].vertex_size_;
 			if (stride <= 0)
 				assert(false);
 			UINT offset = 0;
 
-			immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list_[0].vertex_buffer_.GetAddressOf(),
+			immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list[0].vertex_buffer_.GetAddressOf(),
 				&stride, &offset);
-			immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list_[0].index_buffer_.Get(),
+			immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list[0].index_buffer_.Get(),
 				DXGI_FORMAT_R32_UINT, 0);
 
-			immediate_context_->DrawIndexed(object_list_[obj].indices_list_[0].size(), 0, 0);
+			immediate_context_->DrawIndexed(object_list_[obj].indices_list[0].size(), 0, 0);
 		}
 
 
@@ -286,7 +351,7 @@ bool PSkmObj::GetAnimationTrack(const float elapsed_time, const std::vector<PAni
 	return false;
 }
 
-void PSkmObj::Interpolate(PGeoMesh& mesh, D3DXMATRIX& mat_parent, float elapsed_time)
+void PSkmObj::Interpolate(PSkinMesh& mesh, D3DXMATRIX& mat_parent, float elapsed_time)
 {
 	D3DXMATRIX mat_anim_scale, mat_anim_rot, mat_anim_pos;
 	mat_anim_scale = mesh.mat_scale;

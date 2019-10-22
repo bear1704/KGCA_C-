@@ -11,6 +11,26 @@ const int kMaxTexname = 256;
 
 using namespace std;
 
+enum class FILE_EXTENSION_TYPE
+{
+	KGC,
+	SKM,
+	MAT
+};
+
+struct Vertex_PNCTW8I8
+{
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR4 color;
+	D3DXVECTOR2 uv;
+	D3DXVECTOR4 i0;
+	D3DXVECTOR4 w0;
+	D3DXVECTOR4 i1;
+	D3DXVECTOR4 w1;
+
+};
+
 //(텍스쳐매니져)->텍스쳐리스트에 있는 텍스쳐 정보를 불러오기 위한..
 struct PTexMap
 {
@@ -30,7 +50,7 @@ struct Material
 };
 
 //오브젝트마다 가지는 메시 정보 모음
-struct MeshinfoByObject
+struct MeshinfoByObject //TMeshHeader
 {
 	string meshlist_name;
 	string parent_name;
@@ -67,38 +87,49 @@ struct MaxScene
 
 	}
 };
-
-
 //오브젝트당 필요한 정보 모음
-struct MaxExportInfo
+struct MaxExportInfoInterface
 {
+	vector<vector<int>> index_list;
 	MeshinfoByObject meshinfo;
 	vector<Material> material;
-	vector<vector<Vertex_PNCT>> vertex_list;
 	vector<int> numberof_vertices;
-	vector<vector<int>> index_list;
 	vector<int> numberof_indicies;
 
 	std::vector<PAnimTrack> animlist_pos;
 	std::vector<PAnimTrack> animlist_rot;
 	std::vector<PAnimTrack> animlist_scale;
 
-	MaxExportInfo()
+
+	MaxExportInfoInterface()
 	{
 		material.reserve(5);
-		vertex_list.reserve(5);
 		numberof_vertices.reserve(5);
 		index_list.reserve(5);
 		numberof_indicies.reserve(5);
 	}
 };
 
+//오브젝트당 필요한 정보 모음
+struct MaxExportInfo : public MaxExportInfoInterface
+{
+public:
+	vector<vector<Vertex_PNCT>> vertex_list;
+
+};
+
+struct MaxExportSkinInfo : public MaxExportInfoInterface
+{
+	vector<vector<Vertex_PNCTW8I8>> vertex_list;
+	std::vector<D3DXMATRIX> bone_list;
+};
 
 
 const int kCharMaxSize = 256;
 
 class PParser
 {
+	//extension type
 	//0 = kgc
 	//1 = skm
 	//2 = mat
@@ -111,7 +142,9 @@ private:
 public:
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
 	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene, 
-		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, int extension_type);
+		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, FILE_EXTENSION_TYPE type);
+	int MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene,
+		std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, FILE_EXTENSION_TYPE type);
 	std::vector<std::string> SplitString(std::string str, char delimiter);
 	std::vector<std::string> SplitString(std::wstring str, char delimiter);
 	inline void ReadNextLineAndSplit(OUT_ std::vector<std::string>& strvec, FILE* infile)
