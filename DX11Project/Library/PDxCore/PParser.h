@@ -15,7 +15,8 @@ enum class FILE_EXTENSION_TYPE
 {
 	KGC,
 	SKM,
-	MAT
+	MAT,
+	ERROR_OCCUR,
 };
 
 struct Vertex_PNCTW8I8
@@ -126,6 +127,7 @@ struct MaxExportSkinInfo : public MaxExportInfoInterface
 
 
 const int kCharMaxSize = 256;
+const int kVertexLineMaxSize = 512;
 
 class PParser
 {
@@ -138,7 +140,7 @@ public:
 	PParser();
 	~PParser();
 private:
-	wchar_t wch_t[kCharMaxSize];
+	wchar_t wch_t[kVertexLineMaxSize];
 public:
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
 	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene, 

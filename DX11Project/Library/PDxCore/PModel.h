@@ -133,9 +133,6 @@ public:
 	std::vector<Vertex_PNCT>* GetVertexListPointer();
 	std::vector<Vertex_PNCT>& vertex_list();
 	DX::PDxHelper& dx_helper();
-	virtual bool Load(multibyte_string filename, ID3D11Device* device,
-		const TCHAR* vs_path, const TCHAR* vs_func, const TCHAR* ps_path, const TCHAR* ps_func);
-
 
 };
 

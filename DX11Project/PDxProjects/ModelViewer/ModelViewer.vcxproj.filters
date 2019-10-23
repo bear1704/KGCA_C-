@@ -52,8 +52,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ModelView.hlsli">
+    <None Include="ModelView.hlsl">
       <Filter>Shader</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DiffuseLight.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

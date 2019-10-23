@@ -617,7 +617,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std:
 				Vertex_PNCTW8I8 pnct;
 				wsstr.str(L"");
 				wsstr.clear();
-				_fgetts(wch_t, kCharMaxSize, infile);
+				_fgetts(wch_t, kVertexLineMaxSize, infile);
 				wstr = wch_t;
 				wsstr.str(wstr);
 
@@ -681,10 +681,10 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std:
 					wstringstream sstr;
 					sstr.str(wstr);
 
-					sstr >> info_list[obj].bone_list[numberof_nodetm].m[row][0];
-					sstr >> info_list[obj].bone_list[numberof_nodetm].m[row][1];
-					sstr >> info_list[obj].bone_list[numberof_nodetm].m[row][2];
-					sstr >> info_list[obj].bone_list[numberof_nodetm].m[row][3];
+					sstr >> info_list[obj].bone_list[i].m[row][0];
+					sstr >> info_list[obj].bone_list[i].m[row][1];
+					sstr >> info_list[obj].bone_list[i].m[row][2];
+					sstr >> info_list[obj].bone_list[i].m[row][3];
 
 				}
 			}

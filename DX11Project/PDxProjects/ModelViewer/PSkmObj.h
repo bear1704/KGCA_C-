@@ -11,6 +11,8 @@ struct CB_BoneAnimation
 
 class PSkmObj : public PModel
 {
+private:
+	PParser parse;
 
 public:
 	PSkmObj();
@@ -31,10 +33,11 @@ public:
 
 
 public:
-	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
+	virtual bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
-		std::wstring object_path = L"", std::wstring texcomp_path = L"");
+		std::wstring object_path = L"", std::wstring texcomp_path = L"") override;
 	virtual bool Frame() override;
+	//virtual bool Frame(D3DXMATRIX* matrix); //왜쓰는거지
 	virtual HRESULT CreateVertexBuffer()	override;
 	virtual HRESULT CreateIndexBuffer()		override;
 	virtual HRESULT CreateVertexData()		override;

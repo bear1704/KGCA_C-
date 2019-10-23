@@ -6,21 +6,23 @@ PSkmObj::PSkmObj()
 
 PSkmObj::~PSkmObj()
 {
+	//delete parse;
 }
 
 bool PSkmObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path,
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path, std::wstring texcomp_path)
 {
+	PModel::Init(device, context);
+
 	std::vector<MaxExportSkinInfo> info;
 	std::vector<Material> matrl_info;
 	MaxScene scene;
-
-	PModel::Init(device, context);
-	PParser parse;
+	//parse = new PParser();
 
 	parse.MaxExportParse(info, matrl_info, scene, object_path, texcomp_path, device, FILE_EXTENSION_TYPE::SKM);
 
 	object_list_.resize(info.size());
+	bone_list_.resize(info.size());
 
 	for (int k = 0; k < info.size(); k++)
 	{
@@ -79,15 +81,14 @@ bool PSkmObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstr
 			&cur_obj.rot_track
 		);
 
-		while (1)
-			break;
-
+		bone_list_ = std::move(cur_obj.info.bone_list);
 	}
 
 	material_list_ = std::move(matrl_info); //머터리얼 정보 이식
 	scene_ = std::move(scene);
 
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
+
 
 
 	return true;
@@ -118,8 +119,15 @@ bool PSkmObj::Frame()
 		}
 	}
 
+	for (int obj = 0; obj < bone_list_.size(); obj++)
+	{
+		D3DXMatrixIdentity(&bone_matrix[obj]);
+		D3DXMatrixTranspose(&cb_bonedata_.g_matrix[obj], &bone_matrix[obj]);
+	}
+
 	return true;
 }
+
 
 HRESULT PSkmObj::CreateVertexBuffer()
 {
@@ -135,7 +143,7 @@ HRESULT PSkmObj::CreateVertexBuffer()
 			}
 
 			auto& cur_dxhelper = object_list_[obj].helper_list[i];
-			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCT);
+			cur_dxhelper.vertex_size_ = sizeof(Vertex_PNCTW8I8);
 			cur_dxhelper.vertex_count_ = object_list_[obj].vertices_list[i].size();
 
 
@@ -237,10 +245,10 @@ HRESULT PSkmObj::CreateInputLayout()
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
 
 		//index,weight data  : 즉 8개의 index, 8개의 weight이 정점에 영향을 끼칠 수 있다.
-		{"TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 48, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 64, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 80, D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 96, D3D11_INPUT_PER_VERTEX_DATA, 0  },
 
 	};
 
@@ -260,6 +268,7 @@ bool PSkmObj::PreRender()
 	D3D11_MAPPED_SUBRESOURCE map_subres;
 	immediate_context_->Map(cbuffer_bone_anim_.Get(), 0, D3D11_MAP_WRITE_DISCARD,
 		0, &map_subres);
+	memcpy(map_subres.pData, &cb_bonedata_, sizeof(CB_BoneAnimation));
 	immediate_context_->Unmap(cbuffer_bone_anim_.Get(), 0);
 
 	immediate_context_->VSSetConstantBuffers(1, 1, cbuffer_bone_anim_.GetAddressOf());

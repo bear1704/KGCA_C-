@@ -52,6 +52,8 @@ private:
 	PFreeCamera free_camera_;
 	std::vector<PModel*> object_list_;
 	std::vector<multibyte_string> loadfiles_dir_;
+	PBoxObject box;
+	PLightObj light_obj_;
 
 public:
 	bool Init() override;
@@ -63,7 +65,7 @@ public:
 public:
 	void MessageProc(MSG msg) override;
 	bool Load();
-	int LoadFileDialog(const TCHAR* extension, const TCHAR* title);
+	FILE_EXTENSION_TYPE LoadFileDialog(const TCHAR* extension, const TCHAR* title);
 
 };
 PCORE_RUN(L"Model Viewer", 0, 0, 800, 600);

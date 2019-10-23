@@ -14,7 +14,7 @@ Sample::~Sample()
 
 bool Sample::Init()
 {
-	Load();
+
 	free_camera_.Init();
 	free_camera_.camera_position_ = D3DXVECTOR3(0.0f, 10.0f, -50.0f);
 	free_camera_.vec_view_target_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -22,6 +22,9 @@ bool Sample::Init()
 		free_camera_.vec_view_target_, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	free_camera_.CreateProjectionMatrix();
 	main_camera_ = &free_camera_;
+	Load();
+	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
 
 	return true;
 }
@@ -59,11 +62,20 @@ bool Sample::Frame()
 	{
 		ToggleIsWireframeRender();
 	}
+	if (g_InputActionMap.rightClick == KEYSTAT::KEY_PUSH)
+	{
+		Load();
+	}
+	light_obj_.Frame();
+
 
 
 #pragma endregion
 
-
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		object_list_[obj]->Frame();
+	}
 	main_camera_->Frame();
 
 	return true;
@@ -72,6 +84,8 @@ bool Sample::Frame()
 bool Sample::Render()
 {
 	DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+	light_obj_.Render();
+
 
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
@@ -98,26 +112,24 @@ void Sample::MessageProc(MSG msg)
 
 bool Sample::Load()
 {
-	int file_type = LoadFileDialog(L"*", L"ModelView");
+	FILE_EXTENSION_TYPE file_type = LoadFileDialog(L"*", L"ModelView");
 	PModel* model = nullptr;
 
-	if (file_type == 0)
+	if (file_type == FILE_EXTENSION_TYPE::KGC)
 		model = new PKgcObj;
-	else if (file_type == 1)
-		model = new PSkmObj;
-
-	int load_index = loadfiles_dir_.size() - 1;
-	if (!model->Load(loadfiles_dir_[load_index], device_, L"modelview.hlsl", L"VS", L"modelview.hlsl", L"PS"))
+	else if (file_type == FILE_EXTENSION_TYPE::SKM)
 	{
-		return false;
+		model = new PSkmObj;
+		int load_index = loadfiles_dir_.size() - 1;
+		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS", loadfiles_dir_[load_index], L"data/texture/");
 	}
 	object_list_.push_back(model);
 	return true;
 }
 
-int Sample::LoadFileDialog(const TCHAR* extension, const TCHAR* title)
+FILE_EXTENSION_TYPE Sample::LoadFileDialog(const TCHAR* extension, const TCHAR* title)
 {
-	OPENFILENAME    ofn;
+	OPENFILENAME    ofn = { 0, };
 	TCHAR           szFile[MAX_PATH] = { 0, };
 	TCHAR			szFileTitle[MAX_PATH] = { 0, };
 	static TCHAR* szFilter;
@@ -149,7 +161,7 @@ int Sample::LoadFileDialog(const TCHAR* extension, const TCHAR* title)
 
 	if (!GetOpenFileName(&ofn))
 	{
-		return -1;
+		return FILE_EXTENSION_TYPE::ERROR_OCCUR;
 	}
 	TCHAR* load = _tcstok(szFile, _T("\n"));
 	multibyte_string dir = szFile;
@@ -184,10 +196,10 @@ int Sample::LoadFileDialog(const TCHAR* extension, const TCHAR* title)
 	multibyte_string FileKgcExt = L".kgc";
 	multibyte_string FileSkmExt = L".skm";
 	multibyte_string FileMatExt = L".mat";
-	if (FileExt == FileKgcExt) return 0;
-	if (FileExt == FileSkmExt) return 1;
-	if (FileExt == FileMatExt) return 2;
+	if (FileExt == FileKgcExt) return FILE_EXTENSION_TYPE::KGC;
+	if (FileExt == FileSkmExt) return FILE_EXTENSION_TYPE::SKM;
+	if (FileExt == FileMatExt) return FILE_EXTENSION_TYPE::MAT;
 	
-	return -1;
+	return FILE_EXTENSION_TYPE::ERROR_OCCUR;
 	
 }
