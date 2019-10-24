@@ -1,5 +1,13 @@
 #include "PMatObj.h"
 
+PMatObj::PMatObj()
+{
+}
+
+PMatObj::~PMatObj()
+{
+}
+
 bool PMatObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring vs_file_path,
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring object_path, std::wstring texcomp_path)
 {
@@ -71,13 +79,22 @@ bool PMatObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstr
 			&cur_obj.rot_track
 		);
 
-		while (1)
-			break;
 
 	}
 
+
 	material_list_ = std::move(matrl_info); //머터리얼 정보 이식
 	scene_ = std::move(scene);
+
+	TextureInfo texinfo;
+	texinfo.width = 991.0f; texinfo.height = 612.0f;
+	texinfo.uv_ltop = std::string("0.0f, 0.0f");
+	texinfo.uv_rbottom = std::string("1.0f, 1.0f");
+	texinfo.tex_name = L"bk.bmp";
+	texinfo.tex_path = texcomp_path + texinfo.tex_name;
+	PTextureManager::GetInstance().LoadTextureWithoutScript(texinfo, device);
+	texture_ = PTextureManager::GetInstance().GetTextureFromMap(L"bk.bmp");
+
 
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
 
@@ -206,63 +223,42 @@ bool PMatObj::PostRender()
 
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
+		int root_index = object_list_[obj].info.meshinfo.material_id;
+
+		if (root_index == -1) //material이 없음 (더미, 본)
+			continue;
+
 
 		//constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
 		constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
 
 		D3DXMatrixTranspose(&constant_data_.matWorld, &constant_data_.matWorld);
 
+		float time = g_fGameTimer;
+		constant_data_.color[0] = cosf(time);
+		constant_data_.color[1] = sinf(time);
+		constant_data_.color[2] = 1 - cosf(time);
+		constant_data_.color[3] = 1.0f;
+		constant_data_.etc[0] = time;
+
 		immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0, NULL, &constant_data_, 0, 0);
 
-		int root_index = object_list_[obj].info.meshinfo.material_id;
 
-		if (root_index == -1) //material이 없음 (더미, 본)
-			continue;
-
-		if (root_index >= 0 && material_list_[root_index].sub_material_list.size() > 0)
+		if (object_list_[obj].info.meshinfo.numberof_face > 0)
 		{
-			for (int submatl = 0; submatl < object_list_[obj].info.meshinfo.numberof_submesh; submatl++)
-			{
-				if (object_list_[obj].helper_list[submatl].vertex_size_ == 0)
-					continue;
-
-				std::wstring key = material_list_[root_index].sub_material_list[submatl].tex_list[0].texname;
-				ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
-				immediate_context_->PSSetShaderResources(0, 1, srv);
-
-				UINT stride = object_list_[obj].helper_list[submatl].vertex_size_;
-				UINT offset = 0;
-
-				immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list[submatl].vertex_buffer_.GetAddressOf(),
-					&stride, &offset);
-
-				immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list[submatl].index_buffer_.Get(),
-					DXGI_FORMAT_R32_UINT, 0);
-
-				immediate_context_->DrawIndexed(object_list_[obj].indices_list[submatl].size(), 0, 0);
-
-			}
-
-		}
-		else
-		{
-			std::wstring key = material_list_[0].tex_list[0].texname;
-			ID3D11ShaderResourceView** srv = PTextureManager::GetInstance().GetTextureFromMap(key)->shader_res_view_double_ptr();
-			immediate_context_->PSSetShaderResources(0, 1, srv);
+			immediate_context_->PSSetShaderResources(0, 1, texture_->shader_res_view_double_ptr());
+			
 			UINT stride = object_list_[obj].helper_list[0].vertex_size_;
-			if (stride <= 0)
-				assert(false);
 			UINT offset = 0;
 
 			immediate_context_->IASetVertexBuffers(0, 1, object_list_[obj].helper_list[0].vertex_buffer_.GetAddressOf(),
 				&stride, &offset);
+
 			immediate_context_->IASetIndexBuffer(object_list_[obj].helper_list[0].index_buffer_.Get(),
 				DXGI_FORMAT_R32_UINT, 0);
 
 			immediate_context_->DrawIndexed(object_list_[obj].indices_list[0].size(), 0, 0);
 		}
-
-
 
 	}
 

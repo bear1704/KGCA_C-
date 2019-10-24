@@ -121,7 +121,15 @@ bool Sample::Load()
 	{
 		model = new PSkmObj;
 		int load_index = loadfiles_dir_.size() - 1;
-		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS", loadfiles_dir_[load_index], L"data/texture/");
+		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS", 
+			loadfiles_dir_[load_index], L"data/texture/");
+	}
+	else if (file_type == FILE_EXTENSION_TYPE::MAT)
+	{
+		model = new PMatObj;
+		int load_index = loadfiles_dir_.size() - 1;
+		model->Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS",
+			loadfiles_dir_[load_index], L"data/texture/");
 	}
 	object_list_.push_back(model);
 	return true;
@@ -189,13 +197,13 @@ FILE_EXTENSION_TYPE Sample::LoadFileDialog(const TCHAR* extension, const TCHAR* 
 	TCHAR Ext[MAX_PATH];
 	_tsplitpath_s(loadfiles_dir_[loadfiles_dir_.size() - 1].c_str(),
 		Drive, Dir, FName, Ext);
-	Ext[4] = 0;
+	Ext[5] = '\0';
 	_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
 
 	multibyte_string FileExt = Ext;
 	multibyte_string FileKgcExt = L".kgc";
 	multibyte_string FileSkmExt = L".skm";
-	multibyte_string FileMatExt = L".mat";
+	multibyte_string FileMatExt = L".anim";
 	if (FileExt == FileKgcExt) return FILE_EXTENSION_TYPE::KGC;
 	if (FileExt == FileSkmExt) return FILE_EXTENSION_TYPE::SKM;
 	if (FileExt == FileMatExt) return FILE_EXTENSION_TYPE::MAT;

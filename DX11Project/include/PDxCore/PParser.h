@@ -57,7 +57,7 @@ struct MeshinfoByObject //TMeshHeader
 	string parent_name;
 	int material_id;
 	int numberof_submesh;
-	int trilist_size;
+	int numberof_face;
 	D3DXMATRIX world_mat;
 };
 
@@ -88,6 +88,15 @@ struct MaxScene
 
 	}
 };
+
+struct PBox
+{
+	D3DXVECTOR3 center;
+	D3DXVECTOR3 min;
+	D3DXVECTOR3 max;
+	D3DXVECTOR3 axis[3];
+};
+
 //오브젝트당 필요한 정보 모음
 struct MaxExportInfoInterface
 {
@@ -116,7 +125,7 @@ struct MaxExportInfo : public MaxExportInfoInterface
 {
 public:
 	vector<vector<Vertex_PNCT>> vertex_list;
-
+	PBox bounding_box; // mat animation only
 };
 
 struct MaxExportSkinInfo : public MaxExportInfoInterface
@@ -124,6 +133,8 @@ struct MaxExportSkinInfo : public MaxExportInfoInterface
 	vector<vector<Vertex_PNCTW8I8>> vertex_list;
 	std::vector<D3DXMATRIX> bone_list;
 };
+
+
 
 
 const int kCharMaxSize = 256;

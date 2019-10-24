@@ -145,6 +145,8 @@ void PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Device* c
 
 	ID3D11ShaderResourceView** view = texture->shader_res_view_double_ptr();
 
+	texture->set_tex_name(info.tex_name);
+	texture->set_tex_path(info.tex_path);
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
 		current_device, info.tex_path.c_str(), NULL, NULL, view, NULL

@@ -13,6 +13,7 @@ public:
 	std::vector<Material> material_list_;
 	float elapsed_time_;
 	MaxScene scene_;
+	PTexture* texture_;
 
 public:
 	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,

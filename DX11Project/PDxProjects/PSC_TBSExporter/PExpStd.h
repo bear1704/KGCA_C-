@@ -14,7 +14,6 @@ const enum class OBJECT_TYPE
 	CLASS_BONE,
 	CLASS_DUMMY,
 	CLASS_BIPED,
-	CLASS_ERROR,
 };
 
 typedef struct _D3D_MATRIX {

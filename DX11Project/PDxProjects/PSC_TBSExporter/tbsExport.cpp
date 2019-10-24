@@ -122,7 +122,7 @@ INT_PTR CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}break;
 		case IDC_MATRIXEXP:
 		{
-			TSTR exp_file = PMatrixExp::GetInstance().SaveFileDialog(L"mat", L"MatrixWriter");
+			TSTR exp_file = PMatrixExp::GetInstance().SaveFileDialog(L"anim", L"MatrixWriter");
 			if (exp_file != NULL)
 			{
 				PMatrixExp::GetInstance().Set(exp_file, tbsExport::GetInstance()->interface_);

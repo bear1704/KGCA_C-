@@ -33,6 +33,11 @@ public:
 	float GetImageWidth();
 	float GetImageHeight();
 
+	void set_tex_name(multibyte_string name);
+	void set_tex_path(multibyte_string path);
+	multibyte_string tex_name();
+	multibyte_string tex_path();
+
 
 	
 

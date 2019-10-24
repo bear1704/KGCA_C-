@@ -71,3 +71,23 @@ float PTexture::GetImageHeight()
 	return height_;
 }
 
+void PTexture::set_tex_name(multibyte_string name)
+{
+	tex_name_ = name;
+}
+
+void PTexture::set_tex_path(multibyte_string path)
+{
+	tex_path_ = path;
+}
+
+multibyte_string PTexture::tex_name()
+{
+	return tex_name_;
+}
+
+multibyte_string PTexture::tex_path()
+{
+	return tex_path_;
+}
+

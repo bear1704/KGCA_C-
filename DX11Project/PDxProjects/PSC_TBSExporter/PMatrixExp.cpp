@@ -23,7 +23,7 @@ bool PMatrixExp::Export()
 	scene_.numberof_meshes = mesh_list_.size();
 
 	_wfopen_s(&file, filename_.c_str(), _T("wb"));
-	_ftprintf(file, _T("%s %d"), _T("MatrixExporter v1"), object_list_.size());
+	_ftprintf(file, _T("%s %d"), _T("MatrixExporter_v2"), object_list_.size());
 
 	_ftprintf(file, _T("\n%s"), L"#HEADER INFO  [FirstFrame/LastFrame/FrameRate/TickPerFrame/MeshListSize/PMaterialListSize]  ");
 	_ftprintf(file, _T("\n%d %d %d %d %d %d"),
@@ -71,6 +71,7 @@ bool PMatrixExp::Export()
 			mesh_list_[imesh].world_d3d._43,
 			mesh_list_[imesh].world_d3d._44);
 
+		mesh_list_[imesh].tri_list;
 
 		auto subtri_list = mesh_list_[imesh].buffer_list;
 		for (int iSubTri = 0; iSubTri < subtri_list.size(); iSubTri++)
@@ -145,19 +146,19 @@ bool PMatrixExp::SwitchAllNodeToMesh()
 		Object* object = node->GetObjectRef();
 		Control* control = node->GetTMController();
 
+		object->GetDeformBBox(0, mesh.bounding_box, &node->GetObjectTM(0));
+
 		mesh.type = OBJECT_TYPE::CLASS_GEOM;
 		if (object && object->ClassID() == Class_ID(BONE_CLASS_ID, 0))
 			mesh.type = OBJECT_TYPE::CLASS_BONE;
 		else if (object && object->ClassID() == Class_ID(DUMMY_CLASS_ID, 0))
 			mesh.type = OBJECT_TYPE::CLASS_DUMMY;
-		else if (object && object->ClassID() == BIPBODY_CONTROL_CLASS_ID)
+		else if (control && control->ClassID() == BIPBODY_CONTROL_CLASS_ID)
 			mesh.type = OBJECT_TYPE::CLASS_BIPED;
-		else if (object && object->ClassID() == BIPSLAVE_CONTROL_CLASS_ID)
+		else if (control && control->ClassID() == BIPSLAVE_CONTROL_CLASS_ID)
 			mesh.type = OBJECT_TYPE::CLASS_BIPED;
-		else
-			mesh.type = OBJECT_TYPE::CLASS_ERROR;
 
-		if (mesh.type != OBJECT_TYPE::CLASS_ERROR)
+		if (mesh.type != OBJECT_TYPE::CLASS_GEOM)
 		{
 			GetMesh(node, mesh);
 		}

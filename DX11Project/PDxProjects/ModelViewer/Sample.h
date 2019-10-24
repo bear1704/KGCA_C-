@@ -9,6 +9,7 @@
 #include "PLightObj.h"
 #include "PKgcObj.h"
 #include "PSkmObj.h"
+#include "PMatObj.h"
 
 
 #if defined(DEBUG) || defined(_DEBUG)

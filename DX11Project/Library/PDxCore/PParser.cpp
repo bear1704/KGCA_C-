@@ -3,6 +3,7 @@
 
 PParser::PParser()
 {
+	
 }
 
 PParser::~PParser()
@@ -245,15 +246,38 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 		}
 		else if (wstr.find(L"#OBJECT INFO") != std::string::npos)
 		{
-			ReadNextLineAndSplit(split_str, infile);
-
 			obj++;
-			info_list[obj].meshinfo.meshlist_name = split_str[0];
-			info_list[obj].meshinfo.parent_name = split_str[1];
-			info_list[obj].meshinfo.material_id = std::stoi(split_str[2]);
-			info_list[obj].meshinfo.numberof_submesh = std::stoi(split_str[3]);
-			info_list[obj].meshinfo.trilist_size = std::stoi(split_str[4]);
-			
+
+			if (type == FILE_EXTENSION_TYPE::MAT)
+			{
+				stringstream sstr;
+
+				_fgetts(wch_t, kCharMaxSize, infile);
+				wstr = wch_t;
+				str.assign(wstr.begin(), wstr.end());
+				sstr.str(str);
+				sstr >> info_list[obj].meshinfo.meshlist_name; 
+				sstr >> info_list[obj].meshinfo.parent_name;
+				sstr >> info_list[obj].meshinfo.numberof_face;
+				sstr >> info_list[obj].bounding_box.max.x;
+				sstr >> info_list[obj].bounding_box.max.z;
+				sstr >> info_list[obj].bounding_box.max.y;
+				sstr >> info_list[obj].bounding_box.min.x;
+				sstr >> info_list[obj].bounding_box.min.z;
+				sstr >> info_list[obj].bounding_box.min.y;
+
+				info_list[obj].meshinfo.material_id = 0;
+				info_list[obj].meshinfo.numberof_submesh = 0;
+			}
+			else //기본형
+			{
+				ReadNextLineAndSplit(split_str, infile);
+				info_list[obj].meshinfo.meshlist_name = split_str[0];
+				info_list[obj].meshinfo.parent_name = split_str[1];
+				info_list[obj].meshinfo.material_id = std::stoi(split_str[2]);
+				info_list[obj].meshinfo.numberof_submesh = std::stoi(split_str[3]);
+				info_list[obj].meshinfo.numberof_face = std::stoi(split_str[4]);
+			}
 		}
 		else if (wstr.find(L"#WORLD MATRIX") != std::string::npos)
 		{
@@ -307,7 +331,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 				Vertex_PNCT pnct;
 				wsstr.str(L"");
 				wsstr.clear();
-				_fgetts(wch_t, kCharMaxSize, infile);
+				_fgetts(wch_t, kVertexLineMaxSize, infile);
 				wstr = wch_t;
 				wsstr.str(wstr);
 			
@@ -316,14 +340,11 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 				wsstr >> pnct.color.x; wsstr >> pnct.color.y; wsstr >> pnct.color.z; wsstr >> pnct.color.w;
 				wsstr >> pnct.uv.x; wsstr >> pnct.uv.y;
 				
-				
-				if (type == FILE_EXTENSION_TYPE::SKM)  //skm 확장자일때만 적용
-				{
-					wsstr >> iwvalue[0]; wsstr >> iwvalue[1]; wsstr >> iwvalue[2]; wsstr >> iwvalue[3];
-					wsstr >> iwvalue[4]; wsstr >> iwvalue[5]; wsstr >> iwvalue[6]; wsstr >> iwvalue[7];
-					wsstr >> iwvalue[8]; wsstr >> iwvalue[9]; wsstr >> iwvalue[10]; wsstr >> iwvalue[11];
-					wsstr >> iwvalue[12]; wsstr >> iwvalue[13]; wsstr >> iwvalue[14]; wsstr >> iwvalue[15];
-				}
+				//skm 확장자일때 전용
+				wsstr >> iwvalue[0]; wsstr >> iwvalue[1]; wsstr >> iwvalue[2]; wsstr >> iwvalue[3];
+				wsstr >> iwvalue[4]; wsstr >> iwvalue[5]; wsstr >> iwvalue[6]; wsstr >> iwvalue[7];
+				wsstr >> iwvalue[8]; wsstr >> iwvalue[9]; wsstr >> iwvalue[10]; wsstr >> iwvalue[11];
+				wsstr >> iwvalue[12]; wsstr >> iwvalue[13]; wsstr >> iwvalue[14]; wsstr >> iwvalue[15];
 
 				vertices.push_back(pnct);
 			}
@@ -415,10 +436,9 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene,
 	std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, FILE_EXTENSION_TYPE type)
 {
-	//extension type
-	//0 = kgc
-	//1 = skm
-	//2 = mat
+	
+	if (type != FILE_EXTENSION_TYPE::SKM)
+		assert(false);
 
 	std::string str;
 	std::wstring wstr;
@@ -562,7 +582,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std:
 			info_list[obj].meshinfo.parent_name = split_str[1];
 			info_list[obj].meshinfo.material_id = std::stoi(split_str[2]);
 			info_list[obj].meshinfo.numberof_submesh = std::stoi(split_str[3]);
-			info_list[obj].meshinfo.trilist_size = std::stoi(split_str[4]);
+			info_list[obj].meshinfo.numberof_face = std::stoi(split_str[4]);
 
 		}
 		else if (wstr.find(L"#WORLD MATRIX") != std::string::npos)
@@ -695,6 +715,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std:
 
 	return 0;
 }
+
 
 std::vector<std::string> PParser::SplitString(std::string str, char delimiter)
 {

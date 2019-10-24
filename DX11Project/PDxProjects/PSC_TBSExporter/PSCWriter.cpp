@@ -257,7 +257,7 @@ void PSCWriter::GetMesh(INode* node, OUT_  PMesh& pmesh)
 
 	mesh->buildBoundingBox();
 	pmesh.bounding_box = mesh->getBoundingBox(&tm);
-
+	
 	bool is_negscale = IsTmNegativeParity(tm);
 	int custom_v0, custom_v1, custom_v2;
 

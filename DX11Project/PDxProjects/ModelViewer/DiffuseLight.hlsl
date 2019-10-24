@@ -102,6 +102,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
 	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
+	//float4 vFinalColor = vTexColor * (Diffuse(vIn.n) + Specular(vIn.n)) * vIn.c;
 	float4 vFinalColor = vTexColor * (Diffuse(vIn.n) + Specular(vIn.n)) * vIn.c;
 	vFinalColor.a = 1.0f;
 	return vFinalColor;
