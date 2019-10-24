@@ -103,6 +103,88 @@ int PParser::XmlParse(std::string path, std::vector<std::pair<string, string>>* 
 
 }
 
+int PParser::CharacterSheetParse(std::wstring filepath, OUT_ std::vector<StringPair>* data_map)
+{
+
+
+	FILE* infile = nullptr;
+	_tfopen_s(&infile, filepath.c_str(), _T("rb"));
+	bool is_first_line = false;
+
+	while (_fgetts(wch_t, kDoubledLineMaxSize, infile) != NULL)
+	{
+		std::string str;
+		std::wstring wstr;
+		size_t start_position = 0;
+		size_t string_endposition = 0;
+		
+
+		wstr = wch_t;
+		if (!is_first_line)
+		{
+			str.assign(wstr.begin() + 1, wstr.end()); //ucs-2 bom에서 첫 문장 첫글자에 bom byte가 들어가는 문제 발생으로 인한..
+			is_first_line = true;
+		}
+		else
+			str.assign(wstr.begin(), wstr.end()); 
+
+		std::string type_string;
+		std::string value_string;
+		bool is_comment_line = false;
+
+		if (str == "\t" || str == "") //공백감지
+			continue;
+
+		
+		std::regex type_start("\\[([a-zA-Z0-9_]*)\\]");
+		std::regex comment("\/[/]+.*");
+		//std::regex value(".*^[^\/]+");
+		std::regex value(".*(?=\/\/)");
+
+		std::sregex_iterator it_start(str.begin(), str.end(), type_start);
+		std::sregex_iterator end;
+		std::sregex_iterator it_comment(str.begin(), str.end(), comment);
+
+		while (it_comment != end && it_start == end) //라인 주석검사
+		{
+			is_comment_line = true;
+			it_comment++;
+		}
+		if (is_comment_line) //주석 무효 
+		{
+			is_comment_line = false;
+			continue;
+		}
+
+		while (it_start != end)
+		{
+			std::smatch m = *it_start;
+			type_string = m.str(0).substr(1, m.str(0).size() - 2); //<>를 제외하고 호출        
+			start_position = m.position() + m.str(0).size(); // [regex] 면, [가 0, x가 5, ]가 6.  즉 +2 하면 7번째부터 찾을 수 있음
+			it_start++;
+		}
+
+		if (start_position > 0) //미드스트링 존재, 삽입가능
+		{
+			value_string = str.substr(start_position, str.size() - 1); //주의 : -1이 옳은 것인가?
+			value_string.erase(remove_if(value_string.begin(), value_string.end(), isspace), value_string.end()); //공백제거
+			
+			std::sregex_iterator real_val(value_string.begin(), value_string.end(), value);
+
+			if (real_val != end)
+			{
+				std::smatch r = *real_val;
+				value_string = r.str(0);
+			}			
+
+			auto pair = std::make_pair(type_string, value_string);
+			data_map->emplace_back(pair);
+		}
+	}
+	fclose(infile);
+	return 0;
+}
+
 int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene,
 	std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, FILE_EXTENSION_TYPE type)
 {
@@ -114,7 +196,6 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 	std::string str;
 	std::wstring wstr;
 	std::vector<std::string> split_str;
-	std::string::size_type n;
 
 	int vertex_count = 0;
 	int index_count = 0;
@@ -331,7 +412,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 				Vertex_PNCT pnct;
 				wsstr.str(L"");
 				wsstr.clear();
-				_fgetts(wch_t, kVertexLineMaxSize, infile);
+				_fgetts(wch_t, kDoubledLineMaxSize, infile);
 				wstr = wch_t;
 				wsstr.str(wstr);
 			
@@ -637,7 +718,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std:
 				Vertex_PNCTW8I8 pnct;
 				wsstr.str(L"");
 				wsstr.clear();
-				_fgetts(wch_t, kVertexLineMaxSize, infile);
+				_fgetts(wch_t, kDoubledLineMaxSize, infile);
 				wstr = wch_t;
 				wsstr.str(wstr);
 
