@@ -1,6 +1,6 @@
 #include "PModel.h"
 
-PModel::PModel()
+PModel::PModel() : mytype(FILE_EXTENSION_TYPE::ERROR_OCCUR)
 {
 	be_using_sprite_ = false;
 }
@@ -27,6 +27,16 @@ bool PModel::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstri
 bool PModel::Frame()
 {
 	return true;
+}
+
+bool PModel::Frame(D3DXMATRIX* matrix)
+{
+	return true;
+}
+
+D3DXMATRIX* PModel::FrameMatrix(int start, int end, float elapsed_time)
+{
+	return nullptr;
 }
 
 bool PModel::PreRender()

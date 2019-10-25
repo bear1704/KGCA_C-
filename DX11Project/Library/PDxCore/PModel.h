@@ -62,6 +62,18 @@ struct PSkinMesh : public PMeshInterface
 	MaxExportSkinInfo info;
 };
 
+//animation action 시작/끝 나누기
+struct PAction
+{
+	int start;
+	int end;
+
+	struct PAction(int start_, int end_)
+	{
+		start = start_;
+		end = end_;
+	}
+};
 
 class PModel
 {
@@ -78,6 +90,7 @@ public:
 	PTexture* texture_; //Sprite를 사용하지 않는 보통 오브젝트에서 사용되는 텍스쳐 
 	FILE* file_;
 	bool be_using_sprite_;
+	FILE_EXTENSION_TYPE mytype;
 
 public:
 	PModel();
@@ -89,6 +102,8 @@ public:
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
 		std::wstring tex_name = L"", std::wstring sprite_name = L"");
 	virtual bool Frame();
+	virtual bool Frame(D3DXMATRIX* matrix);
+	virtual D3DXMATRIX* FrameMatrix(int start, int end, float elapsed_time);
 	virtual bool PreRender();
 	virtual bool Render();
 	virtual bool PostRender();

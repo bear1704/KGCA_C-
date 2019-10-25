@@ -2,6 +2,7 @@
 
 PMatObj::PMatObj()
 {
+	mytype = FILE_EXTENSION_TYPE::MAT;
 }
 
 PMatObj::~PMatObj()
@@ -129,6 +130,37 @@ bool PMatObj::Frame()
 
 	return true;
 }
+
+bool PMatObj::Frame(D3DXMATRIX* matrix)
+{
+	return true;
+}
+
+D3DXMATRIX* PMatObj::FrameMatrix(int start_frame, int end_frame, float elapsed_time)
+{
+	float start_tick = start_frame * scene_.tick_per_frame;
+	float end_tick = end_frame * scene_.tick_per_frame;
+	float currnet_elapsed_time = start_tick + elapsed_time;
+		
+	D3DXMATRIX pseudo_mat_parent;
+	D3DXMatrixIdentity(&pseudo_mat_parent);
+	
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		if (object_list_[obj].parent_geomesh) // parent node가 존재할 경우(상속되는 본 애니메이션)
+		{
+			Interpolate(object_list_[obj], object_list_[obj].parent_geomesh->mat_calculation, currnet_elapsed_time);
+			matrix_[obj] = object_list_[obj].mat_calculation;
+		}
+		else
+		{
+			Interpolate(object_list_[obj], pseudo_mat_parent, currnet_elapsed_time);
+			matrix_[obj] = object_list_[obj].mat_calculation;
+		}
+	}
+		return matrix_;
+}
+
 
 HRESULT PMatObj::CreateVertexBuffer()
 {

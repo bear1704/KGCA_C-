@@ -2,6 +2,7 @@
 
 PKgcObj::PKgcObj()
 {
+	mytype = FILE_EXTENSION_TYPE::KGC;
 }
 
 PKgcObj::~PKgcObj()

@@ -800,6 +800,8 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportSkinInfo>& info_list, std:
 
 std::vector<std::string> PParser::SplitString(std::string str, char delimiter)
 {
+	bool is_delimiter_exist = false;
+
 	std::string::iterator str_start = str.begin();
 	std::string::iterator str_iter;
 	std::vector<std::string> strvec;
@@ -812,17 +814,27 @@ std::vector<std::string> PParser::SplitString(std::string str, char delimiter)
 
 			strvec.push_back(temp_str);
 			str_start = str_iter + 1;
+			is_delimiter_exist = true;
 		}
 
 	}
-	std::string temp_str(str_start, str.end());
-	strvec.push_back(temp_str);
+
+	if (is_delimiter_exist)
+	{
+		std::string temp_str(str_start, str.end());
+		strvec.push_back(temp_str);
+	}
+	else
+		strvec.push_back(str);
+
 	return strvec;
 }
 
 
 std::vector<std::string> PParser::SplitString(std::wstring str, char delimiter)
 {
+	bool is_delimiter_exist = false;
+
 	std::wstring::iterator str_start = str.begin();
 	std::wstring::iterator str_iter;
 	std::vector<std::string> strvec;
@@ -835,11 +847,22 @@ std::vector<std::string> PParser::SplitString(std::wstring str, char delimiter)
 
 			strvec.push_back(temp_str);
 			str_start = str_iter + 1;
+			is_delimiter_exist = true;
 		}
 
 	}
-	std::string temp_str(str_start, str.end());
-	strvec.push_back(temp_str);
+
+	if (is_delimiter_exist)
+	{
+		std::string temp_str(str_start, str.end());
+		strvec.push_back(temp_str);
+	}
+	else
+	{
+		string sstr;
+		sstr.assign(str.begin(), str.end());
+		strvec.push_back(sstr);
+	}
 	return strvec;
 }
 

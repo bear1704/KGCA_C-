@@ -2,6 +2,7 @@
 
 PSkmObj::PSkmObj()
 {
+	mytype = FILE_EXTENSION_TYPE::SKM;
 }
 
 PSkmObj::~PSkmObj()
@@ -123,6 +124,20 @@ bool PSkmObj::Frame()
 	{
 		D3DXMatrixIdentity(&bone_matrix[obj]);
 		D3DXMatrixTranspose(&cb_bonedata_.g_matrix[obj], &bone_matrix[obj]);
+	}
+
+	return true;
+}
+
+bool PSkmObj::Frame(D3DXMATRIX* matrix)
+{
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		for (int i = 0; i < bone_list_.size(); i++)
+		{
+			D3DXMATRIX mat_anim = bone_list_[i] * matrix[i];
+			D3DXMatrixTranspose(&cb_bonedata_.g_matrix[i], &mat_anim);
+		}
 	}
 
 	return true;
@@ -262,7 +277,6 @@ HRESULT PSkmObj::CreateInputLayout()
 
 bool PSkmObj::PreRender()
 {
-	//주의! : 다 띄우고 난 다음 의미없는 코드일경우 지울 것
 	dx_helper_.PreRender(immediate_context_, dx_helper_.vertex_size_); 
 	
 	D3D11_MAPPED_SUBRESOURCE map_subres;
@@ -282,10 +296,7 @@ bool PSkmObj::PostRender()
 	{
 
 		//constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
-		constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
-
-		D3DXMatrixTranspose(&constant_data_.matWorld, &constant_data_.matWorld);
-
+		//D3DXMatrixTranspose(&constant_data_.matWorld, &constant_data_.matWorld);
 		immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0, NULL, &constant_data_, 0, 0);
 
 		int root_index = object_list_[obj].info.meshinfo.material_id;

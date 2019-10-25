@@ -25,6 +25,8 @@
 
 PScene* g_current_scene_;
 
+
+
 struct CB_VS_ChangesEveryFrame
 {
 	D3DXMATRIX mat_normal;
@@ -42,6 +44,19 @@ struct CB_VS_NearlyNotChange
 	D3DXVECTOR4 cb_SpecularLightColor;
 };
 
+class PSCharacter
+{
+public:
+	PSCharacter();
+	~PSCharacter();
+public:
+	std::vector<PModel*> object_list_;
+	multibyte_string character_name_;
+	multibyte_string shader_name_;
+	PMatObj* matrix_;
+};
+
+
 
 class Sample : public PCore
 {
@@ -49,12 +64,14 @@ public:
 	Sample();
 	~Sample();
 private:
+	PParser parse_;
+	PSCharacter character_;
 	PCamera* main_camera_;
 	PFreeCamera free_camera_;
 	std::vector<PModel*> object_list_;
-	std::vector<multibyte_string> loadfiles_dir_;
-	PBoxObject box;
 	PLightObj light_obj_;
+
+	float elapsed_time_;
 
 public:
 	bool Init() override;
@@ -65,8 +82,8 @@ public:
 
 public:
 	void MessageProc(MSG msg) override;
-	bool Load();
-	FILE_EXTENSION_TYPE LoadFileDialog(const TCHAR* extension, const TCHAR* title);
+	PModel* LoadSheetObject(multibyte_string filename, std::wstring vs_shader_path, std::string vs_func_name,
+		std::wstring ps_shader_path, std::string ps_func_name);
 
 };
-PCORE_RUN(L"Model Viewer", 0, 0, 800, 600);
+PCORE_RUN(L"Animation Viewer", 0, 0, 800, 600);
