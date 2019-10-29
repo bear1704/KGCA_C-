@@ -3,6 +3,25 @@
 #include "PSpriteManager.h"
 #include "PParser.h"
 
+struct P_BaseObj
+{
+	D3DXVECTOR3 pos;
+	D3DXMATRIX mat_world;
+};
+
+//AABB, OBB 충돌 / 계측 처리를 위한 비렌더링 박스
+struct P_BOX : public P_BaseObj
+{
+	D3DXVECTOR3 center;
+	//AABB
+	D3DXVECTOR3 aabb_min;
+	D3DXVECTOR3 aabb_max;
+	//OBB
+	D3DXVECTOR3 obb_axis[3];
+	D3DXVECTOR3 obb_extents[3];
+};
+
+
 class PPlaneObject : public PModel
 {
 public:
@@ -25,6 +44,7 @@ public:
 
 };
 
+//center,aabb,obb등 정보가 있으면 그 형태로 Worldmat 생성, 없으면 단위행렬로 사용.
 class PBoxObject : public PModel
 {
 public:
@@ -45,12 +65,7 @@ public:
 public:
 	virtual HRESULT CreateVertexData() override;
 	virtual HRESULT CreateIndexData() override;
-
 };
-
-
-
-
 
 
 class PImportObject : public PModel
