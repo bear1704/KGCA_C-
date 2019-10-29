@@ -3,11 +3,12 @@
 #include <D3DX11.h>
 #include <D3DX10math.h>
 #include "PArcBall.h"
+#include "PFrustum.h"
 
 class PCamera
 {
 public:
-
+	PFrustum frustum_;
 	PArcBall arcball_view_;
 	PArcBall arcball_world_;
 	D3DXVECTOR3 vec_look_;
@@ -38,6 +39,7 @@ public:
 	//카메라의 단순방향이동에 쓰임
 	void MoveCameraVec(D3DXVECTOR3 move = D3DXVECTOR3(0,0,0)); 
 	void UpdateVector();
+	void SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj);
 
 	void UpWard();
 	void DownWard();
@@ -56,6 +58,7 @@ public:
 public:
 	virtual bool Init();
 	virtual bool Frame();
+	virtual bool Render(ID3D11DeviceContext* context);
 
 
 };

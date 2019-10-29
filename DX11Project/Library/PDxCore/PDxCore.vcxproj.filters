@@ -267,6 +267,9 @@
     <ClInclude Include="PNormalMapHelper.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
+    <ClInclude Include="PFrustum.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -468,6 +471,9 @@
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="PNormalMapHelper.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="PFrustum.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
   </ItemGroup>

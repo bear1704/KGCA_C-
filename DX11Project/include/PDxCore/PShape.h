@@ -18,7 +18,7 @@ struct P_BOX : public P_BaseObj
 	D3DXVECTOR3 aabb_max;
 	//OBB
 	D3DXVECTOR3 obb_axis[3];
-	D3DXVECTOR3 obb_extents[3];
+	float obb_extents[3];
 };
 
 

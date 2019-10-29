@@ -71,6 +71,13 @@ void PCamera::UpdateVector()
 	D3DXVec3Normalize(&vec_look_, &vec_look_);
 	D3DXVec3Normalize(&vec_up_, &vec_up_);
 	D3DXVec3Normalize(&vec_right_, &vec_right_);
+
+	frustum_.CreateFrustum(matView_, matProj_);
+}
+
+void PCamera::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
+{
+	frustum_.frustum_box_obj_.SetWVPMatrix(world, view, proj);
 }
 
 void PCamera::UpWard()
@@ -175,3 +182,10 @@ bool PCamera::Frame()
 	
 	return true;
 }
+
+bool PCamera::Render(ID3D11DeviceContext* context)
+{
+	frustum_.Render(context);
+	return true;
+}
+

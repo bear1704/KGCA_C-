@@ -165,3 +165,60 @@ PNode* PQuadTree::FindNode(PNode* node, P_BaseObj* obj)
 
 	return node;
 }
+
+void PQuadTree::IsVisibleObject(PNode* node)
+{
+	for (int i = 0; i < node->object_list_.size(); i++)
+	{
+		if (current_camera_->frustum_.CheckCollisionOBB(node->box_blueprint_))
+		{
+			drawobj_list_.push_back(node->object_list_[i]);
+		}
+	}
+}
+
+void PQuadTree::Update(PCamera* camera)
+{
+	current_camera_ = camera;
+}
+
+void PQuadTree::FindAndAddDrawNode(PNode* node)
+{
+	RELATIVE_POSITION r_pos = current_camera_->frustum_.CheckOBBRelativePos(node->box_blueprint_);
+
+	//back(노드가 프러스텀 외부에 존재)
+	if (r_pos == RELATIVE_POSITION::BACK) return;
+
+	//단말노드면서, 평면과 교차하든 평면 안쪽에(FRONT) 있든, 어쨌든 얘는 단말이므로 BACK만 아니면 그려져야 한다.
+	if (node->is_leaf_ == true && r_pos != RELATIVE_POSITION::BACK)
+	{
+		drawnode_list_.push_back(node);
+		return;
+	}
+	//FRONT라면, 단말이든 부모든 루트든 다 무조건 그려져야 한다
+	if (r_pos == RELATIVE_POSITION::FRONT) 
+	{
+		drawnode_list_.push_back(node);
+		return;
+	}
+	//SPANNING(프러스텀 평면에 교차하거나, 일부만 안쪽에 있는 상태)이라면, 
+	//그 노드는 그리지 않는다(어차피 자식노드로 내려가서 그려진다), 단, 오브젝트는 반이 짤려서 나오더라도 반드시 그려져야 한다.
+	if (r_pos == RELATIVE_POSITION::SPANNING)
+	{
+		IsVisibleObject(node);
+	}
+	for (int i = 0; i < node->child_list_.size(); i++)
+	{
+		FindAndAddDrawNode(node->child_list_[i]);
+	}
+
+}
+
+bool PQuadTree::Frame()
+{
+	drawobj_list_.clear();
+	drawnode_list_.clear();
+
+	FindAndAddDrawNode(rootnode_);
+	return true;
+}
