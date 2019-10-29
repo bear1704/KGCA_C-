@@ -42,7 +42,7 @@ void PCamera::CreateTargetViewMatrix(D3DXVECTOR3 mypos, D3DXVECTOR3 target, D3DX
 void PCamera::CreateProjectionMatrix()
 {
 	D3DXMatrixPerspectiveFovLH(&matProj_, D3DX_PI / 4, (float)g_rectangle_client.right / (float)g_rectangle_client.bottom,
-	0.01f, 3000.0f);
+	1.0f, 3000.0f);
 }
 
 
@@ -171,9 +171,12 @@ void PCamera::RotateRight()
 
 
 
-bool PCamera::Init()
+bool PCamera::Init(ID3D11Device* device, ID3D11DeviceContext* context,
+	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name)
 {
-	return false;
+	frustum_.frustum_box_obj_.Init(device, context, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
+	frustum_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(device, ps_file_path.c_str(), "PS_Color", false));
+	return true;
 }
 
 bool PCamera::Frame()

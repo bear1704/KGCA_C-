@@ -559,3 +559,71 @@ void PImportObject::Interpolate(PGeoMesh& mesh, D3DXMATRIX& mat_parent, float el
 	mesh.mat_calculation = mat_animation * mat_parent;
 }
 
+bool PLineObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring shader_path)
+{
+	device_ = device;
+	immediate_context_ = context;
+	Create(device_, immediate_context_, shader_path, "VS", shader_path, "PS");
+	return true;
+}
+
+HRESULT PLineObject::CreateVertexData()
+{
+	vertex_list_.resize(2);
+	vertex_list_[0].pos =		D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex_list_[0].normal =	D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex_list_[0].color =		D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+	vertex_list_[0].uv	=		D3DXVECTOR2(0.0f, 0.0f);
+
+	vertex_list_[1].pos =	 D3DXVECTOR3(1000.0f, 0.0f, 0.0f);
+	vertex_list_[1].normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex_list_[1].color =	 D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+	vertex_list_[1].uv =	 D3DXVECTOR2(1.0f, 0.0f);
+
+	return S_OK;
+}
+
+bool PLineObject::PostRender()
+{
+	immediate_context_->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+	dx_helper_.PostRender(immediate_context_, dx_helper_.vertex_count_);
+	return true;
+}
+
+void PLineObject::Draw(D3DXVECTOR3 v0, D3DXVECTOR3 v1, D3DXVECTOR4 color)
+{
+	vertex_list_[0].pos = v0;
+	vertex_list_[0].normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex_list_[0].color = color;
+	vertex_list_[0].uv = D3DXVECTOR2(0.0f, 0.0f);
+
+	vertex_list_[1].pos = v1;
+	vertex_list_[1].normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	vertex_list_[1].color = color;
+	vertex_list_[1].uv = D3DXVECTOR2(1.0f, 0.0f);
+
+	immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(), 0,
+		NULL, &vertex_list_.at(0), 0, 0);
+
+	float time = g_fGameTimer;
+	constant_data_.color[0] = cosf(time);
+	constant_data_.color[1] = sinf(time);
+	constant_data_.color[2] = 1 - cosf(time);
+	constant_data_.color[3] = 1.0f;
+	constant_data_.etc[0] = time;
+	immediate_context_->UpdateSubresource(
+		dx_helper_.constant_buffer_.Get(),
+		0, NULL, &constant_data_, 0, 0);
+
+	dx_helper_.PreRender(immediate_context_, dx_helper_.vertex_count_);
+	PostRender();
+
+}
+
+PLineObject::PLineObject()
+{
+}
+
+PLineObject::~PLineObject()
+{
+}

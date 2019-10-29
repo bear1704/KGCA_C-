@@ -75,6 +75,7 @@ void PFrustum::CreateFrustum(D3DXMATRIX& mat_view, D3DXMATRIX& mat_proj)
 
 }
 
+
 bool PFrustum::CheckCollisionOBB(P_BOX& box)
 {
 	float dist_plane_to_center = 0;
@@ -119,7 +120,7 @@ RELATIVE_POSITION PFrustum::CheckOBBRelativePos(P_BOX& box)
 	float dist_obb_inner_products = 0;
 	D3DXVECTOR3 axis_dir;
 	D3DXVECTOR3 normal;
-
+	RELATIVE_POSITION r_pos = RELATIVE_POSITION::FRONT;
 	for (int i = 0; i < kNumberofFrustumPlane; i++)
 	{
 		//obb x축 내적합
@@ -148,10 +149,10 @@ RELATIVE_POSITION PFrustum::CheckOBBRelativePos(P_BOX& box)
 		if (dist_plane_to_center < -dist_obb_inner_products) //제외
 			return RELATIVE_POSITION::BACK;
 		else if (dist_plane_to_center <= dist_obb_inner_products)
-			return RELATIVE_POSITION::SPANNING;
+			r_pos = RELATIVE_POSITION::SPANNING;
 	}
 
-	return RELATIVE_POSITION::FRONT;	
+	return r_pos;	
 }
 
 bool PFrustum::PreRender(ID3D11DeviceContext* context, int stride_length)

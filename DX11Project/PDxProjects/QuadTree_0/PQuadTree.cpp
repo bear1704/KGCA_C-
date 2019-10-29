@@ -29,8 +29,8 @@ PNode* PQuadTree::CreateNode(PNode* parent_node, float xmin, float xmax, float z
 	node->box_blueprint_.obb_axis[2] = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 
 	node->box_blueprint_.obb_extents[0] = (node->box_blueprint_.aabb_max.x - node->box_blueprint_.aabb_min.x) / 2;
-	node->box_blueprint_.obb_extents[0] = (node->box_blueprint_.aabb_max.y - node->box_blueprint_.aabb_min.y) / 2;
-	node->box_blueprint_.obb_extents[0] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
+	node->box_blueprint_.obb_extents[1] = (node->box_blueprint_.aabb_max.y - node->box_blueprint_.aabb_min.y) / 2;
+	node->box_blueprint_.obb_extents[2] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
 
 	node->depth_ = 0;
 
@@ -214,11 +214,19 @@ void PQuadTree::FindAndAddDrawNode(PNode* node)
 
 }
 
+
+
 bool PQuadTree::Frame()
 {
 	drawobj_list_.clear();
 	drawnode_list_.clear();
 
 	FindAndAddDrawNode(rootnode_);
+	return true;
+}
+
+bool PQuadTree::Release()
+{
+	delete rootnode_;
 	return true;
 }

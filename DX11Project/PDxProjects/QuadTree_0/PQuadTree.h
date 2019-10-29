@@ -29,6 +29,7 @@ public:
 
 public:
 	bool Frame();
+	bool Release();
 
 
 };

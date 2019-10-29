@@ -108,7 +108,12 @@ float4 PS(VS_OUTPUT vIn) : SV_Target
 	return vFinalColor;
 }
 
-
+float4 PS_Color(VS_OUTPUT input) : SV_TARGET
+{
+	float4 color = float4(0.4f, 0.0f, 0.0f, 1.0f);
+	return color;
+}
+//
 ////--------------------------------------------------------------------------------------
 //// Pixel Shader
 ////--------------------------------------------------------------------------------------

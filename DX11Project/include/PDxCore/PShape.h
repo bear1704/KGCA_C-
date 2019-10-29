@@ -97,3 +97,15 @@ public:
 	void Interpolate(PGeoMesh& mesh, D3DXMATRIX& mat_parent, float elapsed_time);
 
 };
+
+class PLineObject : public PModel
+{
+public:
+	virtual bool Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstring shader_path);
+	virtual HRESULT CreateVertexData() override;
+	virtual bool PostRender() override;
+	void Draw(D3DXVECTOR3 v0, D3DXVECTOR3 v1, D3DXVECTOR4 color);
+public:
+	PLineObject();
+	virtual ~PLineObject();
+};

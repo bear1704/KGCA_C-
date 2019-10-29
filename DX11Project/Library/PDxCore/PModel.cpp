@@ -96,12 +96,12 @@ bool PModel::Release()
 
 HRESULT PModel::CreateVertexData()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT PModel::CreateIndexData()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context,  std::wstring vs_file_path,
@@ -152,7 +152,7 @@ HRESULT PModel::CreateVertexBuffer()
 
 HRESULT PModel::CreateIndexBuffer()
 {
-	if (index_list_.size() <= 0) return E_FAIL;
+	if (index_list_.size() <= 0) return S_OK;
 
 	dx_helper_.index_count_ = index_list_.size();
 	dx_helper_.index_buffer_.Attach(DX::CreateIndexBuffer(

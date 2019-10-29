@@ -49,5 +49,8 @@
     <FxCompile Include="DiffuseLight.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="LineShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
