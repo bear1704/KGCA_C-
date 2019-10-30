@@ -258,6 +258,9 @@ void PModel::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 		matView_ = *view;
 	if (proj != nullptr)
 		matProj_ = *proj;
+	
+	if (world == nullptr)
+		D3DXMatrixIdentity(&matWorld_);
 
 	D3DXMatrixTranspose(&constant_data_.matWorld, &matWorld_);
 	D3DXMatrixTranspose(&constant_data_.matView, &matView_);

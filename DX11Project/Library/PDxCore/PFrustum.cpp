@@ -11,7 +11,7 @@ bool P_PLANE::CreatePlane(D3DXVECTOR3 v0, D3DXVECTOR3 v1, D3DXVECTOR3 v2)
 	b = normal.y;
 	c = normal.z;
 	//v0을 평면의 방정식에 대입하여, ax+by+cz+d = 0에서 d를 제외한 나머지를 이항하여 d를 도출.
-	d = -(a*v0.x + b*v1.y + c*v2.z);
+	d = -(a*v0.x + b*v0.y + c*v0.z);
 	
 	return true;
 }
@@ -121,6 +121,7 @@ RELATIVE_POSITION PFrustum::CheckOBBRelativePos(P_BOX& box)
 	D3DXVECTOR3 axis_dir;
 	D3DXVECTOR3 normal;
 	RELATIVE_POSITION r_pos = RELATIVE_POSITION::FRONT;
+
 	for (int i = 0; i < kNumberofFrustumPlane; i++)
 	{
 		//obb x축 내적합
@@ -146,10 +147,10 @@ RELATIVE_POSITION PFrustum::CheckOBBRelativePos(P_BOX& box)
 			frustum_plane_[i].d;
 
 
-		if (dist_plane_to_center < -dist_obb_inner_products) //제외
-			return RELATIVE_POSITION::BACK;
-		else if (dist_plane_to_center <= dist_obb_inner_products)
+		if (dist_plane_to_center <= dist_obb_inner_products)
 			r_pos = RELATIVE_POSITION::SPANNING;
+		else if (dist_plane_to_center < -dist_obb_inner_products) //제외
+			return RELATIVE_POSITION::BACK;
 	}
 
 	return r_pos;	
@@ -175,72 +176,72 @@ bool PFrustum::PreRender(ID3D11DeviceContext* context, int stride_length)
 	//far
 	frustum_box_obj_.vertex_list_[4] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[6].x, frustum_vertex_[6].y, frustum_vertex_[6].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[5] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[5].x, frustum_vertex_[5].y, frustum_vertex_[5].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[6] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[4].x, frustum_vertex_[4].y, frustum_vertex_[4].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[7] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[7].x, frustum_vertex_[7].y, frustum_vertex_[7].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 
 	//right
 	frustum_box_obj_.vertex_list_[8] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[5].x, frustum_vertex_[5].y, frustum_vertex_[5].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[9] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[1].x, frustum_vertex_[1].y, frustum_vertex_[1].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[10] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[0].x, frustum_vertex_[0].y, frustum_vertex_[0].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[11] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[4].x, frustum_vertex_[4].y, frustum_vertex_[4].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 
 	//left
 	frustum_box_obj_.vertex_list_[12] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[2].x, frustum_vertex_[2].y, frustum_vertex_[2].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[13] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[6].x, frustum_vertex_[6].y, frustum_vertex_[6].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[14] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[7].x, frustum_vertex_[7].y, frustum_vertex_[7].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[15] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[3].x, frustum_vertex_[3].y, frustum_vertex_[3].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	
 	//top
 	frustum_box_obj_.vertex_list_[16] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[5].x, frustum_vertex_[5].y, frustum_vertex_[5].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[17] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[6].x, frustum_vertex_[6].y, frustum_vertex_[6].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[18] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[2].x, frustum_vertex_[2].y, frustum_vertex_[2].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[19] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[1].x, frustum_vertex_[1].y, frustum_vertex_[1].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.5f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 
 	//bottom
 	frustum_box_obj_.vertex_list_[20] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[0].x, frustum_vertex_[0].y, frustum_vertex_[0].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[21] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[3].x, frustum_vertex_[3].y, frustum_vertex_[3].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[22] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[7].x, frustum_vertex_[7].y, frustum_vertex_[7].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	frustum_box_obj_.vertex_list_[23] =
 		Vertex_PNCT(D3DXVECTOR3(frustum_vertex_[4].x, frustum_vertex_[4].y, frustum_vertex_[4].z),
-			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
+			D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 0.2f), D3DXVECTOR2(0.0f, 0.0f));
 	
 	context->UpdateSubresource(frustum_box_obj_.dx_helper_.vertex_buffer_.Get(), 0, NULL, &frustum_box_obj_.vertex_list_.at(0), 0, 0);
 	frustum_box_obj_.dx_helper_.PreRender(context, stride_length);

@@ -99,6 +99,24 @@ VS_OUTPUT VS(VS_INPUT vIn)
 }
 
 
+VS_OUTPUT VS_NoLight(VS_INPUT vIn)
+{
+	VS_OUTPUT vOut = (VS_OUTPUT)0;
+
+	vOut.p = mul(float4(vIn.p, 1.0f), WIDEN(matWorld));
+	//vOut.p = mul(vOut.p, WIDEN(matWorld));
+	vOut.p = mul(vOut.p, WIDEN(matView));
+	vOut.p = mul(vOut.p, WIDEN(matProj));
+	vOut.n = normalize(mul(vIn.n, (float3x3)g_matWorldInverse));
+	//vOut.n = vIn.n;
+	vOut.t = vIn.t;
+	vOut.c = vIn.c;
+	vOut.c.w = 1.0f;
+	return vOut;
+}
+
+
+
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
 	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
@@ -108,9 +126,19 @@ float4 PS(VS_OUTPUT vIn) : SV_Target
 	return vFinalColor;
 }
 
-float4 PS_Color(VS_OUTPUT input) : SV_TARGET
+float4 PS_NoLight(VS_OUTPUT vIn) : SV_Target
 {
-	float4 color = float4(0.4f, 0.0f, 0.0f, 1.0f);
+	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
+	float4 vFinalColor = vTexColor * vIn.c;
+	vFinalColor.a = 1.0f;
+	return vTexColor;
+	//return vIn.c;
+	
+}
+
+float4 PS_Frustum(VS_OUTPUT input) : SV_TARGET
+{
+	float4 color = input.c;
 	return color;
 }
 //

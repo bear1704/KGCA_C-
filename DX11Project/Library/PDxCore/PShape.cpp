@@ -72,9 +72,9 @@ HRESULT PPlaneObject::CreateVertexData()
 	vertex_list_[3].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
 
 	vertex_list_[0].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[1].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[2].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[3].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
+	vertex_list_[1].color = D3DXVECTOR4{ 0.0f, 1.0f, 0.0f, 1.0f };
+	vertex_list_[2].color = D3DXVECTOR4{ 0.0f, 0.0f, 1.0f, 1.0f };
+	vertex_list_[3].color = D3DXVECTOR4{ 1.0f, 1.0f, 1.0f, 1.0f };
 
 	vertex_list_[0].uv = D3DXVECTOR2{ 0.0f, 0.0f };
 	vertex_list_[1].uv = D3DXVECTOR2{ 1.0f, 0.0f };
@@ -586,7 +586,7 @@ HRESULT PLineObject::CreateVertexData()
 bool PLineObject::PostRender()
 {
 	immediate_context_->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
-	dx_helper_.PostRender(immediate_context_, dx_helper_.vertex_count_);
+	dx_helper_.PostRender(immediate_context_, dx_helper_.index_count_);
 	return true;
 }
 
@@ -615,7 +615,7 @@ void PLineObject::Draw(D3DXVECTOR3 v0, D3DXVECTOR3 v1, D3DXVECTOR4 color)
 		dx_helper_.constant_buffer_.Get(),
 		0, NULL, &constant_data_, 0, 0);
 
-	dx_helper_.PreRender(immediate_context_, dx_helper_.vertex_count_);
+	dx_helper_.PreRender(immediate_context_, dx_helper_.vertex_size_);
 	PostRender();
 
 }

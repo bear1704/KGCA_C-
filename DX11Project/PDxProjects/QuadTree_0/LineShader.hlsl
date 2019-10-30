@@ -1,5 +1,4 @@
 Texture2D g_txDiffuse : register(t0);
-Texture2D g_txMask : register(t1);
 SamplerState s0 : register(s0);
 
 struct VS_INPUT

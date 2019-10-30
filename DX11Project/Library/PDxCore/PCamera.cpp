@@ -174,8 +174,9 @@ void PCamera::RotateRight()
 bool PCamera::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name)
 {
-	frustum_.frustum_box_obj_.Init(device, context, vs_file_path, vs_func_name, ps_file_path, ps_func_name);
-	frustum_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(device, ps_file_path.c_str(), "PS_Color", false));
+	frustum_.frustum_box_obj_.Init(device, context, vs_file_path, "VS_NoLight", ps_file_path, ps_func_name);
+	//frustum_.frustum_box_obj_.Init(device, context, vs_file_path, "VS_NoLight", ps_file_path, ps_func_name);
+	frustum_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(device, ps_file_path.c_str(), "PS_Frustum", false));
 	return true;
 }
 
