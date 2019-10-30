@@ -149,7 +149,7 @@ RELATIVE_POSITION PFrustum::CheckOBBRelativePos(P_BOX& box)
 
 		if (dist_plane_to_center <= dist_obb_inner_products)
 			r_pos = RELATIVE_POSITION::SPANNING;
-		else if (dist_plane_to_center < -dist_obb_inner_products) //제외
+		if (dist_plane_to_center < -dist_obb_inner_products) //제외
 			return RELATIVE_POSITION::BACK;
 	}
 
