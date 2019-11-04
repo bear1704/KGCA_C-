@@ -206,6 +206,7 @@ HRESULT PBoxObject::CreateIndexData()
 PImportObject::PImportObject()
 {
 	elapsed_time_ = 0.0f;
+	mytype = FILE_EXTENSION_TYPE::OBJECT;
 }
 
 PImportObject::~PImportObject()

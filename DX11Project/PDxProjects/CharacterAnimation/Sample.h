@@ -71,6 +71,8 @@ private:
 	std::vector<PModel*> object_list_;
 	PLightObj light_obj_;
 
+	std::wstring object_file_texture_path_;
+
 	float elapsed_time_;
 
 public:
@@ -83,7 +85,7 @@ public:
 public:
 	void MessageProc(MSG msg) override;
 	PModel* LoadSheetObject(multibyte_string filename, std::wstring vs_shader_path, std::string vs_func_name,
-		std::wstring ps_shader_path, std::string ps_func_name);
+		std::wstring ps_shader_path, std::string ps_func_name, std::wstring texture_path = L"");
 
 };
 PCORE_RUN(L"Animation Viewer", 0, 0, 800, 600);

@@ -16,6 +16,7 @@ enum class FILE_EXTENSION_TYPE
 	KGC,
 	SKM,
 	MAT,
+	OBJECT,
 	ERROR_OCCUR,
 };
 

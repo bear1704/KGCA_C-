@@ -25,22 +25,22 @@
 
 PScene* g_current_scene_;
 
-struct CB_VS_ChangesEveryFrame
-{
-	D3DXMATRIX mat_normal;
-	D3DXVECTOR3 light_pos;
-	float padding1;
-	D3DXVECTOR3 camera_pos;
-	float padding2;
-	D3DXVECTOR3 vec_look;
-	float padding3;
-};
-struct CB_VS_NearlyNotChange
-{
-	D3DXVECTOR4 cb_AmbientLightColor;
-	D3DXVECTOR4 cb_DiffuseLightColor;
-	D3DXVECTOR4 cb_SpecularLightColor;
-};
+//struct CB_VS_ChangesEveryFrame
+//{
+//	D3DXMATRIX mat_normal;
+//	D3DXVECTOR3 light_pos;
+//	float padding1;
+//	D3DXVECTOR3 camera_pos;
+//	float padding2;
+//	D3DXVECTOR3 vec_look;
+//	float padding3;
+//};
+//struct CB_VS_NearlyNotChange
+//{
+//	D3DXVECTOR4 cb_AmbientLightColor;
+//	D3DXVECTOR4 cb_DiffuseLightColor;
+//	D3DXVECTOR4 cb_SpecularLightColor;
+//};
 
 
 class Sample : public PCore

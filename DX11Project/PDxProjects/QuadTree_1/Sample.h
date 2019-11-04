@@ -4,6 +4,7 @@
 #include "PLightObj.h"
 #include "PDxRenderTarget.h"
 #include "PQuadTree.h"
+#include "PNormHeightMap.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -34,6 +35,9 @@ public:
 	PDxRenderTarget minimap_rt_;
 	PPlaneObject rt_screen_;
 	PLineObject line_obj_;
+	PNormHeightMap map_;
+
+
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -45,6 +49,6 @@ public:
 	bool DrawQuadTree(PNode* node);
 
 };
-PCORE_RUN(L"QuadTree_0", 0, 0, 1024, 768);
+PCORE_RUN(L"QuadTree_1", 0, 0, 1024, 768);
 
 

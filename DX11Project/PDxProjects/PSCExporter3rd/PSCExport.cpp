@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PSCWriter.h"
 
-#define PSCExport_CLASS_ID Class_ID(0x5d65297, 0x36192bf7)
+#define PSCExport_CLASS_ID Class_ID(0x162c0a20, 0x517d20e9)
 class PSCExport : public SceneExport
 {
 public:
@@ -36,7 +36,7 @@ public:
 	{
 		return new PSCExport();
 	}
-	virtual const TCHAR* ClassName() { return _T("PSCExport"); }
+	virtual const TCHAR* ClassName() { return _T("PSCExport v3"); }
 	virtual SClass_ID SuperClassID()
 	{
 		return SCENE_EXPORT_CLASS_ID;
@@ -69,7 +69,7 @@ const MCHAR* PSCExport::Ext(int n)
 
 const MCHAR* PSCExport::LongDesc()
 {
-	return _T("PSC exporter v2");
+	return _T("PSC exporter v3");
 }
 
 const MCHAR* PSCExport::ShortDesc()

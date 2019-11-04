@@ -15,7 +15,7 @@ Sample::~Sample()
 bool Sample::Init()
 {
 	
-	free_camera_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS");
+	free_camera_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS");
 	free_camera_.camera_position_ = D3DXVECTOR3(0.0f, 10.0f, -50.0f);
 	free_camera_.vec_view_target_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	free_camera_.CreateTargetViewMatrix(free_camera_.camera_position_,
@@ -25,11 +25,11 @@ bool Sample::Init()
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
 		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
 
-	rt_screen_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS_NoLight");
+	rt_screen_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS_NoLight");
 	minimap_rt_.Create(device_, 1024, 1024);
 
-	box_obj_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"blue");
-	line_obj_.Init(device_, immediate_device_context_, L"LineShader.hlsl");
+	box_obj_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS", L"blue");
+	line_obj_.Init(device_, immediate_device_context_, L"data/Shader/LineShader.hlsl");
 	
 	quadtree_.Build(50.0f, 50.0f, 5, 1.0f);
 
@@ -56,6 +56,26 @@ bool Sample::Init()
 
 		quadtree_.AddObject(box);
 	}
+
+
+	map_.Init(device_, immediate_device_context_);
+	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
+
+
+	PMapDesc md;
+	md.vertex_cols = map_.vertex_cols();
+	md.vertex_rows = map_.vertex_rows();
+	md.cell_disatnce = 1;
+	md.vs_path = L"data/Shader/NormalMap.hlsl";
+	md.vs_func = "VS";
+	md.ps_path = L"data/Shader/NormalMap.hlsl";
+	md.ps_func = "PS";
+	md.texture_name = L"stone_wall";
+
+	map_.SetNormalTexture(L"test");
+	if (map_.Load(md) == false)
+		assert(false);
+
 	return true;
 }
 
@@ -99,6 +119,8 @@ bool Sample::Frame()
 	main_camera_->Frame();
 	quadtree_.Update(main_camera_);
 	quadtree_.Frame();
+	map_.Frame(light_obj_.light_direction(), main_camera_->camera_position_, main_camera_->vec_look_);
+
 	return true;
 }
 
@@ -111,7 +133,7 @@ bool Sample::Render()
 	
 	for (int i = 0; i < quadtree_.drawnode_list_.size(); i++)
 	{
-		DrawQuadTree(quadtree_.drawnode_list_[i]);
+ 		DrawQuadTree(quadtree_.drawnode_list_[i]);
 	}
 
 	for (int i = 0; i < quadtree_.drawobj_list_.size(); i++)
@@ -139,6 +161,11 @@ bool Sample::Render()
 
 		minimap_rt_.End(immediate_device_context_);
 	}
+	
+	map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
+	immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
+		NULL, &map_.constant_data_, 0, 0);
+	map_.Render();
 
 	DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_disable_);
 	DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_disable_);
@@ -154,7 +181,6 @@ bool Sample::Render()
 	immediate_device_context_->PSSetShaderResources(0, 1, minimap_rt_.shader_res_view_.GetAddressOf());
 	rt_screen_.PostRender();
 
-
 	return true;
 
 }
@@ -165,6 +191,7 @@ bool Sample::Release()
 	minimap_rt_.Release();
 	quadtree_.Release();
 	line_obj_.Release();
+	map_.Release();
 	return true;
 }
 

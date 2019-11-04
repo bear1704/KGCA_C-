@@ -6,6 +6,7 @@
 #define OUT_
 using namespace std;
 
+
 typedef struct _D3D_MATRIX {
 	union {
 		struct {
@@ -17,7 +18,7 @@ typedef struct _D3D_MATRIX {
 		float m[4][4];
 	};
 }D3D_MATRIX;
-
+//vertex
 struct PNCT
 {
 	Point3 p;
@@ -26,7 +27,7 @@ struct PNCT
 	Point2 t;
 
 };
-
+//face
 struct TriComponent
 {
 	int tri_index;
@@ -39,6 +40,7 @@ struct PTextureMap
 	TSTR name;
 };
 
+/*마테리얼 */
 struct PMtl
 {
 	int mtl_id;
@@ -48,6 +50,10 @@ struct PMtl
 
 };
 
+/*tick : 해당 애니메이션 위치/회전 당시의 tick값. (160틱의 x,y,z  320틱의 x,y,z....)
+  Point3 p : 위치
+  Quat q : 회전
+*/
 struct PAnimTrack
 {
 	int tick;
@@ -60,6 +66,7 @@ struct PMesh
 	TSTR name;
 	TSTR parent_name;
 	Matrix3 world_tm;
+	//GetNodeTm(Parent 포함)
 	D3D_MATRIX world_d3d;
 	vector<TriComponent> tri_list; //dummy code?
 	vector<vector<TriComponent>> buffer_list;

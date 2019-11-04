@@ -125,24 +125,24 @@ bool Sample::Frame()
 
 
 
-	D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
-	if (SUCCEEDED(immediate_device_context_->Map((ID3D11Resource*)constant_buffer_changes_everyframe_.Get(), 0, D3D11_MAP_WRITE_DISCARD,
-		0, &MappedFaceDest)))
-	{
-		CB_VS_ChangesEveryFrame* constant_data = (CB_VS_ChangesEveryFrame*)MappedFaceDest.pData;
+	//D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
+	//if (SUCCEEDED(immediate_device_context_->Map((ID3D11Resource*)constant_buffer_changes_everyframe_.Get(), 0, D3D11_MAP_WRITE_DISCARD,
+	//	0, &MappedFaceDest)))
+	//{
+	//	CB_VS_ChangesEveryFrame* constant_data = (CB_VS_ChangesEveryFrame*)MappedFaceDest.pData;
 
-		constant_data->mat_normal = map_.ref_mat_normal();
-		constant_data->light_pos = light_obj_.light_direction();
-		constant_data->camera_pos = main_camera_->camera_position_;
-		constant_data->vec_look = main_camera_->vec_look_;
-		immediate_device_context_->Unmap(constant_buffer_changes_everyframe_.Get(), 0);
+	//	constant_data->mat_normal = map_.ref_mat_normal();
+	//	constant_data->light_pos = light_obj_.light_direction();
+	//	constant_data->camera_pos = main_camera_->camera_position_;
+	//	constant_data->vec_look = main_camera_->vec_look_;
+	//	immediate_device_context_->Unmap(constant_buffer_changes_everyframe_.Get(), 0);
 
-	}
+	//}
 
 	main_camera_->Frame();
 	obj_.Frame();
 	box_.Frame();
-	map_.Frame();
+	map_.Frame(light_obj_.light_direction(), main_camera_->camera_position_, main_camera_->vec_look_);
 	ship_.Frame();
 	return true;
 }

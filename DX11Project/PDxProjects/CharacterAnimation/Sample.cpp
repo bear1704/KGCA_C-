@@ -27,7 +27,7 @@ bool Sample::Init()
 	std::vector<StringPair> vec;
 	
 	
-	parse_.CharacterSheetParse(L"data/Character/reg.sheet", &vec);
+	parse_.CharacterSheetParse(L"data/Character/reg2.sheet", &vec);
 
 
 	for (auto iter = vec.begin(); iter != vec.end(); iter++)
@@ -41,7 +41,7 @@ bool Sample::Init()
 			multibyte_string matrix_file;
 			matrix_file.assign(iter->second.begin(), iter->second.end());
 			character_.matrix_ =static_cast<PMatObj*>(LoadSheetObject(matrix_file, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS"));
-			character_.matrix_->action_animlist_.insert(make_pair("walk", PAction(0, 425)));
+			character_.matrix_->action_animlist_.insert(make_pair("walk", PAction(0, 8)));
 		}
 		else if (iter->first == "SkinUpperBody")
 		{
@@ -49,7 +49,8 @@ bool Sample::Init()
 			skm_file.assign(iter->second.begin(), iter->second.end());
 			std::vector<string> pstring = parse_.SplitString(skm_file, ',');
 			skm_file.assign(pstring[0].begin(), pstring[0].end());
-			PSkmObj* obj = static_cast<PSkmObj*>(LoadSheetObject(skm_file, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS"));
+			PSkmObj* obj = static_cast<PSkmObj*>(LoadSheetObject(skm_file, character_.shader_name_, 
+				"VS", character_.shader_name_, "PS"));
 			character_.object_list_.push_back(obj);
 		}
 		else if (iter->first == "SkinWeapon")
@@ -58,7 +59,20 @@ bool Sample::Init()
 			skm_file.assign(iter->second.begin(), iter->second.end());
 			std::vector<string> pstring = parse_.SplitString(skm_file, ',');
 			skm_file.assign(pstring[0].begin(), pstring[0].end());
-			PSkmObj* obj = static_cast<PSkmObj*>(LoadSheetObject(skm_file, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS"));
+			PSkmObj* obj = static_cast<PSkmObj*>(LoadSheetObject(skm_file, character_.shader_name_, "VS", 
+				character_.shader_name_, "PS"));
+			character_.object_list_.push_back(obj);
+		}
+		else if (iter->first == "TexturePath")
+			object_file_texture_path_.assign(iter->second.begin(), iter->second.end());
+		else if (iter->first == "ObjectFileName")
+		{
+			multibyte_string obj_file;
+			obj_file.assign(iter->second.begin(), iter->second.end());
+			std::vector<string> pstring = parse_.SplitString(obj_file, ',');
+			obj_file.assign(pstring[0].begin(), pstring[0].end());
+			PImportObject* obj = static_cast<PImportObject*>(LoadSheetObject(obj_file, character_.shader_name_, "VS",
+				character_.shader_name_, "PS", object_file_texture_path_));
 			character_.object_list_.push_back(obj);
 		}
 
@@ -108,30 +122,41 @@ bool Sample::Frame()
 
 	PMatObj* matobj = character_.matrix_;
 
-	if (!matobj)
-		assert(false);
-	
-	auto action_iter =  matobj->action_animlist_.find("walk");
-	PAction act = (*action_iter).second;
-
-	int start = act.start;
-	int end = act.end;
-
-	elapsed_time_ += 1.0f * g_SecondPerFrame * matobj->scene_.frame_rate * matobj->scene_.tick_per_frame;
-	float end_time = end * 160.0f;
-	float elapse_time = start + elapsed_time_;
-
-	if (elapse_time > end_time)
+	if (matobj)
 	{
-		elapse_time = 0;
-		elapsed_time_ = 0;
+		auto action_iter = matobj->action_animlist_.find("walk");
+		PAction act = (*action_iter).second;
+
+		int start = act.start;
+		int end = act.end;
+
+		elapsed_time_ += 1.0f * g_SecondPerFrame * matobj->scene_.frame_rate * matobj->scene_.tick_per_frame;
+		float end_time = end * 160.0f;
+		float elapse_time = start + elapsed_time_;
+
+		if (elapse_time > end_time)
+		{
+			elapse_time = 0;
+			elapsed_time_ = 0;
+		}
+
+		D3DXMATRIX* matrix = matobj->FrameMatrix(start, end, elapse_time);
+		for (auto& obj : character_.object_list_)
+		{
+			obj->Frame(matrix);
+		}
+	}
+	//matobj가 없다는건 오브젝트 애니메이션이라는 의미이다.
+	else 
+	{
+		for (auto& obj : character_.object_list_)
+		{
+			obj->Frame();
+		}
 	}
 
-	D3DXMATRIX* matrix = matobj->FrameMatrix(start, end, elapse_time);
-	for (auto& obj : character_.object_list_)
-	{
-		obj->Frame(matrix);
-	}
+
+
 
 	main_camera_->Frame();
 
@@ -152,11 +177,15 @@ bool Sample::Render()
 		{
 			PSkmObj* skm = (PSkmObj*)obj;
 			skm->PreRender();
-
 			skm->SetWVPMatrix(nullptr, (D3DXMATRIX*)&main_camera_->matView_, (D3DXMATRIX*)&main_camera_->matProj_);
 			skm->PostRender();
-
-
+		}
+		else if (obj->mytype == FILE_EXTENSION_TYPE::OBJECT)
+		{
+			PImportObject* imp = (PImportObject*)obj;
+			imp->PreRender();
+			imp->SetWVPMatrix(nullptr, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
+			imp->PostRender();
 		}
 
 
@@ -184,7 +213,7 @@ void Sample::MessageProc(MSG msg)
 }
 
 PModel* Sample::LoadSheetObject(multibyte_string filename, std::wstring vs_shader_path, std::string vs_func_name,
-	std::wstring ps_shader_path, std::string ps_func_name)
+	std::wstring ps_shader_path, std::string ps_func_name, std::wstring texture_path)
 {
 	FILE_EXTENSION_TYPE file_type = FILE_EXTENSION_TYPE::KGC;
 	TCHAR szFileName[256];
@@ -205,6 +234,8 @@ PModel* Sample::LoadSheetObject(multibyte_string filename, std::wstring vs_shade
 		file_type = FILE_EXTENSION_TYPE::SKM;
 	else if (file_ext == L".anim")
 		file_type = FILE_EXTENSION_TYPE::MAT;
+	else if (file_ext == L".png")
+		file_type = FILE_EXTENSION_TYPE::OBJECT;
 
 	PModel* model = nullptr;
 
@@ -221,6 +252,12 @@ PModel* Sample::LoadSheetObject(multibyte_string filename, std::wstring vs_shade
 		model = new PMatObj;
 		model->Init(device_, immediate_device_context_, vs_shader_path, vs_func_name, ps_shader_path, ps_func_name,
 			filename.c_str(), L"data/texture/");
+	}
+	else if (file_type == FILE_EXTENSION_TYPE::OBJECT)
+	{
+		model = new PImportObject;
+		model->Init(device_, immediate_device_context_, vs_shader_path, vs_func_name, ps_shader_path, ps_func_name,
+			filename.c_str(), texture_path);
 	}
 	object_list_.push_back(model);
 	return model;

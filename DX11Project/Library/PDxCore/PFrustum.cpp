@@ -146,10 +146,11 @@ RELATIVE_POSITION PFrustum::CheckOBBRelativePos(P_BOX& box)
 			frustum_plane_[i].c * box.center.z +
 			frustum_plane_[i].d;
 
-
+		//BACK이어도 일단 SPANNING으로 들어간다. 왜냐면 BACK위치에서 PlaneToCenter는 음수이기 때문에.
 		if (dist_plane_to_center <= dist_obb_inner_products)
 			r_pos = RELATIVE_POSITION::SPANNING;
-		if (dist_plane_to_center < -dist_obb_inner_products) //제외
+		//제외, PlaneToCenter(센터와 평면간의 거리)가 BACK위치면 음수이기 때문에, 내적값에도 마이너스를 붙여서 계산해 주어야 한다.
+		if (dist_plane_to_center < -dist_obb_inner_products) 
 			return RELATIVE_POSITION::BACK;
 	}
 

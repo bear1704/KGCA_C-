@@ -2,6 +2,8 @@
 #include "PMap.h"
 #include "PNormalMapHelper.h"
 
+
+
 class PNormHeightMap :
 	public PHeightMap
 {
@@ -18,11 +20,14 @@ public:
 	
 
 public:
+	bool Frame(D3DXVECTOR3 light_dir, D3DXVECTOR3 camera_position, D3DXVECTOR3 vec_look);
+	bool PreRender() override;
 	bool Render() override;
 	bool UpdateBuffer();
 	HRESULT CreateInputLayout() override;
 	HRESULT CreateVertexBuffer() override;
 	HRESULT CreateResource();
+	HRESULT CreateConstantBuffer() override;
 	void SetWVPMatrix(D3DXMATRIX* world = nullptr, D3DXMATRIX* view = nullptr, D3DXMATRIX* proj = nullptr) override;
 	void SetNormalTexture(std::wstring tex_path);
 
@@ -31,6 +36,10 @@ public:
 	const D3DXMATRIX& ref_mat_normal();
 	Microsoft::WRL::ComPtr<ID3D11Buffer>* tangent_space_vbuffer();
 	PTexture* normal_texture();
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
+	CB_VS_NearlyNotChange cb_nearly_not_changes_;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
 
 };
 

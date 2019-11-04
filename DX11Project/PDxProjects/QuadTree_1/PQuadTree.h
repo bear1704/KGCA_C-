@@ -1,5 +1,6 @@
 #pragma once
 #include "PNode.h"
+#include "PNormHeightMap.h"
 #include "PFreeCamera.h"
 #include "PFrustum.h"
 #include <queue>
@@ -8,6 +9,7 @@ const int kNumberOfDivide = 4;
 
 class PQuadTree
 {
+
 public:
 	PNode* rootnode_;
 	int		max_depth_limit_;
@@ -34,3 +36,18 @@ public:
 
 };
 
+class PQuadTreeIndex : public PQuadTree
+{
+public:
+	int map_width_;
+	int map_height_;
+	PMap* map_;
+public:
+	bool	Build(PMap* map, int maxdepth, float minsize);
+	PNode* CreateNode(PNode* parent_node, int idx_top_l, int idx_top_r, int idx_bot_l, int idx_bot_r);
+	D3DXVECTOR2 GetHeightFromNode(int idx_top_l, int idx_top_r, int idx_bot_l, int idx_bot_r);
+	void ComputeBoundingBox(PNode* node);
+
+
+
+};

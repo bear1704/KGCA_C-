@@ -77,7 +77,7 @@ public:
 	{
 		return tbsExport::GetInstance();
 	}
-	virtual const TCHAR* ClassName() { return _T("tbsExport_v1"); }
+	virtual const TCHAR* ClassName() { return _T("PSCExporter v4"); }
 	virtual SClass_ID SuperClassID()
 	{
 		return UTILITY_CLASS_ID;
@@ -86,7 +86,7 @@ public:
 	{
 		return PSCExport_CLASS_ID;
 	}
-	virtual const TCHAR* Category() { return _T("tbsExport"); }
+	virtual const TCHAR* Category() { return _T("PSCExporter"); }
 	virtual const TCHAR* InternalName() { return _T("tbsExportClassDesc"); }
 	virtual HINSTANCE HandleInstance() { return handle_instance; }
 };

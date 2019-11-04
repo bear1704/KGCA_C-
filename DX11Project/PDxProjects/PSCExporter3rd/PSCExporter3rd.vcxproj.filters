@@ -24,6 +24,9 @@
     <ClInclude Include="PSCWriter.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -43,5 +46,10 @@
     <None Include="Source.def">
       <Filter>헤더 파일</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\PSC_TBSExporter\PscTbsExport.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

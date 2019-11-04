@@ -25,6 +25,7 @@ PSCWriter::~PSCWriter()
 {
 }
 
+//맥스에서 애니메이션 정보등을 읽어온다.
 void PSCWriter::Set(const TCHAR* name, Interface* interface_max)
 {
 	interface_max_ = interface_max;
@@ -39,7 +40,9 @@ void PSCWriter::Set(const TCHAR* name, Interface* interface_max)
 
 	PreProcess(rootnode_);
 }
-
+/*
+skm, mat 파일을 export하는 메인 함수입니다.
+*/
 bool PSCWriter::Export()
 {
 	SwitchAllNodeToMesh(object_list_, mesh_list_);
@@ -54,13 +57,14 @@ bool PSCWriter::Export()
 	_ftprintf(file, _T("\n%d %d %d %d %d %d"), scene_.first_frame, scene_.last_frame, scene_.frame_rate, scene_.tick_per_frame 
 		,mesh_list_.size(), pmtl_list_.size());
 
-	
+	//마테리얼이 있을 경우, 마테리얼 출력
 	for (int i = 0; i < pmtl_list_.size(); i++)
 	{
 		_ftprintf(file, _T("\n%s"), L"#MATERIAL INFO  [PMaterialListName/SubMaterialListSize] Sub-> [SubMaterialName/TexSize] // [TexmapID/TexmapName] ");
 		_ftprintf(file, _T("\n%s %d"),
 			pmtl_list_[i].name, pmtl_list_[i].submaterial_list.size());
 
+		//서브메테리얼이 있을 경우
 		if (pmtl_list_[i].submaterial_list.size() > 0)
 		{
 			auto current_submaterial_list = pmtl_list_[i].submaterial_list;
@@ -79,12 +83,14 @@ bool PSCWriter::Export()
 				}
 			}
 		}
+		//서브마테리얼이 없을 경우, 서브마테리얼 이름을 NotExistSubMtrl로 만든다. 
 		else
 		{
 			_ftprintf(file, _T("\n%s %d"),
 				L"NotExistSubMtrl",
 				pmtl_list_[i].tex_list.size());
 
+			//메인마테리얼의 TexList는 있을 수 있으므로 
 			for (int itex = 0; itex < pmtl_list_[i].tex_list.size(); itex++)
 			{
 				_ftprintf(file, _T("\n%d %s"),
@@ -178,7 +184,8 @@ bool PSCWriter::Export()
 
 	return true;
 }
-   
+ 
+/*재귀호출을 통해, 맥스의 모든 노드를 루트부터 시작해서 모든 자식노드를 순회하며 세팅한다.*/
 void PSCWriter::PreProcess(INode* node)
 {
 	if (node == NULL) return;
@@ -192,7 +199,9 @@ void PSCWriter::PreProcess(INode* node)
 	}
 
 }
-
+/*지오메트리 오브젝트와 헬퍼 오브젝트를 오브젝트 리스트에 추가한다.
+지오메트리에는 nodeTm, 버텍스, 노말 등의 정보가 있다.
+헬퍼에는 더미 등이 있다. */
 void PSCWriter::AddObject(INode* node)
 {
 	ObjectState os = node->EvalWorldState(0);
@@ -449,6 +458,8 @@ void PSCWriter::CopyPoint3(Point3& dest, Point3& src)
 	dest.z = src.y;
 }
 
+/* 텍스쳐 등을 담고있는 마테리얼들을 리스트에 추가합니다.
+    마테리얼은 여러개의 서브마테리얼을 담고 있을 수 있습니다. */
 void PSCWriter::AddMaterial(INode* node)
 {
 	Mtl* mtl = node->GetMtl();
@@ -518,6 +529,11 @@ TCHAR* PSCWriter::FixupName(MSTR name)
 
 }
 
+/*
+object_list 모든 INode를 직접 정의한 PMesh타입으로 바꿔준다. 
+정확히는 INode의 정보를 사용해 PMesh를 만든다. 
+마테리얼은 마테리얼리스트에 저장되고 관리되므로, PMesh는 마테리얼 id 인덱스를 사용하여 관리한다.
+*/
 bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vector<PMesh>& mesh_list)
 {
 	for (int i = 0; i < object_list.size(); i++)
@@ -534,8 +550,9 @@ bool PSCWriter::SwitchAllNodeToMesh(std::vector<INode*>& object_list, std::vecto
 		CopyMatrix3(mesh.world_d3d, world_3dsmax);
 
 		mesh.material_id = FindMaterialIndex(node);
-
-		if(mesh.material_id >= 0 && pmtl_list_[mesh.material_id].submaterial_list.size() > 0) //해당 ID를 가진 메테리얼이 서브메테리얼을 가지고 있을 경우
+		
+		//해당 ID를 가진 메테리얼이 서브메테리얼을 가지고 있을 경우
+		if(mesh.material_id >= 0 && pmtl_list_[mesh.material_id].submaterial_list.size() > 0) 
 		{
 			mesh.numberof_submesh = pmtl_list_[mesh.material_id].submaterial_list.size();
 		}
@@ -579,6 +596,7 @@ bool PSCWriter::EqualPoint4(Point4 p1, Point4 p2)
 	return true;
 }
 
+/*버텍스리스트의 버텍스와, 입력할 버텍스를 중복체크하여 중복이면 걸러내기 위함이다.*/
 int PSCWriter::IsEqualVertexAndVertexList(PNCT& vertex, std::vector<PNCT>& vertex_list)
 {
 	for (int i = 0; i < vertex_list.size(); i++)
@@ -622,6 +640,8 @@ void PSCWriter::CopyMatrix3(OUT_ D3D_MATRIX& d3d_world, Matrix3& matWorld)
 
 }
 
+/*메시에 있는 face들로부터, face를 이루는 버텍스와 인덱스를 구성하여 
+VertexList, IndexList를 만든다.  VertexList의 경우 face끼리 겹치는 정점을 제거하기 위해 중복제거 함수를 이용한다.*/
 void PSCWriter::SetUniqueBuffer(PMesh& mesh)
 {
 	mesh.vertex_list.resize(mesh.buffer_list.size());
@@ -651,16 +671,22 @@ void PSCWriter::SetUniqueBuffer(PMesh& mesh)
 	}
 
 }
+/*
 
+
+*/
 void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 {
+	//0 -> translate 1 -> rotation  2-> scale
 	mesh.animation_enable[0] = false;
 	mesh.animation_enable[1] = false;
 	mesh.animation_enable[2] = false;
 
+
 	TimeValue start_frame = interval_.Start();
 
-	//tm = selfTm * parentTm * Inverse(parentTm)
+	/*tm = selfTm * parentTm * Inverse(parentTm)
+		Tm이란, 시작 프레임(대개 0프레임)의 월드행렬*/
 	Matrix3 tm = node->GetNodeTM(start_frame) * Inverse(node->GetParentTM(start_frame));
 
 	//행렬 분해(SRT)
@@ -685,7 +711,7 @@ void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 	start_animtrack.q = start_ap.u;
 	mesh.anim_scale.push_back(start_animtrack);
 
-	TimeValue start = interval_.Start() + GetTicksPerFrame(); //start + 1프레임
+	TimeValue start = interval_.Start() + GetTicksPerFrame(); //start + 1프레임(160tick)
 	TimeValue end = interval_.End();
 
 	for (TimeValue t = start; t <= end; t += GetTicksPerFrame())
@@ -712,7 +738,7 @@ void PSCWriter::GetAnimation(INode* node, PMesh& mesh)
 		AngAxisFromQ(frame_ap.q, &frame_rotate_value, frame_rotate_axis);
 
 		
-		//animation이 존재하는지 체크
+		//위치, 회전, 스케일 animation이 존재하는지 체크
 		if (mesh.animation_enable[0] == false)
 		{
 			if (EqualPoint3(start_ap.t, frame_ap.t) == false)

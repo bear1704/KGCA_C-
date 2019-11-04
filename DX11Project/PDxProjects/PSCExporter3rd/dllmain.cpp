@@ -28,7 +28,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
 __declspec(dllexport) const TCHAR* LibDescription()
 {
-	return _T("PSCExport 100");
+	return _T("PSCExport v3");
 }
 
 __declspec(dllexport) int LibNumberClasses()

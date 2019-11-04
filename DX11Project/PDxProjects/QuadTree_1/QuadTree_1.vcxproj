@@ -147,14 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="DiffuseLight.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="LineShader.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="PNode.cpp" />
     <ClCompile Include="PQuadTree.cpp" />
@@ -165,6 +157,17 @@
     <ClInclude Include="PNode.h" />
     <ClInclude Include="PQuadTree.h" />
     <ClInclude Include="Sample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\Shader\DiffuseLight.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="data\Shader\LineShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="data\Shader\NormalMap.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

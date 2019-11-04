@@ -177,6 +177,13 @@ bool PCamera::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	frustum_.frustum_box_obj_.Init(device, context, vs_file_path, "VS_NoLight", ps_file_path, ps_func_name);
 	//frustum_.frustum_box_obj_.Init(device, context, vs_file_path, "VS_NoLight", ps_file_path, ps_func_name);
 	frustum_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(device, ps_file_path.c_str(), "PS_Frustum", false));
+	render_frustum_ = true;
+	return true;
+}
+
+bool PCamera::Init()
+{
+	render_frustum_ = false;
 	return true;
 }
 
@@ -189,7 +196,9 @@ bool PCamera::Frame()
 
 bool PCamera::Render(ID3D11DeviceContext* context)
 {
-	frustum_.Render(context);
+	if(render_frustum_)
+		frustum_.Render(context);
+
 	return true;
 }
 

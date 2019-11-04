@@ -8,6 +8,7 @@ bool PQuadTree::Build(float width, float height, int maxdepth, float minsize)
 	return BuildTree(rootnode_);
 }
 
+
 PNode* PQuadTree::CreateNode(PNode* parent_node, float xmin, float xmax, float zmin, float zmax)
 {
 	PNode* node = new PNode;
@@ -33,7 +34,6 @@ PNode* PQuadTree::CreateNode(PNode* parent_node, float xmin, float xmax, float z
 	node->box_blueprint_.obb_extents[2] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
 
 	node->depth_ = 0;
-
 	if (parent_node != nullptr)
 	{
 		node->depth_ = parent_node->depth_ + 1;
@@ -42,6 +42,7 @@ PNode* PQuadTree::CreateNode(PNode* parent_node, float xmin, float xmax, float z
 	return node;
 
 }
+
 
 bool PQuadTree::BuildTree(PNode* node)
 {
@@ -229,4 +230,106 @@ bool PQuadTree::Release()
 {
 	delete rootnode_;
 	return true;
+}
+
+
+
+bool PQuadTreeIndex::Build(PMap* map, int maxdepth, float minsize)
+{
+	map_width_ = map->vertex_cols();
+	map_height_ = map->vertex_rows();
+	map_ = map;
+
+	rootnode_ = CreateNode(nullptr, 0,
+		map_width_ - 1,
+		map_width_ * (map_height_ - 1),
+		(map_width_ * map_height_) - 1);
+
+	max_depth_limit_ = maxdepth;
+	min_devided_size_ = minsize;
+	return BuildTree(rootnode_);
+}
+
+
+
+PNode* PQuadTreeIndex::CreateNode(PNode* parent_node, int idx_top_l, int idx_top_r, int idx_bot_l, int idx_bot_r)
+{
+	PNode* node = new PNode;
+	node->child_list_.reserve(kNumberOfDivide);
+	node->is_leaf_ = false;
+
+	node->corner_index_.at(0) = idx_top_l;
+	node->corner_index_.at(1) = idx_top_r;
+	node->corner_index_.at(2) = idx_bot_l;
+	node->corner_index_.at(3) = idx_bot_r;
+
+	node->depth_ = 0;
+	if (parent_node != nullptr)
+	{
+		node->depth_ = parent_node->depth_ + 1;
+	}
+
+	return node;
+}
+
+D3DXVECTOR2 PQuadTreeIndex::GetHeightFromNode(int idx_top_l, int idx_top_r, int idx_bot_l, int idx_bot_r)
+{
+
+	float min = 99999.9f;
+	float max = -99999.9f;
+
+	int start_row = idx_top_l / map_width_;
+	int end_row = idx_bot_l / map_height_;
+	int start_col = idx_top_l % map_width_;
+	int end_col = idx_top_r % map_width_;
+
+	for (int row = start_row; row < end_row; row++)
+	{
+		for (int col = start_col; col < end_col; col++)
+		{
+			int index = row * map_width_ * col;
+			if (map_->vertex_list_[index].pos.y < min)
+			{
+				min = map_->vertex_list_[index].pos.y;
+			}
+			if (map_->vertex_list_[index].pos.y > max)
+			{
+				max = map_->vertex_list_[index].pos.y;
+			}
+		}
+	}
+
+	return D3DXVECTOR2(min, max);
+}
+
+void PQuadTreeIndex::ComputeBoundingBox(PNode* node)
+{
+	D3DXVECTOR2 minmax_height = GetHeightFromNode(
+		node->corner_index_.at(0),
+		node->corner_index_.at(1),
+		node->corner_index_.at(2),
+		node->corner_index_.at(3));
+
+	int idx_top_l = node->corner_index_.at(0);
+	int idx_bot_r = node->corner_index_.at(3);
+
+	D3DXVECTOR3 v0 = map_->vertex_list_[idx_top_l].pos;
+	D3DXVECTOR3 v1 = map_->vertex_list_[idx_bot_r].pos;
+
+	node->box_blueprint_.aabb_max.x = v1.x;
+	node->box_blueprint_.aabb_max.y = minmax_height.y;
+	node->box_blueprint_.aabb_max.z = v0.z; //좌상단 far(z)에 바운딩박스의 top-left가 있고, 우하단 near에 바운딩박스의 bot-right가 있음
+	node->box_blueprint_.aabb_min.x = v0.x;
+	node->box_blueprint_.aabb_min.y = minmax_height.x;
+	node->box_blueprint_.aabb_min.z = v1.z;
+	node->box_blueprint_.center = (node->box_blueprint_.aabb_max + node->box_blueprint_.aabb_min) / 2;
+
+	node->box_blueprint_.obb_axis[0] = D3DXVECTOR3(1, 0, 0);
+	node->box_blueprint_.obb_axis[1] = D3DXVECTOR3(0, 1, 0);
+	node->box_blueprint_.obb_axis[2] = D3DXVECTOR3(0, 0, 1);
+
+	node->box_blueprint_.obb_extents[0] = (node->box_blueprint_.aabb_max.x - node->box_blueprint_.aabb_min.x) / 2;
+	node->box_blueprint_.obb_extents[1] = (node->box_blueprint_.aabb_max.y - node->box_blueprint_.aabb_min.y) / 2;
+	node->box_blueprint_.obb_extents[2] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
+
 }

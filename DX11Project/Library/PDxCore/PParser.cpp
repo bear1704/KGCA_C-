@@ -328,7 +328,7 @@ int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vec
 		else if (wstr.find(L"#OBJECT INFO") != std::string::npos)
 		{
 			obj++;
-
+			
 			if (type == FILE_EXTENSION_TYPE::MAT)
 			{
 				stringstream sstr;

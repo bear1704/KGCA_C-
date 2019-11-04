@@ -18,14 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="LineShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="DiffuseLight.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="PLightObj.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -52,5 +44,16 @@
     <ClInclude Include="PLightObj.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\Shader\DiffuseLight.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="data\Shader\LineShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="data\Shader\NormalMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

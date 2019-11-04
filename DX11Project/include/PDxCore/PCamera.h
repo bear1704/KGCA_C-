@@ -27,6 +27,8 @@ public:
 	D3DXMATRIX matWorld_;
 	D3DXMATRIX matView_;
 	D3DXMATRIX matProj_;
+
+	bool render_frustum_;
 public:
 	PCamera();
 	~PCamera();
@@ -58,6 +60,7 @@ public:
 public:
 	virtual bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name);
+	virtual bool Init();
 	virtual bool Frame();
 	virtual bool Render(ID3D11DeviceContext* context);
 
