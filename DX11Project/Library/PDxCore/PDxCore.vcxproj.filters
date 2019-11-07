@@ -54,9 +54,6 @@
     <ClInclude Include="framework.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="header.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -270,11 +267,11 @@
     <ClInclude Include="PFrustum.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
+    <ClInclude Include="PLightObj.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PBossMobHitAction.cpp">
       <Filter>소스 파일\FSM\Boss</Filter>
     </ClCompile>
@@ -474,6 +471,9 @@
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
     <ClCompile Include="PFrustum.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="PLightObj.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
   </ItemGroup>
