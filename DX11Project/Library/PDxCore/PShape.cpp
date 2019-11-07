@@ -20,16 +20,19 @@ bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
 	std::wstring tex_name, std::wstring sprite_name)
 {
-
 	PModel::Init(device, context);
-
-	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
 
 	if (sprite_name.compare(L"") != 0)
 	{
-		sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f, 1.0f);
 		be_using_sprite_ = true;
+		Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
+		sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f, 1.0f);
 	}
+	else
+	{
+		Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
+	}
+
 	return true;
 }
 
@@ -109,13 +112,17 @@ bool PBoxObject::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::w
 
 	PModel::Init(device, context);
 
-	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
-
 	if (sprite_name.compare(L"") != 0)
 	{
-		sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f, 1.0f);
 		be_using_sprite_ = true;
+		Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
+		sprite_.Clone(PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name), 1.0f, 1.0f);
 	}
+	else
+	{
+		Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
+	}
+
 	return true;
 }
 
