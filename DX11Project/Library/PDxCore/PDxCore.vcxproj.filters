@@ -19,18 +19,6 @@
     <Filter Include="소스 파일\Object">
       <UniqueIdentifier>{a52f6bbc-611b-411d-bbc7-e5f2f866507d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\FSM">
-      <UniqueIdentifier>{c39cd947-0f1c-4bf7-a334-edc0f11ff6cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\FSM\Boss">
-      <UniqueIdentifier>{22ff1006-f6f3-4ec6-9859-55dfd86f8d0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\FSM\Monster">
-      <UniqueIdentifier>{38dff832-6304-4006-afd4-715f895ed46f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\FSM\Character">
-      <UniqueIdentifier>{0d734395-dbe3-4c0a-8e27-36b55c8b15a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\System">
       <UniqueIdentifier>{37421ecc-fc5e-414e-b3d7-fcd5dee79a14}</UniqueIdentifier>
     </Filter>
@@ -63,47 +51,8 @@
     <ClInclude Include="targetver.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PBossMobHitAction.h">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="PBossMobIdleAction.h">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="PBossMobSkillAction.h">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="PBossMobState.h">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="PBossMonster.h">
-      <Filter>소스 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="PCore.h">
       <Filter>소스 파일\System</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobAttackAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobDeadAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobHitAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobIdleAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobJumpAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobMoveAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobReviveAction.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="PMobState.h">
-      <Filter>소스 파일\FSM\Monster</Filter>
     </ClInclude>
     <ClInclude Include="PSoundMgr.h">
       <Filter>소스 파일\Manager</Filter>
@@ -116,30 +65,6 @@
     </ClInclude>
     <ClInclude Include="PComponentStorage.h">
       <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="PCharacter.h">
-      <Filter>소스 파일\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="PAttackAction.h">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="PDeadAction.h">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="PHitAction.h">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="PIdleAction.h">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="PJumpAction.h">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="PMoveAction.h">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="PPlayerState.h">
-      <Filter>소스 파일\FSM\Character</Filter>
     </ClInclude>
     <ClInclude Include="PWindow.h">
       <Filter>소스 파일\System</Filter>
@@ -159,17 +84,8 @@
     <ClInclude Include="PInput.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
-    <ClInclude Include="PFsm.h">
-      <Filter>소스 파일\FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="PFiniteState.h">
-      <Filter>소스 파일\FSM</Filter>
-    </ClInclude>
     <ClInclude Include="PMonster.h">
       <Filter>소스 파일\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="PScene.h">
-      <Filter>소스 파일\System</Filter>
     </ClInclude>
     <ClInclude Include="PPhysicsModule.h">
       <Filter>소스 파일\Util</Filter>
@@ -272,47 +188,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PBossMobHitAction.cpp">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="PBossMobIdleAction.cpp">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="PBossMobSkillAction.cpp">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="PBossMobState.cpp">
-      <Filter>소스 파일\FSM\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="PBossMonster.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
     <ClCompile Include="PCore.cpp">
       <Filter>소스 파일\System</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobAttackAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobDeadAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobHitAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobIdleAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobJumpAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobMoveAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobReviveAction.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="PMobState.cpp">
-      <Filter>소스 파일\FSM\Monster</Filter>
     </ClCompile>
     <ClCompile Include="PSoundMgr.cpp">
       <Filter>소스 파일\Manager</Filter>
@@ -325,30 +202,6 @@
     </ClCompile>
     <ClCompile Include="PComponentStorage.cpp">
       <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="PCharacter.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="PAttackAction.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="PDeadAction.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="PHitAction.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="PIdleAction.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="PJumpAction.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="PMoveAction.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="PPlayerState.cpp">
-      <Filter>소스 파일\FSM\Character</Filter>
     </ClCompile>
     <ClCompile Include="PWindow.cpp">
       <Filter>소스 파일\System</Filter>
@@ -365,17 +218,8 @@
     <ClCompile Include="PInput.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="PFsm.cpp">
-      <Filter>소스 파일\FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="PFiniteState.cpp">
-      <Filter>소스 파일\FSM</Filter>
-    </ClCompile>
     <ClCompile Include="PMonster.cpp">
       <Filter>소스 파일\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="PScene.cpp">
-      <Filter>소스 파일\System</Filter>
     </ClCompile>
     <ClCompile Include="PPhysicsModule.cpp">
       <Filter>소스 파일\Util</Filter>
