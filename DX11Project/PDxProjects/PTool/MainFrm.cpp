@@ -159,7 +159,28 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE |
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
+		CBRS_LEFT | CBRS_FLOAT_MULTI;
+
+	CreatePaneWindow(m_TabbedPane, L"Tab", -1);
+	CreatePaneWindow(m_ToolPane, L"ToolPane", 1234);
+	m_TabbedPane.AddTab(&m_ToolPane);
+
+
+
 	return 0;
+}
+
+void CMainFrame::CreatePaneWindow(CDockablePane& pane, const TCHAR* title, DWORD id)
+{
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE |
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
+		CBRS_LEFT | CBRS_FLOAT_MULTI;
+	pane.CreateEx(NULL, title, this,
+		CRect(0, 0, 400, 100), TRUE, id, dwStyle);
+	pane.EnableDocking(CBRS_ALIGN_ANY);
+	DockPane(&pane);
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)

@@ -16,6 +16,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{8b39c8d1-00a3-4b96-a283-74f10b0a9f5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="toolFrame">
+      <UniqueIdentifier>{f705be4c-2e97-4248-949e-f9ed0e28043e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PTool.h">
@@ -48,6 +51,15 @@
     <ClInclude Include="PToolCore.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PToolPane.h">
+      <Filter>toolFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="PToolForm.h">
+      <Filter>toolFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="PCreatePlaneDlg.h">
+      <Filter>toolFrame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PTool.cpp">
@@ -70,6 +82,15 @@
     </ClCompile>
     <ClCompile Include="PToolCore.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PToolPane.cpp">
+      <Filter>toolFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="PToolForm.cpp">
+      <Filter>toolFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="PCreatePlaneDlg.cpp">
+      <Filter>toolFrame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

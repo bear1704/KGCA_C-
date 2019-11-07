@@ -4,6 +4,7 @@
 
 #pragma once
 #include "PropertiesWnd.h"
+#include "PToolPane.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -14,9 +15,16 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
+	CTabbedPane m_TabbedPane;
+	PToolPane m_ToolPane;
 
 // 작업입니다.
 public:
+	
+public:
+	void CreatePaneWindow(
+		CDockablePane& pane,
+		const TCHAR* title, DWORD id);
 
 // 재정의입니다.
 public:
