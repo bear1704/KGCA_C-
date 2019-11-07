@@ -39,9 +39,11 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PLightObj.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -86,7 +86,6 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../output/PDxCore/</OutDir>
     <IntDir>../../output/PDxCore/PDxCoreLib</IntDir>
-    <IncludePath>D:\SC\C_C++\Git\DX11Project\Dx\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -230,7 +229,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PInput.h" />
     <ClInclude Include="PJumpAction.h" />
-    <ClInclude Include="PLightObj.h" />
     <ClInclude Include="PMap.h" />
     <ClInclude Include="PMobAttackAction.h" />
     <ClInclude Include="PMobDeadAction.h" />
@@ -309,7 +307,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PInput.cpp" />
     <ClCompile Include="PJumpAction.cpp" />
-    <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="PMap.cpp" />
     <ClCompile Include="PMobAttackAction.cpp" />
     <ClCompile Include="PMobDeadAction.cpp" />

@@ -16,7 +16,6 @@ bool PPlaneObject::Frame()
 	return true;
 }
 
-
 bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
 	std::wstring tex_name, std::wstring sprite_name)

@@ -78,7 +78,7 @@ struct PMesh
 	D3D_MATRIX world_d3d;
 	D3D_MATRIX world_d3d_inv;
 
-	vector<TriComponent> tri_list; 
+	vector<TriComponent> tri_list; //dummy code?
 	vector<vector<TriComponent>> buffer_list;
 
 	int material_id;

@@ -187,7 +187,6 @@
     <ClCompile Include="tbsExport.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="Source.def" />
   </ItemGroup>
   <ItemGroup>

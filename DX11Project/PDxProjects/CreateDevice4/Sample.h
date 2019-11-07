@@ -82,7 +82,6 @@ public:
 	PNormHeightMap map_;
 	//PHeightMap map_;
 	PImportObject ship_;
-	PPlaneObject plane_obj_;
 
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;

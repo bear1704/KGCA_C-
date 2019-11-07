@@ -188,7 +188,10 @@ int PParser::CharacterSheetParse(std::wstring filepath, OUT_ std::vector<StringP
 int PParser::MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene,
 	std::wstring exportfile_path, std::wstring texfile_path, ID3D11Device* device, FILE_EXTENSION_TYPE type)
 {
-
+	//extension type
+	//0 = kgc
+	//1 = skm
+	//2 = mat
 
 	std::string str;
 	std::wstring wstr;

@@ -36,7 +36,7 @@ public:
 	virtual bool PostRender();
 	virtual bool Release();
 
-public:
+private:
 	bool PCoreInit();
 	bool PCoreFrame();
 	bool PCoreRender();

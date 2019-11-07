@@ -270,9 +270,6 @@
     <ClInclude Include="PFrustum.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
-    <ClInclude Include="PLightObj.h">
-      <Filter>소스 파일\Object</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -478,9 +475,6 @@
     </ClCompile>
     <ClCompile Include="PFrustum.cpp">
       <Filter>소스 파일\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="PLightObj.cpp">
-      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
