@@ -2,35 +2,47 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-
-bool IsSameString(char* str_a, char* str_b)
-{
-	if (strlen(str_a) != strlen(str_b))
-		return false;
-
-	int alphabet[26] = { 0, }; //97
-
-	for (int i = 0; i < strlen(str_a); i++)
-	{
-		alphabet[str_a[i] - 97] += 1;
-		alphabet[str_b[i] - 97] -= 1;
-	}
-
-	for (int j = 0; j < 26; j++)
-	{
-		if (alphabet[j] > 0)
-			return false;
-	}
-
-	return true;
-}
-
+#include <vector>
 
 int main()
 {
-	char a[10] = "appleb";
-	char b[10] = "papelq";
-	bool c = IsSameString(a, b);
+	int arr[5][5] =
+	{ {0,1,0,0,0 } ,
+	  {0,0,0,1,0 }, 
+	  {0,1,1,1,0 },
+	  {0,0,0,1,0 },
+	  {0,0,0,1,0 } };
+
+	std::vector<int*> stack_row;
+	std::vector<int*> stack_col;
+	
+	for (int ii = 0; ii < 5; ii++)
+	{
+		for (int jj = 0; jj < 5; jj++)
+		{
+			if (arr[ii][jj] == 1)
+			{
+				stack_row.push_back(&arr[ii][jj]);
+			}
+			else
+			{
+				stack_row.clear();
+			}
+
+
+			if (arr[jj][ii] == 1)
+			{
+				stack_col.push_back(&arr[jj][ii]);
+			}
+			else
+			{
+				stack_col.clear();
+			}
+		}
+
+		if(stack_row.size() >= 1)
+
+	}
 
 	system("pause");
 }

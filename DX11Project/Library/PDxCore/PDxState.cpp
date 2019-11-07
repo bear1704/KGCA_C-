@@ -71,7 +71,7 @@ namespace DX
 		ZeroMemory(&raster_desc, sizeof(raster_desc));
 		raster_desc.DepthClipEnable = TRUE;
 		raster_desc.FillMode = D3D11_FILL_WIREFRAME;
-		raster_desc.CullMode = D3D11_CULL_BACK;
+		raster_desc.CullMode = D3D11_CULL_NONE;
 		raster_desc.MultisampleEnable = TRUE;
 		raster_desc.AntialiasedLineEnable = TRUE;
 

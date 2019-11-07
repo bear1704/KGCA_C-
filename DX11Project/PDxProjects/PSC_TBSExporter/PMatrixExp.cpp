@@ -142,7 +142,7 @@ bool PMatrixExp::SwitchAllNodeToMesh()
 
 		mesh.material_id = FindMaterialIndex(node);
 
-		
+		//헬퍼 오브젝트인지, 바이패드인지, 본인지 구분하기 위함
 		Object* object = node->GetObjectRef();
 		Control* control = node->GetTMController();
 

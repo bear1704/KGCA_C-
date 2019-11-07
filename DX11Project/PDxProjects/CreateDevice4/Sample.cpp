@@ -16,10 +16,10 @@ bool Sample::Init()
 {
 
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"tile");
+	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
+	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"character", L"character_move");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
-
+	plane_obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
 
 	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", 
 		"PS", L"data/obj/turret/turret8.PNG", L"data/obj/turret/");
@@ -144,6 +144,7 @@ bool Sample::Frame()
 	box_.Frame();
 	map_.Frame(light_obj_.light_direction(), main_camera_->camera_position_, main_camera_->vec_look_);
 	ship_.Frame();
+	plane_obj_.Frame();
 	return true;
 }
 
@@ -181,21 +182,21 @@ bool Sample::Render()
 
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
 
-		obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		obj_.Render();
-		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		box_.Render();
+		//obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		//obj_.Render();
+		//box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		//box_.Render();
 
-		ship_.SetWVPMatrix(&ship_.object_list_[0].info.meshinfo.world_mat, &main_camera_->matView_, &main_camera_->matProj_);
-		//ship_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		ship_.Render();
+		//ship_.SetWVPMatrix(&ship_.object_list_[0].info.meshinfo.world_mat, &main_camera_->matView_, &main_camera_->matProj_);
+		////ship_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		//ship_.Render();
 
 		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
 
 
 		immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
 			NULL, &map_.constant_data_, 0, 0);
-		map_.PreRender();
+		//map_.PreRender();
 		
 		ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
 		UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
@@ -207,9 +208,11 @@ bool Sample::Render()
 		immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
 		immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
 		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		map_.PostRender();
+		//map_.PostRender();
 	
-
+		
+		plane_obj_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		plane_obj_.Render();
 
 		dx_rt_.End(immediate_device_context_);
 	}

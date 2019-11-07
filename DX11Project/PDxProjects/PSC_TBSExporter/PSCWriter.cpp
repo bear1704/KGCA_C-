@@ -499,8 +499,6 @@ void PSCWriter::AddMaterial(INode* node)
 		material_list_.push_back(mtl);
 		GetMaterial(node);
 	}
-
-
 }
 
 int PSCWriter::FindMaterialIndex(INode* node)
