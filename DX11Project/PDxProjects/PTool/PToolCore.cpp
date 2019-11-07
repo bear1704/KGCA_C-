@@ -14,13 +14,13 @@ bool PToolCore::Init()
 {
 
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	obj_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
-	box_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS", L"tile");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
 
 
 	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl",
 		"PS", L"data/obj/turret/turret8.PNG", L"data/obj/turret/");
+
+	//plane_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -123,10 +123,9 @@ bool PToolCore::Frame()
 
 
 	main_camera_->Frame();
-	obj_.Frame();
-	box_.Frame();
 	map_.Frame(light_obj_.light_direction(), main_camera_->camera_position_, main_camera_->vec_look_);
 	ship_.Frame();
+	//plane_.Frame();
 	return true;
 }
 
@@ -162,12 +161,10 @@ bool PToolCore::Render()
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
 
-		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+		//plane_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+		//plane_.Render();
 
-		obj_.SetWVPMatrix(&mat_obj_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		obj_.Render();
-		box_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		box_.Render();
+		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
 
 		ship_.SetWVPMatrix(&ship_.object_list_[0].info.meshinfo.world_mat, &main_camera_->matView_, &main_camera_->matProj_);
 		//ship_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
@@ -226,10 +223,10 @@ bool PToolCore::Render()
 
 bool PToolCore::Release()
 {
-	obj_.Release();
-	box_.Release();
+
 	map_.Release();
 	dx_rt_.Release();
+	plane_.Release();
 	return true;
 }
 

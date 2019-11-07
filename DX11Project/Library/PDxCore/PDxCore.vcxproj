@@ -218,15 +218,11 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PLightObj.h" />
     <ClInclude Include="PMap.h" />
     <ClInclude Include="PModel.h" />
-    <ClInclude Include="PMonster.h" />
     <ClInclude Include="PNormalMapHelper.h" />
     <ClInclude Include="PNormHeightMap.h" />
-    <ClInclude Include="PObjectDataManager.h" />
     <ClInclude Include="PObjectInfoManager.h" />
     <ClInclude Include="PParser.h" />
     <ClInclude Include="PPhysicsModule.h" />
-    <ClInclude Include="PPlayerCharacter.h" />
-    <ClInclude Include="PPlayerStatus.h" />
     <ClInclude Include="PObject.h" />
     <ClInclude Include="PShape.h" />
     <ClInclude Include="PSkyBox.h" />
@@ -267,15 +263,11 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="PMap.cpp" />
     <ClCompile Include="PModel.cpp" />
-    <ClCompile Include="PMonster.cpp" />
     <ClCompile Include="PNormalMapHelper.cpp" />
     <ClCompile Include="PNormHeightMap.cpp" />
-    <ClCompile Include="PObjectDataManager.cpp" />
     <ClCompile Include="PObjectInfoManager.cpp" />
     <ClCompile Include="PParser.cpp" />
     <ClCompile Include="PPhysicsModule.cpp" />
-    <ClCompile Include="PPlayerCharacter.cpp" />
-    <ClCompile Include="PPlayerStatus.cpp" />
     <ClCompile Include="PObject.cpp" />
     <ClCompile Include="PShape.cpp" />
     <ClCompile Include="PSkyBox.cpp" />
@@ -290,6 +282,23 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PUIDataManager.cpp" />
     <ClCompile Include="PWallAndPlatform.cpp" />
     <ClCompile Include="PWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DiffuseLight.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="ModelView.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Skybox.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

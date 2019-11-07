@@ -137,6 +137,23 @@ BOOL CPToolApp::InitInstance()
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 
+	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
+	CPToolView* pView = (CPToolView*)pFrame->GetActiveView();
+
+	m_tool.hInstance = AfxGetInstanceHandle();
+	m_tool.hWnd = pView->m_hWnd;
+	g_hInstance = m_tool.hInstance;
+	g_hWnd = m_tool.hWnd;
+
+	RECT client_rect;
+	RECT window_rect;
+	GetWindowRect(m_tool.hWnd, &window_rect);
+	GetClientRect(m_tool.hWnd, &client_rect);
+
+	m_tool.rectangle_client = { (float)client_rect.left, (float)client_rect.top, (float)client_rect.right, (float)client_rect.bottom };
+	g_rectangle_client = m_tool.rectangle_client;
+
+
 	m_tool.PCoreInit();
 
 	return TRUE;
@@ -146,6 +163,7 @@ int CPToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
+	m_tool.PCoreRelease();
 
 	return CWinAppEx::ExitInstance();
 }
@@ -196,7 +214,7 @@ BOOL CPToolApp::OnIdle(LONG lCount)
 {
 	m_tool.PCoreFrame();
 	m_tool.PCoreRender();
-	return 0;
+	return TRUE;
 }
 
 // CPToolApp 사용자 지정 로드/저장 방법

@@ -6,8 +6,6 @@
 #include "P2DCamera.h"
 #include "PWallAndPlatform.h"
 #include "PObjectInfoManager.h"
-#include "PObjectDataManager.h"
-
 
 class PCore : public PDevice
 {

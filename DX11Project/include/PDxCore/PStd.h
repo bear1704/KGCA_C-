@@ -8,9 +8,6 @@
 #include <memory>
 #include <cmath>
 
-class PScene;
-
-
 using namespace std;
 
 #pragma comment(lib, "msimg32")
@@ -305,7 +302,6 @@ extern HDC g_handle_off_screenDC;
 extern HDC g_handle_screenDC;
 extern HINSTANCE g_hInstance;
 extern FLOAT_RECT g_rectangle_client;
-extern PScene* g_current_scene_;
 
 template <typename T>
 class PSingleton

@@ -94,12 +94,9 @@ bool PCore::PCoreInit()
 	PCollision::GetInstance().Init();
 	PWallAndPlatform::GetInstance().Init();
 	PObjectInfoManager::GetInstance().Init();
-	PObjectDataManager::GetInstance().Init();
-	PSpriteManager::GetInstance().Init();
 	InitDevice(hWnd, g_rectangle_client.right, g_rectangle_client.bottom);
 	DX::PDxState::SetState(device_);
 	PTextureManager::GetInstance().LoadTextureFromScript(L"data/tex.txt", device_);
-	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
 
 
 	return Init();
@@ -112,7 +109,6 @@ bool PCore::PCoreFrame()
 	PInput::GetInstance().Frame();
 	PSoundMgr::GetInstance().Frame();
 	P2DCamera::GetInstance().Frame();
-	PSpriteManager::GetInstance().Frame();
 	Frame();
 	return PostFrame();
 }
@@ -141,7 +137,6 @@ bool PCore::PCoreRelease()
 	PInput::GetInstance().Release();
 	PSoundMgr::GetInstance().Release();
 	P2DCamera::GetInstance().Release();
-	PSpriteManager::GetInstance().Release();
 
 	return Release();
 }

@@ -37,6 +37,9 @@
     <Filter Include="소스 파일\System\DXSystem">
       <UniqueIdentifier>{08203978-d416-494e-8385-f08e2bef32b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{08d4dc7e-d867-46a1-bf1f-55b4ee13aab7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -55,9 +58,6 @@
       <Filter>소스 파일\System</Filter>
     </ClInclude>
     <ClInclude Include="PSoundMgr.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="PObjectDataManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
     <ClInclude Include="PObjectInfoManager.h">
@@ -84,14 +84,8 @@
     <ClInclude Include="PInput.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
-    <ClInclude Include="PMonster.h">
-      <Filter>소스 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="PPhysicsModule.h">
       <Filter>소스 파일\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="PPlayerCharacter.h">
-      <Filter>소스 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="PParser.h">
       <Filter>소스 파일\Util</Filter>
@@ -101,9 +95,6 @@
     </ClInclude>
     <ClInclude Include="P2DCamera.h">
       <Filter>소스 파일\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="PPlayerStatus.h">
-      <Filter>소스 파일\Texture</Filter>
     </ClInclude>
     <ClInclude Include="PSprite.h">
       <Filter>소스 파일\Texture</Filter>
@@ -197,9 +188,6 @@
     <ClCompile Include="PObjectInfoManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="PObjectDataManager.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="PComponentStorage.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
@@ -218,14 +206,8 @@
     <ClCompile Include="PInput.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="PMonster.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
     <ClCompile Include="PPhysicsModule.cpp">
       <Filter>소스 파일\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="PPlayerCharacter.cpp">
-      <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="PParser.cpp">
       <Filter>소스 파일\Util</Filter>
@@ -235,9 +217,6 @@
     </ClCompile>
     <ClCompile Include="P2DCamera.cpp">
       <Filter>소스 파일\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="PPlayerStatus.cpp">
-      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PSprite.cpp">
       <Filter>소스 파일\Texture</Filter>
@@ -320,5 +299,22 @@
     <ClCompile Include="PLightObj.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ModelView.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DiffuseLight.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Skybox.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -49,22 +49,14 @@ public:
 	PDxRenderTarget dx_rt_;
 	PDxRenderTarget dx_minimap_rt_;
 
-	PPlaneObject obj_;
-	PBoxObject box_;
-
 	PPlaneObject screen_tex_object_;
 
 	PSkyBox skybox_;
 
-	//LIGHT_CONSTANT_BUFFER cb_light_;
-	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_light_;
-	//D3DXVECTOR3 light_vector_;
-
 	PLightObj light_obj_;
 	PNormHeightMap map_;
-	//PHeightMap map_;
 	PImportObject ship_;
-
+	PPlaneObject plane_;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
 	CB_VS_NearlyNotChange cb_nearly_not_changes_;

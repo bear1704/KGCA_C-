@@ -23,8 +23,6 @@
 
 
 
-PScene* g_current_scene_;
-
 //struct CB_VS_ChangesEveryFrame
 //{
 //	D3DXMATRIX mat_normal;

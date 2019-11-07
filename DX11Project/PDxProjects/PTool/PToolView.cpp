@@ -126,3 +126,18 @@ CPToolDoc* CPToolView::GetDocument() const // 디버그되지 않은 버전은 �
 
 
 // CPToolView 메시지 처리기
+
+
+LRESULT CPToolView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	CPToolApp* pApp = (CPToolApp*)AfxGetApp();
+	HWND hWnd = pApp->m_tool.hWnd;
+	MSG msg;
+	msg.message = message;
+	msg.wParam = wParam;
+	msg.lParam = lParam;
+	msg.hwnd = hWnd;
+	pApp->m_tool.MessageProc(msg);
+	return CView::WindowProc(message, wParam, lParam);
+}

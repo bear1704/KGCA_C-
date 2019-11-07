@@ -1,7 +1,6 @@
 #pragma once
 #include "PStd.h"
 #include "PUIComponent.h"
-#include "PMonster.h"
 
 class PComponentStorage : public PSingleton<PComponentStorage>
 {
