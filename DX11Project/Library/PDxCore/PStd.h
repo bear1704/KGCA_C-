@@ -69,12 +69,6 @@ enum class KEYSTAT
 	KEY_UP
 };
 
-enum class PLoadMode
-{
-	BITMAP,
-	BITMAPMASK,
-};
-
 enum class ObjectLoadType //로드 시 중복방지
 {
 	CHARACTER,

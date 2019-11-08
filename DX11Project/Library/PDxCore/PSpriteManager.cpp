@@ -75,17 +75,6 @@ PSprite* PSpriteManager::get_sprite_from_map_ex(std::wstring key)
 	return nullptr;
 }
 
-PSprite* PSpriteManager::get_sprite_from_dmgfont_list(std::wstring key)
-{
-	auto iter = damage_font_list_.find(key);
-	if (iter != damage_font_list_.end())
-	{
-		PSprite* data = (*iter).second;
-		return data;
-	}
-	return nullptr;
-}
-
 
 void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectLoadType type)
 {
@@ -128,7 +117,7 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 				else if (iter->first.compare("tex_name") == 0)
 				{
 					info.texture_name.assign(iter->second.begin(), iter->second.end());
-					texture = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
+					texture= PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
 				}
 				else if (iter->first.compare("uv_ltop") == 0)
 				{
@@ -181,59 +170,7 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 			sprite_list_.insert(std::make_pair(sprite_name, sprite));
 
 		}
-		else if (iter->second.compare("dmg_sprite") == 0)
-		{
-			SpriteDataInfo info;
-			std::wstring sprite_name;
-			std::vector<DX::PTex_uv4> rt;
-
-
-			info.lifetime = kDamageFontLifetime;
-			info.once_playtime = kDamageFontLifetime;
-
-			PTexture* texture = nullptr;
-
-			while (true)
-			{
-				iter++;
-				if (iter->first.compare("name") == 0)
-					sprite_name.assign(iter->second.begin(), iter->second.end());
-				else if (iter->first.compare("max_frame") == 0)
-					info.max_frame = std::atoi(iter->second.c_str());					
-				else if (iter->first.compare("tex_name") == 0)
-				{
-					info.texture_name.assign(iter->second.begin(), iter->second.end());
-					texture = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
-				}
-				else if (iter->first.compare("uv1") == 0)
-				{
-					DX::PTex_uv4 uv4;
-
-					for (int i = 0; i < 4; i++)
-					{
-						std::vector<string> uv_vec = parser.SplitString(iter->second, ',');
-						DX::PTex_uv temp_uv;
-
-						temp_uv = PTextureManager::GetInstance().ImageCoordinateToTexCoordinate(std::atof(uv_vec[i].c_str()), std::atof(uv_vec[i].c_str()),
-							texture->GetImageWidth(), texture->GetImageHeight());
-
-						uv4.u[i] = temp_uv.u;
-						uv4.v[i] = temp_uv.v;
-						iter++;
-					}
-					iter--;// 마지막 한칸 되돌리기(위에서 한번더 iter++를 하므로)
-					rt.push_back(uv4);
-				}
-				else if (iter->first.compare("END") == 0)
-					break;
-			}
-			info.tex_boundary_list = std::move(rt); 
-
-			PSprite* sprite = new PSprite();
-			sprite->Set(info, 1.0, 1.0);
-			damage_font_list_.insert(std::make_pair(sprite_name, sprite));
-
-		}
+		
 		
 	}
 	if (need_load_character_sprite_data_ && type == ObjectLoadType::CHARACTER)
@@ -244,6 +181,14 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 		need_load_map_sprite_data_ = false;
 }
 
+void PSpriteManager::LoadSpriteDataWithoutScript(std::wstring sprite_name, std::vector<PTexture*> texture, SpriteDataInfo info)
+{
+	PSprite* sprite = new PSprite;
+	sprite->Set(info, 1.0f, 1.0f);
+	sprite->set_texture_list(texture);
+	sprite_list_.insert(make_pair(sprite_name, sprite));
+}
+
 bool PSpriteManager::Delete(int key)
 {
 	return false;
@@ -252,27 +197,5 @@ bool PSpriteManager::Delete(int key)
 void PSpriteManager::AddRenderWaitList(PSprite sprite)
 {
 	render_wait_list_.push_back(sprite);
-}
-
-void PSpriteManager::CreateDamageFontFromInteger(int damage, pPoint firstPos)
-{
-	std::string damage_str = std::to_string(damage);
-	
-	float gap = 0; 
-
-	for (int i = 0; i < damage_str.size(); i++)
-	{
-		std::wstring nthstr(1, damage_str[i]);
-		PSprite* sprite = get_sprite_from_dmgfont_list(nthstr);
-		
-		PSprite clone_sprite;
-		clone_sprite.Clone(sprite, 1.0f, 1.5f);
-		clone_sprite.SetPosition(firstPos.x + gap, firstPos.y);
-		clone_sprite.set_is_dmg(true);
-		gap += kDamageFontGap;
-		AddRenderWaitList(clone_sprite);
-	}
-
-
 }
 

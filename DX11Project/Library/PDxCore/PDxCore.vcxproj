@@ -203,7 +203,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PDxRenderTarget.h" />
     <ClInclude Include="PDxSprite.h" />
     <ClInclude Include="PBitmap.h" />
-    <ClInclude Include="PBitmapManager.h" />
     <ClInclude Include="PButtonControl.h" />
     <ClInclude Include="PCollision.h" />
     <ClInclude Include="PComponentStorage.h" />
@@ -248,7 +247,6 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PDxRenderTarget.cpp" />
     <ClCompile Include="PDxSprite.cpp" />
     <ClCompile Include="PBitmap.cpp" />
-    <ClCompile Include="PBitmapManager.cpp" />
     <ClCompile Include="PButtonControl.cpp" />
     <ClCompile Include="PCollision.cpp" />
     <ClCompile Include="PComponentStorage.cpp" />

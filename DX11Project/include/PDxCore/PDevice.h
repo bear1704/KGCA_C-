@@ -43,15 +43,15 @@ public:
 	bool		InitDevice(HWND hwnd, UINT client_width, UINT client_height);
 	bool		CreateSwapChain(HWND hwnd, UINT client_width, UINT client_height);
 	bool		CreateRenderTarget(UINT client_width, UINT client_height);
-
-	
-	
 	
 	bool		DevicePreRender();
 	//bool		DeviceRender();
 	bool		DeviceRelease();
 
 	
+	ID3D11Device* device();
+	ID3D11DeviceContext* immediate_device_context();
+
 
 
 

@@ -43,10 +43,10 @@ bool PSprite::Frame()
 	return true;
 }
 
-bool PSprite::Render(ID3D11Device* device, std::vector<Vertex_PNCT>& vertices,
+bool PSprite::Render(ID3D11Device* device, ID3D11DeviceContext* context ,std::vector<Vertex_PNCT>& vertices,
 	DX::PDxHelper& helper, bool is_reversal)
 {
-	DrawPlane(device, vertices, helper, is_reversal);
+	DrawPlane(device, context,vertices, helper, is_reversal);
 	return true;
 }
 
@@ -57,7 +57,9 @@ bool PSprite::Release()
 
 bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 {
+	
 	tex_boundary_list_ = info.tex_boundary_list;
+	texture_list_ = info.texture_list;
 	tex_default_boundary_list_ = tex_boundary_list_;
 	if (info.lifetime == 777)
 	{
@@ -78,10 +80,11 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
 
-	texture_ = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
+	if(texture_list_.size() == 0)
+		texture_ = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
 	
 	return true;
-}
+} 
 
 bool PSprite::SetPosition(float x, float y)
 {
@@ -96,27 +99,32 @@ void PSprite::Play()
 	remain_lifetime_ = lifetime_;
 }
 
-void PSprite::DrawPlane(ID3D11Device* device, std::vector<Vertex_PNCT>& vertices,
+void PSprite::DrawPlane(ID3D11Device* device, ID3D11DeviceContext* context ,std::vector<Vertex_PNCT>& vertices,
 	DX::PDxHelper& helper, bool is_reversal)
 {
 	if (isDead)
 		return;
 
-	DX::PTex_uv4 tex_coord = tex_boundary_list_[current_played_spriteframe_];
+	if (texture_list_.size() == 0)
+	{
 
-	PModel::ChangeTexValue(vertices, tex_coord);
-	
-	int vertices_count = vertices.size();
-	
-	helper.vertex_size_ = sizeof(Vertex_PNCT);
-	helper.vertex_count_ = vertices_count;
-	helper.vertex_buffer_.Attach(DX::CreateVertexBuffer(device, &vertices.at(0), vertices_count , sizeof(Vertex_PNCT), false));
-	helper.shader_res_view_ = texture_->shader_res_view();
+		DX::PTex_uv4 tex_coord = tex_boundary_list_[current_played_spriteframe_];
 
-	//if(helper.shader_res_view_ != nullptr)
-	//	helper.shader_res_view_.Attach(texture_->shader_res_view());
-	////이거왜오류뜨냐(물어보기)
+		PModel::ChangeTexValue(vertices, tex_coord);
 
+		int vertices_count = vertices.size();
+
+		helper.vertex_size_ = sizeof(Vertex_PNCT);
+		helper.vertex_count_ = vertices_count;
+		context->UpdateSubresource(helper.vertex_buffer_.Get(),
+			0, NULL, &vertices.at(0), 0, 0);
+		helper.shader_res_view_ = texture_->shader_res_view();
+	}
+	else
+	{
+		texture_ = texture_list_[current_played_spriteframe_];
+		helper.shader_res_view_ = texture_->shader_res_view();
+	}
 
 }
 
@@ -133,11 +141,13 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	alpha_ = alpha;
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
+	texture_list_ = sprite->texture_list_;
 	
 	if (sprite->texture() != nullptr)
 	{
 		texture_ = sprite->texture();
 	}
+	else if(texture_list_.size() > 0) {}
 	else
 		assert(false);
 
@@ -214,6 +224,11 @@ void PSprite::set_animation_type_(ANIMATIONTYPE type)
 void PSprite::set_is_dmg(bool isdmg)
 {
 	is_dmg_ = isdmg;
+}
+
+void PSprite::set_texture_list(std::vector<PTexture*>& texture_list)
+{
+	texture_list_ = std::move(texture_list);
 }
 
 ANIMATIONTYPE PSprite::get_animation_type_()

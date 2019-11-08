@@ -33,7 +33,7 @@ public:
 	bool Release() override;
 	
 	void LoadTextureFromScript(multibyte_string filepath, ID3D11Device* current_device);
-	void LoadTextureWithoutScript(TextureInfo info, ID3D11Device* current_device);
+	PTexture* LoadTextureWithoutScript(TextureInfo info, ID3D11Device* current_device);
 	PTexture* GetTextureFromMap(std::wstring key);
 
 	DX::PTex_uv ImageCoordinateToTexCoordinate(float x, float y, float image_width, float image_height);

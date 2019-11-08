@@ -170,6 +170,16 @@ bool PDevice::DeviceRelease()
 	return true;
 }
 
+ID3D11Device* PDevice::device()
+{
+	return device_;
+}
+
+ID3D11DeviceContext* PDevice::immediate_device_context()
+{
+	return immediate_device_context_;
+}
+
 
 
 bool PDevice::DevicePreRender()

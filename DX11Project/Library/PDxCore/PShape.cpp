@@ -3,6 +3,8 @@
 /*            Plane          */
 PPlaneObject::PPlaneObject()
 {
+	width_ = 2.0f;
+	height_ = 2.0f;
 }
 
 PPlaneObject::~PPlaneObject()
@@ -39,7 +41,7 @@ bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 bool PPlaneObject::Render()
 {
 	if (be_using_sprite_ == true)
-		sprite_.Render(device_, vertex_list_, dx_helper_, false);
+		sprite_.Render(device_,immediate_context_, vertex_list_, dx_helper_, false);
 	else
 	{
 
@@ -50,12 +52,14 @@ bool PPlaneObject::Render()
 
 		dx_helper_.vertex_size_ = sizeof(Vertex_PNCT);
 		dx_helper_.vertex_count_ = vertices_count;
-		//dx_helper_.vertex_buffer_.Attach(DX::CreateVertexBuffer(device_, &vertex_list_.at(0), vertices_count, sizeof(Vertex_PNCT), false));
 		immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
 			0, NULL, &vertex_list_.at(0), 0, 0);
 		dx_helper_.shader_res_view_ = texture_->shader_res_view();
 
 	}
+
+
+		
 		PModel::Render();
 	
 	return true;
@@ -64,10 +68,10 @@ bool PPlaneObject::Render()
 HRESULT PPlaneObject::CreateVertexData()
 {
 	vertex_list_.resize(4);
-	vertex_list_[0].pos = D3DXVECTOR3{ -1.0f, 1.0f, 0.5f };
-	vertex_list_[1].pos = D3DXVECTOR3{ 1.0f, 1.0f, 0.5f };
-	vertex_list_[2].pos = D3DXVECTOR3{ 1.0f,-1.0f, 0.5f };
-	vertex_list_[3].pos = D3DXVECTOR3{ -1.0f,-1.0f, 0.5f };
+	vertex_list_[0].pos = D3DXVECTOR3{ -width_, height_, 0.5f };
+	vertex_list_[1].pos = D3DXVECTOR3{ width_, height_, 0.5f };
+	vertex_list_[2].pos = D3DXVECTOR3{ width_,-height_, 0.5f };
+	vertex_list_[3].pos = D3DXVECTOR3{ -width_,-height_, 0.5f };
 
 	vertex_list_[0].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
 	vertex_list_[1].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
@@ -94,6 +98,14 @@ HRESULT PPlaneObject::CreateIndexData()
 	index_list_[3] = 0; index_list_[4] = 2; index_list_[5] = 3;
 
 	return S_OK;
+}
+
+void PPlaneObject::CreatePlane(ID3D11Device* device, ID3D11DeviceContext* context, float width, float height, std::wstring sprite_name)
+{	
+	be_using_sprite_ = true;
+	width_ = width;   height_ = height;
+	this->Init(device, context, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"" , sprite_name);
+
 }
 
 
@@ -136,7 +148,7 @@ bool PBoxObject::Frame()
 bool PBoxObject::Render()
 {
 	if (be_using_sprite_ == true)
-		sprite_.Render(device_, vertex_list_, dx_helper_, false);
+		sprite_.Render(device_, immediate_context_,vertex_list_, dx_helper_, false);
 
 
 	DX::PTex_uv4 uv4 = texture_->uv_coord();

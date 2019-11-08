@@ -15,7 +15,6 @@ private:
 	friend class PSingleton<PSpriteManager>;
 	//std::map<std::wstring, SpriteDataInfo*> sprite_data_list_;
 	std::map<std::wstring, PSprite*> sprite_list_;
-	std::map<std::wstring, PSprite*> damage_font_list_;
 	std::list<PSprite> render_wait_list_; //이 곳에 넣으면 렌더타임에 렌더된다.
 	int dmg_font_index_;
 	bool need_load_character_sprite_data_;
@@ -32,11 +31,10 @@ public:
 	bool Release() override;
 
 	PSprite* get_sprite_from_map_ex(std::wstring key);
-	PSprite* get_sprite_from_dmgfont_list(std::wstring key);
 	void LoadSpriteDataFromScript(multibyte_string filepath, ObjectLoadType type);
+	void LoadSpriteDataWithoutScript(std::wstring sprite_name,std::vector<PTexture*> texture, SpriteDataInfo info);
 	bool Delete(int key);
 	void AddRenderWaitList(PSprite sprite);
-	void CreateDamageFontFromInteger(int damage, pPoint firstPos);
 
 
 };

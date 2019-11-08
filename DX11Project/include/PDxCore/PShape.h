@@ -30,6 +30,8 @@ public:
 
 private:
 	PSprite sprite_;
+	float width_;
+	float height_;
 
 public:
 	//bool DXInit(ID3D11Device* device, ID3D11DeviceContext* context) override;
@@ -41,6 +43,7 @@ public:
 public:
 	virtual HRESULT CreateVertexData() override;
 	virtual HRESULT CreateIndexData() override;
+	void CreatePlane(ID3D11Device* device, ID3D11DeviceContext* context, float width, float height, std::wstring sprite_name);
 
 };
 

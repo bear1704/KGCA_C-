@@ -107,9 +107,9 @@ void PTextureManager::LoadTextureFromScript(multibyte_string filepath, ID3D11Dev
 	}
 }
 
-void PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Device* current_device)
+PTexture* PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Device* current_device)
 {
-	if (info.tex_path.empty()) return;
+	if (info.tex_path.empty()) return nullptr;
 
 	TCHAR Drive[MAX_PATH] = { 0, };
 	TCHAR Dir[MAX_PATH] = { 0, };
@@ -122,30 +122,45 @@ void PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Device* c
 	
 	if (texture_list_.find(str) != texture_list_.end()) //중복임
 	{
-		return;
+		return nullptr;
 	}
 
-	DX::PTex_uv4 uv4;
-	std::vector<std::string>&& ltop = parser.SplitString(info.uv_ltop, ',');
-	DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::stof(ltop[0]), std::stof(ltop[1]),
-		info.width, info.height);
-
-	std::vector<std::string>&& rbottom = parser.SplitString(info.uv_rbottom, ','); //가능?
-	DX::PTex_uv right_bottom = ImageCoordinateToTexCoordinate(std::stof(rbottom[0]), std::stof(rbottom[1]),
-		info.width, info.height);
-
-	uv4.u[0] = left_top.u;     uv4.v[0] = left_top.v;
-	uv4.u[1] = right_bottom.u; uv4.v[1] = left_top.v;
-	uv4.u[2] = right_bottom.u; uv4.v[2] = right_bottom.v;
-	uv4.u[3] = left_top.u;     uv4.v[3] = right_bottom.v;
-
 	PTexture* texture = new PTexture;
-	texture->set_uv_coord(uv4);
-	texture->SetImageSize(info.width, info.height);
+	if (info.width == 0 || info.height == 0)
+	{
+		DX::PTex_uv4 uv4;
+		std::vector<std::string>&& ltop = parser.SplitString(info.uv_ltop, ',');
+		DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::stof(ltop[0]), std::stof(ltop[1]),
+			info.width, info.height);
 
+		std::vector<std::string>&& rbottom = parser.SplitString(info.uv_rbottom, ','); //가능?
+		DX::PTex_uv right_bottom = ImageCoordinateToTexCoordinate(std::stof(rbottom[0]), std::stof(rbottom[1]),
+			info.width, info.height);
+
+		uv4.u[0] = left_top.u;     uv4.v[0] = left_top.v;
+		uv4.u[1] = right_bottom.u; uv4.v[1] = left_top.v;
+		uv4.u[2] = right_bottom.u; uv4.v[2] = right_bottom.v;
+		uv4.u[3] = left_top.u;     uv4.v[3] = right_bottom.v;
+	
+		texture->set_uv_coord(uv4);
+		texture->SetImageSize(info.width, info.height);
+	}
+	else
+	{
+		DX::PTex_uv4 uv4;
+		uv4.u[0] = 0.0f;	uv4.v[0] = 0.0f;
+		uv4.u[1] = 1.0f;	uv4.v[1] = 0.0f;
+		uv4.u[2] = 1.0f;	uv4.v[2] = 1.0f;
+		uv4.u[3] = 0.0f;	uv4.v[3] = 1.0f;
+		texture->set_uv_coord(uv4);
+		
+	}
 	ID3D11ShaderResourceView** view = texture->shader_res_view_double_ptr();
 
-	texture->set_tex_name(info.tex_name);
+	std::wstring tex_name = Name;
+	tex_name += Ext;
+
+	texture->set_tex_name(tex_name);
 	texture->set_tex_path(info.tex_path);
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
@@ -155,7 +170,9 @@ void PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Device* c
 	if (FAILED(hr))
 		assert(false); //여기 오류뜸
 
-	texture_list_.insert(make_pair(info.tex_name, texture));
+	texture_list_.insert(make_pair(tex_name, texture));
+
+	return texture;
 
 }
 
@@ -167,6 +184,7 @@ PTexture* PTextureManager::GetTextureFromMap(std::wstring key)
 		PTexture* data = (*iter).second;
 		return data;
 	}
+
 	assert(false);
 	return nullptr;
 }

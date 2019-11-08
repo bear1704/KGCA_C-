@@ -12,6 +12,7 @@ const int kPlaneVertexNumber = 4;
 struct SpriteDataInfo
 {
 	vector<DX::PTex_uv4> tex_boundary_list;
+	std::vector<PTexture*> texture_list;
 	std::wstring texture_name;
 	int max_frame;
 	float lifetime;
@@ -40,6 +41,7 @@ public:
 private:
 
 	PTexture* texture_;
+	std::vector<PTexture*> texture_list_;
 
 	//renewel
 	vector<DX::PTex_uv4> tex_boundary_list_;
@@ -66,7 +68,7 @@ public:
 
 	bool Init();
 	bool Frame();
-	bool Render(ID3D11Device* device, std::vector<Vertex_PNCT>& vertices,
+	bool Render(ID3D11Device* device, ID3D11DeviceContext* context, std::vector<Vertex_PNCT>& vertices,
 		DX::PDxHelper& helper, bool is_reversal);
 	bool Release();
 	bool Set(SpriteDataInfo info, float alpha, float scale);
@@ -75,7 +77,7 @@ public:
 
 	/*bufset : uv좌표 세트(4개) :: vertices : 버텍스 좌표 세트(4개) ::
 	Plane Object를 셰이더에 넘겨준다.(직접 그리기 x) */
-	void DrawPlane(ID3D11Device* device , std::vector<Vertex_PNCT>& vertices,
+	void DrawPlane(ID3D11Device* device , ID3D11DeviceContext* context ,std::vector<Vertex_PNCT>& vertices,
 		DX::PDxHelper& helper, bool is_reversal);
 	void Clone(PSprite* sprite, float alpha, float scale);
 	void AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position);
@@ -101,6 +103,7 @@ public:
 	void set_current_played_spriteframe_(int current);
 	void set_animation_type_(ANIMATIONTYPE type);
 	void set_is_dmg(bool isdmg);
+	void set_texture_list(std::vector<PTexture*>& texture_list);
 	ANIMATIONTYPE get_animation_type_();
 	
 };
