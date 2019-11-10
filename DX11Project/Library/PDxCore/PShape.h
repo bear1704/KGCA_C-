@@ -28,10 +28,11 @@ public:
 	PPlaneObject();
 	~PPlaneObject();
 
-private:
+public:
 	PSprite sprite_;
 	float width_;
 	float height_;
+	std::wstring name;
 
 public:
 	//bool DXInit(ID3D11Device* device, ID3D11DeviceContext* context) override;

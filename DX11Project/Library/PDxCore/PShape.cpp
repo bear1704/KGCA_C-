@@ -104,6 +104,7 @@ void PPlaneObject::CreatePlane(ID3D11Device* device, ID3D11DeviceContext* contex
 {	
 	be_using_sprite_ = true;
 	width_ = width;   height_ = height;
+	name = sprite_name;
 	this->Init(device, context, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"" , sprite_name);
 
 }

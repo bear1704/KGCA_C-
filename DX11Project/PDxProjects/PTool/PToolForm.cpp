@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(PToolForm, CFormView)
 	ON_CBN_SELCHANGE(IDC_COMBO_BLEND_DEST, &PToolForm::OnCbnSelchangeComboBlendDest)
 	ON_BN_CLICKED(IDC_Btn_Save, &PToolForm::OnBnClickedBtnSave)
 	ON_BN_CLICKED(IDC_Btn_Load, &PToolForm::OnBnClickedBtnLoad)
+	ON_BN_CLICKED(IDC_CHECK_BLEND, &PToolForm::OnBnClickedCheckBlend)
 END_MESSAGE_MAP()
 
 
@@ -244,22 +245,24 @@ void PToolForm::SaveData()
 	ar << str;
 
 
-
-	//멀티텍스쳐
-	if (m_DlgPlane.m_IsMultiTexture == TRUE)
-	{
 		std::vector<PSprite*> sprite_list = PSpriteManager::GetInstance().GetSpriteListFromMap();
 		std::vector<PPlaneObject> plane_list = app->m_tool.plane_list_;
-		int plane_count = 0;
 
-		for (auto sprite : sprite_list)
+		for (auto plane : plane_list)
 		{
-			if (sprite->get_is_effect() == false)
-				continue;
+			PSprite* sprite = &plane.sprite_;
 
-			parse.Push("type", "MULTI");
-			//parse.Push("name", std::string(CT2CA(m_DlgPlane.m_PlaneName)));
-			//parse.Push("name", sprite.get));
+		
+			if(sprite->get_is_multitexture())
+				parse.Push("type", "MULTI");
+			else
+				parse.Push("type", "OFFSET");
+
+			std::string sname;
+			
+			sname.assign(plane.name.begin(), plane.name.end());
+			parse.Push("name", sname);
+			
 			if (m_IsAlphaBlend == TRUE)
 				parse.Push("blend", "TRUE");
 			else
@@ -268,17 +271,17 @@ void PToolForm::SaveData()
 			parse.Push("lifetime", std::to_string(sprite->get_lifetime_()));
 			parse.Push("each_sprite_playtime", std::to_string(sprite->get_allocatetime_for_onesprite()));
 			
-			std::string str = std::to_string(plane_list[plane_count].matWorld_._11) + " " + std::to_string(plane_list[plane_count].matWorld_._12) + " " +
-				std::to_string(plane_list[plane_count].matWorld_._13) + " " + std::to_string(plane_list[plane_count].matWorld_._14);
+			std::string str = std::to_string(plane.matWorld_._11) + " " + std::to_string(plane.matWorld_._12) + " " +
+				std::to_string(plane.matWorld_._13) + " " + std::to_string(plane.matWorld_._14);
 			parse.Push("MAT1col", str);
-			str = std::to_string(plane_list[plane_count].matWorld_._21) + " " + std::to_string(plane_list[plane_count].matWorld_._22) + " " +
-				std::to_string(plane_list[plane_count].matWorld_._23) + " " + std::to_string(plane_list[plane_count].matWorld_._24);
+			str = std::to_string(plane.matWorld_._21) + " " + std::to_string(plane.matWorld_._22) + " " +
+				std::to_string(plane.matWorld_._23) + " " + std::to_string(plane.matWorld_._24);
 			parse.Push("MAT2col", str);
-			str = std::to_string(plane_list[plane_count].matWorld_._31) + " " + std::to_string(plane_list[plane_count].matWorld_._32) + " " +
-				std::to_string(plane_list[plane_count].matWorld_._33) + " " + std::to_string(plane_list[plane_count].matWorld_._34);
+			str = std::to_string(plane.matWorld_._31) + " " + std::to_string(plane.matWorld_._32) + " " +
+				std::to_string(plane.matWorld_._33) + " " + std::to_string(plane.matWorld_._34);
 			parse.Push("MAT3col", str);
-			str = std::to_string(plane_list[plane_count].matWorld_._41) + " " + std::to_string(plane_list[plane_count].matWorld_._42) + " " +
-				std::to_string(plane_list[plane_count].matWorld_._43) + " " + std::to_string(plane_list[plane_count].matWorld_._44);
+			str = std::to_string(plane.matWorld_._41) + " " + std::to_string(plane.matWorld_._42) + " " +
+				std::to_string(plane.matWorld_._43) + " " + std::to_string(plane.matWorld_._44);
 			parse.Push("MAT4col", str);
 
 			int tex_list_size = sprite->get_texture_list_ptr()->size();
@@ -290,14 +293,42 @@ void PToolForm::SaveData()
 				str.assign(wstr.begin(), wstr.end());
 				parse.Push("tex_path", str);
 			}
-			plane_count++;
 			
+			//OFFSET
+
+
 			parse.Commit();
 		}
 
 
-	}
+
+}
+
+
+void PToolForm::OnBnClickedCheckBlend()
+{
+
+	UpdateData(TRUE);
+
+	ID3D11DeviceContext* context = app->m_tool.immediate_device_context();
+	ID3D11Device* device = app->m_tool.device();
+
+	if (m_IsAlphaBlend == TRUE)
+		app->m_tool.blend_desc_.RenderTarget[0].BlendEnable = true;
+	else
+		app->m_tool.blend_desc_.RenderTarget[0].BlendEnable = false;
+
+	int index = m_CtlBlendSrc.GetCurSel();
+	app->m_tool.blend_desc_.RenderTarget[0].SrcBlend = (D3D11_BLEND)(index + 1);
+
+	index = m_CtlBlendDest.GetCurSel();
+	app->m_tool.blend_desc_.RenderTarget[0].DestBlend = (D3D11_BLEND)(index + 1);
 	
-
-
+	HRESULT hr;
+	if (FAILED(hr = device->CreateBlendState(
+		&app->m_tool.blend_desc_, &app->m_tool.blend_state_)))
+	{
+		return;
+	}
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

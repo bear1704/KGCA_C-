@@ -47,6 +47,7 @@ public:
 	afx_msg void OnBnClickedBtnSave();
 	afx_msg void OnBnClickedBtnLoad();
 	void SaveData();
+	afx_msg void OnBnClickedCheckBlend();
 };
 
 
