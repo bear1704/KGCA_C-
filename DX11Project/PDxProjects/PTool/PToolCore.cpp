@@ -14,6 +14,26 @@ PToolCore::~PToolCore()
 bool PToolCore::Init()
 {
 	
+	ZeroMemory(&blend_desc_, sizeof(D3D11_BLEND_DESC));
+	blend_desc_.AlphaToCoverageEnable = TRUE;
+	blend_desc_.IndependentBlendEnable = TRUE;
+	blend_desc_.RenderTarget[0].BlendEnable = TRUE;
+	blend_desc_.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend_desc_.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blend_desc_.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+	blend_desc_.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blend_desc_.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blend_desc_.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+
+	blend_desc_.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	HRESULT hr = device()->CreateBlendState(&blend_desc_, &blend_state_);
+	if (FAILED(hr))
+		assert(false);
+
+
+
 
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
@@ -21,8 +41,6 @@ bool PToolCore::Init()
 
 	//plane_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
 
-	D3DXMatrixIdentity(&mat_obj_world_);
-	D3DXMatrixIdentity(&mat_box_world_);
 
 	free_camera_.Init();
 
@@ -33,14 +51,6 @@ bool PToolCore::Init()
 
 	free_camera_.CreateTargetViewMatrix(eye, at, up);
 	free_camera_.CreateProjectionMatrix();
-
-	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
-	D3DXMatrixScaling(&mat_box_world_, 4.0f, 4.0f, 10.0f);
-	
-	mat_obj_world_._42 = 1.0f;
-	mat_box_world_._42 = 70.0f;
-
-	//D3DXMatrixIdentity(&mat_box_world_);
 
 	main_camera_ = &free_camera_;
 
@@ -136,21 +146,24 @@ bool PToolCore::Render()
 			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 		//sky
 
-		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_wrap_point);
-
-
+		
+		
+		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
+		
 
+		DX::ApplyBlendState(immediate_device_context_, blend_state_);
 		for (int ii = 0; ii < plane_list_.size(); ii++)
 		{
 			if (plane_list_[ii].be_using_sprite_ == true)
 			{
-				plane_list_[ii] .SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+				plane_list_[ii].SetWVPMatrix(&plane_list_[ii].matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
 				plane_list_[ii].Render();
 			}
 		}
+		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
 
 

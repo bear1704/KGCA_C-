@@ -290,7 +290,7 @@ namespace DX
 
 	void PDxHelper::PreRender(ID3D11DeviceContext* context, int stride_length)
 	{
-		DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
+		//DX::ApplyBlendState(context, DX::PDxState::blend_state_alphablend_);
 
 		UINT stride = stride_length;
 		UINT offset = 0;

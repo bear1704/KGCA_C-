@@ -189,6 +189,8 @@ protected:
 // 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnCbnSelchangeComboBlendSrc();
 };
 
 CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)
@@ -201,6 +203,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+	ON_CBN_SELCHANGE(IDC_COMBO_BLEND_SRC, &CAboutDlg::OnCbnSelchangeComboBlendSrc)
 END_MESSAGE_MAP()
 
 // 대화 상자를 실행하기 위한 응용 프로그램 명령입니다.
@@ -240,3 +243,12 @@ void CPToolApp::SaveCustomState()
 
 
 
+
+
+void CAboutDlg::OnCbnSelchangeComboBlendSrc()
+{
+
+
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}

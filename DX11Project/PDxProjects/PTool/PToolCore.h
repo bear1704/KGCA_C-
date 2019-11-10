@@ -40,8 +40,8 @@ public:
 
 
 public:
-	D3DXMATRIX mat_obj_world_;
-	D3DXMATRIX mat_box_world_;
+	D3D11_BLEND_DESC blend_desc_;
+	ID3D11BlendState* blend_state_;
 
 	PCamera* main_camera_;
 	PCamera  backview_camera_;

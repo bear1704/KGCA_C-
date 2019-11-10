@@ -73,6 +73,10 @@
 #define IDC_BUTTON2                     1034
 #define IDC_EDIT_TextureWidth           1037
 #define IDC_EDIT_TextureHeight          1038
+#define IDC_Btn_Initialize              1039
+#define IDC_COMBO_BLEND_SRC             1042
+#define IDC_CHECK_BLEND                 1043
+#define IDC_COMBO_BLEND_DEST            1044
 
 // Next default values for new objects
 // 
@@ -80,7 +84,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_CONTROL_VALUE         1045
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

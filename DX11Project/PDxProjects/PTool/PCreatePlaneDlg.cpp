@@ -27,8 +27,19 @@ PCreatePlaneDlg::PCreatePlaneDlg(CWnd* pParent /*=nullptr*/)
 	, m_YCount(0)
 	, m_TextureWidth(0)
 	, m_TextureHeight(0)
+	, m_WorldTx(0)
+	, m_WorldTy(0)
+	, m_WorldTz(0)
+	, m_WorldRx(0)
+	, m_WorldRy(0)
+	, m_WorldRz(0)
+	, m_WorldSx(0)
+	, m_WorldSy(0)
+	, m_WorldSz(0)
 {
 	app = (CPToolApp*)AfxGetApp();
+
+	
 }
 
 PCreatePlaneDlg::~PCreatePlaneDlg()
@@ -55,6 +66,15 @@ void PCreatePlaneDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_YCount, m_YCount);
 	DDX_Text(pDX, IDC_EDIT_TextureWidth, m_TextureWidth);
 	DDX_Text(pDX, IDC_EDIT_TextureHeight, m_TextureHeight);
+	DDX_Text(pDX, IDC_EDIT_Tx, m_WorldTx);
+	DDX_Text(pDX, IDC_EDIT_Ty, m_WorldTy);
+	DDX_Text(pDX, IDC_EDIT_Tz, m_WorldTz);
+	DDX_Text(pDX, IDC_EDIT_Rx, m_WorldRx);
+	DDX_Text(pDX, IDC_EDIT_Ry, m_WorldRy);
+	DDX_Text(pDX, IDC_EDIT_Rz, m_WorldRz);
+	DDX_Text(pDX, IDC_EDIT_Sx, m_WorldSx);
+	DDX_Text(pDX, IDC_EDIT_Sy, m_WorldSy);
+	DDX_Text(pDX, IDC_EDIT_Sz, m_WorldSz);
 }
 
 
@@ -63,6 +83,8 @@ BEGIN_MESSAGE_MAP(PCreatePlaneDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_Btn_SelectTexture, &PCreatePlaneDlg::OnBtnClickedSelectTexture)
 	ON_BN_CLICKED(IDC_Btn_SelectScript, &PCreatePlaneDlg::OnBtnClickedSelectScript)
 	ON_BN_CLICKED(IDCANCEL, &PCreatePlaneDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_Btn_Initialize, &PCreatePlaneDlg::OnBnClickedBtnInitialize)
+	ON_BN_CLICKED(IDC_CHECK_IsBlended, &PCreatePlaneDlg::OnBnClickedCheckIsblended)
 END_MESSAGE_MAP()
 
 
@@ -77,6 +99,19 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	UpdateData(TRUE);
 	std::wstring plane_and_sprite_name = m_PlaneName;
 
+	D3DXMATRIX mat_rot;
+	D3DXMATRIX mat_scale;
+	D3DXMATRIX mat_world;
+	D3DXMatrixIdentity(&mat_rot);
+	D3DXMatrixIdentity(&mat_scale);
+	D3DXMatrixIdentity(&mat_world);
+	D3DXMatrixRotationYawPitchRoll(&mat_rot, m_WorldRx, m_WorldRy, m_WorldRz);
+	D3DXMatrixScaling(&mat_scale, m_WorldSx, m_WorldSy, m_WorldSz);
+
+	mat_world = mat_scale * mat_rot;
+	mat_world._41 = m_WorldTx;
+	mat_world._42 = m_WorldTy;
+	mat_world._43 = m_WorldTz;
 
 	// > 1  이면 다중텍스쳐 스프라이트
 	if (tex_list.size() > 1)
@@ -97,6 +132,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
 		PPlaneObject pp;
+		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
 		app->m_tool.plane_list_.push_back(pp);
 
@@ -145,7 +181,10 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
 
+
+
 		PPlaneObject pp;
+		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
 		app->m_tool.plane_list_.push_back(pp);
 
@@ -204,6 +243,7 @@ void PCreatePlaneDlg::OnBtnClickedSelectTexture()
 void PCreatePlaneDlg::OnBtnClickedSelectScript()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
 }
 
 
@@ -214,3 +254,28 @@ void PCreatePlaneDlg::OnBnClickedCancel()
 }
 
 
+
+
+void PCreatePlaneDlg::OnBnClickedBtnInitialize()
+{
+	m_WorldTx = 0.0f;
+	m_WorldTy = 50.0f;
+	m_WorldTz = 10.0f;
+	m_WorldRx = 0.0f;
+	m_WorldRy = 0.0f;
+	m_WorldRz = 0.0f; 
+	m_WorldSx = 1.0f;
+	m_WorldSy = 1.0f;
+	m_WorldSz = 1.0f;
+	m_PlaneHeight = 10.0f;
+	m_PlaneWidth = 10.0f;
+	m_FrameInterval = 0.1f;
+	m_LifeTime = 777.0f;
+	UpdateData(FALSE);
+}
+
+
+void PCreatePlaneDlg::OnBnClickedCheckIsblended()
+{
+	DX::ApplyBlendState(app->m_tool.immediate_device_context(), DX::PDxState::blend_state_alphablend_);
+}

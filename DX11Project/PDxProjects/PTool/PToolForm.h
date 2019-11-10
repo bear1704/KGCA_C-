@@ -14,7 +14,7 @@ protected:
 
 public:
 	static PToolForm* CreateOne(CWnd* pParent);
-
+	CPToolApp* app;
 
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_EffToolForm };
@@ -35,6 +35,13 @@ public:
 	CButton m_BtnCreatePlane;
 
 	afx_msg void OnBnClickedBtnCreateplane();
+	CComboBox m_CtlBlendSrc;
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	virtual void OnInitialUpdate();
+	afx_msg void OnCbnSelchangeComboBlendSrc();
+	BOOL m_IsAlphaBlend;
+	afx_msg void OnCbnSelchangeComboBlendDest();
+	CComboBox m_CtlBlendDest;
 };
 
 

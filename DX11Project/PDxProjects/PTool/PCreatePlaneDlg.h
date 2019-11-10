@@ -29,6 +29,7 @@ public:
 	afx_msg void OnBtnClickedSelectTexture();
 	afx_msg void OnBtnClickedSelectScript();
 	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedBtnInitialize();
 	float m_PlaneHeight;
 	float m_FrameInterval;
 	float m_LifeTime;
@@ -45,4 +46,16 @@ public:
 	int m_YCount;
 	float m_TextureWidth;
 	float m_TextureHeight;
+
+	//World Matrix
+	float m_WorldTx;
+	float m_WorldTy;
+	float m_WorldTz;
+	float m_WorldRx;
+	float m_WorldRy;
+	float m_WorldRz;
+	float m_WorldSx;
+	float m_WorldSy;
+	float m_WorldSz;
+	afx_msg void OnBnClickedCheckIsblended();
 };

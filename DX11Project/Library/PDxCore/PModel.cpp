@@ -11,7 +11,6 @@ PModel::~PModel()
 
 bool PModel::Init(ID3D11Device* device, ID3D11DeviceContext* context)
 {
-	D3DXMatrixIdentity(&matWorld_);
 	D3DXMatrixIdentity(&matView_);
 	D3DXMatrixIdentity(&matProj_);
 	device_ = device;

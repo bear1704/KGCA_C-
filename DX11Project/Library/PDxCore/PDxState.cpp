@@ -56,7 +56,7 @@ namespace DX
 
 		blend_desc.RenderTarget[0].BlendEnable = FALSE;
 
-		hr = current_device->CreateBlendState(&blend_desc, &blend_state_alphablend_);
+		hr = current_device->CreateBlendState(&blend_desc, &blend_state_alphablend_disable_);
 		if (FAILED(hr))
 			assert(false);
 

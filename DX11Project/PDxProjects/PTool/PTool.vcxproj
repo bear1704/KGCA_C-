@@ -101,6 +101,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>../../Debug/PDXLib_0/;../../FMOD/lib/x64/;../../Dx/lib/x64;../../FMOD/lib/;</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
