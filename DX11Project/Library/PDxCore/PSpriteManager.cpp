@@ -167,6 +167,8 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 
 			PSprite* sprite = new PSprite();
 			sprite->Set(info, 1.0, 1.0);
+			sprite->set_is_effect(false);
+			sprite->set_is_multitexture(false);
 			sprite_list_.insert(std::make_pair(sprite_name, sprite));
 
 		}
@@ -200,5 +202,18 @@ bool PSpriteManager::Delete(int key)
 void PSpriteManager::AddRenderWaitList(PSprite sprite)
 {
 	render_wait_list_.push_back(sprite);
+}
+
+std::vector<PSprite*> PSpriteManager::GetSpriteListFromMap()
+{
+	std::vector<PSprite*> ret_vec;
+
+	std::map<std::wstring, PSprite*>::iterator iter;
+	for (iter = sprite_list_.begin(); iter != sprite_list_.end(); iter++)
+	{
+		PSprite* sprite = &(*iter->second);
+		ret_vec.push_back(sprite);
+	}
+	return ret_vec;
 }
 

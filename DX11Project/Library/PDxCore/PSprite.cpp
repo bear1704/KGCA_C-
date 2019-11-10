@@ -7,6 +7,8 @@ PSprite::PSprite()
 	isDead = false;
 	alpha_ = 1.0f;
 	is_dmg_ = false;
+	is_effect_sprite_ = false;
+	is_multi_texture_ = false;
 }
 
 
@@ -79,6 +81,9 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	alpha_ = alpha;
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
+	is_multi_texture_ = info.is_multi_texture;
+	is_effect_sprite_ = info.is_effect_sprite;
+
 
 	if(texture_list_.size() == 0)
 		texture_ = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
@@ -231,6 +236,17 @@ void PSprite::set_texture_list(std::vector<PTexture*>& texture_list)
 	texture_list_ = std::move(texture_list);
 }
 
+void PSprite::set_is_multitexture(bool b)
+{
+	is_multi_texture_ = b;
+}
+
+void PSprite::set_is_effect(bool b)
+{
+	is_effect_sprite_ = b;
+}
+
+
 ANIMATIONTYPE PSprite::get_animation_type_()
 {
 	return animation_type_;
@@ -271,6 +287,16 @@ bool PSprite::get_is_dmg()
 	return is_dmg_;
 }
 
+bool PSprite::get_is_multitexture()
+{
+	return is_multi_texture_;
+}
+
+bool PSprite::get_is_effect()
+{
+	return is_effect_sprite_;
+}
+
 vector<DX::PTex_uv4> PSprite::tex_boundary_list()
 {
 	return tex_boundary_list_;
@@ -284,4 +310,9 @@ vector<DX::PTex_uv4> PSprite::tex_default_boundary_list()
 PTexture* PSprite::texture()
 {
 	return texture_;
+}
+
+std::vector<PTexture*>* PSprite::get_texture_list_ptr()
+{
+	return &texture_list_;
 }

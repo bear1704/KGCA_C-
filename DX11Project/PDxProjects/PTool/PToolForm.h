@@ -33,6 +33,8 @@ protected:
 public:
 	PCreatePlaneDlg m_DlgPlane;
 	CButton m_BtnCreatePlane;
+	CFile fp;
+	PParser parse;
 
 	afx_msg void OnBnClickedBtnCreateplane();
 	CComboBox m_CtlBlendSrc;
@@ -42,6 +44,9 @@ public:
 	BOOL m_IsAlphaBlend;
 	afx_msg void OnCbnSelchangeComboBlendDest();
 	CComboBox m_CtlBlendDest;
+	afx_msg void OnBnClickedBtnSave();
+	afx_msg void OnBnClickedBtnLoad();
+	void SaveData();
 };
 
 

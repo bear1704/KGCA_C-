@@ -35,7 +35,7 @@ public:
 	void LoadSpriteDataWithoutScript(std::wstring sprite_name,std::vector<PTexture*> texture, SpriteDataInfo info);
 	bool Delete(int key);
 	void AddRenderWaitList(PSprite sprite);
-
+	std::vector<PSprite*> GetSpriteListFromMap();
 
 };
 

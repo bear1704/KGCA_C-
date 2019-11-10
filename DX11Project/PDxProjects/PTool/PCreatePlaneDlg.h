@@ -58,4 +58,5 @@ public:
 	float m_WorldSy;
 	float m_WorldSz;
 	afx_msg void OnBnClickedCheckIsblended();
+	BOOL m_IsMultiTexture;
 };

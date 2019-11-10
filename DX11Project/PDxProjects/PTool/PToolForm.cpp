@@ -64,6 +64,8 @@ BEGIN_MESSAGE_MAP(PToolForm, CFormView)
 	ON_WM_CREATE()
 	ON_CBN_SELCHANGE(IDC_COMBO_BLEND_SRC, &PToolForm::OnCbnSelchangeComboBlendSrc)
 	ON_CBN_SELCHANGE(IDC_COMBO_BLEND_DEST, &PToolForm::OnCbnSelchangeComboBlendDest)
+	ON_BN_CLICKED(IDC_Btn_Save, &PToolForm::OnBnClickedBtnSave)
+	ON_BN_CLICKED(IDC_Btn_Load, &PToolForm::OnBnClickedBtnLoad)
 END_MESSAGE_MAP()
 
 
@@ -169,7 +171,7 @@ void PToolForm::OnCbnSelchangeComboBlendDest()
 	{
 		app->m_tool.blend_desc_.RenderTarget[0].BlendEnable = false;
 	}
-	else
+	else 
 	{
 		int index = m_CtlBlendDest.GetCurSel();
 		app->m_tool.blend_desc_.RenderTarget[0].BlendEnable = true;
@@ -185,3 +187,117 @@ void PToolForm::OnCbnSelchangeComboBlendDest()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
+
+
+void PToolForm::OnBnClickedBtnSave()
+{
+
+	CFileDialog dlg(
+		FALSE, L"EffSceNE", NULL,
+		OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
+		L"effect scene files(*.이펙t)|*.EffSceNE|All Files(*.*)|*.*||", this
+	);
+	CString file_path;
+	char str_file[4096];
+	ZeroMemory(&str_file, sizeof(str_file));
+	dlg.m_ofn.lpstrFile = file_path.GetBuffer(4096);
+	dlg.m_ofn.nMaxFile = sizeof(str_file);
+
+	if (dlg.DoModal() == IDOK)
+	{
+		CString path_name = dlg.GetPathName();
+
+		
+		CFileException e;
+		if (!fp.Open(path_name, CFile::modeWrite | CFile::modeCreate, &e))
+		{
+			e.ReportError();
+			return;
+		}
+
+		/*CString str = _T("dsfsadf");
+		CArchive ar(&fp, CArchive::store);
+		ar << str;*/
+		SaveData();
+
+
+	}
+
+	fp.Close();
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void PToolForm::OnBnClickedBtnLoad()
+{
+
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+void PToolForm::SaveData()
+{
+	parse.ClearOutVec();
+
+	CString str = _T("qqqq");
+	CArchive ar(&fp, CArchive::store);
+	ar << str;
+
+
+
+	//멀티텍스쳐
+	if (m_DlgPlane.m_IsMultiTexture == TRUE)
+	{
+		std::vector<PSprite*> sprite_list = PSpriteManager::GetInstance().GetSpriteListFromMap();
+		std::vector<PPlaneObject> plane_list = app->m_tool.plane_list_;
+		int plane_count = 0;
+
+		for (auto sprite : sprite_list)
+		{
+			if (sprite->get_is_effect() == false)
+				continue;
+
+			parse.Push("type", "MULTI");
+			//parse.Push("name", std::string(CT2CA(m_DlgPlane.m_PlaneName)));
+			//parse.Push("name", sprite.get));
+			if (m_IsAlphaBlend == TRUE)
+				parse.Push("blend", "TRUE");
+			else
+				parse.Push("blend", "FALSE");
+
+			parse.Push("lifetime", std::to_string(sprite->get_lifetime_()));
+			parse.Push("each_sprite_playtime", std::to_string(sprite->get_allocatetime_for_onesprite()));
+			
+			std::string str = std::to_string(plane_list[plane_count].matWorld_._11) + " " + std::to_string(plane_list[plane_count].matWorld_._12) + " " +
+				std::to_string(plane_list[plane_count].matWorld_._13) + " " + std::to_string(plane_list[plane_count].matWorld_._14);
+			parse.Push("MAT1col", str);
+			str = std::to_string(plane_list[plane_count].matWorld_._21) + " " + std::to_string(plane_list[plane_count].matWorld_._22) + " " +
+				std::to_string(plane_list[plane_count].matWorld_._23) + " " + std::to_string(plane_list[plane_count].matWorld_._24);
+			parse.Push("MAT2col", str);
+			str = std::to_string(plane_list[plane_count].matWorld_._31) + " " + std::to_string(plane_list[plane_count].matWorld_._32) + " " +
+				std::to_string(plane_list[plane_count].matWorld_._33) + " " + std::to_string(plane_list[plane_count].matWorld_._34);
+			parse.Push("MAT3col", str);
+			str = std::to_string(plane_list[plane_count].matWorld_._41) + " " + std::to_string(plane_list[plane_count].matWorld_._42) + " " +
+				std::to_string(plane_list[plane_count].matWorld_._43) + " " + std::to_string(plane_list[plane_count].matWorld_._44);
+			parse.Push("MAT4col", str);
+
+			int tex_list_size = sprite->get_texture_list_ptr()->size();
+			for (int ii = 0 ; ii < tex_list_size; ii++)
+			{
+				PTexture* tex = sprite->get_texture_list_ptr()->at(ii);
+				std::wstring wstr = tex->tex_path();
+				str.clear();
+				str.assign(wstr.begin(), wstr.end());
+				parse.Push("tex_path", str);
+			}
+			plane_count++;
+			
+			parse.Commit();
+		}
+
+
+	}
+	
+
+
+}

@@ -20,6 +20,8 @@ struct SpriteDataInfo
 	float posX;
 	float posY;
 	float scale;
+	bool is_multi_texture;
+	bool is_effect_sprite;
 
 	SpriteDataInfo()
 	{
@@ -61,6 +63,8 @@ private:
 	bool is_reversal_for_automata_;//reversal 상태인지 스프라이트가 원래는 알 필요 없지만, 특수 상황(1회용 스프라이트 제작 등..)에서 필요하므로 넣는다.
 							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
 	bool is_dmg_; //데미지를 표시하는 스프라이트인지 체크
+	bool is_multi_texture_; //멀티텍스쳐를 사용하는 스프라이트인지
+	bool is_effect_sprite_; //이펙트 툴에 사용되는 스프라이트인지, 일반 스프라이트인지?
 
 
 
@@ -93,9 +97,12 @@ public:
 	int get_current_played_frame();
 	float get_allocatetime_for_onesprite();
 	bool get_is_dmg();
+	bool get_is_multitexture();
+	bool get_is_effect();
 	vector<DX::PTex_uv4> tex_boundary_list();
 	vector<DX::PTex_uv4> tex_default_boundary_list();
 	PTexture* texture();
+	std::vector<PTexture*>* get_texture_list_ptr();
 
 	//setter
 	void set_alpha_(float alpha);
@@ -104,6 +111,9 @@ public:
 	void set_animation_type_(ANIMATIONTYPE type);
 	void set_is_dmg(bool isdmg);
 	void set_texture_list(std::vector<PTexture*>& texture_list);
+	void set_is_multitexture(bool b);
+	void set_is_effect(bool b);
+	
 	ANIMATIONTYPE get_animation_type_();
 	
 };

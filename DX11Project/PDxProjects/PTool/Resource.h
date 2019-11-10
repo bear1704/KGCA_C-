@@ -55,8 +55,6 @@
 #define IDC_EDIT_XInit                  1015
 #define IDC_EDIT_YInit                  1016
 #define IDC_EDIT_YOffset                1017
-#define IDC_BtnSave                     1018
-#define IDC_BtnLoad                     1019
 #define IDC_EDIT_Tx                     1020
 #define IDC_EDIT_Ty                     1021
 #define IDC_EDIT_Tz                     1022
@@ -70,13 +68,16 @@
 #define IDC_EDIT1_XCount                1031
 #define IDC_EDIT_YCount                 1032
 #define IDC_BUTTON1                     1033
+#define IDC_Btn_Save                    1033
 #define IDC_BUTTON2                     1034
+#define IDC_Btn_Load                    1034
 #define IDC_EDIT_TextureWidth           1037
 #define IDC_EDIT_TextureHeight          1038
 #define IDC_Btn_Initialize              1039
 #define IDC_COMBO_BLEND_SRC             1042
 #define IDC_CHECK_BLEND                 1043
 #define IDC_COMBO_BLEND_DEST            1044
+#define IDC_CHECK_IsMultiTexture        1045
 
 // Next default values for new objects
 // 
@@ -84,7 +85,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1045
+#define _APS_NEXT_CONTROL_VALUE         1046
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -3,7 +3,7 @@
 
 PParser::PParser()
 {
-	
+
 }
 
 PParser::~PParser()
@@ -865,4 +865,23 @@ std::vector<std::string> PParser::SplitString(std::wstring str, char delimiter)
 	}
 	return strvec;
 }
+
+void PParser::Push(std::string type, std::string value)
+{
+	pair_vec_.push_back(make_pair(type, value));
+}
+
+void PParser::Commit()
+{
+	out_vec_.push_back(pair_vec_);
+	pair_vec_.clear();
+}
+
+void PParser::ClearOutVec()
+{
+	out_vec_.clear();
+	pair_vec_.clear();
+}
+
+
 

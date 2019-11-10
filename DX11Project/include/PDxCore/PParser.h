@@ -142,20 +142,20 @@ const int kCharMaxSize = 256;
 const int kDoubledLineMaxSize = 512;
 
 using StringPair = std::pair<string, string> ;
+using PairVec = std::vector<std::pair<string, string>>;
 
 class PParser
 {
-	//extension type
-	//0 = kgc
-	//1 = skm
-	//2 = mat
 
 public:
 	PParser();
 	~PParser();
 private:
 	wchar_t wch_t[kDoubledLineMaxSize];
+	std::vector<PairVec> out_vec_;
+	PairVec pair_vec_;
 public:
+	//읽기
 	int XmlParse(std::string path, std::vector<std::pair<string,string>>* data_map); //반환값 : 데이터수
 	int CharacterSheetParse(std::wstring filepath, OUT_ std::vector<StringPair>* data_map);
 	int MaxExportParse(OUT_ std::vector<MaxExportInfo>& info_list, std::vector<Material>& material_list, MaxScene& scene, 
@@ -170,5 +170,12 @@ public:
 		std::wstring wstr = wch_t;
 		strvec = std::move(SplitString(wstr, ' '));
 	}
+
+	//저장
+	void Push(std::string type, std::string value);
+	void Commit();
+	void ClearOutVec();
+
+
 };
 

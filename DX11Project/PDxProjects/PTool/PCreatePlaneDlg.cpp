@@ -36,6 +36,7 @@ PCreatePlaneDlg::PCreatePlaneDlg(CWnd* pParent /*=nullptr*/)
 	, m_WorldSx(0)
 	, m_WorldSy(0)
 	, m_WorldSz(0)
+	, m_IsMultiTexture(FALSE)
 {
 	app = (CPToolApp*)AfxGetApp();
 
@@ -75,6 +76,7 @@ void PCreatePlaneDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_Sx, m_WorldSx);
 	DDX_Text(pDX, IDC_EDIT_Sy, m_WorldSy);
 	DDX_Text(pDX, IDC_EDIT_Sz, m_WorldSz);
+	DDX_Check(pDX, IDC_CHECK_IsMultiTexture, m_IsMultiTexture);
 }
 
 
@@ -114,7 +116,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	mat_world._43 = m_WorldTz;
 
 	// > 1  이면 다중텍스쳐 스프라이트
-	if (tex_list.size() > 1)
+	if (m_IsMultiTexture == TRUE)
 	{
 		SpriteDataInfo sp_info;
 		sp_info.max_frame = tex_list.size();
@@ -129,6 +131,9 @@ void PCreatePlaneDlg::OnBnClickedOk()
 			sp_info.lifetime = kLoopLifetime;
 		else
 			sp_info.lifetime = m_LifeTime;
+
+		sp_info.is_effect_sprite = true;
+		sp_info.is_multi_texture = true;
 
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
 		PPlaneObject pp;
@@ -178,6 +183,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 			}
 		}
 		
+		sp_info.is_effect_sprite = true;
+		sp_info.is_multi_texture = false;
 
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
 
