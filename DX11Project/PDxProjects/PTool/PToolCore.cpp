@@ -4,6 +4,7 @@
 
 PToolCore::PToolCore()
 {
+
 }
 
 PToolCore::~PToolCore()
@@ -17,10 +18,6 @@ bool PToolCore::Init()
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
-
-
-	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl",
-		"PS", L"data/obj/turret/turret8.PNG", L"data/obj/turret/");
 
 	//plane_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
 
@@ -39,39 +36,20 @@ bool PToolCore::Init()
 
 	D3DXMatrixRotationY(&mat_box_world_, D3DX_PI / 2.5);
 	D3DXMatrixScaling(&mat_box_world_, 4.0f, 4.0f, 10.0f);
-
+	
 	mat_obj_world_._42 = 1.0f;
 	mat_box_world_._42 = 70.0f;
 
+	//D3DXMatrixIdentity(&mat_box_world_);
 
 	main_camera_ = &free_camera_;
 
 
 	dx_rt_.Create(device_, 800, 600);
-	dx_minimap_rt_.Create(device_, 800, 600);
 
 
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
 		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
-
-
-	map_.Init(device_, immediate_device_context_);
-	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
-
-
-	PMapDesc md;
-	md.vertex_cols = map_.vertex_cols();
-	md.vertex_rows = map_.vertex_rows();
-	md.cell_disatnce = 1;
-	md.vs_path = L"NormalMap.hlsl";
-	md.vs_func = "VS";
-	md.ps_path = L"NormalMap.hlsl";
-	md.ps_func = "PS";
-	md.texture_name = L"tile";
-
-	map_.SetNormalTexture(L"test");
-	if (map_.Load(md) == false)
-		assert(false);
 
 	CreateConstantBuffer();
 
@@ -125,10 +103,11 @@ bool PToolCore::Frame()
 
 
 	main_camera_->Frame();
-	map_.Frame(light_obj_.light_direction(), main_camera_->camera_position_, main_camera_->vec_look_);
-	ship_.Frame();
-	if(plane_.be_using_sprite_ == true)
-		plane_.Frame();
+	for (int ii = 0; ii < plane_list_.size(); ii++)
+	{
+		if (plane_list_[ii].be_using_sprite_ == true)
+			plane_list_[ii].Frame();
+	}
 	return true;
 }
 
@@ -164,35 +143,15 @@ bool PToolCore::Render()
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
 
-		if (plane_.be_using_sprite_ == true)
+		for (int ii = 0; ii < plane_list_.size(); ii++)
 		{
-			plane_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-			plane_.Render();
+			if (plane_list_[ii].be_using_sprite_ == true)
+			{
+				plane_list_[ii] .SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
+				plane_list_[ii].Render();
+			}
 		}
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
-
-		ship_.SetWVPMatrix(&ship_.object_list_[0].info.meshinfo.world_mat, &main_camera_->matView_, &main_camera_->matProj_);
-		//ship_.SetWVPMatrix(&mat_box_world_, &main_camera_->matView_, &main_camera_->matProj_);
-		ship_.Render();
-
-		map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
-
-
-		immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
-			NULL, &map_.constant_data_, 0, 0);
-		map_.PreRender();
-
-		ID3D11Buffer* buffer[2] = { map_.dx_helper_.vertex_buffer_.Get(), map_.tangent_space_vbuffer_.Get() };
-		UINT stride[2] = { sizeof(Vertex_PNCT), sizeof(D3DXVECTOR3) };
-		UINT offset[2] = { 0,0 };
-
-		immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
-		immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
-		immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		map_.PostRender();
 
 
 
@@ -229,9 +188,11 @@ bool PToolCore::Render()
 bool PToolCore::Release()
 {
 
-	map_.Release();
 	dx_rt_.Release();
-	plane_.Release();
+	for (int ii = 0; ii < plane_list_.size(); ii++)
+	{
+		plane_list_[ii].Release();
+	}
 	return true;
 }
 

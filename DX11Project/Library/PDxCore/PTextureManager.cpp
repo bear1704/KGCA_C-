@@ -126,7 +126,7 @@ PTexture* PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Devi
 	}
 
 	PTexture* texture = new PTexture;
-	if (info.width == 0 || info.height == 0)
+	if (info.width > 0 || info.height > 0)
 	{
 		DX::PTex_uv4 uv4;
 		std::vector<std::string>&& ltop = parser.SplitString(info.uv_ltop, ',');

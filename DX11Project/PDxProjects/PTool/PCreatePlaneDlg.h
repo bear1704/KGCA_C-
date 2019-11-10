@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "PTool.h"
 
+
+const int kLoopLifetime = 777;
 // PCreatePlaneDlg 대화 상자
 
 class PCreatePlaneDlg : public CDialogEx
@@ -36,4 +38,11 @@ public:
 	float m_YOffset;
 	float m_PlaneWidth;
 	CString m_PlaneName;
+	BOOL m_CurrentPlaneIsLoop;
+
+	std::vector<PTexture*> tex_list;
+	int m_XCount;
+	int m_YCount;
+	float m_TextureWidth;
+	float m_TextureHeight;
 };

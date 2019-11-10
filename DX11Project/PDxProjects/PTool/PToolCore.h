@@ -48,16 +48,14 @@ public:
 	PFreeCamera free_camera_;
 
 	PDxRenderTarget dx_rt_;
-	PDxRenderTarget dx_minimap_rt_;
 
 	PPlaneObject screen_tex_object_;
 
 	PSkyBox skybox_;
 
 	PLightObj light_obj_;
-	PNormHeightMap map_;
-	PImportObject ship_;
-	PPlaneObject plane_;
+	std::vector<PPlaneObject> plane_list_;
+
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
 	CB_VS_NearlyNotChange cb_nearly_not_changes_;

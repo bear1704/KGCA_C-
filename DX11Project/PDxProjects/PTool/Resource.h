@@ -66,8 +66,13 @@
 #define IDC_EDIT_Sx                     1026
 #define IDC_EDIT_Sy                     1027
 #define IDC_EDIT_Sz                     1028
-#define IDC_EDIT1                       1029
 #define IDC_EDIT_PlaneName              1029
+#define IDC_EDIT1_XCount                1031
+#define IDC_EDIT_YCount                 1032
+#define IDC_BUTTON1                     1033
+#define IDC_BUTTON2                     1034
+#define IDC_EDIT_TextureWidth           1037
+#define IDC_EDIT_TextureHeight          1038
 
 // Next default values for new objects
 // 
@@ -75,7 +80,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1030
+#define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -185,7 +185,10 @@ void PSpriteManager::LoadSpriteDataWithoutScript(std::wstring sprite_name, std::
 {
 	PSprite* sprite = new PSprite;
 	sprite->Set(info, 1.0f, 1.0f);
-	sprite->set_texture_list(texture);
+
+	if(texture.size() > 0)
+		sprite->set_texture_list(texture);
+	
 	sprite_list_.insert(make_pair(sprite_name, sprite));
 }
 

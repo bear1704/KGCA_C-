@@ -105,7 +105,7 @@ void PSprite::DrawPlane(ID3D11Device* device, ID3D11DeviceContext* context ,std:
 	if (isDead)
 		return;
 
-	if (texture_list_.size() == 0)
+	if (tex_boundary_list().size() > 0)
 	{
 
 		DX::PTex_uv4 tex_coord = tex_boundary_list_[current_played_spriteframe_];
