@@ -9,6 +9,31 @@
 
 const int kPlaneVertexNumber = 4;
 
+struct EffectInfo
+{
+	int x_count;
+	int y_count;
+	float x_offset;
+	float y_offset;
+	float x_init;
+	float y_init;
+	bool is_multi_texture; //멀티텍스쳐를 사용하는 스프라이트인지
+	bool is_effect_sprite; //이펙트 툴에 사용되는 스프라이트인지, 일반 스프라이트인지?
+
+	EffectInfo()
+	{
+		int x_count = 0;
+		int y_count = 0;
+		float x_offset = 0.0f;
+		float y_offset = 0.0f;
+		float x_init = 0.0f;
+		float y_init = 0.0f;
+		bool is_multi_texture_ = false;
+		bool is_effect_sprite_ = false;
+	}
+};
+
+
 struct SpriteDataInfo
 {
 	vector<DX::PTex_uv4> tex_boundary_list;
@@ -20,8 +45,7 @@ struct SpriteDataInfo
 	float posX;
 	float posY;
 	float scale;
-	bool is_multi_texture;
-	bool is_effect_sprite;
+	EffectInfo effect_info;
 
 	SpriteDataInfo()
 	{
@@ -33,6 +57,7 @@ struct SpriteDataInfo
 		max_frame = 0;
 	}
 };
+
 
 class PSprite
 {
@@ -63,10 +88,7 @@ private:
 	bool is_reversal_for_automata_;//reversal 상태인지 스프라이트가 원래는 알 필요 없지만, 특수 상황(1회용 스프라이트 제작 등..)에서 필요하므로 넣는다.
 							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
 	bool is_dmg_; //데미지를 표시하는 스프라이트인지 체크
-	bool is_multi_texture_; //멀티텍스쳐를 사용하는 스프라이트인지
-	bool is_effect_sprite_; //이펙트 툴에 사용되는 스프라이트인지, 일반 스프라이트인지?
-
-
+	EffectInfo effect_info;
 
 public:
 
@@ -103,6 +125,7 @@ public:
 	vector<DX::PTex_uv4> tex_default_boundary_list();
 	PTexture* texture();
 	std::vector<PTexture*>* get_texture_list_ptr();
+	EffectInfo get_effect_info();
 
 	//setter
 	void set_alpha_(float alpha);

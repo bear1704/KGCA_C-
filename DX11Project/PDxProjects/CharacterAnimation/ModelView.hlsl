@@ -57,7 +57,6 @@ VS_OUTPUT VS(VS_INPUT input)
 			float weight = input.weight1[biped];
 			mat_anim = g_mat_anim[idx_bone];
 			vtx_anim += weight * mul(vtx_local, mat_anim);
-			//pOut.normal += weight * mul(input.normal, (float3x3)mat_anim); 
 			pOut.normal += weight * mul(input.normal, mat_anim); 
 		}
 		else
@@ -66,7 +65,6 @@ VS_OUTPUT VS(VS_INPUT input)
 			float weight = input.weight2[biped - 4];
 			mat_anim = g_mat_anim[idx_bone];
 			vtx_anim += weight * mul(vtx_local, mat_anim);
-			//pOut.normal += weight * mul(input.normal, (float3x3)mat_anim);
 			pOut.normal += weight * mul(input.normal, mat_anim);
 		}
 	}

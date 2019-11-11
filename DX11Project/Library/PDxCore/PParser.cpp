@@ -138,7 +138,6 @@ int PParser::CharacterSheetParse(std::wstring filepath, OUT_ std::vector<StringP
 		
 		std::regex type_start("\\[([a-zA-Z0-9_]*)\\]");
 		std::regex comment("\/[/]+.*");
-		//std::regex value(".*^[^\/]+");
 		std::regex value(".*(?=\/\/)");
 
 		std::sregex_iterator it_start(str.begin(), str.end(), type_start);
@@ -166,7 +165,7 @@ int PParser::CharacterSheetParse(std::wstring filepath, OUT_ std::vector<StringP
 
 		if (start_position > 0) //미드스트링 존재, 삽입가능
 		{
-			value_string = str.substr(start_position, str.size() - 1); //주의 : -1이 옳은 것인가?
+			value_string = str.substr(start_position, str.size() - 1); 
 			value_string.erase(remove_if(value_string.begin(), value_string.end(), isspace), value_string.end()); //공백제거
 			
 			std::sregex_iterator real_val(value_string.begin(), value_string.end(), value);
@@ -873,7 +872,25 @@ void PParser::Push(std::string type, std::string value)
 
 void PParser::Commit()
 {
-	out_vec_.push_back(pair_vec_);
+	//out_vec_.push_back(pair_vec_);
+
+	std::vector<std::string> ret_vec;
+	int size = pair_vec_.size();
+	
+	std::string s = "<" + pair_vec_[0].second  + ">";
+	ret_vec.push_back(s);
+	for (int ii = 1; ii < size; ii++)
+	{
+		std::string str = "";
+		str += "\t<" + pair_vec_[ii].first + ">";
+		str += pair_vec_[ii].second;
+		str += "</" + pair_vec_[ii].first + ">";
+		ret_vec.push_back(str);
+	}
+	s = "/<" + pair_vec_[0].second + ">";
+	ret_vec.push_back(s);
+
+	out_vec_.push_back(ret_vec);
 	pair_vec_.clear();
 }
 
@@ -881,6 +898,11 @@ void PParser::ClearOutVec()
 {
 	out_vec_.clear();
 	pair_vec_.clear();
+}
+
+std::vector<std::vector<std::string>>& PParser::out_vec()
+{
+	return out_vec_;
 }
 
 

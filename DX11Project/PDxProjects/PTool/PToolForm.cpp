@@ -240,10 +240,6 @@ void PToolForm::SaveData()
 {
 	parse.ClearOutVec();
 
-	CString str = _T("qqqq");
-	CArchive ar(&fp, CArchive::store);
-	ar << str;
-
 
 		std::vector<PSprite*> sprite_list = PSpriteManager::GetInstance().GetSpriteListFromMap();
 		std::vector<PPlaneObject> plane_list = app->m_tool.plane_list_;
@@ -252,12 +248,20 @@ void PToolForm::SaveData()
 		{
 			PSprite* sprite = &plane.sprite_;
 
-		
+			parse.Push("data", "plane");
+
 			if(sprite->get_is_multitexture())
 				parse.Push("type", "MULTI");
 			else
+			{
 				parse.Push("type", "OFFSET");
-
+				parse.Push("xInit", std::to_string(sprite->get_effect_info().x_init));
+				parse.Push("yInit", std::to_string(sprite->get_effect_info().y_init));
+				parse.Push("xCount", std::to_string(sprite->get_effect_info().x_count));
+				parse.Push("yCount", std::to_string(sprite->get_effect_info().x_count));
+				parse.Push("xOffset", std::to_string(sprite->get_effect_info().x_offset));
+				parse.Push("yOffset", std::to_string(sprite->get_effect_info().y_offset));
+			}
 			std::string sname;
 			
 			sname.assign(plane.name.begin(), plane.name.end());
@@ -271,17 +275,17 @@ void PToolForm::SaveData()
 			parse.Push("lifetime", std::to_string(sprite->get_lifetime_()));
 			parse.Push("each_sprite_playtime", std::to_string(sprite->get_allocatetime_for_onesprite()));
 			
-			std::string str = std::to_string(plane.matWorld_._11) + " " + std::to_string(plane.matWorld_._12) + " " +
-				std::to_string(plane.matWorld_._13) + " " + std::to_string(plane.matWorld_._14);
+			std::string str = std::to_string(plane.matWorld_._11) + "," + std::to_string(plane.matWorld_._12) + "," +
+				std::to_string(plane.matWorld_._13) + "," + std::to_string(plane.matWorld_._14);
 			parse.Push("MAT1col", str);
-			str = std::to_string(plane.matWorld_._21) + " " + std::to_string(plane.matWorld_._22) + " " +
-				std::to_string(plane.matWorld_._23) + " " + std::to_string(plane.matWorld_._24);
+			str = std::to_string(plane.matWorld_._21) + "," + std::to_string(plane.matWorld_._22) + "," +
+				std::to_string(plane.matWorld_._23) + "," + std::to_string(plane.matWorld_._24);
 			parse.Push("MAT2col", str);
-			str = std::to_string(plane.matWorld_._31) + " " + std::to_string(plane.matWorld_._32) + " " +
-				std::to_string(plane.matWorld_._33) + " " + std::to_string(plane.matWorld_._34);
+			str = std::to_string(plane.matWorld_._31) + "," + std::to_string(plane.matWorld_._32) + "," +
+				std::to_string(plane.matWorld_._33) + "," + std::to_string(plane.matWorld_._34);
 			parse.Push("MAT3col", str);
-			str = std::to_string(plane.matWorld_._41) + " " + std::to_string(plane.matWorld_._42) + " " +
-				std::to_string(plane.matWorld_._43) + " " + std::to_string(plane.matWorld_._44);
+			str = std::to_string(plane.matWorld_._41) + "," + std::to_string(plane.matWorld_._42) + "," +
+				std::to_string(plane.matWorld_._43) + "," + std::to_string(plane.matWorld_._44);
 			parse.Push("MAT4col", str);
 
 			int tex_list_size = sprite->get_texture_list_ptr()->size();
@@ -295,11 +299,25 @@ void PToolForm::SaveData()
 			}
 			
 			//OFFSET
-
-
 			parse.Commit();
 		}
 
+		CArchive ar(&fp, CArchive::store);
+		int ovec_size = parse.out_vec().size();
+		CString cs;
+		for (int ii = 0; ii < ovec_size; ii++)
+		{
+			for (int jj = 0; jj < parse.out_vec().at(ii).size(); jj++)
+			{
+				std::string& str = parse.out_vec().at(ii).at(jj);
+				cs = str.c_str();
+				ar << cs;
+				ar << "\n";
+			}
+			
+
+		}
+		
 
 
 }

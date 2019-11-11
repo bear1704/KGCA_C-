@@ -151,8 +151,8 @@ public:
 	PParser();
 	~PParser();
 private:
+	std::vector<std::vector<std::string>> out_vec_;
 	wchar_t wch_t[kDoubledLineMaxSize];
-	std::vector<PairVec> out_vec_;
 	PairVec pair_vec_;
 public:
 	//ÀÐ±â
@@ -175,7 +175,7 @@ public:
 	void Push(std::string type, std::string value);
 	void Commit();
 	void ClearOutVec();
-
+	std::vector<std::vector<std::string>>& out_vec();
 
 };
 

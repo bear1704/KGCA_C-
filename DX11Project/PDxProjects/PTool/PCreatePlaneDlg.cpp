@@ -132,8 +132,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		else
 			sp_info.lifetime = m_LifeTime;
 
-		sp_info.is_effect_sprite = true;
-		sp_info.is_multi_texture = true;
+		sp_info.effect_info.is_effect_sprite = true;
+		sp_info.effect_info.is_multi_texture = true;
 
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
 		PPlaneObject pp;
@@ -183,18 +183,23 @@ void PCreatePlaneDlg::OnBnClickedOk()
 			}
 		}
 		
-		sp_info.is_effect_sprite = true;
-		sp_info.is_multi_texture = false;
+		sp_info.effect_info.is_effect_sprite = true;
+		sp_info.effect_info.is_multi_texture = false;
+		sp_info.effect_info.x_count = m_XCount;
+		sp_info.effect_info.y_count = m_YCount;
+		sp_info.effect_info.x_init = m_SpriteXInit;
+		sp_info.effect_info.y_init = m_SpriteYInit;
+		sp_info.effect_info.x_offset = m_XOffset;
+		sp_info.effect_info.y_offset = m_YOffset;
 
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
-
 
 
 		PPlaneObject pp;
 		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
 		app->m_tool.plane_list_.push_back(pp);
-
+		tex_list.clear();
 	}
 }
 

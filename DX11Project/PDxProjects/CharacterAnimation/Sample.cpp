@@ -27,7 +27,7 @@ bool Sample::Init()
 	std::vector<StringPair> vec;
 	
 	
-	parse_.CharacterSheetParse(L"data/Character/reg2.sheet", &vec);
+	parse_.CharacterSheetParse(L"data/Character/obj.sheet", &vec);
 
 
 	for (auto iter = vec.begin(); iter != vec.end(); iter++)
@@ -41,7 +41,7 @@ bool Sample::Init()
 			multibyte_string matrix_file;
 			matrix_file.assign(iter->second.begin(), iter->second.end());
 			character_.matrix_ =static_cast<PMatObj*>(LoadSheetObject(matrix_file, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS"));
-			character_.matrix_->action_animlist_.insert(make_pair("walk", PAction(0, 8)));
+			character_.matrix_->action_animlist_.insert(make_pair("walk", PAction(0, 425)));
 		}
 		else if (iter->first == "SkinUpperBody")
 		{

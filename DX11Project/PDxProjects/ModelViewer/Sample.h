@@ -23,7 +23,6 @@
 
 
 
-PScene* g_current_scene_;
 
 struct CB_VS_ChangesEveryFrame
 {

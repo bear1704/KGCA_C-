@@ -7,8 +7,8 @@ PSprite::PSprite()
 	isDead = false;
 	alpha_ = 1.0f;
 	is_dmg_ = false;
-	is_effect_sprite_ = false;
-	is_multi_texture_ = false;
+	effect_info.is_effect_sprite = false;
+	effect_info.is_multi_texture = false;
 }
 
 
@@ -81,9 +81,18 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	alpha_ = alpha;
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
-	is_multi_texture_ = info.is_multi_texture;
-	is_effect_sprite_ = info.is_effect_sprite;
+	effect_info.is_multi_texture = info.effect_info.is_multi_texture;
+	effect_info.is_effect_sprite = info.effect_info.is_effect_sprite;
 
+	if (effect_info.is_multi_texture == false)
+	{
+		effect_info.x_count = info.effect_info.x_count;
+		effect_info.y_count = info.effect_info.y_count;
+		effect_info.x_offset = info.effect_info.x_offset;
+		effect_info.y_offset = info.effect_info.y_offset;
+		effect_info.x_init = info.effect_info.x_init;
+		effect_info.y_init = info.effect_info.y_init;
+	}
 
 	if(texture_list_.size() == 0)
 		texture_ = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
@@ -148,6 +157,17 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	current_played_spriteframe_ = 0;
 	texture_list_ = sprite->texture_list_;
 	
+	effect_info.is_effect_sprite = sprite->effect_info.is_effect_sprite;
+	effect_info.is_multi_texture= sprite->effect_info.is_multi_texture;
+
+	effect_info.x_count = sprite->effect_info.x_count;
+	effect_info.y_count = sprite->effect_info.y_count;
+	effect_info.x_init= sprite->effect_info.x_init;
+	effect_info.y_init = sprite->effect_info.y_init;
+	effect_info.x_offset = sprite->effect_info.x_offset;
+	effect_info.y_offset = sprite->effect_info.y_offset;
+
+
 	if (sprite->texture() != nullptr)
 	{
 		texture_ = sprite->texture();
@@ -238,12 +258,12 @@ void PSprite::set_texture_list(std::vector<PTexture*>& texture_list)
 
 void PSprite::set_is_multitexture(bool b)
 {
-	is_multi_texture_ = b;
+	effect_info.is_multi_texture = b;
 }
 
 void PSprite::set_is_effect(bool b)
 {
-	is_effect_sprite_ = b;
+	effect_info.is_effect_sprite = b;
 }
 
 
@@ -289,12 +309,12 @@ bool PSprite::get_is_dmg()
 
 bool PSprite::get_is_multitexture()
 {
-	return is_multi_texture_;
+	return effect_info.is_multi_texture;
 }
 
 bool PSprite::get_is_effect()
 {
-	return is_effect_sprite_;
+	return effect_info.is_effect_sprite;
 }
 
 vector<DX::PTex_uv4> PSprite::tex_boundary_list()
@@ -315,4 +335,9 @@ PTexture* PSprite::texture()
 std::vector<PTexture*>* PSprite::get_texture_list_ptr()
 {
 	return &texture_list_;
+}
+
+EffectInfo PSprite::get_effect_info()
+{
+	return effect_info;
 }
