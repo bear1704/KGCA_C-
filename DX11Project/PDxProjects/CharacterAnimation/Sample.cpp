@@ -27,7 +27,7 @@ bool Sample::Init()
 	std::vector<StringPair> vec;
 	
 	
-	parse_.CharacterSheetParse(L"data/Character/obj.sheet", &vec);
+	parse_.CharacterSheetParse(L"data/Character/reg.sheet", &vec);
 
 
 	for (auto iter = vec.begin(); iter != vec.end(); iter++)

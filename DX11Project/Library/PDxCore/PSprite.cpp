@@ -59,9 +59,10 @@ bool PSprite::Release()
 
 bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 {
+	if(texture_list_.size() <= 0)
+		texture_list_ = info.texture_list;
 	
 	tex_boundary_list_ = info.tex_boundary_list;
-	texture_list_ = info.texture_list;
 	tex_default_boundary_list_ = tex_boundary_list_;
 	if (info.lifetime == 777)
 	{
@@ -84,6 +85,7 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	effect_info.is_multi_texture = info.effect_info.is_multi_texture;
 	effect_info.is_effect_sprite = info.effect_info.is_effect_sprite;
 
+
 	if (effect_info.is_multi_texture == false)
 	{
 		effect_info.x_count = info.effect_info.x_count;
@@ -92,10 +94,14 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 		effect_info.y_offset = info.effect_info.y_offset;
 		effect_info.x_init = info.effect_info.x_init;
 		effect_info.y_init = info.effect_info.y_init;
+		effect_info.tex_width = info.effect_info.tex_width;
+		effect_info.tex_height = info.effect_info.tex_height;
 	}
 
-	if(texture_list_.size() == 0)
+	if (texture_list_.size() == 0)
 		texture_ = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
+	else
+		texture_ = texture_list_[0];
 	
 	return true;
 } 
@@ -159,6 +165,8 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	
 	effect_info.is_effect_sprite = sprite->effect_info.is_effect_sprite;
 	effect_info.is_multi_texture= sprite->effect_info.is_multi_texture;
+	effect_info.tex_width = sprite->effect_info.tex_width;
+	effect_info.tex_height = sprite->effect_info.tex_height;
 
 	effect_info.x_count = sprite->effect_info.x_count;
 	effect_info.y_count = sprite->effect_info.y_count;
@@ -325,6 +333,11 @@ vector<DX::PTex_uv4> PSprite::tex_boundary_list()
 vector<DX::PTex_uv4> PSprite::tex_default_boundary_list()
 {
 	return tex_default_boundary_list_;
+}
+
+vector<DX::PTex_uv4>& PSprite::tex_boundary_list_ref()
+{
+	return tex_boundary_list_;
 }
 
 PTexture* PSprite::texture()

@@ -17,19 +17,23 @@ struct EffectInfo
 	float y_offset;
 	float x_init;
 	float y_init;
+	float tex_width = 0.0f;
+	float tex_height = 0.0f;
 	bool is_multi_texture; //멀티텍스쳐를 사용하는 스프라이트인지
 	bool is_effect_sprite; //이펙트 툴에 사용되는 스프라이트인지, 일반 스프라이트인지?
 
 	EffectInfo()
 	{
-		int x_count = 0;
-		int y_count = 0;
-		float x_offset = 0.0f;
-		float y_offset = 0.0f;
-		float x_init = 0.0f;
-		float y_init = 0.0f;
-		bool is_multi_texture_ = false;
-		bool is_effect_sprite_ = false;
+		x_count = 0;
+		y_count = 0;
+		x_offset = 0.0f;
+		y_offset = 0.0f;
+		x_init = 0.0f;
+		y_init = 0.0f;
+		tex_width = 0.0f;
+		tex_height = 0.0f;
+		is_multi_texture = false;
+		is_effect_sprite = false;
 	}
 };
 
@@ -46,6 +50,8 @@ struct SpriteDataInfo
 	float posY;
 	float scale;
 	EffectInfo effect_info;
+	std::string sprite_name;
+
 
 	SpriteDataInfo()
 	{
@@ -123,6 +129,7 @@ public:
 	bool get_is_effect();
 	vector<DX::PTex_uv4> tex_boundary_list();
 	vector<DX::PTex_uv4> tex_default_boundary_list();
+	vector<DX::PTex_uv4>& tex_boundary_list_ref();
 	PTexture* texture();
 	std::vector<PTexture*>* get_texture_list_ptr();
 	EffectInfo get_effect_info();

@@ -100,7 +100,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	CDialogEx::OnOK();
 	UpdateData(TRUE);
 	std::wstring plane_and_sprite_name = m_PlaneName;
-
+	std::string sprite_name_str;
+	WstringToString(plane_and_sprite_name, sprite_name_str);
 	D3DXMATRIX mat_rot;
 	D3DXMATRIX mat_scale;
 	D3DXMATRIX mat_world;
@@ -123,6 +124,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.once_playtime = m_FrameInterval * tex_list.size();
 		sp_info.posX = 100.0f;
 		sp_info.posY = 100.0f;
+		sp_info.sprite_name = sprite_name_str;
 		sp_info.texture_list = tex_list;
 		std::wstring plane_and_sprite_name = m_PlaneName;
 		sp_info.texture_name = plane_and_sprite_name;
@@ -135,10 +137,15 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.effect_info.is_effect_sprite = true;
 		sp_info.effect_info.is_multi_texture = true;
 
-		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
+		std::wstring wstr_name;
+		StringToWstring(sp_info.sprite_name, wstr_name);
+		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, sp_info);
+
 		PPlaneObject pp;
 		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
+		pp.width_ = m_PlaneWidth;
+		pp.height_ = m_PlaneHeight;
 		app->m_tool.plane_list_.push_back(pp);
 
 		tex_list.clear();
@@ -150,8 +157,9 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.once_playtime = m_FrameInterval * sp_info.max_frame;
 		sp_info.posX = 100.0f;
 		sp_info.posY = 100.0f;
-		std::wstring plane_and_sprite_name = m_PlaneName;
+		sp_info.sprite_name = sprite_name_str;
 		sp_info.texture_name = tex_list[0]->tex_name();
+
 
 		if (m_CurrentPlaneIsLoop == TRUE)
 			sp_info.lifetime = kLoopLifetime;
@@ -191,13 +199,19 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.effect_info.y_init = m_SpriteYInit;
 		sp_info.effect_info.x_offset = m_XOffset;
 		sp_info.effect_info.y_offset = m_YOffset;
+		sp_info.effect_info.tex_width = m_TextureWidth;
+		sp_info.effect_info.tex_height = m_TextureHeight;
 
-		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(plane_and_sprite_name, tex_list, sp_info);
+		std::wstring wstr_name;
+		StringToWstring(sp_info.sprite_name, wstr_name);
+		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, sp_info);
 
 
 		PPlaneObject pp;
 		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
+		pp.width_ = m_PlaneWidth;
+		pp.height_ = m_PlaneHeight;
 		app->m_tool.plane_list_.push_back(pp);
 		tex_list.clear();
 	}

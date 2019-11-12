@@ -14,6 +14,7 @@ namespace DX
 
 		static ID3D11RasterizerState* rs_state_wireframe_;
 		static ID3D11RasterizerState* rs_state_solidframe_;
+		static ID3D11RasterizerState* rs_state_nocull_;
 
 		static ID3D11SamplerState* sampler_state_linear_filter;
 		static ID3D11SamplerState* sampler_state_anisotropic;

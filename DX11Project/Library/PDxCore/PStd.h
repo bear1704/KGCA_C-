@@ -48,6 +48,15 @@ static std::string unicode_to_multibyte_str(std::wstring str)
 	return ret;
 }
 
+static void StringToWstring(std::string str, std::wstring& wstr)
+{
+	wstr = std::wstring(str.begin(), str.end());
+}
+static void WstringToString(std::wstring wstr, std::string& str)
+{
+	str = std::string(wstr.begin(), wstr.end());
+}
+
 static std::string multibyte_to_string(multibyte_string mstr)
 {
 	std::string ret = std::string(mstr.begin(), mstr.end());

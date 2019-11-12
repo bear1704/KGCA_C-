@@ -7,6 +7,7 @@ namespace DX
 	ID3D11BlendState* PDxState::blend_state_alphablend_disable_ = 0;
 	ID3D11RasterizerState* PDxState::rs_state_wireframe_ = 0;
 	ID3D11RasterizerState* PDxState::rs_state_solidframe_ = 0;
+	ID3D11RasterizerState* PDxState::rs_state_nocull_ = 0;
 	ID3D11SamplerState* PDxState::sampler_state_linear_filter = 0;
 	ID3D11SamplerState* PDxState::sampler_state_anisotropic = 0;
 	ID3D11SamplerState* PDxState::sampler_state_wrap_point = 0;
@@ -82,6 +83,9 @@ namespace DX
 		raster_desc.FillMode = D3D11_FILL_SOLID;
 
 		hr = current_device->CreateRasterizerState(&raster_desc, &rs_state_solidframe_);
+	
+		raster_desc.CullMode = D3D11_CULL_NONE;
+		hr = current_device->CreateRasterizerState(&raster_desc, &rs_state_nocull_);
 
 		if (FAILED(hr))
 			return;

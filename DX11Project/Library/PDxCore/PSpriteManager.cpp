@@ -186,10 +186,45 @@ void PSpriteManager::LoadSpriteDataFromScript(multibyte_string filepath, ObjectL
 void PSpriteManager::LoadSpriteDataWithoutScript(std::wstring sprite_name, std::vector<PTexture*> texture, SpriteDataInfo info)
 {
 	PSprite* sprite = new PSprite;
+	
+	if (texture.size() > 0)
+		sprite->set_texture_list(texture);
+
 	sprite->Set(info, 1.0f, 1.0f);
 
-	if(texture.size() > 0)
-		sprite->set_texture_list(texture);
+	if (sprite->tex_boundary_list().size() == 0)
+	{
+		if (info.effect_info.is_multi_texture == false && info.effect_info.is_effect_sprite == true)
+		{
+			float x_init = info.effect_info.x_init;
+			float y_init = info.effect_info.y_init;
+			float xoffset = info.effect_info.x_offset;
+			float yoffset = info.effect_info.y_offset;
+			float tex_width = info.effect_info.tex_width;
+			float tex_height = info.effect_info.tex_height;
+
+			for (int ii = 0; ii < info.effect_info.y_count; ii++)
+			{
+				for (int jj = 0; jj < info.effect_info.x_count; jj++)
+				{
+					float current_xOrigin = x_init + xoffset * jj;
+					float current_yOrigin = y_init + yoffset * ii;
+
+					DX::PTex_uv4 uv;
+					uv.u[0] = current_xOrigin / tex_width;
+					uv.u[1] = (current_xOrigin + info.effect_info.x_offset) / tex_width;
+					uv.u[2] = (current_xOrigin + info.effect_info.x_offset) / tex_width;
+					uv.u[3] = current_xOrigin / tex_width;
+					uv.v[0] = current_yOrigin / tex_height;
+					uv.v[1] = current_yOrigin / tex_height;
+					uv.v[2] = (current_yOrigin + yoffset) / tex_height;
+					uv.v[3] = (current_yOrigin + yoffset) / tex_height;
+
+					sprite->tex_boundary_list_ref().push_back(uv);
+				}
+			}
+		}
+	}
 	
 	sprite_list_.insert(make_pair(sprite_name, sprite));
 }
