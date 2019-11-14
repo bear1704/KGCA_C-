@@ -155,6 +155,8 @@ bool PToolCore::Render()
 		
 
 		DX::ApplyBlendState(immediate_device_context_, blend_state_);
+		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
+		
 		for (int ii = 0; ii < plane_list_.size(); ii++)
 		{
 			if (plane_list_[ii].be_using_sprite_ == true)
@@ -163,9 +165,11 @@ bool PToolCore::Render()
 				plane_list_[ii].Render();
 			}
 		}
+		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
-
+		
+		
 
 
 		dx_rt_.End(immediate_device_context_);

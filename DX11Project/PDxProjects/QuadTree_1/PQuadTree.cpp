@@ -72,6 +72,7 @@ bool PQuadTree::SubTreeDivide(PNode* node)
 		node->is_leaf_ = true;
 		return false;
 	}
+
 	//좌상단
 	PNode* child_node = CreateNode(
 		node,
@@ -167,7 +168,7 @@ PNode* PQuadTree::FindNode(PNode* node, P_BaseObj* obj)
 	return node;
 }
 
-void PQuadTree::IsVisibleObject(PNode* node)
+void PQuadTree::CheckVisibleObject(PNode* node)
 {
 	for (int i = 0; i < node->object_list_.size(); i++)
 	{
@@ -175,6 +176,19 @@ void PQuadTree::IsVisibleObject(PNode* node)
 		{
 			drawobj_list_.push_back(node->object_list_[i]);
 		}
+	}
+}
+
+void PQuadTree::CheckVisibleNode(PNode* node)
+{
+	if (node == nullptr) return;
+	if (node->is_leaf_)
+		drawnode_list_.push_back(node);
+	
+	int child_size = node->child_list_.size();
+	for (int ii = 0; ii < child_size; ii++)
+	{
+		CheckVisibleNode(node->child_list_[ii]);
 	}
 }
 
@@ -196,18 +210,22 @@ void PQuadTree::FindAndAddDrawNode(PNode* node)
 		drawnode_list_.push_back(node);
 		return;
 	}
-	//FRONT라면, 단말이든 부모든 루트든 다 무조건 그려져야 한다
+	/*
+	FRONT라면, 단말 노드만 골라서 그린다.(부모 노드를 그릴 필요가 없다)
+	*/
 	if (r_pos == RELATIVE_POSITION::FRONT) 
 	{
-		drawnode_list_.push_back(node);
+		//drawnode_list_.push_back(node);
+		CheckVisibleNode(node);
 		return;
 	}
 	//SPANNING(프러스텀 평면에 교차하거나, 일부만 안쪽에 있는 상태)이라면, 
 	//그 노드는 그리지 않는다(어차피 자식노드로 내려가서 그려진다), 단, 오브젝트는 반이 짤려서 나오더라도 반드시 그려져야 한다.
 	if (r_pos == RELATIVE_POSITION::SPANNING)
 	{
-		IsVisibleObject(node);
+		CheckVisibleObject(node);
 	}
+	//재귀호출
 	for (int i = 0; i < node->child_list_.size(); i++)
 	{
 		FindAndAddDrawNode(node->child_list_[i]);
@@ -225,6 +243,12 @@ bool PQuadTree::Frame()
 	FindAndAddDrawNode(rootnode_);
 	return true;
 }
+
+bool PQuadTree::Render(ID3D11DeviceContext* context)
+{
+	return false;
+}
+
 
 bool PQuadTree::Release()
 {
@@ -263,6 +287,8 @@ PNode* PQuadTreeIndex::CreateNode(PNode* parent_node, int idx_top_l, int idx_top
 	node->corner_index_.at(2) = idx_bot_l;
 	node->corner_index_.at(3) = idx_bot_r;
 
+	ComputeBoundingBox(node);
+
 	node->depth_ = 0;
 	if (parent_node != nullptr)
 	{
@@ -287,7 +313,7 @@ D3DXVECTOR2 PQuadTreeIndex::GetHeightFromNode(int idx_top_l, int idx_top_r, int 
 	{
 		for (int col = start_col; col < end_col; col++)
 		{
-			int index = row * map_width_ * col;
+			int index = row * map_width_ + col;
 			if (map_->vertex_list_[index].pos.y < min)
 			{
 				min = map_->vertex_list_[index].pos.y;
@@ -332,4 +358,128 @@ void PQuadTreeIndex::ComputeBoundingBox(PNode* node)
 	node->box_blueprint_.obb_extents[1] = (node->box_blueprint_.aabb_max.y - node->box_blueprint_.aabb_min.y) / 2;
 	node->box_blueprint_.obb_extents[2] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
 
+}
+
+void PQuadTreeIndex::CreateIndexBuffer(PNode* node)
+{
+	// divide(/)는 배열 인덱스의 줄을 구하기 위함
+	int start_row = node->corner_index_[0] / map_width_;
+	int end_row = node->corner_index_[2] / map_width_;
+	int start_col = node->corner_index_[0] % map_width_;
+	int end_col = node->corner_index_[1] % map_width_;
+
+	/*
+	x3 = 인덱스 트라이앵글 정점 갯수 3개
+	x2 = 트라이앵글 2개(최종형태 쿼드트리 노드 사각형)
+	*/
+	node->index_data_.resize((end_row - start_row) * (end_col - start_col) * 2 * 3);
+
+	int index = 0;
+	for (int row = start_row; row < end_row; row++)
+	{
+		for (int col = start_col; col < end_col; col++)
+		{
+			int next_row = row + 1;
+			int next_col = col + 1;
+			node->index_data_[index + 0] = row * map_width_ + col;
+			node->index_data_[index + 1] = row * map_width_ + next_col;
+			node->index_data_[index + 2] = next_row * map_width_ + col;
+
+			node->index_data_[index + 3] = node->index_data_[index + 2];
+			node->index_data_[index + 4] = node->index_data_[index + 1];
+			node->index_data_[index + 5] = next_row * map_width_ +next_col;
+
+			index += 6;
+		}
+	}
+
+	node->index_buffer_.Attach(DX::CreateIndexBuffer(map_->device_,
+		&node->index_data_.at(0), node->index_data_.size(), sizeof(int), false));
+}
+
+bool PQuadTreeIndex::SubTreeDivide(PNode* node)
+{
+	float splited_width = (node->box_blueprint_.aabb_max.x - node->box_blueprint_.aabb_min.x) / 2;
+	float splited_height = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
+
+	if (max_depth_limit_ <= node->depth_)
+	{
+		node->is_leaf_ = true;
+		CreateIndexBuffer(node);
+		return false;
+	}
+
+	if (splited_height <= min_devided_size_ || splited_width <= min_devided_size_)
+	{
+		node->is_leaf_ = true;
+		CreateIndexBuffer(node);
+		return false;
+	}
+
+	int index_center = (node->corner_index_[0] + node->corner_index_[3]) / 2;
+
+	int edge_center_top = (node->corner_index_[0] + node->corner_index_[1]) / 2;
+	int edge_center_right = (node->corner_index_[1] + node->corner_index_[3]) / 2;
+	int edge_center_bottom = (node->corner_index_[2] + node->corner_index_[3]) / 2;
+	int edge_center_left = (node->corner_index_[0] + node->corner_index_[2]) / 2;
+
+	PNode* child_node = CreateNode(
+		node,
+		node->corner_index_[0],
+		edge_center_top,
+		edge_center_left,
+		index_center
+	);
+	node->child_list_.push_back(child_node);
+	child_node = CreateNode(
+		node,
+		edge_center_top,
+		node->corner_index_[1],
+		index_center,
+		edge_center_right
+	);
+	node->child_list_.push_back(child_node);
+	child_node = CreateNode(
+		node,
+		index_center,
+		edge_center_right,
+		edge_center_bottom,
+		node->corner_index_[3]
+	);
+	node->child_list_.push_back(child_node);
+	child_node = CreateNode(
+		node,
+		edge_center_left,
+		index_center,
+		node->corner_index_[2],
+		edge_center_bottom
+	);
+	node->child_list_.push_back(child_node);
+	return true;
+}
+
+bool PQuadTreeIndex::Render(ID3D11DeviceContext* context)
+{
+
+	float time = g_fGameTimer;
+	map_->constant_data_.color[0] = cosf(time);
+	map_->constant_data_.color[1] = sinf(time);
+	map_->constant_data_.color[2] = 1 - cosf(time);
+	map_->constant_data_.color[3] = 1.0f;
+	map_->constant_data_.etc[0] = time;
+
+
+	context->UpdateSubresource(map_->dx_helper_.constant_buffer_.Get(),
+		0, NULL, &map_->constant_data_, 0, 0);
+	map_->PreRender();
+
+	int drawnode_size = drawnode_list_.size();
+	for (int node = 0; node < drawnode_size; node++)
+	{
+		PNode* pnode = drawnode_list_[node];
+		context->IASetIndexBuffer(pnode->index_buffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
+		context->DrawIndexed(pnode->index_data_.size(), 0, 0);
+	}
+
+	return true;
 }

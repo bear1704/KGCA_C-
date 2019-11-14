@@ -14,6 +14,11 @@ PNode* PQuadTree::CreateNode(PNode* parent_node, float xmin, float xmax, float z
 	node->child_list_.reserve(kNumberOfDivide);
 	node->is_leaf_ = false;
 
+	
+
+
+
+/*
 	node->box_blueprint_.aabb_max.x = xmax;
 	node->box_blueprint_.aabb_max.y = 0.0f;
 	node->box_blueprint_.aabb_max.z = zmax;
@@ -30,7 +35,7 @@ PNode* PQuadTree::CreateNode(PNode* parent_node, float xmin, float xmax, float z
 
 	node->box_blueprint_.obb_extents[0] = (node->box_blueprint_.aabb_max.x - node->box_blueprint_.aabb_min.x) / 2;
 	node->box_blueprint_.obb_extents[1] = (node->box_blueprint_.aabb_max.y - node->box_blueprint_.aabb_min.y) / 2;
-	node->box_blueprint_.obb_extents[2] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;
+	node->box_blueprint_.obb_extents[2] = (node->box_blueprint_.aabb_max.z - node->box_blueprint_.aabb_min.z) / 2;*/
 
 	node->depth_ = 0;
 
@@ -166,7 +171,7 @@ PNode* PQuadTree::FindNode(PNode* node, P_BaseObj* obj)
 	return node;
 }
 
-void PQuadTree::IsVisibleObject(PNode* node)
+void PQuadTree::CheckVisibleObject(PNode* node)
 {
 	for (int i = 0; i < node->object_list_.size(); i++)
 	{
@@ -205,13 +210,17 @@ void PQuadTree::FindAndAddDrawNode(PNode* node)
 	//그 노드는 그리지 않는다(어차피 자식노드로 내려가서 그려진다), 단, 오브젝트는 반이 짤려서 나오더라도 반드시 그려져야 한다.
 	if (r_pos == RELATIVE_POSITION::SPANNING)
 	{
-		IsVisibleObject(node);
+		CheckVisibleObject(node);
 	}
 	for (int i = 0; i < node->child_list_.size(); i++)
 	{
 		FindAndAddDrawNode(node->child_list_[i]);
 	}
 
+}
+
+void PQuadTree::ComputeBoundingBox(PNode* node)
+{
 }
 
 

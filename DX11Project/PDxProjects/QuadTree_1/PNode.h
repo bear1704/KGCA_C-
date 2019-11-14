@@ -14,5 +14,7 @@ public:
 	bool				is_leaf_;
 	int					depth_;
 	vector<P_BaseObj*>	object_list_;
+	vector<int>			index_data_;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> index_buffer_;
 };
 

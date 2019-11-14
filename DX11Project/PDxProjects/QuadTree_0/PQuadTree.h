@@ -23,9 +23,10 @@ public:
 	void	AddObject(P_BaseObj* p_obj);
 	bool	IsObjInQdTreeSquare(PNode* node, P_BaseObj* obj);
 	PNode*	FindNode(PNode* node, P_BaseObj* obj);
-	void	IsVisibleObject(PNode* node);
+	void	CheckVisibleObject(PNode* node);
 	void	Update(PCamera* camera);
 	void	FindAndAddDrawNode(PNode* node);
+	void	ComputeBoundingBox(PNode* node);
 
 public:
 	bool Frame();

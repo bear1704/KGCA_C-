@@ -31,32 +31,6 @@ bool Sample::Init()
 	box_obj_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS", L"blue");
 	line_obj_.Init(device_, immediate_device_context_, L"data/Shader/LineShader.hlsl");
 	
-	quadtree_.Build(50.0f, 50.0f, 5, 1.0f);
-
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	uniform_int_distribution<int> distribution(1, 40);          // 생성 범위
-	auto generator = bind(distribution, mt);
-
-	for (int i = 0; i < 10; i++)
-	{
-		P_BOX* box = (P_BOX*) &random_map_obj_[i];
-		box->pos.x = -20.0f + generator();
-		box->pos.z = -20.0f + generator();
-		box->pos.y = 0.0f;
-
-		box->aabb_min.x = box->pos.x - 1.0f;
-		box->aabb_min.y = box->pos.y - 1.0f;
-		box->aabb_min.z = box->pos.z - 1.0f;
-		
-		box->aabb_max.x = box->pos.x + 1.0f;
-		box->aabb_max.y = box->pos.y + 1.0f;
-		box->aabb_max.z = box->pos.z + 1.0f;
-		D3DXMatrixTranslation(&box->mat_world, box->pos.x, box->pos.y, box->pos.z);
-
-		quadtree_.AddObject(box);
-	}
-
 
 	map_.Init(device_, immediate_device_context_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
@@ -75,6 +49,35 @@ bool Sample::Init()
 	map_.SetNormalTexture(L"test");
 	if (map_.Load(md) == false)
 		assert(false);
+
+	quadtree_.Build(&map_, 7, 10.0f);
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	uniform_int_distribution<int> distribution(1, 80);          // 생성 범위
+	auto generator = std::bind(distribution, mt);
+
+	for (int i = 0; i < 10; i++)
+	{
+		P_BOX* box = (P_BOX*)& random_map_obj_[i];
+		box->pos.x = -40.0f + generator();
+		box->pos.z = -40.0f + generator();
+		box->pos.y = 0.0f;
+
+		box->aabb_min.x = box->pos.x - 1.0f;
+		box->aabb_min.y = box->pos.y - 1.0f;
+		box->aabb_min.z = box->pos.z - 1.0f;
+
+		box->aabb_max.x = box->pos.x + 1.0f;
+		box->aabb_max.y = box->pos.y + 1.0f;
+		box->aabb_max.z = box->pos.z + 1.0f;
+		D3DXMatrixTranslation(&box->mat_world, box->pos.x, box->pos.y, box->pos.z);
+
+		quadtree_.AddObject(box);
+	}
+
+	//프러스텀 표시/비표시
+	main_camera_->render_frustum_ = false;
 
 	return true;
 }
@@ -130,7 +133,7 @@ bool Sample::Render()
 	light_obj_.Render();
 	line_obj_.SetWVPMatrix(nullptr, (D3DXMATRIX*)&main_camera_->matView_, (D3DXMATRIX*)&main_camera_->matProj_);
 	
-	
+	/*
 	for (int i = 0; i < quadtree_.drawnode_list_.size(); i++)
 	{
  		DrawQuadTree(quadtree_.drawnode_list_[i]);
@@ -141,19 +144,25 @@ bool Sample::Render()
 		P_BOX* pbox = (P_BOX*)quadtree_.drawobj_list_[i];
 		box_obj_.SetWVPMatrix(&pbox->mat_world, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
 		box_obj_.Render();
-	}
+	}*/
+
+	map_.SetWVPMatrix(nullptr, (D3DXMATRIX*) &main_camera_->matView_, (D3DXMATRIX*) &main_camera_->matProj_);
+	quadtree_.Render(immediate_device_context_);
+
 
 	D3DXMATRIX mat_topview;
-	D3DXMatrixLookAtLH(&mat_topview, &D3DXVECTOR3(0, 100, 0), &D3DXVECTOR3(0, 0, 0.1f), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&mat_topview, &D3DXVECTOR3(0, 500, 0), &D3DXVECTOR3(0, 0, 0.1f), &D3DXVECTOR3(0, 1, 0));
 
 	minimap_rt_.Begin(immediate_device_context_);
 	{
-		for (int i = 0; i < quadtree_.drawobj_list_.size(); i++)
-		{
-			P_BOX* pbox = (P_BOX*)quadtree_.drawobj_list_[i];
-			box_obj_.SetWVPMatrix(&pbox->mat_world, &mat_topview, (D3DXMATRIX*)& main_camera_->matProj_);
-			box_obj_.Render();
-		}
+		//for (int i = 0; i < quadtree_.drawobj_list_.size(); i++)
+		//{
+		//	P_BOX* pbox = (P_BOX*)quadtree_.drawobj_list_[i];
+		//	box_obj_.SetWVPMatrix(&pbox->mat_world, &mat_topview, (D3DXMATRIX*)& main_camera_->matProj_);
+		//	box_obj_.Render();
+		//}
+		map_.SetWVPMatrix(nullptr, (D3DXMATRIX*)&mat_topview, (D3DXMATRIX*)& main_camera_->matProj_);
+		quadtree_.Render(immediate_device_context_);
 		main_camera_->SetWVPMatrix(nullptr,
 			&mat_topview,
 			&main_camera_->matProj_);
@@ -161,11 +170,10 @@ bool Sample::Render()
 
 		minimap_rt_.End(immediate_device_context_);
 	}
-	
-	map_.SetWVPMatrix(&main_camera_->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
+	/*
 	immediate_device_context_->UpdateSubresource(map_.dx_helper_.constant_buffer_.Get(), 0,
 		NULL, &map_.constant_data_, 0, 0);
-	map_.Render();
+	map_.Render();*/
 
 	DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_disable_);
 	DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_disable_);
