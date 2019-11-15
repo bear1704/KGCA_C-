@@ -164,6 +164,10 @@ struct PInputActionMap
 	KEYSTAT upArrowKey;
 	KEYSTAT downArrowKey;
 	KEYSTAT attackKey;
+	KEYSTAT HomeKey;
+	KEYSTAT EndKey;
+	KEYSTAT DeleteKey;
+	KEYSTAT PageDownKey;
 	
 };
 

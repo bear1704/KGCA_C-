@@ -54,6 +54,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PTool", "PTool\PTool.vcxpro
 		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AABB_OBB", "AABB_OBB\AABB_OBB.vcxproj", "{D1310235-39D8-4D21-B536-6A064C7BFB80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -174,6 +179,14 @@ Global
 		{F2E2A202-655D-4379-95B2-A602A3A7EA91}.Release|x64.Build.0 = Release|x64
 		{F2E2A202-655D-4379-95B2-A602A3A7EA91}.Release|x86.ActiveCfg = Release|Win32
 		{F2E2A202-655D-4379-95B2-A602A3A7EA91}.Release|x86.Build.0 = Release|Win32
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Debug|x64.ActiveCfg = Debug|x64
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Debug|x64.Build.0 = Debug|x64
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Debug|x86.ActiveCfg = Debug|Win32
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Debug|x86.Build.0 = Debug|Win32
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Release|x64.ActiveCfg = Release|x64
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Release|x64.Build.0 = Release|x64
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Release|x86.ActiveCfg = Release|Win32
+		{D1310235-39D8-4D21-B536-6A064C7BFB80}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

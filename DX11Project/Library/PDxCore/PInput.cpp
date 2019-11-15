@@ -27,6 +27,10 @@ bool PInput::Frame()
 	g_InputActionMap.qKey = KeyCheck('Q');
 	g_InputActionMap.wKey = KeyCheck('W');
 	g_InputActionMap.eKey = KeyCheck('E');
+	g_InputActionMap.HomeKey = KeyCheck(VK_HOME);
+	g_InputActionMap.DeleteKey = KeyCheck(VK_DELETE);
+	g_InputActionMap.EndKey = KeyCheck(VK_END);
+	g_InputActionMap.PageDownKey = KeyCheck(VK_NEXT);
 	g_InputActionMap.upArrowKey = KeyCheck(VK_UP);
 	g_InputActionMap.downArrowKey = KeyCheck(VK_DOWN);
 	g_InputActionMap.leftArrowKey = KeyCheck(VK_LEFT);

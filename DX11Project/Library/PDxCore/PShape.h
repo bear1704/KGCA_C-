@@ -3,6 +3,13 @@
 #include "PSpriteManager.h"
 #include "PParser.h"
 
+enum xyz
+{
+	x = 0,
+	y,
+	z,
+};
+
 struct P_BaseObj
 {
 	D3DXVECTOR3 pos;
@@ -13,6 +20,7 @@ struct P_BaseObj
 struct P_BOX : public P_BaseObj
 {
 	D3DXVECTOR3 center;
+	D3DXVECTOR3 box_pos[8];
 	//AABB
 	D3DXVECTOR3 aabb_min;
 	D3DXVECTOR3 aabb_max;
@@ -39,6 +47,7 @@ public:
 	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
 		std::wstring tex_name = L"", std::wstring sprite_name = L"");
+	
 	bool Frame() override;
 	bool Render() override;
 public:
@@ -57,10 +66,17 @@ public:
 	
 private:
 	PSprite sprite_;
+public:
+	P_BOX box_blueprint_;
+	bool is_obb_;
 
 public:
 	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
+		std::wstring tex_name = L"", std::wstring sprite_name = L"");
+	bool OBBInit(ID3D11Device* device, ID3D11DeviceContext* context,
+		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
+		float ext_x, float ext_y, float ext_z, D3DXVECTOR3 center, D3DXVECTOR3 dir_x, D3DXVECTOR3 dir_y, D3DXVECTOR3 dir_z,
 		std::wstring tex_name = L"", std::wstring sprite_name = L"");
 
 	bool Frame() override;
