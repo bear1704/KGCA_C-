@@ -17,6 +17,7 @@
 #pragma comment (lib, "fmod_vc.lib")
 #pragma comment (lib, "winmm.lib")
 
+const float kObjectMoveSpeed = 0.2f;
 
 
 //PScene* g_current_scene_;
@@ -34,6 +35,7 @@ public:
 	int				render_depth_;
 	P_BOX			random_map_obj_[10];
 	PBoxObject		box_obj_;
+	PBoxObject		box_obj2_;
 	PDxRenderTarget minimap_rt_;
 	PPlaneObject rt_screen_;
 	PLineObject line_obj_;

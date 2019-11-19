@@ -85,6 +85,11 @@ public:
 public:
 	virtual HRESULT CreateVertexData() override;
 	virtual HRESULT CreateIndexData() override;
+
+public:
+	void KeyRotate(float x, float y, float z);
+	void MoveBox(D3DXVECTOR3& dir_vec, float speed);
+	void ScaleBox(D3DXVECTOR3& scl_vec);
 };
 
 

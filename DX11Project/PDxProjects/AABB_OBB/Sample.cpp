@@ -31,6 +31,9 @@ bool Sample::Init()
 	box_obj_.OBBInit(device_, immediate_device_context_, L"data/Shader/VertexShader.hlsl", "VS", L"data/Shader/PixelShader.hlsl", "PS",
 		4, 2, 8, D3DXVECTOR3(0.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), 
 		L"blue");
+	box_obj2_.OBBInit(device_, immediate_device_context_, L"data/Shader/VertexShader.hlsl", "VS", L"data/Shader/PixelShader.hlsl", "PS",
+		4, 2, 8, D3DXVECTOR3(10.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f),
+		L"blue");
 	//
 	//D3DXMATRIX mat_rot;
 	//D3DXMatrixRotationYawPitchRoll(&mat_rot, 0.0f, 0.0f, 30.8f);
@@ -97,15 +100,54 @@ bool Sample::Frame()
 	{
 		ToggleIsWireframeRender();
 	}
-	if (g_InputActionMap.DeleteKey == KEYSTAT::KEY_PUSH)
+	if (g_InputActionMap.DeleteKey == KEYSTAT::KEY_HOLD)
 	{
-		
+		box_obj_.KeyRotate(4.0f, 0.0f, 0.0f);
 	}
+	if (g_InputActionMap.EndKey == KEYSTAT::KEY_HOLD)
+	{
+		box_obj_.KeyRotate(0.0f, 4.0f, 0.0f);
+	}
+	if (g_InputActionMap.PageDownKey == KEYSTAT::KEY_HOLD)
+	{
+		box_obj_.KeyRotate(0.0f, 0.0f, 4.0f);
+	}
+	if (g_InputActionMap.upArrowKey == KEYSTAT::KEY_HOLD)
+	{
+		box_obj_.MoveBox(main_camera_->vec_up_, kObjectMoveSpeed);
+	}
+	if (g_InputActionMap.downArrowKey == KEYSTAT::KEY_HOLD)
+	{
+		D3DXVECTOR3 vec = -(main_camera_->vec_up_);
+		box_obj_.MoveBox(vec, kObjectMoveSpeed);
+	}
+	if (g_InputActionMap.leftArrowKey == KEYSTAT::KEY_HOLD)
+	{
+		D3DXVECTOR3 vec = -(main_camera_->vec_right_);
+		box_obj_.MoveBox(vec, kObjectMoveSpeed);
+	}
+	if (g_InputActionMap.rightArrowKey == KEYSTAT::KEY_HOLD)
+	{
+		box_obj_.MoveBox(main_camera_->vec_right_, kObjectMoveSpeed);
+	}
+	if (g_InputActionMap.PageUpKey == KEYSTAT::KEY_HOLD)
+	{
+		D3DXVECTOR3 vec = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+		box_obj_.ScaleBox(vec);
+	}
+	if (g_InputActionMap.InsertKey == KEYSTAT::KEY_HOLD)
+	{
+		D3DXVECTOR3 vec = -(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
+		box_obj_.ScaleBox(vec);
+	}
+
+
 
 #pragma endregion
 	light_obj_.Frame();
 
 	box_obj_.Frame();
+	box_obj2_.Frame();
 	main_camera_->Frame();
 	quadtree_.Update(main_camera_);
 	quadtree_.Frame();
@@ -124,8 +166,12 @@ bool Sample::Render()
 	map_.SetWVPMatrix(nullptr, (D3DXMATRIX*) &main_camera_->matView_, (D3DXMATRIX*) &main_camera_->matProj_);
 	quadtree_.Render(immediate_device_context_);
 
+
 	box_obj_.SetWVPMatrix((D3DXMATRIX*)& box_obj_.matWorld_, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
 	box_obj_.Render();
+
+	box_obj2_.SetWVPMatrix((D3DXMATRIX*)& box_obj2_.matWorld_, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
+	box_obj2_.Render();
 
 	D3DXMATRIX mat_topview;
 	D3DXMatrixLookAtLH(&mat_topview, &D3DXVECTOR3(0, 500, 0), &D3DXVECTOR3(0, 0, 0.1f), &D3DXVECTOR3(0, 1, 0));
@@ -169,6 +215,7 @@ bool Sample::Release()
 	line_obj_.Release();
 	map_.Release();
 	box_obj_.Release();
+	box_obj2_.Release();
 	return true;
 }
 
