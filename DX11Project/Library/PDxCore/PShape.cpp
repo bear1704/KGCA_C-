@@ -65,6 +65,7 @@ bool PPlaneObject::Render()
 	if (sprite_.get_is_effect() == true)
 	{
 		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_disable_);
+		constant_data_.color[3] = sprite_.get_alpha_();
 		PModel::Render();
 		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
 	}

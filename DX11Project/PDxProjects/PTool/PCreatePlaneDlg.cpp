@@ -138,6 +138,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 		sp_info.effect_info.is_effect_sprite = true;
 		sp_info.effect_info.is_multi_texture = true;
+		sp_info.sprite_name.assign(plane_and_sprite_name.begin(), plane_and_sprite_name.end());
 
 		std::wstring wstr_name;
 		StringToWstring(sp_info.sprite_name, wstr_name);
@@ -148,7 +149,6 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		pp.matWorld_ = mat_world;
 		pp.width_ = m_PlaneWidth;
 		pp.height_ = m_PlaneHeight;
-		pp.constant_data_.color[3] = 0.7f;
 		app->m_tool.plane_list_.push_back(pp);
 
 		tex_list.clear();
@@ -219,6 +219,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		app->m_tool.plane_list_.push_back(pp);
 		tex_list.clear();
 	}
+
+	UpdateData(TRUE);
 }
 
 

@@ -25,12 +25,17 @@ bool PSprite::Frame()
 {
 	if (remain_lifetime_ <= 0)
 	{
-		if (is_loop_)
+
+		if (effect_info.current_fadeout_time > 0)
 		{
-			remain_lifetime_ = lifetime_;
+			effect_info.current_fadeout_time -= g_SecondPerFrame;
+			alpha_ = effect_info.current_fadeout_time / effect_info.fadeout_time;
 		}
 		else
+		{
 			isDead = true;
+		}
+			
 	}
 	if (isDead == true) return true;
 
@@ -85,7 +90,7 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	
 	is_loop_ = info.is_loop;
 	
-
+	sprite_name_ = info.sprite_name;
 	position_.x = info.posX;
 	position_.y = info.posY;
 	number_of_max_spriteframe_ = info.max_frame;
@@ -95,7 +100,10 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	current_played_spriteframe_ = 0;
 	effect_info.is_multi_texture = info.effect_info.is_multi_texture;
 	effect_info.is_effect_sprite = info.effect_info.is_effect_sprite;
-
+	effect_info.fadein_time = info.effect_info.fadein_time;
+	effect_info.fadeout_time = info.effect_info.fadeout_time;
+	effect_info.current_fadein_time = info.effect_info.fadein_time;
+	effect_info.current_fadeout_time = info.effect_info.fadeout_time;
 
 	if (effect_info.is_multi_texture == false)
 	{
@@ -169,6 +177,8 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	current_played_spriteframe_ = 0;
 	texture_list_ = sprite->texture_list_;
 	
+	sprite_name_ = sprite->sprite_name_;
+
 	effect_info.is_effect_sprite = sprite->effect_info.is_effect_sprite;
 	effect_info.is_multi_texture= sprite->effect_info.is_multi_texture;
 	effect_info.tex_width = sprite->effect_info.tex_width;
@@ -180,6 +190,11 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	effect_info.y_init = sprite->effect_info.y_init;
 	effect_info.x_offset = sprite->effect_info.x_offset;
 	effect_info.y_offset = sprite->effect_info.y_offset;
+
+	effect_info.fadein_time = sprite->effect_info.fadein_time;
+	effect_info.fadeout_time = sprite->effect_info.fadeout_time;
+	effect_info.current_fadein_time = sprite->effect_info.fadein_time;
+	effect_info.current_fadeout_time = sprite->effect_info.fadeout_time;
 
 
 	if (sprite->texture() != nullptr)
@@ -280,6 +295,18 @@ void PSprite::set_is_effect(bool b)
 	effect_info.is_effect_sprite = b;
 }
 
+void PSprite::set_fadein(float f)
+{
+	effect_info.fadein_time = f;
+	effect_info.current_fadein_time = f;
+}
+
+void PSprite::set_fadeout(float f)
+{
+	effect_info.fadeout_time = f;
+	effect_info.current_fadeout_time = f;
+}
+
 
 ANIMATIONTYPE PSprite::get_animation_type_()
 {
@@ -329,6 +356,11 @@ bool PSprite::get_is_multitexture()
 bool PSprite::get_is_effect()
 {
 	return effect_info.is_effect_sprite;
+}
+
+std::string PSprite::get_name()
+{
+	return sprite_name_;
 }
 
 vector<DX::PTex_uv4> PSprite::tex_boundary_list()

@@ -32,7 +32,7 @@ bool PToolCore::Init()
 	if (FAILED(hr))
 		assert(false);
 
-
+	plane_list_.reserve(1024);
 
 
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
@@ -155,7 +155,7 @@ bool PToolCore::Render()
 
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
 		
-
+		
 		for (int ii = 0; ii < plane_list_.size(); ii++)
 		{
 

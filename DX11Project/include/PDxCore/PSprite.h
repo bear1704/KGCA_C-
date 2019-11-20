@@ -21,6 +21,10 @@ struct EffectInfo
 	float tex_height = 0.0f;
 	bool is_multi_texture; //멀티텍스쳐를 사용하는 스프라이트인지
 	bool is_effect_sprite; //이펙트 툴에 사용되는 스프라이트인지, 일반 스프라이트인지?
+	float fadein_time;
+	float fadeout_time;
+	float current_fadeout_time;
+	float current_fadein_time;
 
 	EffectInfo()
 	{
@@ -34,6 +38,10 @@ struct EffectInfo
 		tex_height = 0.0f;
 		is_multi_texture = false;
 		is_effect_sprite = false;
+		fadein_time = 0.0f;
+		fadeout_time = 0.0f;
+		current_fadein_time = 0.0f;
+		current_fadeout_time = 0.0f;
 	}
 };
 
@@ -90,6 +98,7 @@ private:
 	float time_after_spriteopen_;
 	bool isDead;
 	bool is_loop_;
+	std::string sprite_name_;
 	
 	float alpha_;
 	float scale_;
@@ -133,6 +142,7 @@ public:
 	bool get_is_dmg();
 	bool get_is_multitexture();
 	bool get_is_effect();
+	std::string get_name();
 	vector<DX::PTex_uv4> tex_boundary_list();
 	vector<DX::PTex_uv4> tex_default_boundary_list();
 	vector<DX::PTex_uv4>& tex_boundary_list_ref();
@@ -149,6 +159,8 @@ public:
 	void set_texture_list(std::vector<PTexture*>& texture_list);
 	void set_is_multitexture(bool b);
 	void set_is_effect(bool b);
+	void set_fadein(float f);
+	void set_fadeout(float f);
 	
 	ANIMATIONTYPE get_animation_type_();
 	

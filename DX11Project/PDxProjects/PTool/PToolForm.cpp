@@ -33,6 +33,8 @@ IMPLEMENT_DYNCREATE(PToolForm, CFormView)
 PToolForm::PToolForm()
 	: CFormView(IDD_EffToolForm)
 	, m_IsAlphaBlend(FALSE)
+	, m_FadeInNum(0)
+	, m_FadeOutNum(0)
 {
 
 }
@@ -57,6 +59,9 @@ void PToolForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_BLEND_SRC, m_CtlBlendSrc);
 	DDX_Check(pDX, IDC_CHECK_BLEND, m_IsAlphaBlend);
 	DDX_Control(pDX, IDC_COMBO_BLEND_DEST, m_CtlBlendDest);
+	DDX_Text(pDX, IDC_EDIT_FadeIn, m_FadeInNum);
+	DDX_Text(pDX, IDC_EDIT_FadeOut, m_FadeOutNum);
+	DDX_Control(pDX, IDC_COMBO_PlaneList, m_CtlPlaneList);
 }
 
 BEGIN_MESSAGE_MAP(PToolForm, CFormView)
@@ -67,6 +72,9 @@ BEGIN_MESSAGE_MAP(PToolForm, CFormView)
 	ON_BN_CLICKED(IDC_Btn_Save, &PToolForm::OnBnClickedBtnSave)
 	ON_BN_CLICKED(IDC_Btn_Load, &PToolForm::OnBnClickedBtnLoad)
 	ON_BN_CLICKED(IDC_CHECK_BLEND, &PToolForm::OnBnClickedCheckBlend)
+	ON_BN_CLICKED(IDC_Btn_EffectApply, &PToolForm::OnBnClickedBtnEffectapply)
+	ON_BN_CLICKED(IDC_Btn_Refresh, &PToolForm::OnBnClickedBtnRefresh)
+	ON_CBN_SELCHANGE(IDC_COMBO_PlaneList, &PToolForm::OnCbnSelchangeComboPlanelist)
 END_MESSAGE_MAP()
 
 
@@ -98,7 +106,6 @@ void PToolForm::OnBnClickedBtnCreateplane()
 	}
 
 	m_DlgPlane.ShowWindow(SW_SHOW);
-	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -482,4 +489,60 @@ void PToolForm::OnBnClickedCheckBlend()
 		return;
 	}
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void PToolForm::OnBnClickedBtnEffectapply()
+{
+	UpdateData(TRUE);
+	m_pCurrentSprite->set_fadeout(m_FadeOutNum);
+	int index = m_CtlPlaneList.GetCurSel();
+	CString cstr;
+	m_CtlPlaneList.GetLBText(index, cstr);
+	std::string str = CT2CA(cstr);
+
+	//주의 : 멀티스레드 사용 시 위험할 수 있음(erase와 병행)
+	//현재 실행되는 이펙트의 스프라이트가 변경된 스프라이트와 이름이 같으면, 이쪽도 변경을 적용해준다.
+	for (int ii = 0; ii < app->m_tool.plane_list_.size(); ii++)
+	{
+		if (app->m_tool.plane_list_[ii].sprite_.get_name() == str)
+		{
+			app->m_tool.plane_list_[ii].sprite_.set_fadeout(m_FadeOutNum);
+			app->m_tool.plane_list_[ii].sprite_.set_fadeout(m_FadeInNum);
+		}
+	}
+	
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void PToolForm::OnBnClickedBtnRefresh()
+{
+	UpdateData(TRUE);
+	m_CtlPlaneList.ResetContent();
+
+	std::vector<PSprite*> sprite_list = PSpriteManager::GetInstance().GetSpriteListFromMap();
+	
+	for (PSprite* sp : sprite_list)
+	{
+		multibyte_string mstr = string_to_multibyte(sp->get_name());
+		if (sp->get_effect_info().is_effect_sprite == true)
+		{		
+			m_CtlPlaneList.AddString(mstr.c_str());
+		}
+	}
+
+}
+
+
+void PToolForm::OnCbnSelchangeComboPlanelist()
+{
+	int index = m_CtlPlaneList.GetCurSel();
+	CString cstr;
+	m_CtlPlaneList.GetLBText(index, cstr);
+
+	std::wstring wstr = CT2CW(cstr);
+
+	m_pCurrentSprite =  PSpriteManager::GetInstance().get_sprite_from_map_ex(wstr);
 }

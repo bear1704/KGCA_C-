@@ -35,6 +35,7 @@ public:
 	CButton m_BtnCreatePlane;
 	PParser parse;
 	FILE* fp;
+	PSprite* m_pCurrentSprite;
 
 	afx_msg void OnBnClickedBtnCreateplane();
 	CComboBox m_CtlBlendSrc;
@@ -49,6 +50,12 @@ public:
 	afx_msg void OnBnClickedCheckBlend();
 	void SaveData();
 	void LoadData(std::string path);
+	float m_FadeInNum;
+	float m_FadeOutNum;
+	afx_msg void OnBnClickedBtnEffectapply();
+	CComboBox m_CtlPlaneList;
+	afx_msg void OnBnClickedBtnRefresh();
+	afx_msg void OnCbnSelchangeComboPlanelist();
 };
 
 
