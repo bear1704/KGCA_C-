@@ -29,10 +29,10 @@ bool Sample::Init()
 	minimap_rt_.Create(device_, 1024, 1024);
 
 	box_obj_.OBBInit(device_, immediate_device_context_, L"data/Shader/VertexShader.hlsl", "VS", L"data/Shader/PixelShader.hlsl", "PS",
-		4, 2, 8, D3DXVECTOR3(0.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), 
+		5, 1, 1, D3DXVECTOR3(0.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), 
 		L"blue");
 	box_obj2_.OBBInit(device_, immediate_device_context_, L"data/Shader/VertexShader.hlsl", "VS", L"data/Shader/PixelShader.hlsl", "PS",
-		4, 2, 8, D3DXVECTOR3(10.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f),
+		4, 4, 1, D3DXVECTOR3(10.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f),
 		L"blue");
 	//
 	//D3DXMATRIX mat_rot;
@@ -166,6 +166,18 @@ bool Sample::Render()
 	map_.SetWVPMatrix(nullptr, (D3DXMATRIX*) &main_camera_->matView_, (D3DXMATRIX*) &main_camera_->matProj_);
 	quadtree_.Render(immediate_device_context_);
 
+	if (PCollision::GetInstance().CheckOBBtoObb(box_obj_.box_blueprint_, box_obj2_.box_blueprint_) ==  true)
+	{
+		box_obj_.texture_ = PTextureManager::GetInstance().GetTextureFromMap(L"green");
+		box_obj_.dx_helper_.shader_res_view_.Detach();
+		box_obj_.dx_helper_.shader_res_view_.Attach(box_obj_.texture_->shader_res_view());
+	}
+	else
+	{
+		box_obj_.texture_ = PTextureManager::GetInstance().GetTextureFromMap(L"blue");
+		box_obj_.dx_helper_.shader_res_view_.Detach();
+		box_obj_.dx_helper_.shader_res_view_.Attach(box_obj_.texture_->shader_res_view());
+	}
 
 	box_obj_.SetWVPMatrix((D3DXMATRIX*)& box_obj_.matWorld_, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
 	box_obj_.Render();

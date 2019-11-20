@@ -17,7 +17,7 @@
 #pragma comment (lib, "fmod_vc.lib")
 #pragma comment (lib, "winmm.lib")
 
-const float kObjectMoveSpeed = 0.2f;
+const float kObjectMoveSpeed = 0.01f;
 
 
 //PScene* g_current_scene_;

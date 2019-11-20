@@ -188,6 +188,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	//w5  OBB2.y
 	const D3DXVECTOR3* By = &box1.obb_axis[1];
 	box1_axis_boxcenter_distance_dot[1] = D3DXVec3Dot(By, &distance_center);
+	D = std::fabsf(box1_axis_boxcenter_distance_dot[1]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[0][1] +
 		box0.obb_extents[1] * obb_projection_abs[1][1] +
@@ -199,6 +200,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	//w6  OBB2.z
 	const D3DXVECTOR3* Bz = &box1.obb_axis[2];
 	box1_axis_boxcenter_distance_dot[2] = D3DXVec3Dot(Bz, &distance_center);
+	D = std::fabsf(box1_axis_boxcenter_distance_dot[2]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[0][2] +
 		box0.obb_extents[1] * obb_projection_abs[1][2] +
@@ -208,7 +210,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	if (D > (p1 + p2)) return false;
 
 	//w7 = A0 X B0    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[2] * obb_projection[1][0] - distance_center[1] * obb_projection[2][0]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[2] * obb_projection[1][0] - box0_axis_boxcenter_distance_dot[1] * obb_projection[2][0]);
 
 	p1 = box0.obb_extents[1] * obb_projection_abs[2][0] + box0.obb_extents[2] * obb_projection_abs[1][0];
 	p2 = box1.obb_extents[1] * obb_projection_abs[0][2] + box1.obb_extents[2] * obb_projection_abs[0][1];
@@ -216,7 +218,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	if (D > (p1 + p2)) return false;
 
 	//w8 = A0 X B1    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[2] * obb_projection[1][1] - distance_center[1] * obb_projection[2][1]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[2] * obb_projection[1][1] - box0_axis_boxcenter_distance_dot[1] * obb_projection[2][1]);
 
 	p1 = box0.obb_extents[1] * obb_projection_abs[2][1] + box0.obb_extents[2] * obb_projection_abs[1][1];
 	p2 = box1.obb_extents[0] * obb_projection_abs[0][2] + box1.obb_extents[2] * obb_projection_abs[0][0];
@@ -224,15 +226,15 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	if (D > (p1 + p2)) return false;
 	
 	//w9 = A0 X B2    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[2] * obb_projection[1][2] - distance_center[1] * obb_projection[2][2]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[2] * obb_projection[1][2] - box0_axis_boxcenter_distance_dot[1] * obb_projection[2][2]);
 
 	p1 = box0.obb_extents[1] * obb_projection_abs[2][2] + box0.obb_extents[2] * obb_projection_abs[1][2];
-	p2 = box1.obb_extents[0] * obb_projection_abs[0][2] + box1.obb_extents[2] * obb_projection_abs[0][0];
+	p2 = box1.obb_extents[0] * obb_projection_abs[0][1] + box1.obb_extents[1] * obb_projection_abs[0][0];
 
 	if (D > (p1 + p2)) return false;
 
 	//w10 = A1 X B0    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[0] * obb_projection[2][0] - distance_center[2] * obb_projection[0][0]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[0] * obb_projection[2][0] - box0_axis_boxcenter_distance_dot[2] * obb_projection[0][0]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[2][0] + box0.obb_extents[2] * obb_projection_abs[0][0];
 	p2 = box1.obb_extents[1] * obb_projection_abs[1][2] + box1.obb_extents[2] * obb_projection_abs[1][1];
@@ -241,7 +243,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 
 
 	//w11 = A1 X B1    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[0] * obb_projection[2][1] - distance_center[2] * obb_projection[0][1]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[0] * obb_projection[2][1] - box0_axis_boxcenter_distance_dot[2] * obb_projection[0][1]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[2][1] + box0.obb_extents[2] * obb_projection_abs[0][1];
 	p2 = box1.obb_extents[0] * obb_projection_abs[1][2] + box1.obb_extents[2] * obb_projection_abs[1][0];
@@ -250,7 +252,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 
 
 	//w12 = A1 X B2    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[0] * obb_projection[2][2] - distance_center[2] * obb_projection[0][2]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[0] * obb_projection[2][2] - box0_axis_boxcenter_distance_dot[2] * obb_projection[0][2]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[2][2] + box0.obb_extents[2] * obb_projection_abs[0][2];
 	p2 = box1.obb_extents[0] * obb_projection_abs[1][1] + box1.obb_extents[1] * obb_projection_abs[1][0];
@@ -258,7 +260,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	if (D > (p1 + p2)) return false;
 
 	//w13 = A2 X B0    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[1] * obb_projection[0][0] - distance_center[0] * obb_projection[1][0]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[1] * obb_projection[0][0] - box0_axis_boxcenter_distance_dot[0] * obb_projection[1][0]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[1][0] + box0.obb_extents[1] * obb_projection_abs[0][0];
 	p2 = box1.obb_extents[1] * obb_projection_abs[2][2] + box1.obb_extents[2] * obb_projection_abs[2][1];
@@ -266,7 +268,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	if (D > (p1 + p2)) return false;
 
 	//w14 = A2 X B1    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[1] * obb_projection[0][1] - distance_center[0] * obb_projection[1][1]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[1] * obb_projection[0][1] - box0_axis_boxcenter_distance_dot[0] * obb_projection[1][1]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[1][1] + box0.obb_extents[1] * obb_projection_abs[0][1];
 	p2 = box1.obb_extents[0] * obb_projection_abs[2][2] + box1.obb_extents[2] * obb_projection_abs[2][0];
@@ -274,7 +276,7 @@ bool PCollision::CheckOBBtoObb(const P_BOX& box0, const P_BOX& box1)
 	if (D > (p1 + p2)) return false;
 
 	//w15 = A2 X B2    X = cross product   D : 분리축(separate plane)에 내적된 각 OBB의 센터끼리의 길이
-	D = std::fabs(distance_center[1] * obb_projection[0][2] - distance_center[0] * obb_projection[1][2]);
+	D = std::fabs(box0_axis_boxcenter_distance_dot[1] * obb_projection[0][2] - box0_axis_boxcenter_distance_dot[0] * obb_projection[1][2]);
 
 	p1 = box0.obb_extents[0] * obb_projection_abs[1][2] + box0.obb_extents[1] * obb_projection_abs[0][2];
 	p2 = box1.obb_extents[0] * obb_projection_abs[2][1] + box1.obb_extents[1] * obb_projection_abs[2][0];
