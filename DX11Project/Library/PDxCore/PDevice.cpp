@@ -184,7 +184,8 @@ ID3D11DeviceContext* PDevice::immediate_device_context()
 
 bool PDevice::DevicePreRender()
 {
-	float clearColor[] = { 0.88f, 0.66f, 0.95f, 1.0f };
+	float clearColor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	//float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	immediate_device_context_->ClearRenderTargetView(render_target_view_, clearColor);
 	immediate_device_context_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f, 0);

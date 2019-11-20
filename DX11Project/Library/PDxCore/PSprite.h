@@ -44,6 +44,7 @@ struct SpriteDataInfo
 	std::vector<PTexture*> texture_list;
 	std::wstring texture_name;
 	int max_frame;
+	bool is_loop;
 	float lifetime;
 	float once_playtime;
 	float posX;
@@ -61,6 +62,7 @@ struct SpriteDataInfo
 		lifetime = 0.0f;
 		once_playtime = 0.0f;
 		max_frame = 0;
+		is_loop = false;
 	}
 };
 
@@ -87,13 +89,18 @@ private:
 	float allocatetime_for_onesprite;
 	float time_after_spriteopen_;
 	bool isDead;
+	bool is_loop_;
+	
 	float alpha_;
 	float scale_;
+	
+	
 	ANIMATIONTYPE animation_type_;
 	bool automata_;
 	bool is_reversal_for_automata_;//reversal 상태인지 스프라이트가 원래는 알 필요 없지만, 특수 상황(1회용 스프라이트 제작 등..)에서 필요하므로 넣는다.
 							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
 	bool is_dmg_; //데미지를 표시하는 스프라이트인지 체크
+
 	EffectInfo effect_info;
 
 public:
@@ -105,7 +112,6 @@ public:
 	bool Release();
 	bool Set(SpriteDataInfo info, float alpha, float scale);
 	bool SetPosition(float x, float y);
-	void Play();
 
 	/*bufset : uv좌표 세트(4개) :: vertices : 버텍스 좌표 세트(4개) ::
 	Plane Object를 셰이더에 넘겨준다.(직접 그리기 x) */

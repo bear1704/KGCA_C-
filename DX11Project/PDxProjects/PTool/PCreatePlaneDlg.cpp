@@ -130,9 +130,11 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.texture_name = plane_and_sprite_name;
 
 		if (m_CurrentPlaneIsLoop == TRUE)
-			sp_info.lifetime = kLoopLifetime;
+			sp_info.is_loop = true;
 		else
-			sp_info.lifetime = m_LifeTime;
+			sp_info.is_loop = false;
+
+		sp_info.lifetime = m_LifeTime;
 
 		sp_info.effect_info.is_effect_sprite = true;
 		sp_info.effect_info.is_multi_texture = true;
@@ -142,10 +144,11 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, sp_info);
 
 		PPlaneObject pp;
-		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
+		pp.matWorld_ = mat_world;
 		pp.width_ = m_PlaneWidth;
 		pp.height_ = m_PlaneHeight;
+		pp.constant_data_.color[3] = 0.7f;
 		app->m_tool.plane_list_.push_back(pp);
 
 		tex_list.clear();
@@ -162,11 +165,12 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 
 		if (m_CurrentPlaneIsLoop == TRUE)
-			sp_info.lifetime = kLoopLifetime;
+			sp_info.is_loop = true;
 		else
-			sp_info.lifetime = m_LifeTime;
+			sp_info.is_loop = false;
 
-
+		sp_info.lifetime = m_LifeTime;
+		
 		float xOrigin = m_SpriteXInit;
 		float yOrigin = m_SpriteYInit;
 
@@ -208,8 +212,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 
 		PPlaneObject pp;
-		pp.matWorld_ = mat_world;
 		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
+		pp.matWorld_ = mat_world;
 		pp.width_ = m_PlaneWidth;
 		pp.height_ = m_PlaneHeight;
 		app->m_tool.plane_list_.push_back(pp);
@@ -285,7 +289,7 @@ void PCreatePlaneDlg::OnBnClickedCancel()
 void PCreatePlaneDlg::OnBnClickedBtnInitialize()
 {
 	m_WorldTx = 0.0f;
-	m_WorldTy = 50.0f;
+	m_WorldTy = 0.0f;
 	m_WorldTz = 10.0f;
 	m_WorldRx = 0.0f;
 	m_WorldRy = 0.0f;

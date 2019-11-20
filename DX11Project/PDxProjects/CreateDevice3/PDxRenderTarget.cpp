@@ -49,7 +49,7 @@ bool PDxRenderTarget::Begin(ID3D11DeviceContext* context)
 		depth_stencil_view_old_.GetAddressOf());
 
 	context->ClearRenderTargetView(
-		render_target_view_.Get(), D3DXVECTOR4(0, 0, 0.3f, 1));
+		render_target_view_.Get(), D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	context->ClearDepthStencilView(
 		depth_stencil_view_.Get(),

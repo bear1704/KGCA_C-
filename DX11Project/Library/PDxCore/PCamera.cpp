@@ -10,7 +10,7 @@ PCamera::PCamera()
 	radius_ = 5.0f;
 	turn_speed_ = 15.0f;
 
-	camera_position_ = D3DXVECTOR3(0.0f, 50.0f, -2.0f);
+	camera_position_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vec_view_target_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	vec_up_ = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 }
@@ -22,6 +22,7 @@ PCamera::~PCamera()
 
 void PCamera::CreateTargetViewMatrix(D3DXVECTOR3 mypos, D3DXVECTOR3 target, D3DXVECTOR3 up)
 {
+	camera_position_ = mypos;
 		
 	D3DXMatrixLookAtLH(&matView_, &mypos, &target, &up);
 
@@ -42,7 +43,7 @@ void PCamera::CreateTargetViewMatrix(D3DXVECTOR3 mypos, D3DXVECTOR3 target, D3DX
 void PCamera::CreateProjectionMatrix()
 {
 	D3DXMatrixPerspectiveFovLH(&matProj_, D3DX_PI / 4, (float)g_rectangle_client.right / (float)g_rectangle_client.bottom,
-	1.0f, 3000.0f);
+	0.1f, 3000.0f);
 }
 
 

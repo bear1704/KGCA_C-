@@ -42,10 +42,14 @@ bool PPlaneObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 bool PPlaneObject::Render()
 {
 	if (be_using_sprite_ == true)
-		sprite_.Render(device_,immediate_context_, vertex_list_, dx_helper_, false);
+	{
+		if (sprite_.get_is_dead_() == true)
+			return false;
+
+		sprite_.Render(device_, immediate_context_, vertex_list_, dx_helper_, false);
+	}
 	else
 	{
-
 		DX::PTex_uv4 uv4 = texture_->uv_coord();
 		ChangeTexValue(vertex_list_, uv4);
 
@@ -56,11 +60,15 @@ bool PPlaneObject::Render()
 		immediate_context_->UpdateSubresource(dx_helper_.vertex_buffer_.Get(),
 			0, NULL, &vertex_list_.at(0), 0, 0);
 		dx_helper_.shader_res_view_ = texture_->shader_res_view();
-
 	}
 
-
-		
+	if (sprite_.get_is_effect() == true)
+	{
+		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_disable_);
+		PModel::Render();
+		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
+	}
+	else
 		PModel::Render();
 	
 	return true;
@@ -79,9 +87,9 @@ HRESULT PPlaneObject::CreateVertexData()
 	vertex_list_[2].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
 	vertex_list_[3].normal = D3DXVECTOR3{ 0.0f,0.0f, -1.0f };
 
-	vertex_list_[0].color = D3DXVECTOR4{ 1.0f, 0.0f, 0.0f, 1.0f };
-	vertex_list_[1].color = D3DXVECTOR4{ 0.0f, 1.0f, 0.0f, 1.0f };
-	vertex_list_[2].color = D3DXVECTOR4{ 0.0f, 0.0f, 1.0f, 1.0f };
+	vertex_list_[0].color = D3DXVECTOR4{ 1.0f, 1.0f, 1.0f, 1.0f };
+	vertex_list_[1].color = D3DXVECTOR4{ 1.0f, 1.0f, 1.0f, 1.0f };
+	vertex_list_[2].color = D3DXVECTOR4{ 1.0f, 1.0f, 1.0f, 1.0f };
 	vertex_list_[3].color = D3DXVECTOR4{ 1.0f, 1.0f, 1.0f, 1.0f };
 
 	vertex_list_[0].uv = D3DXVECTOR2{ 0.0f, 0.0f };
@@ -106,7 +114,7 @@ void PPlaneObject::CreatePlane(ID3D11Device* device, ID3D11DeviceContext* contex
 	be_using_sprite_ = true;
 	width_ = width;   height_ = height;
 	name = sprite_name;
-	this->Init(device, context, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"" , sprite_name);
+	this->Init(device, context, L"VertexShader.hlsl", "VS_ALPHA", L"PixelShader.hlsl", "PS_ALPHA", L"" , sprite_name);
 
 }
 
@@ -789,7 +797,7 @@ HRESULT PLineObject::CreateVertexData()
 
 	vertex_list_[1].pos =	 D3DXVECTOR3(1000.0f, 0.0f, 0.0f);
 	vertex_list_[1].normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vertex_list_[1].color =	 D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+	vertex_list_[1].color =	 D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
 	vertex_list_[1].uv =	 D3DXVECTOR2(1.0f, 0.0f);
 
 	return S_OK;

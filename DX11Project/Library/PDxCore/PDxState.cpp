@@ -38,7 +38,7 @@ namespace DX
 #pragma region BLEND
 		D3D11_BLEND_DESC blend_desc;
 		ZeroMemory(&blend_desc, sizeof(D3D11_BLEND_DESC));
-		blend_desc.AlphaToCoverageEnable = TRUE;
+		blend_desc.AlphaToCoverageEnable = FALSE;
 		blend_desc.IndependentBlendEnable = TRUE;
 		blend_desc.RenderTarget[0].BlendEnable = TRUE;
 		blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;

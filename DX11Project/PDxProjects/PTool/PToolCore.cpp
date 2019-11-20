@@ -44,7 +44,7 @@ bool PToolCore::Init()
 
 	free_camera_.Init();
 
-	D3DXVECTOR3 eye(0.0f, 0.0f, -2.0f);
+	D3DXVECTOR3 eye(0.0f, 0.0f, -30.0f);
 	D3DXVECTOR3 at(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 
@@ -138,7 +138,6 @@ bool PToolCore::Render()
 #pragma region SCREEN
 	dx_rt_.Begin(immediate_device_context_);
 	{
-		//DX::ApplyDepthStencilState(immediate_device_context_, DX::PDxState::depth_stencil_state_enable_);
 
 		if (is_wireframe_render_) //마우스 휠 여부에 따라 와이어프레임, 솔리드를 가르는 코드
 			DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_wireframe_);
@@ -149,56 +148,55 @@ bool PToolCore::Render()
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_wrap_point);
 		
 		
-		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
-		
 
 		DX::ApplyBlendState(immediate_device_context_, blend_state_);
+
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
 		
+
 		for (int ii = 0; ii < plane_list_.size(); ii++)
 		{
+
 			if (plane_list_[ii].be_using_sprite_ == true)
 			{
 				plane_list_[ii].SetWVPMatrix(&plane_list_[ii].matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
 				plane_list_[ii].Render();
 			}
+			if (plane_list_[ii].sprite_.get_is_dead_() == true)
+				plane_list_.erase(plane_list_.begin() + ii);
 		}
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
-		
-		
-
-
+	
 		dx_rt_.End(immediate_device_context_);
 	}
 #pragma endregion
-
-
-
+	
+	DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_disable_);
 	DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 	screen_tex_object_.vertex_list()[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[1].pos = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[2].pos = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[3].pos = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);
-
+	
 	screen_tex_object_.vertex_list()[0].uv = D3DXVECTOR2(0.0f, 0.0f);
 	screen_tex_object_.vertex_list()[1].uv = D3DXVECTOR2(1.0f, 0.0f);
 	screen_tex_object_.vertex_list()[2].uv = D3DXVECTOR2(1.0f, 1.0f);
 	screen_tex_object_.vertex_list()[3].uv = D3DXVECTOR2(0.0f, 1.0f);
-
+	
 	immediate_device_context_->UpdateSubresource(screen_tex_object_.dx_helper().vertex_buffer_.Get(),
 		0, NULL, &screen_tex_object_.vertex_list().at(0), 0, 0);
-
-
+	
+	
 	screen_tex_object_.SetWVPMatrix(NULL, NULL, NULL);
 	screen_tex_object_.PreRender();
 	immediate_device_context_->PSSetShaderResources(0, 1,
 		dx_rt_.shader_res_view_.GetAddressOf());
 	screen_tex_object_.PostRender();
-
+	DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 	return true;
 }
 

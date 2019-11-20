@@ -26,7 +26,7 @@ struct VS_OUTPUT
 	float2 t : TEXCOORD0;
 };
 
-VS_OUTPUT VS(VS_INPUT input)
+VS_OUTPUT VS_ALPHA(VS_INPUT input)
 {
 	VS_OUTPUT Output = (VS_OUTPUT)0;
 
@@ -37,7 +37,21 @@ VS_OUTPUT VS(VS_INPUT input)
 	Output.t = input.t;
 	Output.n = input.n;
 	Output.c = input.c;
+	Output.c.w = color.w;
 
 	return Output;
 }
 
+VS_OUTPUT VS(VS_INPUT input)
+{
+	VS_OUTPUT Output = (VS_OUTPUT)0;
+
+	Output.p = mul(float4(input.p, 1.0f), matWorld);
+	Output.p = mul(Output.p, matView);
+	Output.p = mul(Output.p, matProj);
+	Output.t = input.t;
+	Output.n = input.n;
+	Output.c = input.c;
+
+	return Output;
+}

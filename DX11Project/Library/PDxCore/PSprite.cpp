@@ -25,7 +25,12 @@ bool PSprite::Frame()
 {
 	if (remain_lifetime_ <= 0)
 	{
-		isDead = true;
+		if (is_loop_)
+		{
+			remain_lifetime_ = lifetime_;
+		}
+		else
+			isDead = true;
 	}
 	if (isDead == true) return true;
 
@@ -48,12 +53,15 @@ bool PSprite::Frame()
 bool PSprite::Render(ID3D11Device* device, ID3D11DeviceContext* context ,std::vector<Vertex_PNCT>& vertices,
 	DX::PDxHelper& helper, bool is_reversal)
 {
-	DrawPlane(device, context,vertices, helper, is_reversal);
+	if(isDead == false)
+		DrawPlane(device, context, vertices, helper, is_reversal);
+	
 	return true;
 }
 
 bool PSprite::Release()
 {
+
 	return false;
 }
 
@@ -75,6 +83,9 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 		lifetime_ = info.lifetime;
 	}
 	
+	is_loop_ = info.is_loop;
+	
+
 	position_.x = info.posX;
 	position_.y = info.posY;
 	number_of_max_spriteframe_ = info.max_frame;
@@ -113,11 +124,6 @@ bool PSprite::SetPosition(float x, float y)
 	return false;
 }
 
-void PSprite::Play()
-{
-	isDead = false;
-	remain_lifetime_ = lifetime_;
-}
 
 void PSprite::DrawPlane(ID3D11Device* device, ID3D11DeviceContext* context ,std::vector<Vertex_PNCT>& vertices,
 	DX::PDxHelper& helper, bool is_reversal)
