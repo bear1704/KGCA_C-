@@ -320,19 +320,6 @@ void PBoxObject::KeyRotate(float x, float y, float z)
 		D3DXVec3TransformNormal(&box_blueprint_.obb_axis[ii], &box_blueprint_.obb_axis[ii], &mat_rotate);
 	}
 
-	D3DXVECTOR3 x_axis_extent = box_blueprint_.obb_axis[0] * box_blueprint_.obb_extents[0];
-	D3DXVECTOR3 y_axis_extent = box_blueprint_.obb_axis[1] * box_blueprint_.obb_extents[1];
-	D3DXVECTOR3 z_axis_extent = box_blueprint_.obb_axis[2] * box_blueprint_.obb_extents[2];
-
-	box_blueprint_.box_pos[0] = box_blueprint_.center - x_axis_extent - y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[1] = box_blueprint_.center - x_axis_extent + y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[2] = box_blueprint_.center + x_axis_extent + y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[3] = box_blueprint_.center + x_axis_extent - y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[4] = box_blueprint_.center - x_axis_extent - y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[5] = box_blueprint_.center - x_axis_extent + y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[6] = box_blueprint_.center + x_axis_extent + y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[7] = box_blueprint_.center + x_axis_extent - y_axis_extent + z_axis_extent;
-
 	matWorld_._41 = 0.0f;
 	matWorld_._42 = 0.0f;
 	matWorld_._43 = 0.0f;
@@ -355,19 +342,6 @@ void PBoxObject::MoveBox(D3DXVECTOR3& dir_vec, float speed)
 	matWorld_._42 = box_blueprint_.center.y;
 	matWorld_._43 = box_blueprint_.center.z;
 
-	D3DXVECTOR3 x_axis_extent = box_blueprint_.obb_axis[0] * box_blueprint_.obb_extents[0];
-	D3DXVECTOR3 y_axis_extent = box_blueprint_.obb_axis[1] * box_blueprint_.obb_extents[1];
-	D3DXVECTOR3 z_axis_extent = box_blueprint_.obb_axis[2] * box_blueprint_.obb_extents[2];
-
-	box_blueprint_.box_pos[0] = box_blueprint_.center - x_axis_extent - y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[1] = box_blueprint_.center - x_axis_extent + y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[2] = box_blueprint_.center + x_axis_extent + y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[3] = box_blueprint_.center + x_axis_extent - y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[4] = box_blueprint_.center - x_axis_extent - y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[5] = box_blueprint_.center - x_axis_extent + y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[6] = box_blueprint_.center + x_axis_extent + y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[7] = box_blueprint_.center + x_axis_extent - y_axis_extent + z_axis_extent;
-
 	UpdatePosition();
 
 }
@@ -389,18 +363,6 @@ void PBoxObject::ScaleBox(D3DXVECTOR3& scl_vec)
 	box_blueprint_.obb_extents[2] = v_scale.z;
 	
 
-	D3DXVECTOR3 x_axis_extent = box_blueprint_.obb_axis[0] * box_blueprint_.obb_extents[0];
-	D3DXVECTOR3 y_axis_extent = box_blueprint_.obb_axis[1] * box_blueprint_.obb_extents[1];
-	D3DXVECTOR3 z_axis_extent = box_blueprint_.obb_axis[2] * box_blueprint_.obb_extents[2];
-	box_blueprint_.box_pos[0] = box_blueprint_.center - x_axis_extent - y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[1] = box_blueprint_.center - x_axis_extent + y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[2] = box_blueprint_.center + x_axis_extent + y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[3] = box_blueprint_.center + x_axis_extent - y_axis_extent - z_axis_extent;
-	box_blueprint_.box_pos[4] = box_blueprint_.center - x_axis_extent - y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[5] = box_blueprint_.center - x_axis_extent + y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[6] = box_blueprint_.center + x_axis_extent + y_axis_extent + z_axis_extent;
-	box_blueprint_.box_pos[7] = box_blueprint_.center + x_axis_extent - y_axis_extent + z_axis_extent;
-
 	D3DXVECTOR3 vec_pos3 = D3DXVECTOR3(matWorld_._41, matWorld_._42, matWorld_._43); 
 
 	matWorld_._41 = 0.0f;
@@ -419,6 +381,18 @@ void PBoxObject::ScaleBox(D3DXVECTOR3& scl_vec)
 
 bool PBoxObject::UpdatePosition()
 {
+	D3DXVECTOR3 x_axis_extent = box_blueprint_.obb_axis[0] * box_blueprint_.obb_extents[0];
+	D3DXVECTOR3 y_axis_extent = box_blueprint_.obb_axis[1] * box_blueprint_.obb_extents[1];
+	D3DXVECTOR3 z_axis_extent = box_blueprint_.obb_axis[2] * box_blueprint_.obb_extents[2];
+
+	box_blueprint_.box_pos[0] = box_blueprint_.center - x_axis_extent - y_axis_extent - z_axis_extent;
+	box_blueprint_.box_pos[1] = box_blueprint_.center - x_axis_extent + y_axis_extent - z_axis_extent;
+	box_blueprint_.box_pos[2] = box_blueprint_.center + x_axis_extent + y_axis_extent - z_axis_extent;
+	box_blueprint_.box_pos[3] = box_blueprint_.center + x_axis_extent - y_axis_extent - z_axis_extent;
+	box_blueprint_.box_pos[4] = box_blueprint_.center - x_axis_extent - y_axis_extent + z_axis_extent;
+	box_blueprint_.box_pos[5] = box_blueprint_.center - x_axis_extent + y_axis_extent + z_axis_extent;
+	box_blueprint_.box_pos[6] = box_blueprint_.center + x_axis_extent + y_axis_extent + z_axis_extent;
+	box_blueprint_.box_pos[7] = box_blueprint_.center + x_axis_extent - y_axis_extent + z_axis_extent;
 
 	box_blueprint_.aabb_min = box_blueprint_.box_pos[0];
 	box_blueprint_.aabb_max = box_blueprint_.box_pos[0];
