@@ -35,6 +35,12 @@ PToolForm::PToolForm()
 	, m_IsAlphaBlend(FALSE)
 	, m_FadeInNum(0)
 	, m_FadeOutNum(0)
+	, m_VeloX(0)
+	, m_VeloY(0)
+	, m_Gravity(0)
+	, m_VeloZ(0)
+	, m_LaunchTime(0)
+	, m_LifeTIme(0)
 {
 
 }
@@ -62,6 +68,12 @@ void PToolForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_FadeIn, m_FadeInNum);
 	DDX_Text(pDX, IDC_EDIT_FadeOut, m_FadeOutNum);
 	DDX_Control(pDX, IDC_COMBO_PlaneList, m_CtlPlaneList);
+	DDX_Text(pDX, IDC_EDIT_VeloX, m_VeloX);
+	DDX_Text(pDX, IDC_EDIT_VeloY, m_VeloY);
+	DDX_Text(pDX, IDC_EDIT_Gravity, m_Gravity);
+	DDX_Text(pDX, IDC_EDIT_VeloZ, m_VeloZ);
+	DDX_Text(pDX, IDC_EDIT_LaunchTime, m_LaunchTime);
+	DDX_Text(pDX, IDC_EDIT_LifeTime, m_LifeTIme);
 }
 
 BEGIN_MESSAGE_MAP(PToolForm, CFormView)
@@ -500,24 +512,26 @@ void PToolForm::OnBnClickedBtnEffectapply()
 {
 	UpdateData(TRUE);
 
-	int index = m_CtlPlaneList.GetCurSel();
-	CString cstr;
-	m_CtlPlaneList.GetLBText(index, cstr);
-	std::string str = CT2CA(cstr);
+	m_pCurrentEffObj->original_particle_->effect_info.fadeout_time = m_FadeOutNum;
+	m_pCurrentEffObj->original_particle_->effect_info.current_fadeout_time = m_FadeOutNum;
+	m_pCurrentEffObj->original_particle_->effect_info.fadein_time = m_FadeInNum;
+	m_pCurrentEffObj->original_particle_->effect_info.current_fadein_time = m_FadeInNum;
+	m_pCurrentEffObj->original_particle_->set_lifetime(m_LifeTIme);
+	m_pCurrentEffObj->original_particle_->set_remain_lifetime(m_LifeTIme);
 
-	//주의 : 멀티스레드 사용 시 위험할 수 있음(erase와 병행)
-	//현재 실행되는 이펙트의 스프라이트가 변경된 스프라이트와 이름이 같으면, 이쪽도 변경을 적용해준다.
-	for (int ii = 0; ii < app->m_tool.effect_plane_.eff_list_.size(); ii++)
-	{
-		if (app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->get_name() == str)
-		{
-			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.fadeout_time = m_FadeOutNum;
-			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.current_fadeout_time = m_FadeOutNum;
-			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.fadein_time = m_FadeInNum;
-			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.current_fadein_time = m_FadeInNum;
-		}
-	}
+
+
+	m_pCurrentEffObj->original_particle_->gravity.y = m_Gravity;
+	m_pCurrentEffObj->original_particle_->velocity.x = m_VeloX;
+	m_pCurrentEffObj->original_particle_->velocity.y = m_VeloY;
+	m_pCurrentEffObj->original_particle_->velocity.z = m_VeloZ;
 	
+	m_pCurrentEffObj->stored_effect_info_.launch_time = m_LaunchTime;
+	
+
+	//external force 들어갈 자리
+
+
 }
 
 /*
@@ -541,6 +555,8 @@ void PToolForm::OnBnClickedBtnRefresh()
 
 void PToolForm::OnCbnSelchangeComboPlanelist()
 {
+	
+
 	int index = m_CtlPlaneList.GetCurSel();
 	CString cstr;
 	m_CtlPlaneList.GetLBText(index, cstr);
@@ -554,6 +570,20 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 		if (list[ii]->original_particle_->get_name() == str)
 		{
 			m_pCurrentEffObj = list[ii];
+			m_FadeOutNum = m_pCurrentEffObj->original_particle_->effect_info.fadeout_time;
+			m_FadeOutNum = m_pCurrentEffObj->original_particle_->effect_info.current_fadeout_time;
+			m_FadeInNum = m_pCurrentEffObj->original_particle_->effect_info.fadein_time;
+			m_FadeInNum = m_pCurrentEffObj->original_particle_->effect_info.current_fadein_time;
+
+			m_Gravity = m_pCurrentEffObj->original_particle_->gravity.y;
+			m_VeloX = m_pCurrentEffObj->original_particle_->velocity.x;
+			m_VeloY = m_pCurrentEffObj->original_particle_->velocity.y;
+			m_VeloZ = m_pCurrentEffObj->original_particle_->velocity.z;
+			m_LaunchTime = m_pCurrentEffObj->stored_effect_info_.launch_time;
+			m_LifeTIme = m_pCurrentEffObj->original_particle_->get_lifetime_();
+
+			UpdateData(FALSE);
+			break;
 		}
 	}
 }

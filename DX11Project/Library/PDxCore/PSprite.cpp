@@ -246,6 +246,16 @@ void PSprite::set_texture_list(std::vector<PTexture*>& texture_list)
 	texture_list_ = std::move(texture_list);
 }
 
+void PSprite::set_lifetime(float lt)
+{
+	lifetime_ = lt;
+}
+
+void PSprite::set_remain_lifetime(float lt)
+{
+	remain_lifetime_ = lt;
+}
+
 
 ANIMATIONTYPE PSprite::get_animation_type_()
 {

@@ -41,6 +41,8 @@ public:
 	D3DXMATRIX					plane_rot_matrix_;  //파티클들의 rotation 계산을 위해 저장
 	D3DXVECTOR4					color_;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> instance_buffer_;
+private:
+	float						spawn_time_counter_; //생성 파티클에서, 생성하는 시간 간격
 public:
 	PEffectObject();
 	~PEffectObject();

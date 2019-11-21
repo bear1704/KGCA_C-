@@ -152,6 +152,8 @@ public:
 	void set_animation_type_(ANIMATIONTYPE type);
 	void set_is_dmg(bool isdmg);
 	void set_texture_list(std::vector<PTexture*>& texture_list);
+	void set_lifetime(float lt);
+	void set_remain_lifetime(float lt);
 
 	
 	ANIMATIONTYPE get_animation_type_();

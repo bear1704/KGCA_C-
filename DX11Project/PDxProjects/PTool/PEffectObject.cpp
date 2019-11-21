@@ -14,6 +14,7 @@ PEffectObject::PEffectObject()
 	color_.y = 1.0f;
 	color_.z = 1.0f;
 	color_.w = 1.0f;
+	spawn_time_counter_ = 0.0f;
 }
 
 PEffectObject::~PEffectObject()
@@ -85,15 +86,14 @@ bool PEffectObject::Frame()
 bool PEffectObject::Render()
 {
 	PParticle ptcl = *original_particle_;
-	static float time = 0.0f; //주의 : static이라 객체가 2개이상이 되면 파티클 생성이 불안정해지는 문제. 해결해야함
-	time += g_SecondPerFrame;
+	spawn_time_counter_ += g_SecondPerFrame;
 
-	if (time > stored_effect_info_.launch_time)
+	if (spawn_time_counter_ > stored_effect_info_.launch_time)
 	{
 		if (particle_list_.size() < kMaxParticle)
 		{
 			particle_list_.push_back(ptcl);
-			time -= stored_effect_info_.launch_time;
+			spawn_time_counter_ -= stored_effect_info_.launch_time;
 		}
 	}
 	for (auto iter = particle_list_.begin(); iter != particle_list_.end(); )
@@ -265,6 +265,17 @@ void PParticle::CopySprite(PSprite* sprite)
 
 bool PParticle::Frame()
 {
+	if (effect_info.current_fadein_time > 0.0f)
+	{
+		effect_info.current_fadein_time -= g_SecondPerFrame;
+		alpha_ = 1.0f - (effect_info.current_fadein_time / effect_info.fadein_time);
+	}
+	else
+	{
+		remain_lifetime_ -= g_SecondPerFrame;
+	}
+
+
 	if (remain_lifetime_ <= 0)
 	{
 		if (effect_info.current_fadeout_time > 0)
@@ -279,7 +290,7 @@ bool PParticle::Frame()
 	}
 	if (isDead == true) return true;
 
-	remain_lifetime_ -= g_SecondPerFrame;
+	
 
 	time_after_spriteopen_ += g_SecondPerFrame;
 	if (time_after_spriteopen_ > allocatetime_for_onesprite)

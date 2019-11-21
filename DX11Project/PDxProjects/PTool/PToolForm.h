@@ -56,6 +56,12 @@ public:
 	CComboBox m_CtlPlaneList;
 	afx_msg void OnBnClickedBtnRefresh();
 	afx_msg void OnCbnSelchangeComboPlanelist();
+	float m_VeloX;
+	float m_VeloY;
+	float m_Gravity;
+	float m_VeloZ;
+	float m_LaunchTime;
+	float m_LifeTIme;
 };
 
 

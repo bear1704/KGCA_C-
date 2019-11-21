@@ -83,6 +83,11 @@
 #define IDC_Btn_EffectApply             1048
 #define IDC_COMBO_PlaneList             1049
 #define IDC_Btn_Refresh                 1050
+#define IDC_EDIT_VeloY                  1051
+#define IDC_EDIT_VeloX                  1052
+#define IDC_EDIT_VeloZ                  1053
+#define IDC_EDIT_Gravity                1054
+#define IDC_EDIT_LaunchTime             1055
 
 // Next default values for new objects
 // 
@@ -90,7 +95,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1051
+#define _APS_NEXT_CONTROL_VALUE         1056
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
