@@ -4,6 +4,12 @@
 
 const int kMaxParticle = 1000;
 
+struct PhysicsInfo
+{
+	float velocity;
+	float gravity;
+
+};
 
 class PParticle : public PSprite
 {

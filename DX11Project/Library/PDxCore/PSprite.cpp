@@ -189,6 +189,7 @@ void PSprite::AutomataClone(PSprite* sprite, float alpha, float scale, bool is_r
 
 void PSprite::CopyTextureList(std::vector<PTexture*>* tex_desti)
 {
+	tex_desti->resize(texture_list_.size());
 	std::copy(texture_list_.begin(), texture_list_.end(), tex_desti->begin());
 }
 

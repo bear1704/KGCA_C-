@@ -196,6 +196,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		}
 		
 		eff_info.is_multi_texture = false;
+		sp_info.sprite_name.assign(plane_and_sprite_name.begin(), plane_and_sprite_name.end());
+
 		eff_info.x_count = m_XCount;
 		eff_info.y_count = m_YCount;
 		eff_info.x_init = m_SpriteXInit;
