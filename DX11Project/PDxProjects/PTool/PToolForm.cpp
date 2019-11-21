@@ -276,7 +276,7 @@ void PToolForm::SaveData()
 		{
 			PParticle* ori_particle = plane->original_particle_;
 
-			parse.Push("data", "plane");
+			parse.Push("data", "effect");
 
 			if(ori_particle->effect_info.is_multi_texture == true)
 				parse.Push("type", "MULTI");
@@ -302,7 +302,11 @@ void PToolForm::SaveData()
 			else
 				parse.Push("blend", "FALSE");
 
-			parse.Push("lifetime", std::to_string(ori_particle->get_lifetime_()));
+			if(ori_particle->get_lifetime_() > 999999999.0f)
+				parse.Push("lifetime", std::to_string(777.0f));
+			else
+				parse.Push("lifetime", std::to_string(ori_particle->get_lifetime_()));
+
 			parse.Push("each_sprite_playtime", std::to_string(ori_particle->get_allocatetime_for_onesprite()));
 			
 			std::string str = std::to_string(plane->matWorld_._11) + "," + std::to_string(plane->matWorld_._12) + "," +
@@ -320,6 +324,19 @@ void PToolForm::SaveData()
 
 			parse.Push("PlaneWidth", std::to_string(plane->width_));
 			parse.Push("PlaneHeight", std::to_string(plane->height_));
+
+			parse.Push("Particle_fadein", std::to_string(ori_particle->effect_info.fadein_time));
+			parse.Push("Particle_fadeout", std::to_string(ori_particle->effect_info.fadeout_time));
+			parse.Push("Particle_launch_time", std::to_string(plane->launch_time));
+			str = std::to_string(ori_particle->position.x) + "," + std::to_string(ori_particle->position.y) + "," + std::to_string(ori_particle->position.z);
+			parse.Push("Particle_position", str);
+			str = std::to_string(ori_particle->scale.x) + "," + std::to_string(ori_particle->scale.y) + "," + std::to_string(ori_particle->scale.z);
+			parse.Push("Particle_scale", str);
+			str = std::to_string(ori_particle->velocity.x) + "," + std::to_string(ori_particle->velocity.y) + "," + std::to_string(ori_particle->velocity.z);
+			parse.Push("Particle_Velocity", str);
+			parse.Push("Particle_Gravity", std::to_string(ori_particle->gravity.y));
+			str = std::to_string(ori_particle->external_force.x) + "," + std::to_string(ori_particle->external_force.y) + "," + std::to_string(ori_particle->external_force.z);
+			parse.Push("Particle_ExternalForce",str);
 
 			int tex_list_size = ori_particle->get_texture_list_ptr()->size();
 			for (int ii = 0 ; ii < tex_list_size; ii++)
@@ -355,9 +372,7 @@ void PToolForm::LoadData(std::string path)
 	parse.XmlParse(path, &vec, true);
 
 	auto iter = vec.begin();
-	
-
-	
+		
 	while (iter != vec.end())
 	{
 		PEffectObject* pp = new PEffectObject();
@@ -367,7 +382,14 @@ void PToolForm::LoadData(std::string path)
 		int frame_count = 0;
 		float each_sprite_playtime = 0.0f;
 
-		if (iter->second == "plane")
+		D3DXVECTOR3 particle_pos;
+		D3DXVECTOR3 particle_scale;
+		D3DXVECTOR3 particle_velocity;
+		D3DXVECTOR3 particle_gravity;
+		D3DXVECTOR3 particle_external_force;
+		
+
+		if (iter->second == "effect")
 		{
 			while (true)
 			{
@@ -410,6 +432,44 @@ void PToolForm::LoadData(std::string path)
 					std::vector<string> col4 = parse.SplitString(iter->second, ',');
 					pp->matWorld_._41 = std::stof(col4[0]); pp->matWorld_._42 = std::stof(col4[1]);
 					pp->matWorld_._43 = std::stof(col4[2]); pp->matWorld_._44 = std::stof(col4[3]);
+				}
+				else if (iter->first == "Particle_fadein")
+				{
+					eff_info.fadein_time = std::stof(iter->second);
+					eff_info.current_fadein_time = std::stof(iter->second);
+				}
+				else if (iter->first == "Particle_fadeout")
+				{
+					eff_info.fadeout_time = std::stof(iter->second);
+					eff_info.current_fadeout_time= std::stof(iter->second);
+				}
+				else if (iter->first == "Particle_launch_time")
+				{
+					pp->launch_time = std::stof(iter->second);
+				}
+				else if (iter->first == "Particle_position")
+				{
+					std::vector<string> split = parse.SplitString(iter->second, ',');
+					particle_pos = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
+				}
+				else if (iter->first == "Particle_scale")
+				{
+					std::vector<string> split = parse.SplitString(iter->second, ',');
+					particle_scale = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
+				}
+				else if (iter->first == "Particle_Velocity")
+				{
+					std::vector<string> split = parse.SplitString(iter->second, ',');
+					particle_velocity = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
+				}
+				else if (iter->first == "Particle_Gravity")
+				{
+					particle_gravity = D3DXVECTOR3(0.0f, std::stof(iter->second), 0.0f);
+				}
+				else if (iter->first == "Particle_ExternalForce")
+				{
+					std::vector<string> split = parse.SplitString(iter->second, ',');
+					particle_external_force = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
 				}
 				else if (iter->first == "tex_path")
 				{
@@ -466,6 +526,17 @@ void PToolForm::LoadData(std::string path)
 			std::wstring wstr_spname;
 			StringToWstring(info.sprite_name, wstr_spname);
 			pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), pp->width_, pp->height_, wstr_spname, eff_info);
+			pp->original_particle_->position	= particle_pos;
+			pp->original_particle_->scale		= particle_scale;
+			pp->original_particle_->velocity	= particle_velocity;
+			pp->original_particle_->gravity		= particle_gravity;
+			pp->original_particle_->external_force		= particle_external_force;
+			
+			D3DXVECTOR3 v_scale; D3DXVECTOR3 v_pos; D3DXQUATERNION q_rot; D3DXMATRIX mat_rot;
+			D3DXMatrixDecompose(&v_scale, &q_rot, &v_pos, &pp->matWorld_);
+			D3DXMatrixRotationQuaternion(&mat_rot, &q_rot);
+			pp->plane_rot_matrix_ = mat_rot;
+
 			app->m_tool.effect_plane_.eff_list_.push_back(pp);
 
 			iter++;
@@ -518,15 +589,14 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	m_pCurrentEffObj->original_particle_->effect_info.current_fadein_time = m_FadeInNum;
 	m_pCurrentEffObj->original_particle_->set_lifetime(m_LifeTIme);
 	m_pCurrentEffObj->original_particle_->set_remain_lifetime(m_LifeTIme);
-
-
+	
 
 	m_pCurrentEffObj->original_particle_->gravity.y = m_Gravity;
 	m_pCurrentEffObj->original_particle_->velocity.x = m_VeloX;
 	m_pCurrentEffObj->original_particle_->velocity.y = m_VeloY;
 	m_pCurrentEffObj->original_particle_->velocity.z = m_VeloZ;
 	
-	m_pCurrentEffObj->stored_effect_info_.launch_time = m_LaunchTime;
+	m_pCurrentEffObj->launch_time = m_LaunchTime;
 	
 
 	//external force 들어갈 자리
@@ -579,7 +649,7 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 			m_VeloX = m_pCurrentEffObj->original_particle_->velocity.x;
 			m_VeloY = m_pCurrentEffObj->original_particle_->velocity.y;
 			m_VeloZ = m_pCurrentEffObj->original_particle_->velocity.z;
-			m_LaunchTime = m_pCurrentEffObj->stored_effect_info_.launch_time;
+			m_LaunchTime = m_pCurrentEffObj->launch_time;
 			m_LifeTIme = m_pCurrentEffObj->original_particle_->get_lifetime_();
 
 			UpdateData(FALSE);

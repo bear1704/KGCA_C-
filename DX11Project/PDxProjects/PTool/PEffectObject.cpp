@@ -15,6 +15,7 @@ PEffectObject::PEffectObject()
 	color_.z = 1.0f;
 	color_.w = 1.0f;
 	spawn_time_counter_ = 0.0f;
+	launch_time = 1.0f;
 }
 
 PEffectObject::~PEffectObject()
@@ -26,7 +27,12 @@ bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
 	std::wstring tex_name, std::wstring sprite_name)
 {
-	PModel::Init(device, context);
+
+	device_ = device;
+	immediate_context_ = context;
+	D3DXMatrixIdentity(&matView_);
+	D3DXMatrixIdentity(&matProj_);
+
 
 	be_using_sprite_ = true;
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
@@ -52,6 +58,18 @@ bool PEffectObject::Frame()
 	D3DXMATRIX mat_rotation;
 	D3DXMatrixIdentity(&mat_scale);
 	D3DXMatrixIdentity(&mat_rotation);
+
+	PParticle ptcl = *original_particle_;
+	spawn_time_counter_ += g_SecondPerFrame;
+
+	if (spawn_time_counter_ > launch_time)
+	{
+		if (particle_list_.size() < kMaxParticle)
+		{
+			particle_list_.push_back(ptcl);
+			spawn_time_counter_ -= launch_time;
+		}
+	}
 
 	int size = particle_list_.size();
 	for (int ii = 0; ii < size; ii++)
@@ -85,17 +103,7 @@ bool PEffectObject::Frame()
 
 bool PEffectObject::Render()
 {
-	PParticle ptcl = *original_particle_;
-	spawn_time_counter_ += g_SecondPerFrame;
 
-	if (spawn_time_counter_ > stored_effect_info_.launch_time)
-	{
-		if (particle_list_.size() < kMaxParticle)
-		{
-			particle_list_.push_back(ptcl);
-			spawn_time_counter_ -= stored_effect_info_.launch_time;
-		}
-	}
 	for (auto iter = particle_list_.begin(); iter != particle_list_.end(); )
 	{
 
@@ -237,7 +245,10 @@ PParticle::PParticle()
 {
 	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	gravity = D3DXVECTOR3(0.0f, -9.8f, 0.0f);
-	external_force = D3DXVECTOR3(0.0f, -9.8f, 0.0f);
+	external_force = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	scale	 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 }
 
 PParticle::~PParticle()

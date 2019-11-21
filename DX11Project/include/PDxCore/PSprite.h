@@ -24,7 +24,6 @@ struct EffectInfo
 	float fadeout_time;
 	float current_fadeout_time;
 	float current_fadein_time;
-	float launch_time;
 
 	EffectInfo()
 	{

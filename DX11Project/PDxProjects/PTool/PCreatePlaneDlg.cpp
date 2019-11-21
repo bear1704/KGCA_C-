@@ -110,7 +110,6 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	D3DXMatrixIdentity(&mat_world);
 	D3DXMatrixRotationYawPitchRoll(&mat_rot, m_WorldRx, m_WorldRy, m_WorldRz);
 	D3DXMatrixScaling(&mat_scale, m_WorldSx, m_WorldSy, m_WorldSz);
-
 	
 	mat_world = mat_scale * mat_rot;
 	mat_world._41 = m_WorldTx;
@@ -139,7 +138,6 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.lifetime = m_LifeTime;
 
 		eff_info.is_multi_texture = true;
-		eff_info.launch_time = 1.0f;
 		sp_info.sprite_name.assign(plane_and_sprite_name.begin(), plane_and_sprite_name.end());
 
 		std::wstring wstr_name;
@@ -147,8 +145,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, sp_info);
 
 		PEffectObject* pp = new PEffectObject();
-		pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name, eff_info);
 		pp->matWorld_ = mat_world;
+		pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name, eff_info);
 		pp->width_ = m_PlaneWidth;
 		pp->height_ = m_PlaneHeight;
 		pp->plane_rot_matrix_ = mat_rot;
@@ -216,8 +214,8 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 
 		PEffectObject* pp = new PEffectObject();
-		pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name, eff_info);
 		pp->matWorld_ = mat_world;
+		pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name, eff_info);
 		pp->width_ = m_PlaneWidth;
 		pp->height_ = m_PlaneHeight;
 		pp->plane_rot_matrix_ = mat_rot;
