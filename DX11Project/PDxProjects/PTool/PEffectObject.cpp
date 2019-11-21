@@ -33,7 +33,6 @@ bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	D3DXMatrixIdentity(&matView_);
 	D3DXMatrixIdentity(&matProj_);
 
-
 	be_using_sprite_ = true;
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name, tex_name);
 	PSprite* sprite = PSpriteManager::GetInstance().get_sprite_from_map_ex(sprite_name);
@@ -262,8 +261,6 @@ void PParticle::CopySprite(PSprite* sprite)
 	tex_default_boundary_list_ = sprite->tex_default_boundary_list();
 	remain_lifetime_ = sprite->get_remain_lifetime_();
 	lifetime_ = sprite->get_lifetime_();
-	//position_.x = sprite->get_position_().x;
-	//position_.y = sprite->get_position_().y;
 	number_of_max_spriteframe_ = sprite->get_max_sprite_number();
 	allocatetime_for_onesprite = sprite->get_allocatetime_for_onesprite();
 	alpha_ = sprite->get_alpha_();
@@ -271,6 +268,8 @@ void PParticle::CopySprite(PSprite* sprite)
 	current_played_spriteframe_ = 0;
 	sprite->CopyTextureList(&texture_list_);
 	sprite_name_ = sprite->get_name();
+	texture_ = sprite->texture();
+	
 }
 
 

@@ -512,25 +512,54 @@ void PToolForm::LoadData(std::string path)
 					}
 						info.once_playtime = each_sprite_playtime * frame_count;
 						info.max_frame = frame_count;
-
-
-					std::wstring wstr_name;
-					StringToWstring(info.sprite_name, wstr_name);
 					
-					PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, info);
 					break;
 				}
 
 			}
 
+
+			//OFFSET 이펙트일 시의 텍스쳐 바운더리 추가 작업
+			if (eff_info.is_multi_texture == false)
+			{
+				float xOrigin = eff_info.x_init;
+				float yOrigin = eff_info.y_init;
+
+				for (int ii = 0; ii < eff_info.y_count; ii++)
+				{
+					for (int jj = 0; jj < eff_info.x_count; jj++)
+					{
+						float current_xOrigin = xOrigin + eff_info.x_offset * jj;
+						float current_yOrigin = yOrigin + eff_info.y_offset * ii;
+
+						DX::PTex_uv4 uv;
+						uv.u[0] = current_xOrigin / eff_info.tex_width;
+						uv.u[1] = (current_xOrigin + eff_info.x_offset) / eff_info.tex_width;
+						uv.u[2] = (current_xOrigin + eff_info.x_offset) / eff_info.tex_width;
+						uv.u[3] = current_xOrigin / eff_info.tex_width;
+						uv.v[0] = current_yOrigin / eff_info.tex_height;
+						uv.v[1] = current_yOrigin / eff_info.tex_height;
+						uv.v[2] = (current_yOrigin + eff_info.y_offset) / eff_info.tex_height;
+						uv.v[3] = (current_yOrigin + eff_info.y_offset) / eff_info.tex_height;
+
+						info.tex_boundary_list.push_back(uv);
+					}
+				}
+			}
+
+			//sprite_info(info) 스프라이트 추가과정
 			std::wstring wstr_spname;
 			StringToWstring(info.sprite_name, wstr_spname);
+			PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_spname, tex_list, info);
+
+			//이펙트 생성(sprite가 미리 생성되어 매니져에 들어가 있어야 한다)
 			pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), pp->width_, pp->height_, wstr_spname, eff_info);
 			pp->original_particle_->position	= particle_pos;
 			pp->original_particle_->scale		= particle_scale;
 			pp->original_particle_->velocity	= particle_velocity;
 			pp->original_particle_->gravity		= particle_gravity;
 			pp->original_particle_->external_force		= particle_external_force;
+			
 			
 			D3DXVECTOR3 v_scale; D3DXVECTOR3 v_pos; D3DXQUATERNION q_rot; D3DXMATRIX mat_rot;
 			D3DXMatrixDecompose(&v_scale, &q_rot, &v_pos, &pp->matWorld_);
