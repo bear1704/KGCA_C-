@@ -111,6 +111,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	D3DXMatrixRotationYawPitchRoll(&mat_rot, m_WorldRx, m_WorldRy, m_WorldRz);
 	D3DXMatrixScaling(&mat_scale, m_WorldSx, m_WorldSy, m_WorldSz);
 
+	
 	mat_world = mat_scale * mat_rot;
 	mat_world._41 = m_WorldTx;
 	mat_world._42 = m_WorldTy;
@@ -138,6 +139,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		sp_info.lifetime = m_LifeTime;
 
 		eff_info.is_multi_texture = true;
+		eff_info.launch_time = 1.0f;
 		sp_info.sprite_name.assign(plane_and_sprite_name.begin(), plane_and_sprite_name.end());
 
 		std::wstring wstr_name;
@@ -149,6 +151,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		pp->matWorld_ = mat_world;
 		pp->width_ = m_PlaneWidth;
 		pp->height_ = m_PlaneHeight;
+		pp->plane_rot_matrix_ = mat_rot;
 		app->m_tool.effect_plane_.eff_list_.push_back(pp);
 		tex_list.clear();
 	}
@@ -217,6 +220,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		pp->matWorld_ = mat_world;
 		pp->width_ = m_PlaneWidth;
 		pp->height_ = m_PlaneHeight;
+		pp->plane_rot_matrix_ = mat_rot;
 		app->m_tool.effect_plane_.eff_list_.push_back(pp);
 		tex_list.clear();
 	}

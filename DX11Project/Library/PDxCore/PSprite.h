@@ -24,6 +24,7 @@ struct EffectInfo
 	float fadeout_time;
 	float current_fadeout_time;
 	float current_fadein_time;
+	float launch_time;
 
 	EffectInfo()
 	{
@@ -77,7 +78,8 @@ class PSprite
 public:
 	PSprite();
 	~PSprite();
-
+private:
+	pPoint position_;
 protected:
 
 	PTexture* texture_;
@@ -86,7 +88,6 @@ protected:
 	//renewel
 	vector<DX::PTex_uv4> tex_boundary_list_;
 	vector<DX::PTex_uv4> tex_default_boundary_list_;
-	pPoint position_;
 	int number_of_max_spriteframe_;
 	int current_played_spriteframe_;
 	float lifetime_;

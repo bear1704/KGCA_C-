@@ -15,7 +15,7 @@ bool PToolCore::Init()
 {
 	
 	ZeroMemory(&blend_desc_, sizeof(D3D11_BLEND_DESC));
-	blend_desc_.AlphaToCoverageEnable = TRUE;
+	blend_desc_.AlphaToCoverageEnable = FALSE;
 	blend_desc_.IndependentBlendEnable = TRUE;
 	blend_desc_.RenderTarget[0].BlendEnable = TRUE;
 	blend_desc_.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;

@@ -157,5 +157,8 @@
     <FxCompile Include="NormalMap.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Instance.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
