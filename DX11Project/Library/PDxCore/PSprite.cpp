@@ -7,8 +7,8 @@ PSprite::PSprite()
 	isDead = false;
 	alpha_ = 1.0f;
 	is_dmg_ = false;
-	effect_info.is_effect_sprite = false;
-	effect_info.is_multi_texture = false;
+	//effect_info.is_effect_sprite = false;
+	//effect_info.is_multi_texture = false;
 }
 
 
@@ -25,17 +25,7 @@ bool PSprite::Frame()
 {
 	if (remain_lifetime_ <= 0)
 	{
-
-		if (effect_info.current_fadeout_time > 0)
-		{
-			effect_info.current_fadeout_time -= g_SecondPerFrame;
-			alpha_ = effect_info.current_fadeout_time / effect_info.fadeout_time;
-		}
-		else
-		{
-			isDead = true;
-		}
-			
+		isDead = true;	
 	}
 	if (isDead == true) return true;
 
@@ -98,24 +88,6 @@ bool PSprite::Set(SpriteDataInfo info, float alpha, float scale = 1.0f)
 	alpha_ = alpha;
 	scale_ = scale;
 	current_played_spriteframe_ = 0;
-	effect_info.is_multi_texture = info.effect_info.is_multi_texture;
-	effect_info.is_effect_sprite = info.effect_info.is_effect_sprite;
-	effect_info.fadein_time = info.effect_info.fadein_time;
-	effect_info.fadeout_time = info.effect_info.fadeout_time;
-	effect_info.current_fadein_time = info.effect_info.fadein_time;
-	effect_info.current_fadeout_time = info.effect_info.fadeout_time;
-
-	if (effect_info.is_multi_texture == false)
-	{
-		effect_info.x_count = info.effect_info.x_count;
-		effect_info.y_count = info.effect_info.y_count;
-		effect_info.x_offset = info.effect_info.x_offset;
-		effect_info.y_offset = info.effect_info.y_offset;
-		effect_info.x_init = info.effect_info.x_init;
-		effect_info.y_init = info.effect_info.y_init;
-		effect_info.tex_width = info.effect_info.tex_width;
-		effect_info.tex_height = info.effect_info.tex_height;
-	}
 
 	if (texture_list_.size() == 0)
 		texture_ = PTextureManager::GetInstance().GetTextureFromMap(info.texture_name);
@@ -179,23 +151,6 @@ void PSprite::Clone(PSprite* sprite, float alpha, float scale)
 	
 	sprite_name_ = sprite->sprite_name_;
 
-	effect_info.is_effect_sprite = sprite->effect_info.is_effect_sprite;
-	effect_info.is_multi_texture= sprite->effect_info.is_multi_texture;
-	effect_info.tex_width = sprite->effect_info.tex_width;
-	effect_info.tex_height = sprite->effect_info.tex_height;
-
-	effect_info.x_count = sprite->effect_info.x_count;
-	effect_info.y_count = sprite->effect_info.y_count;
-	effect_info.x_init= sprite->effect_info.x_init;
-	effect_info.y_init = sprite->effect_info.y_init;
-	effect_info.x_offset = sprite->effect_info.x_offset;
-	effect_info.y_offset = sprite->effect_info.y_offset;
-
-	effect_info.fadein_time = sprite->effect_info.fadein_time;
-	effect_info.fadeout_time = sprite->effect_info.fadeout_time;
-	effect_info.current_fadein_time = sprite->effect_info.fadein_time;
-	effect_info.current_fadeout_time = sprite->effect_info.fadeout_time;
-
 
 	if (sprite->texture() != nullptr)
 	{
@@ -230,6 +185,11 @@ void PSprite::AutomataClone(PSprite* sprite, float alpha, float scale, bool is_r
 
 	automata_ = true;
 	is_reversal_for_automata_ = is_reversal;
+}
+
+void PSprite::CopyTextureList(std::vector<PTexture*>* tex_desti)
+{
+	std::copy(texture_list_.begin(), texture_list_.end(), tex_desti->begin());
 }
 
 
@@ -285,28 +245,6 @@ void PSprite::set_texture_list(std::vector<PTexture*>& texture_list)
 	texture_list_ = std::move(texture_list);
 }
 
-void PSprite::set_is_multitexture(bool b)
-{
-	effect_info.is_multi_texture = b;
-}
-
-void PSprite::set_is_effect(bool b)
-{
-	effect_info.is_effect_sprite = b;
-}
-
-void PSprite::set_fadein(float f)
-{
-	effect_info.fadein_time = f;
-	effect_info.current_fadein_time = f;
-}
-
-void PSprite::set_fadeout(float f)
-{
-	effect_info.fadeout_time = f;
-	effect_info.current_fadeout_time = f;
-}
-
 
 ANIMATIONTYPE PSprite::get_animation_type_()
 {
@@ -348,15 +286,6 @@ bool PSprite::get_is_dmg()
 	return is_dmg_;
 }
 
-bool PSprite::get_is_multitexture()
-{
-	return effect_info.is_multi_texture;
-}
-
-bool PSprite::get_is_effect()
-{
-	return effect_info.is_effect_sprite;
-}
 
 std::string PSprite::get_name()
 {
@@ -388,7 +317,3 @@ std::vector<PTexture*>* PSprite::get_texture_list_ptr()
 	return &texture_list_;
 }
 
-EffectInfo PSprite::get_effect_info()
-{
-	return effect_info;
-}

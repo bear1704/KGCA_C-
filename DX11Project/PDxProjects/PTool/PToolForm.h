@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "PCreatePlaneDlg.h"
-
+#include "PEffectObject.h"
 
 // PToolForm 폼 보기
 
@@ -35,7 +35,7 @@ public:
 	CButton m_BtnCreatePlane;
 	PParser parse;
 	FILE* fp;
-	PSprite* m_pCurrentSprite;
+	PEffectObject* m_pCurrentEffObj;
 
 	afx_msg void OnBnClickedBtnCreateplane();
 	CComboBox m_CtlBlendSrc;

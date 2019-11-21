@@ -12,7 +12,7 @@
 #include "PSkyBox.h"
 #include "PLightObj.h"
 #include "PNormHeightMap.h"
-
+#include "PEffectObject.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -54,8 +54,7 @@ public:
 	PSkyBox skybox_;
 
 	PLightObj light_obj_;
-	std::vector<PPlaneObject> plane_list_;
-
+	PEffectObject effect_plane_;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
 	CB_VS_NearlyNotChange cb_nearly_not_changes_;

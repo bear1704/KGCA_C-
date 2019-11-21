@@ -120,6 +120,7 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	if (m_IsMultiTexture == TRUE)
 	{
 		SpriteDataInfo sp_info;
+		EffectInfo eff_info;
 		sp_info.max_frame = tex_list.size();
 		sp_info.once_playtime = m_FrameInterval * tex_list.size();
 		sp_info.posX = 100.0f;
@@ -136,26 +137,25 @@ void PCreatePlaneDlg::OnBnClickedOk()
 
 		sp_info.lifetime = m_LifeTime;
 
-		sp_info.effect_info.is_effect_sprite = true;
-		sp_info.effect_info.is_multi_texture = true;
+		eff_info.is_multi_texture = true;
 		sp_info.sprite_name.assign(plane_and_sprite_name.begin(), plane_and_sprite_name.end());
 
 		std::wstring wstr_name;
 		StringToWstring(sp_info.sprite_name, wstr_name);
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, sp_info);
 
-		PPlaneObject pp;
-		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
-		pp.matWorld_ = mat_world;
-		pp.width_ = m_PlaneWidth;
-		pp.height_ = m_PlaneHeight;
-		app->m_tool.plane_list_.push_back(pp);
-
+		PEffectObject* pp = new PEffectObject();
+		pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name, eff_info);
+		pp->matWorld_ = mat_world;
+		pp->width_ = m_PlaneWidth;
+		pp->height_ = m_PlaneHeight;
+		app->m_tool.effect_plane_.eff_list_.push_back(pp);
 		tex_list.clear();
 	}
 	else
 	{
 		SpriteDataInfo sp_info;
+		EffectInfo eff_info;
 		sp_info.max_frame = m_XCount * m_YCount;
 		sp_info.once_playtime = m_FrameInterval * sp_info.max_frame;
 		sp_info.posX = 100.0f;
@@ -195,28 +195,27 @@ void PCreatePlaneDlg::OnBnClickedOk()
 			}
 		}
 		
-		sp_info.effect_info.is_effect_sprite = true;
-		sp_info.effect_info.is_multi_texture = false;
-		sp_info.effect_info.x_count = m_XCount;
-		sp_info.effect_info.y_count = m_YCount;
-		sp_info.effect_info.x_init = m_SpriteXInit;
-		sp_info.effect_info.y_init = m_SpriteYInit;
-		sp_info.effect_info.x_offset = m_XOffset;
-		sp_info.effect_info.y_offset = m_YOffset;
-		sp_info.effect_info.tex_width = m_TextureWidth;
-		sp_info.effect_info.tex_height = m_TextureHeight;
+		eff_info.is_multi_texture = false;
+		eff_info.x_count = m_XCount;
+		eff_info.y_count = m_YCount;
+		eff_info.x_init = m_SpriteXInit;
+		eff_info.y_init = m_SpriteYInit;
+		eff_info.x_offset = m_XOffset;
+		eff_info.y_offset = m_YOffset;
+		eff_info.tex_width = m_TextureWidth;
+		eff_info.tex_height = m_TextureHeight;
 
 		std::wstring wstr_name;
 		StringToWstring(sp_info.sprite_name, wstr_name);
 		PSpriteManager::GetInstance().LoadSpriteDataWithoutScript(wstr_name, tex_list, sp_info);
 
 
-		PPlaneObject pp;
-		pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name);
-		pp.matWorld_ = mat_world;
-		pp.width_ = m_PlaneWidth;
-		pp.height_ = m_PlaneHeight;
-		app->m_tool.plane_list_.push_back(pp);
+		PEffectObject* pp = new PEffectObject();
+		pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), m_PlaneWidth, m_PlaneHeight, plane_and_sprite_name, eff_info);
+		pp->matWorld_ = mat_world;
+		pp->width_ = m_PlaneWidth;
+		pp->height_ = m_PlaneHeight;
+		app->m_tool.effect_plane_.eff_list_.push_back(pp);
 		tex_list.clear();
 	}
 
@@ -263,11 +262,7 @@ void PCreatePlaneDlg::OnBtnClickedSelectTexture()
 
 			tex_list.push_back(tex);
 		}
- 		
-		
-
 	}
-
 
 }
 

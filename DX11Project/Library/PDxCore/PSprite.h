@@ -20,7 +20,6 @@ struct EffectInfo
 	float tex_width = 0.0f;
 	float tex_height = 0.0f;
 	bool is_multi_texture; //멀티텍스쳐를 사용하는 스프라이트인지
-	bool is_effect_sprite; //이펙트 툴에 사용되는 스프라이트인지, 일반 스프라이트인지?
 	float fadein_time;
 	float fadeout_time;
 	float current_fadeout_time;
@@ -37,7 +36,6 @@ struct EffectInfo
 		tex_width = 0.0f;
 		tex_height = 0.0f;
 		is_multi_texture = false;
-		is_effect_sprite = false;
 		fadein_time = 0.0f;
 		fadeout_time = 0.0f;
 		current_fadein_time = 0.0f;
@@ -58,7 +56,6 @@ struct SpriteDataInfo
 	float posX;
 	float posY;
 	float scale;
-	EffectInfo effect_info;
 	std::string sprite_name;
 
 
@@ -81,7 +78,7 @@ public:
 	PSprite();
 	~PSprite();
 
-private:
+protected:
 
 	PTexture* texture_;
 	std::vector<PTexture*> texture_list_;
@@ -110,15 +107,14 @@ private:
 							//1회용 스프라이트를 제작할 땐 꼭 설정해야함
 	bool is_dmg_; //데미지를 표시하는 스프라이트인지 체크
 
-	EffectInfo effect_info;
 
 public:
 
-	bool Init();
-	bool Frame();
-	bool Render(ID3D11Device* device, ID3D11DeviceContext* context, std::vector<Vertex_PNCT>& vertices,
+	virtual bool Init();
+	virtual bool Frame();
+	virtual bool Render(ID3D11Device* device, ID3D11DeviceContext* context, std::vector<Vertex_PNCT>& vertices,
 		DX::PDxHelper& helper, bool is_reversal);
-	bool Release();
+	virtual bool Release();
 	bool Set(SpriteDataInfo info, float alpha, float scale);
 	bool SetPosition(float x, float y);
 
@@ -128,6 +124,7 @@ public:
 		DX::PDxHelper& helper, bool is_reversal);
 	void Clone(PSprite* sprite, float alpha, float scale);
 	void AutomataClone(PSprite* sprite, float alpha, float scale, bool is_reversal, pPoint position);
+	void CopyTextureList(std::vector<PTexture*>* tex_desti);
 
 	//getter
 	pPoint get_position_();
@@ -140,15 +137,12 @@ public:
 	int get_current_played_frame();
 	float get_allocatetime_for_onesprite();
 	bool get_is_dmg();
-	bool get_is_multitexture();
-	bool get_is_effect();
 	std::string get_name();
 	vector<DX::PTex_uv4> tex_boundary_list();
 	vector<DX::PTex_uv4> tex_default_boundary_list();
 	vector<DX::PTex_uv4>& tex_boundary_list_ref();
 	PTexture* texture();
 	std::vector<PTexture*>* get_texture_list_ptr();
-	EffectInfo get_effect_info();
 
 	//setter
 	void set_alpha_(float alpha);
@@ -157,10 +151,7 @@ public:
 	void set_animation_type_(ANIMATIONTYPE type);
 	void set_is_dmg(bool isdmg);
 	void set_texture_list(std::vector<PTexture*>& texture_list);
-	void set_is_multitexture(bool b);
-	void set_is_effect(bool b);
-	void set_fadein(float f);
-	void set_fadeout(float f);
+
 	
 	ANIMATIONTYPE get_animation_type_();
 	

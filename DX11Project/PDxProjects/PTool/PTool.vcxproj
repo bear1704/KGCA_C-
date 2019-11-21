@@ -196,6 +196,7 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PCreatePlaneDlg.h" />
+    <ClInclude Include="PEffectObject.h" />
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="PTool.h" />
     <ClInclude Include="PToolCore.h" />
@@ -215,6 +216,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PCreatePlaneDlg.cpp" />
+    <ClCompile Include="PEffectObject.cpp" />
     <ClCompile Include="PropertiesWnd.cpp" />
     <ClCompile Include="PTool.cpp" />
     <ClCompile Include="PToolCore.cpp" />

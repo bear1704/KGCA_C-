@@ -62,16 +62,16 @@ bool PPlaneObject::Render()
 		dx_helper_.shader_res_view_ = texture_->shader_res_view();
 	}
 
-	if (sprite_.get_is_effect() == true)
-	{
-		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_disable_);
-		constant_data_.color[3] = sprite_.get_alpha_();
-		PModel::Render();
-		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
-	}
-	else
-		PModel::Render();
-	
+	//if (sprite_.get_is_effect() == true)
+	//{
+	//	DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_disable_);
+	//	constant_data_.color[3] = sprite_.get_alpha_();
+	//	PModel::Render();
+	//	DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
+	//}
+	//else
+	//	PModel::Render();
+	PModel::Render();
 	return true;
 }
 
@@ -116,7 +116,6 @@ void PPlaneObject::CreatePlane(ID3D11Device* device, ID3D11DeviceContext* contex
 	width_ = width;   height_ = height;
 	name = sprite_name;
 	this->Init(device, context, L"VertexShader.hlsl", "VS_ALPHA", L"PixelShader.hlsl", "PS_ALPHA", L"" , sprite_name);
-
 }
 
 

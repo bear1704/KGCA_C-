@@ -60,6 +60,9 @@
     <ClInclude Include="PCreatePlaneDlg.h">
       <Filter>toolFrame</Filter>
     </ClInclude>
+    <ClInclude Include="PEffectObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PTool.cpp">
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="PCreatePlaneDlg.cpp">
       <Filter>toolFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="PEffectObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

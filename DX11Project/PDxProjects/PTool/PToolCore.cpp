@@ -32,7 +32,7 @@ bool PToolCore::Init()
 	if (FAILED(hr))
 		assert(false);
 
-	plane_list_.reserve(1024);
+	//plane_list_.reserve(1024);
 
 
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
@@ -113,10 +113,9 @@ bool PToolCore::Frame()
 
 
 	main_camera_->Frame();
-	for (int ii = 0; ii < plane_list_.size(); ii++)
+	for (int ii = 0; ii < effect_plane_.eff_list_.size(); ii++)
 	{
-		if (plane_list_[ii].be_using_sprite_ == true)
-			plane_list_[ii].Frame();
+		effect_plane_.eff_list_[ii]->Frame();
 	}
 	return true;
 }
@@ -156,17 +155,12 @@ bool PToolCore::Render()
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
 		
 		
-		for (int ii = 0; ii < plane_list_.size(); ii++)
+		for (int jj = 0 ; jj < effect_plane_.eff_list_.size(); jj++)
 		{
-
-			if (plane_list_[ii].be_using_sprite_ == true)
-			{
-				plane_list_[ii].SetWVPMatrix(&plane_list_[ii].matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
-				plane_list_[ii].Render();
-			}
-			if (plane_list_[ii].sprite_.get_is_dead_() == true)
-				plane_list_.erase(plane_list_.begin() + ii);
+			effect_plane_.eff_list_[jj]->SetWVPMatrix(&effect_plane_.eff_list_[jj]->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
+			effect_plane_.eff_list_[jj]->Render();
 		}
+
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
@@ -204,9 +198,9 @@ bool PToolCore::Release()
 {
 
 	dx_rt_.Release();
-	for (int ii = 0; ii < plane_list_.size(); ii++)
+	for (int ii = 0; ii < effect_plane_.eff_list_.size(); ii++)
 	{
-		plane_list_[ii].Release();
+		effect_plane_.eff_list_[ii]->Release();
 	}
 	return true;
 }

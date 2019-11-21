@@ -53,7 +53,7 @@ public:
 public:
 	virtual HRESULT CreateVertexData() override;
 	virtual HRESULT CreateIndexData() override;
-	void CreatePlane(ID3D11Device* device, ID3D11DeviceContext* context, float width, float height, std::wstring sprite_name);
+	virtual void CreatePlane(ID3D11Device* device, ID3D11DeviceContext* context, float width, float height, std::wstring sprite_name) final;
 
 };
 

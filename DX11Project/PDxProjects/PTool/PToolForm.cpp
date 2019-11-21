@@ -258,31 +258,31 @@ void PToolForm::SaveData()
 
 
 		std::vector<PSprite*> sprite_list = PSpriteManager::GetInstance().GetSpriteListFromMap();
-		std::vector<PPlaneObject> plane_list = app->m_tool.plane_list_;
+		std::vector<PEffectObject*> effect_list = app->m_tool.effect_plane_.eff_list_;
 
-		for (auto plane : plane_list)
+		for (auto plane : effect_list)
 		{
-			PSprite* sprite = &plane.sprite_;
+			PParticle* ori_particle = plane->original_particle_;
 
 			parse.Push("data", "plane");
 
-			if(sprite->get_is_multitexture())
+			if(ori_particle->effect_info.is_multi_texture == true)
 				parse.Push("type", "MULTI");
 			else
 			{
 				parse.Push("type", "OFFSET");
-				parse.Push("xInit", std::to_string(sprite->get_effect_info().x_init));
-				parse.Push("yInit", std::to_string(sprite->get_effect_info().y_init));
-				parse.Push("xCount", std::to_string(sprite->get_effect_info().x_count));
-				parse.Push("yCount", std::to_string(sprite->get_effect_info().x_count));
-				parse.Push("xOffset", std::to_string(sprite->get_effect_info().x_offset));
-				parse.Push("yOffset", std::to_string(sprite->get_effect_info().y_offset));
-				parse.Push("tex_width", std::to_string(sprite->get_effect_info().tex_width));
-				parse.Push("tex_height", std::to_string(sprite->get_effect_info().tex_height));
+				parse.Push("xInit", std::to_string(ori_particle->effect_info.x_init));
+				parse.Push("yInit", std::to_string(ori_particle->effect_info.y_init));
+				parse.Push("xCount", std::to_string(ori_particle->effect_info.x_count));
+				parse.Push("yCount", std::to_string(ori_particle->effect_info.x_count));
+				parse.Push("xOffset", std::to_string(ori_particle->effect_info.x_offset));
+				parse.Push("yOffset", std::to_string(ori_particle->effect_info.y_offset));
+				parse.Push("tex_width", std::to_string(ori_particle->effect_info.tex_width));
+				parse.Push("tex_height", std::to_string(ori_particle->effect_info.tex_height));
 			}
 			std::string sname;
 			
-			sname.assign(plane.name.begin(), plane.name.end());
+			sname.assign(plane->name.begin(), plane->name.end());
 			parse.Push("name", sname);
 			
 			if (m_IsAlphaBlend == TRUE)
@@ -290,29 +290,29 @@ void PToolForm::SaveData()
 			else
 				parse.Push("blend", "FALSE");
 
-			parse.Push("lifetime", std::to_string(sprite->get_lifetime_()));
-			parse.Push("each_sprite_playtime", std::to_string(sprite->get_allocatetime_for_onesprite()));
+			parse.Push("lifetime", std::to_string(ori_particle->get_lifetime_()));
+			parse.Push("each_sprite_playtime", std::to_string(ori_particle->get_allocatetime_for_onesprite()));
 			
-			std::string str = std::to_string(plane.matWorld_._11) + "," + std::to_string(plane.matWorld_._12) + "," +
-				std::to_string(plane.matWorld_._13) + "," + std::to_string(plane.matWorld_._14);
+			std::string str = std::to_string(plane->matWorld_._11) + "," + std::to_string(plane->matWorld_._12) + "," +
+				std::to_string(plane->matWorld_._13) + "," + std::to_string(plane->matWorld_._14);
 			parse.Push("MAT1col", str);
-			str = std::to_string(plane.matWorld_._21) + "," + std::to_string(plane.matWorld_._22) + "," +
-				std::to_string(plane.matWorld_._23) + "," + std::to_string(plane.matWorld_._24);
+			str = std::to_string(plane->matWorld_._21) + "," + std::to_string(plane->matWorld_._22) + "," +
+				std::to_string(plane->matWorld_._23) + "," + std::to_string(plane->matWorld_._24);
 			parse.Push("MAT2col", str);
-			str = std::to_string(plane.matWorld_._31) + "," + std::to_string(plane.matWorld_._32) + "," +
-				std::to_string(plane.matWorld_._33) + "," + std::to_string(plane.matWorld_._34);
+			str = std::to_string(plane->matWorld_._31) + "," + std::to_string(plane->matWorld_._32) + "," +
+				std::to_string(plane->matWorld_._33) + "," + std::to_string(plane->matWorld_._34);
 			parse.Push("MAT3col", str);
-			str = std::to_string(plane.matWorld_._41) + "," + std::to_string(plane.matWorld_._42) + "," +
-				std::to_string(plane.matWorld_._43) + "," + std::to_string(plane.matWorld_._44);
+			str = std::to_string(plane->matWorld_._41) + "," + std::to_string(plane->matWorld_._42) + "," +
+				std::to_string(plane->matWorld_._43) + "," + std::to_string(plane->matWorld_._44);
 			parse.Push("MAT4col", str);
 
-			parse.Push("PlaneWidth", std::to_string(plane.width_));
-			parse.Push("PlaneHeight", std::to_string(plane.height_));
+			parse.Push("PlaneWidth", std::to_string(plane->width_));
+			parse.Push("PlaneHeight", std::to_string(plane->height_));
 
-			int tex_list_size = sprite->get_texture_list_ptr()->size();
+			int tex_list_size = ori_particle->get_texture_list_ptr()->size();
 			for (int ii = 0 ; ii < tex_list_size; ii++)
 			{
-				PTexture* tex = sprite->get_texture_list_ptr()->at(ii);
+				PTexture* tex = ori_particle->get_texture_list_ptr()->at(ii);
 				std::wstring wstr = tex->tex_path();
 				str.clear();
 				str.assign(wstr.begin(), wstr.end());
@@ -344,15 +344,16 @@ void PToolForm::LoadData(std::string path)
 
 	auto iter = vec.begin();
 	
+
 	
 	while (iter != vec.end())
 	{
-		PPlaneObject pp;
+		PEffectObject* pp = new PEffectObject();
 		SpriteDataInfo info;
+		EffectInfo eff_info;
 		std::vector<PTexture*> tex_list;
 		int frame_count = 0;
 		float each_sprite_playtime = 0.0f;
-		info.effect_info.is_effect_sprite = true;
 
 		if (iter->second == "plane")
 		{
@@ -362,9 +363,9 @@ void PToolForm::LoadData(std::string path)
 				if (iter->first == "type")
 				{
 					if (iter->second == "MULTI")
-						info.effect_info.is_multi_texture = true;
+						eff_info.is_multi_texture = true;
 					else
-						info.effect_info.is_multi_texture = false;
+						eff_info.is_multi_texture = false;
 				}
 				else if (iter->first == "name")
 				{
@@ -377,26 +378,26 @@ void PToolForm::LoadData(std::string path)
 				else if (iter->first == "MAT1col")
 				{
 					std::vector<string> col1 = parse.SplitString(iter->second, ',');
-					pp.matWorld_._11 = std::stof(col1[0]); pp.matWorld_._12 = std::stof(col1[1]);
-					pp.matWorld_._13 = std::stof(col1[2]); pp.matWorld_._14 = std::stof(col1[3]);
+					pp->matWorld_._11 = std::stof(col1[0]); pp->matWorld_._12 = std::stof(col1[1]);
+					pp->matWorld_._13 = std::stof(col1[2]); pp->matWorld_._14 = std::stof(col1[3]);
 				}
 				else if (iter->first == "MAT2col")
 				{
 					std::vector<string> col2 = parse.SplitString(iter->second, ',');
-					pp.matWorld_._21 = std::stof(col2[0]); pp.matWorld_._22 = std::stof(col2[1]);
-					pp.matWorld_._23 = std::stof(col2[2]); pp.matWorld_._24 = std::stof(col2[3]);
+					pp->matWorld_._21 = std::stof(col2[0]); pp->matWorld_._22 = std::stof(col2[1]);
+					pp->matWorld_._23 = std::stof(col2[2]); pp->matWorld_._24 = std::stof(col2[3]);
 				}
 				else if (iter->first == "MAT3col")
 				{
 					std::vector<string> col3 = parse.SplitString(iter->second, ',');
-					pp.matWorld_._31 = std::stof(col3[0]); pp.matWorld_._32 = std::stof(col3[1]);
-					pp.matWorld_._33 = std::stof(col3[2]); pp.matWorld_._34 = std::stof(col3[3]);
+					pp->matWorld_._31 = std::stof(col3[0]); pp->matWorld_._32 = std::stof(col3[1]);
+					pp->matWorld_._33 = std::stof(col3[2]); pp->matWorld_._34 = std::stof(col3[3]);
 				}
 				else if (iter->first == "MAT4col")
 				{
 					std::vector<string> col4 = parse.SplitString(iter->second, ',');
-					pp.matWorld_._41 = std::stof(col4[0]); pp.matWorld_._42 = std::stof(col4[1]);
-					pp.matWorld_._43 = std::stof(col4[2]); pp.matWorld_._44 = std::stof(col4[3]);
+					pp->matWorld_._41 = std::stof(col4[0]); pp->matWorld_._42 = std::stof(col4[1]);
+					pp->matWorld_._43 = std::stof(col4[2]); pp->matWorld_._44 = std::stof(col4[3]);
 				}
 				else if (iter->first == "tex_path")
 				{
@@ -411,31 +412,31 @@ void PToolForm::LoadData(std::string path)
 					frame_count++;
 				}
 				else if (iter->first == "xInit")
-					info.effect_info.x_init = std::stof(iter->second);
+					eff_info.x_init = std::stof(iter->second);
 				else if (iter->first == "yInit")
-					info.effect_info.y_init = std::stof(iter->second);
+					eff_info.y_init = std::stof(iter->second);
 				else if (iter->first == "xCount")
-					info.effect_info.x_count = std::stof(iter->second);
+					eff_info.x_count = std::stof(iter->second);
 				else if (iter->first == "yCount")
-					info.effect_info.y_count = std::stof(iter->second);
+					eff_info.y_count = std::stof(iter->second);
 				else if (iter->first == "xOffset")
-					info.effect_info.x_offset = std::stof(iter->second);
+					eff_info.x_offset = std::stof(iter->second);
 				else if (iter->first == "yOffset")
-					info.effect_info.y_offset = std::stof(iter->second);
+					eff_info.y_offset = std::stof(iter->second);
 				else if (iter->first == "tex_width")
-					info.effect_info.tex_width = std::stof(iter->second);
+					eff_info.tex_width = std::stof(iter->second);
 				else if (iter->first == "tex_height")
-					info.effect_info.tex_height = std::stof(iter->second);
+					eff_info.tex_height = std::stof(iter->second);
 				else if (iter->first == "PlaneWidth")
-					pp.width_ = std::stof(iter->second);
+					pp->width_ = std::stof(iter->second);
 				else if (iter->first == "PlaneHeight")
-					pp.height_ = std::stof(iter->second);
+					pp->height_ = std::stof(iter->second);
 				else if (iter->first == "END")
 				{
 					//offset sprite일 경우 프레임 갯수를 다르게 세어야 한다.
-					if (info.effect_info.is_multi_texture == false)
+					if (eff_info.is_multi_texture == false)
 					{
-						frame_count = info.effect_info.x_count * info.effect_info.y_count;
+						frame_count = eff_info.x_count * eff_info.y_count;
 					}
 						info.once_playtime = each_sprite_playtime * frame_count;
 						info.max_frame = frame_count;
@@ -449,10 +450,11 @@ void PToolForm::LoadData(std::string path)
 				}
 
 			}
+
 			std::wstring wstr_spname;
 			StringToWstring(info.sprite_name, wstr_spname);
-			pp.CreatePlane(app->m_tool.device(), app->m_tool.immediate_device_context(), pp.width_, pp.height_, wstr_spname);
-			app->m_tool.plane_list_.push_back(pp);
+			pp->CreateEffect(app->m_tool.device(), app->m_tool.immediate_device_context(), pp->width_, pp->height_, wstr_spname, eff_info);
+			app->m_tool.effect_plane_.eff_list_.push_back(pp);
 
 			iter++;
 		}
@@ -491,11 +493,13 @@ void PToolForm::OnBnClickedCheckBlend()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
-
+/*
+적용 버튼을 누르면 현재 이펙트의 정보가 적용된다.
+*/
 void PToolForm::OnBnClickedBtnEffectapply()
 {
 	UpdateData(TRUE);
-	m_pCurrentSprite->set_fadeout(m_FadeOutNum);
+
 	int index = m_CtlPlaneList.GetCurSel();
 	CString cstr;
 	m_CtlPlaneList.GetLBText(index, cstr);
@@ -503,34 +507,33 @@ void PToolForm::OnBnClickedBtnEffectapply()
 
 	//주의 : 멀티스레드 사용 시 위험할 수 있음(erase와 병행)
 	//현재 실행되는 이펙트의 스프라이트가 변경된 스프라이트와 이름이 같으면, 이쪽도 변경을 적용해준다.
-	for (int ii = 0; ii < app->m_tool.plane_list_.size(); ii++)
+	for (int ii = 0; ii < app->m_tool.effect_plane_.eff_list_.size(); ii++)
 	{
-		if (app->m_tool.plane_list_[ii].sprite_.get_name() == str)
+		if (app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->get_name() == str)
 		{
-			app->m_tool.plane_list_[ii].sprite_.set_fadeout(m_FadeOutNum);
-			app->m_tool.plane_list_[ii].sprite_.set_fadeout(m_FadeInNum);
+			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.fadeout_time = m_FadeOutNum;
+			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.current_fadeout_time = m_FadeOutNum;
+			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.fadein_time = m_FadeInNum;
+			app->m_tool.effect_plane_.eff_list_[ii]->original_particle_->effect_info.current_fadein_time = m_FadeInNum;
 		}
 	}
 	
-
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
-
+/*
+이펙트 오브젝트 리스트를 최신화
+*/
 void PToolForm::OnBnClickedBtnRefresh()
 {
 	UpdateData(TRUE);
 	m_CtlPlaneList.ResetContent();
 
-	std::vector<PSprite*> sprite_list = PSpriteManager::GetInstance().GetSpriteListFromMap();
+	std::vector<PEffectObject*> object_list = app->m_tool.effect_plane_.eff_list_;
 	
-	for (PSprite* sp : sprite_list)
+	for (PEffectObject* sp : object_list)
 	{
-		multibyte_string mstr = string_to_multibyte(sp->get_name());
-		if (sp->get_effect_info().is_effect_sprite == true)
-		{		
-			m_CtlPlaneList.AddString(mstr.c_str());
-		}
+		multibyte_string mstr = string_to_multibyte(sp->original_particle_->get_name());
+		m_CtlPlaneList.AddString(mstr.c_str());
 	}
 
 }
@@ -542,7 +545,15 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 	CString cstr;
 	m_CtlPlaneList.GetLBText(index, cstr);
 
-	std::wstring wstr = CT2CW(cstr);
+	std::string str = CT2CA(cstr);
 
-	m_pCurrentSprite =  PSpriteManager::GetInstance().get_sprite_from_map_ex(wstr);
+	auto list = app->m_tool.effect_plane_.eff_list_;
+
+	for (int ii = 0; ii < list.size(); ii++)
+	{
+		if (list[ii]->original_particle_->get_name() == str)
+		{
+			m_pCurrentEffObj = list[ii];
+		}
+	}
 }
