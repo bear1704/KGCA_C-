@@ -151,7 +151,7 @@ void PToolForm::OnInitialUpdate()
 
 void PToolForm::OnCbnSelchangeComboBlendSrc()
 {
-	UpdateData(TRUE);
+	/*UpdateData(TRUE);
 
 	ID3D11DeviceContext* context = app->m_tool.immediate_device_context();
 	ID3D11Device* device = app->m_tool.device();
@@ -171,7 +171,7 @@ void PToolForm::OnCbnSelchangeComboBlendSrc()
 		&app->m_tool.blend_desc_, &app->m_tool.blend_state_)))
 	{
 		return;
-	}
+	}*/
 
 
 
@@ -182,7 +182,7 @@ void PToolForm::OnCbnSelchangeComboBlendSrc()
 void PToolForm::OnCbnSelchangeComboBlendDest()
 {
 
-	UpdateData(TRUE);
+	/*UpdateData(TRUE);
 
 	ID3D11DeviceContext* context = app->m_tool.immediate_device_context();
 	ID3D11Device* device = app->m_tool.device();
@@ -202,9 +202,8 @@ void PToolForm::OnCbnSelchangeComboBlendDest()
 		&app->m_tool.blend_desc_, &app->m_tool.blend_state_)))
 	{
 		return;
-	}
+	}*/
 
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
 
@@ -337,6 +336,8 @@ void PToolForm::SaveData()
 			parse.Push("Particle_Gravity", std::to_string(ori_particle->gravity.y));
 			str = std::to_string(ori_particle->external_force.x) + "," + std::to_string(ori_particle->external_force.y) + "," + std::to_string(ori_particle->external_force.z);
 			parse.Push("Particle_ExternalForce",str);
+			parse.Push("BlendSrc", std::to_string(plane->src_blend_));
+			parse.Push("BlendDest", std::to_string(plane->dest_blend_));
 
 			int tex_list_size = ori_particle->get_texture_list_ptr()->size();
 			for (int ii = 0 ; ii < tex_list_size; ii++)
@@ -471,6 +472,14 @@ void PToolForm::LoadData(std::string path)
 					std::vector<string> split = parse.SplitString(iter->second, ',');
 					particle_external_force = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
 				}
+				else if (iter->first == "BlendSrc")
+				{
+					pp->src_blend_ = (D3D11_BLEND) std::stoi(iter->second);
+				}
+				else if (iter->first == "BlendDest")
+				{
+					pp->dest_blend_ = (D3D11_BLEND)std::stoi(iter->second);
+				}
 				else if (iter->first == "tex_path")
 				{
 					TextureInfo info;
@@ -590,19 +599,18 @@ void PToolForm::OnBnClickedCheckBlend()
 	else
 		app->m_tool.blend_desc_.RenderTarget[0].BlendEnable = false;
 
-	int index = m_CtlBlendSrc.GetCurSel();
-	app->m_tool.blend_desc_.RenderTarget[0].SrcBlend = (D3D11_BLEND)(index + 1);
+	//int index = m_CtlBlendSrc.GetCurSel();
+	//app->m_tool.blend_desc_.RenderTarget[0].SrcBlend = (D3D11_BLEND)(index + 1);
 
-	index = m_CtlBlendDest.GetCurSel();
-	app->m_tool.blend_desc_.RenderTarget[0].DestBlend = (D3D11_BLEND)(index + 1);
-	
-	HRESULT hr;
-	if (FAILED(hr = device->CreateBlendState(
-		&app->m_tool.blend_desc_, &app->m_tool.blend_state_)))
-	{
-		return;
-	}
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	//index = m_CtlBlendDest.GetCurSel();
+	//app->m_tool.blend_desc_.RenderTarget[0].DestBlend = (D3D11_BLEND)(index + 1);
+	//
+	//HRESULT hr;
+	//if (FAILED(hr = device->CreateBlendState(
+	//	&app->m_tool.blend_desc_, &app->m_tool.blend_state_)))
+	//{
+	//	return;
+	//}
 }
 
 /*
@@ -627,10 +635,12 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	
 	m_pCurrentEffObj->launch_time = m_LaunchTime;
 	
+	int index = m_CtlBlendSrc.GetCurSel();
+	m_pCurrentEffObj->src_blend_ = (D3D11_BLEND)(index + 1);
+	index = m_CtlBlendDest.GetCurSel();
+	m_pCurrentEffObj->dest_blend_ = (D3D11_BLEND)(index + 1);
 
 	//external force 들어갈 자리
-
-
 }
 
 /*
@@ -680,6 +690,9 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 			m_VeloZ = m_pCurrentEffObj->original_particle_->velocity.z;
 			m_LaunchTime = m_pCurrentEffObj->launch_time;
 			m_LifeTIme = m_pCurrentEffObj->original_particle_->get_lifetime_();
+
+			m_CtlBlendSrc.SetCurSel(m_pCurrentEffObj->src_blend_ - 1);
+			m_CtlBlendDest.SetCurSel(m_pCurrentEffObj->dest_blend_ - 1);
 
 			UpdateData(FALSE);
 			break;

@@ -129,7 +129,8 @@ PTexture* PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Devi
 	if (info.width > 0 || info.height > 0)
 	{
 		DX::PTex_uv4 uv4;
-		std::vector<std::string>&& ltop = parser.SplitString(info.uv_ltop, ',');
+		//std::vector<std::string>&& ltop = parser.SplitString(info.uv_ltop, ',');
+		std::vector<std::string> ltop = parser.SplitString(info.uv_ltop, ',');
 		DX::PTex_uv left_top = ImageCoordinateToTexCoordinate(std::stof(ltop[0]), std::stof(ltop[1]),
 			info.width, info.height);
 

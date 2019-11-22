@@ -47,6 +47,7 @@ bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	original_particle_->position = v_plane_trans;
 	original_particle_->scale = v_plane_scale;
 
+	particle_list_.reserve(kMaxParticle);
 
 	return true;
 }

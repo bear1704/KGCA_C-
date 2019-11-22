@@ -32,14 +32,9 @@ bool PToolCore::Init()
 	if (FAILED(hr))
 		assert(false);
 
-	//plane_list_.reserve(1024);
-
-
 	PSpriteManager::GetInstance().LoadSpriteDataFromScript(L"data/sprite.txt", ObjectLoadType::ETC_SPRITE);
 	screen_tex_object_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"blue");
 	skybox_.Init(device_, immediate_device_context_, L"Skybox.hlsl", "VS", L"Skybox.hlsl", "PS");
-
-	//plane_.Init(device_, immediate_device_context_, L"VertexShader.hlsl", "VS", L"PixelShader.hlsl", "PS", L"character", L"character_move");
 
 
 	free_camera_.Init();
@@ -150,13 +145,21 @@ bool PToolCore::Render()
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
 
-		DX::ApplyBlendState(immediate_device_context_, blend_state_);
+		
 
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
 		
 		
 		for (int jj = 0 ; jj < effect_plane_.eff_list_.size(); jj++)
 		{
+			//오브젝트별 알파블렌드 적용 
+			blend_desc_.RenderTarget[0].SrcBlend = effect_plane_.eff_list_[jj]->src_blend_;
+			blend_desc_.RenderTarget[0].DestBlend = effect_plane_.eff_list_[jj]->dest_blend_;
+			blend_desc_.RenderTarget[0].BlendEnable = true;
+
+			device_->CreateBlendState(&blend_desc_, &blend_state_);
+
+			DX::ApplyBlendState(immediate_device_context_, blend_state_);
 			effect_plane_.eff_list_[jj]->SetWVPMatrix(&effect_plane_.eff_list_[jj]->matWorld_, &main_camera_->matView_, &main_camera_->matProj_);
 			effect_plane_.eff_list_[jj]->Render();
 		}

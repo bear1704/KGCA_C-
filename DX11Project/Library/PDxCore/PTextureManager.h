@@ -11,6 +11,16 @@ struct TextureInfo
 	float height;
 	std::string uv_ltop;
 	std::string uv_rbottom;
+
+	TextureInfo()
+	{
+		tex_name = L"";
+		tex_path = L"";
+		width = 0.0f;
+		height = 0.0f;
+		uv_ltop = "";
+		uv_rbottom = "";
+	}
 };
 
 
