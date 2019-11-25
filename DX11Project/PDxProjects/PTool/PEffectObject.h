@@ -40,7 +40,8 @@ public:
 	std::vector<PParticle>		particle_list_;   //실제 렌더되는 파티클 리스트
 	std::vector<PInstance>		instance_list_;
 
-	D3DXMATRIX					plane_rot_matrix_;  //파티클들의 rotation 계산을 위해 저장
+	D3DXMATRIX					mat_billboard_;
+	D3DXMATRIX					plane_rot_matrix_;  //파티클들의 rotation 계산을 위해 저장, 빌보드용
 	D3DXVECTOR4					color_;
 	float						launch_time;
 	D3D11_BLEND					src_blend_;
@@ -78,5 +79,6 @@ public:
 	void set_is_multitexture(bool b);
 	void set_fadein(float f);
 	void set_fadeout(float f);
+	void set_mat_bilboard(D3DXMATRIX bill);
 };
 

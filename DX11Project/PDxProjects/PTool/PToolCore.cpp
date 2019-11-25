@@ -110,6 +110,8 @@ bool PToolCore::Frame()
 	main_camera_->Frame();
 	for (int ii = 0; ii < effect_plane_.eff_list_.size(); ii++)
 	{
+		D3DXMatrixInverse(&mat_billboard, NULL, &main_camera_->matView_);
+		effect_plane_.eff_list_[ii]->set_mat_bilboard(mat_billboard);
 		effect_plane_.eff_list_[ii]->Frame();
 	}
 	return true;

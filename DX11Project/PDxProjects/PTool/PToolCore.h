@@ -60,7 +60,7 @@ public:
 	CB_VS_NearlyNotChange cb_nearly_not_changes_;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
 
-	
+	D3DXMATRIX mat_billboard;
 
 
 

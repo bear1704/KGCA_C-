@@ -110,10 +110,10 @@ bool PEffectObject::Frame()
 	{
 		particle_list_[ii].Frame();
 
+		mat_rotation = mat_billboard_;
 		mat_scale._11 = particle_list_[ii].scale.x;
 		mat_scale._22 = particle_list_[ii].scale.y;
 		mat_scale._33 = particle_list_[ii].scale.z;
-		mat_rotation = mat_scale * plane_rot_matrix_;
 		mat_rotation._41 = particle_list_[ii].position.x;
 		mat_rotation._42 = particle_list_[ii].position.y;
 		mat_rotation._43 = particle_list_[ii].position.z;
@@ -273,6 +273,11 @@ void PEffectObject::set_fadeout(float f)
 {
 	stored_effect_info_.fadeout_time = f;
 	stored_effect_info_.current_fadeout_time = f;
+}
+
+void PEffectObject::set_mat_bilboard(D3DXMATRIX bill)
+{
+	mat_billboard_ = bill;
 }
 
 PParticle::PParticle()
