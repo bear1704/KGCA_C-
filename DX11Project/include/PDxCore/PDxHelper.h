@@ -96,6 +96,8 @@ namespace DX
 		 bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	ID3D11PixelShader* LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
+	ID3D11GeometryShader* LoadGeometryShaderFromFile(ID3D11Device* current_device, LPCTSTR gs_file_path, LPCSTR gs_func_name, 
+		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data,
 												D3D11_INPUT_ELEMENT_DESC* layout, int element_number);
 
@@ -115,8 +117,10 @@ namespace DX
 		Microsoft::WRL::ComPtr<ID3D11Buffer>				constant_buffer_;
 		Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertex_shader_;
 		Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixel_shader_;
+		Microsoft::WRL::ComPtr<ID3D11GeometryShader>		geometry_shader_;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>			input_layout_;
 		Microsoft::WRL::ComPtr<ID3DBlob>					vertex_blob_;
+		Microsoft::WRL::ComPtr<ID3DBlob>					geometry_blob_;
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	shader_res_view_;
 
 		//Render

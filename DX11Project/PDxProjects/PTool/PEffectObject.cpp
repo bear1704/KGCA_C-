@@ -52,6 +52,40 @@ bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 	return true;
 }
 
+#pragma region GeometryLegacy
+//HRESULT PEffectObject::LoadShaderFromFile(ID3D11Device* device_, ShaderFileName filenames)
+//{
+//	PModel::LoadShaderFromFile(device_, filenames);
+//
+//
+//	vs_donothing.Attach(DX::LoadVertexShaderFromFile(device_, filenames.gs_file_path.c_str(), "VS_DoNothing", false, nullptr));
+//
+//	ComPtr<ID3DBlob> blob_out;
+//	//스트림 출력에 사용할 GS 로드(일반적인 GS랑 다름)
+//	gs_draw.Attach(DX::LoadGeometryShaderFromFile(device_, filenames.gs_file_path.c_str(), "GS_ParticleMain", false, blob_out.GetAddressOf()));
+//
+//	D3D11_SO_DECLARATION_ENTRY decl[] =
+//	{
+//		{0, "POSITION", 0, 0, 3, 0},
+//		{0, "VELOCITY", 0, 0, 3, 0},
+//		{0, "TIMER", 0, 0, 1, 0},
+//	};
+//
+//	UINT elems = sizeof(decl) / sizeof(D3D11_SO_DECLARATION_ENTRY);
+//	UINT stride[] = { sizeof(PParticle) };
+//
+//	HRESULT hr = device_->CreateGeometryShaderWithStreamOutput(
+//		blob_out->GetBufferPointer(),
+//		blob_out->GetBufferSize(),
+//		decl, elems, stride, 1,
+//		D3D11_SO_NO_RASTERIZED_STREAM, NULL,
+//		gs_stream_out.GetAddressOf());
+//
+//	return hr;
+//
+//}
+#pragma endregion
+
 bool PEffectObject::Frame()
 {
 	D3DXMATRIX mat_scale;

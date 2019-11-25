@@ -3,6 +3,8 @@
 #include "PTextureManager.h"
 #include <string>
 
+using namespace Microsoft::WRL;
+
 struct VECTOR4
 {
 	float x;
@@ -29,6 +31,26 @@ struct VS_CB_WVP
 	D3DXMATRIX matProj;  //주의! 이거 D3DXMatrix였는데 문제생기지않을까?
 	float color[4];
 	float etc[4];
+};
+
+struct ShaderFileName
+{
+	std::wstring	vs_file_path;
+	std::string		vs_func_name;
+	std::wstring	ps_file_path;
+	std::string		ps_func_name;
+	std::wstring	gs_file_path;
+	std::string		gs_func_name;
+
+	ShaderFileName()
+	{
+		vs_file_path = L"";
+		vs_func_name = "";
+		ps_file_path = L"";
+		ps_func_name = "";
+		gs_file_path = L"";
+		gs_func_name = "";
+	}
 };
 
 struct PMeshInterface
@@ -111,8 +133,11 @@ public:
 
 
 public:
+	/* 지금은 CreateEx를 사용. 이전 코드와의 호환성을 유지하기 위해 정의함 */
 	virtual bool Create(ID3D11Device* device, ID3D11DeviceContext* context,  std::wstring vs_file_path, std::string vs_func_name, 
 		std::wstring ps_file_path, std::string ps_func_name, std::wstring tex_name = L"");
+	/* Create와 같은 기능을 하나, GS 등 추가적인 기능이 정의되어 있음. */
+	virtual bool CreateEx(ID3D11Device* device, ID3D11DeviceContext* context, ShaderFileName filenames, std::wstring tex_name = L"");
 	virtual HRESULT CreateVertexData();
 	virtual HRESULT CreateIndexData();
 	//vertices : 버텍스 버퍼 / vertices_struct_size : 버텍스 버퍼에 사용되는 구조체 사이즈 / vertices_count : 버텍스 개수 / PVertexAndUV 구조체 사용
@@ -120,6 +145,7 @@ public:
 	virtual HRESULT CreateIndexBuffer();
 	virtual HRESULT CreateConstantBuffer();
 	virtual HRESULT LoadTextures(std::wstring tex_name = nullptr);
+	virtual HRESULT LoadShaderFromFile(ID3D11Device* current_device, ShaderFileName filenames);
 	virtual HRESULT LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path, LPCSTR vs_func_name,
 		bool is_already_compiled, OUT_ ID3DBlob** blob = nullptr);
 	virtual HRESULT LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name,

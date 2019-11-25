@@ -268,6 +268,75 @@ namespace DX
 		return ret_pixel_shader;
 	}
 
+	ID3D11GeometryShader* LoadGeometryShaderFromFile(ID3D11Device* current_device, LPCTSTR gs_file_path, LPCSTR gs_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
+	{
+		ID3D11GeometryShader* ret_geometry_shader = nullptr;
+		HRESULT hr;
+		ID3DBlob* gs_shader_blob = nullptr;
+		ID3DBlob* error_msg = nullptr;
+		DWORD blob_size = 0;
+		LPCVOID blob_data = 0;
+
+		if (is_already_compiled == false)
+		{
+
+
+			DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )	
+			dwShaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+
+			hr = D3DX11CompileFromFile(
+				gs_file_path, NULL, NULL,
+				gs_func_name, "gs_5_0",
+				dwShaderFlags, 0, NULL, &gs_shader_blob, &error_msg, NULL);
+
+
+			if (FAILED(hr))
+			{
+				if (error_msg != nullptr)
+				{
+					OutputDebugStringA((char*)error_msg->GetBufferPointer());
+					if (error_msg)  error_msg->Release();
+				}
+				assert(false);
+				return nullptr;
+			}
+
+			blob_size = gs_shader_blob->GetBufferSize();
+			blob_data = gs_shader_blob->GetBufferPointer();
+		}
+		else //컴파일된 binary blob으로 들어올 경우 
+		{
+			gs_shader_blob = *blob;
+			if (gs_shader_blob == nullptr) return nullptr;
+
+			blob_size = gs_shader_blob->GetBufferSize();
+			blob_data = gs_shader_blob->GetBufferPointer();
+		}
+
+		hr = current_device->CreateGeometryShader(blob_data, blob_size, NULL, &ret_geometry_shader);
+
+		if (FAILED(hr))
+		{
+			gs_shader_blob->Release();
+			return nullptr;
+		}
+
+		if (blob == nullptr)
+		{
+			gs_shader_blob->Release();
+		}
+		else
+		{
+			*blob = gs_shader_blob;
+		}
+
+
+		return ret_geometry_shader;
+	}
+
 	ID3D11InputLayout* CreateInputLayout(ID3D11Device* current_device, DWORD vs_blob_size, LPCVOID vs_blob_data, 
 												D3D11_INPUT_ELEMENT_DESC* layout, int element_number)
 	{

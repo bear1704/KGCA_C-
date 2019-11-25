@@ -94,6 +94,33 @@ bool PModel::Release()
 }
 
 
+bool PModel::CreateEx(ID3D11Device* device, ID3D11DeviceContext* context, ShaderFileName filenames,std::wstring tex_name)
+{
+	if (device_ == nullptr)
+		Init(device, context);
+	if (immediate_context_ == nullptr)
+		Init(device, context);
+
+	if (FAILED(LoadShaderFromFile(device, filenames)))
+		return false;
+	if (FAILED(CreateInputLayout()))
+		return false;
+	if (FAILED(CreateVertexData()))
+		return false;
+	if (FAILED(CreateIndexData()))
+		return false;
+	if (FAILED(CreateVertexBuffer()))
+		return false;
+	if (FAILED(CreateIndexBuffer()))
+		return false;
+	if (FAILED(CreateConstantBuffer()))
+		return false;
+	if (!UpdateBuffer())
+		return false;
+
+	LoadTextures(tex_name); //성공/실패여부 상관없음
+}
+
 HRESULT PModel::CreateVertexData()
 {
 	return S_OK;
@@ -107,8 +134,6 @@ HRESULT PModel::CreateIndexData()
 bool PModel::Create(ID3D11Device* device, ID3D11DeviceContext* context,  std::wstring vs_file_path,
 	std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name, std::wstring tex_name)
 {
-	
-
 	if (device_ == nullptr)
 		Init(device, context);
 	if (immediate_context_ == nullptr)
@@ -214,16 +239,41 @@ HRESULT PModel::LoadTextures(std::wstring tex_name)
 	return S_OK;
 }
 
+HRESULT PModel::LoadShaderFromFile(ID3D11Device* current_device, ShaderFileName filenames)
+{
+	HRESULT hr;
+	//VS 파일이름, 함수이름 입력되었을 시
+	if (filenames.vs_file_path != L"" && filenames.vs_func_name != "")
+	{
+		hr = LoadVertexShaderFromFile(current_device, filenames.vs_file_path.c_str(), filenames.vs_func_name.c_str(), false, nullptr);
+		if (FAILED(hr))
+			return hr;
+	}
+	if (filenames.ps_file_path != L"" && filenames.ps_func_name!= "")
+	{
+		hr = LoadPixelShaderFromFile(current_device, filenames.ps_file_path.c_str(), filenames.ps_func_name.c_str(), false, nullptr);
+		if (FAILED(hr))
+			return hr;
+	}
+	if (filenames.gs_file_path != L"" && filenames.gs_func_name != "")
+	{
+		dx_helper_.geometry_shader_.Attach(DX::LoadGeometryShaderFromFile(current_device, filenames.gs_file_path.c_str(), filenames.gs_func_name.c_str(),
+			false, nullptr));
+	}
+
+	return S_OK;
+}
+
 HRESULT PModel::LoadVertexShaderFromFile(ID3D11Device* current_device, LPCTSTR vs_file_path, LPCSTR vs_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
 {
-	dx_helper_.vertex_shader_.Attach(DX::LoadVertexShaderFromFile(device_,vs_file_path,
+	dx_helper_.vertex_shader_.Attach(DX::LoadVertexShaderFromFile(current_device,vs_file_path,
 		vs_func_name, false, dx_helper_.vertex_blob_.GetAddressOf()));
 	return S_OK;
 }
 
 HRESULT PModel::LoadPixelShaderFromFile(ID3D11Device* current_device, LPCTSTR ps_file_path, LPCSTR ps_func_name, bool is_already_compiled, OUT_ ID3DBlob** blob)
 {
-	dx_helper_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(device_,ps_file_path, ps_func_name, false));
+	dx_helper_.pixel_shader_.Attach(DX::LoadPixelShaderFromFile(current_device,ps_file_path, ps_func_name, false));
 	return S_OK;
 }
 
