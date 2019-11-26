@@ -168,6 +168,8 @@ PTexture* PTextureManager::LoadTextureWithoutScript(TextureInfo info, ID3D11Devi
 		current_device, info.tex_path.c_str(), NULL, NULL, view, NULL
 	);
 
+	
+
 	if (FAILED(hr))
 		assert(false); //¿©±â ¿À·ù¶ä
 

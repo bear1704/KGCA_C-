@@ -51,6 +51,8 @@ public:
 	bool GetAnimationTrack(const float elapsed_time, const std::vector<PAnimTrack>& tracklist,
 		OUT_ PAnimTrack& start_track, OUT_ PAnimTrack& end_track);
 	void Interpolate(PSkinMesh& mesh, D3DXMATRIX& mat_parent, float elapsed_time);
+	/* 파일이 index와 weight를 가지지 않을 때, 출력을 위해 보정해주는 함수 */
+	void ReviseNotUseIdxWeightVert(std::vector <Vertex_PNCTW8I8>& vert);
 
 };
 

@@ -81,17 +81,17 @@ public:
 	//PHeightMap map_;
 	PImportObject ship_;
 
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
-	CB_VS_NearlyNotChange cb_nearly_not_changes_;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
+	//D3D11_BUFFER_DESC cb_everyframe_desc;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
+	//CB_VS_NearlyNotChange cb_nearly_not_changes_;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
 
 
 
 
 public:
 	void MessageProc(MSG msg) override;
-	HRESULT CreateConstantBuffer();
+	//HRESULT CreateConstantBuffer();
 
 };
 PCORE_RUN(L"Animation", 0, 0, 800, 600);

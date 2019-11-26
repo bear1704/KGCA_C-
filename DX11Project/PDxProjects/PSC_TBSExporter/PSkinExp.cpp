@@ -345,24 +345,29 @@ void PSkinExp::GetMesh(INode* node, OUT_  PBipedMesh& pmesh)
 			vn = GetVertexNormal(mesh, iFace, rvertex);
 			CopyPoint3(trilist[iFace].v[custom_v2].n, vn);
 
-			//aff_count = affected_count index °¹¼ö
-			for (int aff_count = 0; aff_count < pmesh.biped_list[V0].numberof_weight ; aff_count++)
+
+			if (pmesh.biped_list.size() > 0)
 			{
-				if (aff_count < 4)
+
+				//aff_count = affected_count index °¹¼ö
+				for (int aff_count = 0; aff_count < pmesh.biped_list[V0].numberof_weight; aff_count++)
 				{
-					trilist[iFace].v[custom_v0].index1[aff_count] =
-						pmesh.biped_list[V0].index_list[aff_count];
-					trilist[iFace].v[custom_v0].weight1[aff_count] =
-						pmesh.biped_list[V0].weight_list[aff_count];
+					if (aff_count < 4)
+					{
+						trilist[iFace].v[custom_v0].index1[aff_count] =
+							pmesh.biped_list[V0].index_list[aff_count];
+						trilist[iFace].v[custom_v0].weight1[aff_count] =
+							pmesh.biped_list[V0].weight_list[aff_count];
+					}
+					else
+					{
+						trilist[iFace].v[custom_v0].index2[aff_count - 4] =
+							pmesh.biped_list[V0].index_list[aff_count];
+						trilist[iFace].v[custom_v0].weight2[aff_count - 4] =
+							pmesh.biped_list[V0].weight_list[aff_count];
+					}
 				}
-				else
-				{
-					trilist[iFace].v[custom_v0].index2[aff_count - 4] =
-						pmesh.biped_list[V0].index_list[aff_count];
-					trilist[iFace].v[custom_v0].weight2[aff_count - 4] =
-						pmesh.biped_list[V0].weight_list[aff_count];
-				}
-			}
+
 			for (int aff_count = 0; aff_count < pmesh.biped_list[V1].numberof_weight; aff_count++)
 			{
 				if (aff_count < 4)
@@ -398,6 +403,7 @@ void PSkinExp::GetMesh(INode* node, OUT_  PBipedMesh& pmesh)
 				}
 			}
 
+		}
 
 			trilist[iFace].tri_index = mesh->faces[iFace].getMatID();
 

@@ -12,29 +12,56 @@ cbuffer cb0: register(b0)
 	matrix	g_matProj		: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
+
+cbuffer cbChangesEveryFrame : register(b1)
+{
+	float3				cb_vec_light		:packoffset(c4);
+	float				cb_padding1			:packoffset(c4.w);
+	float3				cb_vec_camera_pos	:packoffset(c5);
+	float				cb_padding2			:packoffset(c5.w);
+	float3				cb_vec_eye_dir		:packoffset(c6);
+	float				cb_padding3			:packoffset(c6.w);
+};
+
+cbuffer cbNearlyNotChange: register(b2)
+{
+	float4				cb_AmbientMaterial	: packoffset(c0);
+	float4				cb_DiffuseMaterial	: packoffset(c1);
+	float4				cb_SpecularMaterial	: packoffset(c2);
+
+	float4				cb_AmbientLightColor	: packoffset(c3);
+	float4				cb_DiffuseLightColor	: packoffset(c4);
+	float4				cb_SpecularLightColor	: packoffset(c5);
+
+	float				cb_is_dirty						: packoffset(c6.x);
+	float				cb_SpecularIntensity			: packoffset(c6.y);
+	float2				cb_notchange_padding			: packoffset(c6.z);
+	//float				cb_notchange_padding2			: packoffset(c6.w);
+}
+
 //--------------------------------------------------------------------------------------
 //Lighting Variables
 //--------------------------------------------------------------------------------------
-cbuffer cb1: register(b1)
-{
-	matrix				g_matWorldInverse: packoffset(c0);
-	float4				g_AmbientMaterial: packoffset(c4);
-	float4				g_DiffuseMaterial: packoffset(c5);
-	float4				g_cSpecularMaterial: packoffset(c6);
-	float4				g_cEmissionMaterial: packoffset(c7);
-
-	float4				g_AmbientLightColor : packoffset(c8);
-	float4				g_DiffuseLightColor: packoffset(c9);
-	float4				g_cSpecularLightColor: packoffset(c10);
-	float3				g_vLightDir : packoffset(c11);
-	float			    g_fDamping : packoffset(c11.w);
-	float3				g_vLightPos : packoffset(c12);
-	float			    g_fRadius : packoffset(c12.w);
-	float3				g_vEyeDir : packoffset(c13);
-	float			    g_fIntensity : packoffset(c13.w);
-	float3				g_vEyePos : packoffset(c14);
-	float			    g_fEyeRadius : packoffset(c14.w);
-};
+//cbuffer cb1: register(b1)
+//{
+//	matrix				g_matWorldInverse: packoffset(c0);
+//	float4				g_AmbientMaterial: packoffset(c4);
+//	float4				g_DiffuseMaterial: packoffset(c5);
+//	float4				g_cSpecularMaterial: packoffset(c6);
+//	float4				g_cEmissionMaterial: packoffset(c7);
+//
+//	float4				g_AmbientLightColor : packoffset(c8);
+//	float4				g_DiffuseLightColor: packoffset(c9);
+//	float4				g_cSpecularLightColor: packoffset(c10);
+//	float3				g_vLightDir : packoffset(c11);
+//	float			    g_fDamping : packoffset(c11.w);
+//	float3				g_vLightPos : packoffset(c12);
+//	float			    g_fRadius : packoffset(c12.w);
+//	float3				g_vEyeDir : packoffset(c13);
+//	float			    g_fIntensity : packoffset(c13.w);
+//	float3				g_vEyePos : packoffset(c14);
+//	float			    g_fEyeRadius : packoffset(c14.w);
+//};
 //--------------------------------------------------------------------------------------
 struct VS_INPUT
 {
@@ -56,9 +83,9 @@ struct VS_OUTPUT
 //--------------------------------------------------------------------------------------
 float4 Diffuse(float3 vNormal)
 {
-	float fIntensity = max(0, dot(vNormal, normalize(-g_vLightDir)));
-	float4 diffuse = g_AmbientMaterial * g_AmbientLightColor +
-		(g_DiffuseMaterial * g_DiffuseLightColor * fIntensity);
+	float diffuse_intensity = max(0, dot(vNormal, normalize(-cb_vec_light)));
+	float4 diffuse = cb_AmbientMaterial * cb_AmbientLightColor +
+		(cb_DiffuseMaterial * cb_DiffuseLightColor * diffuse_intensity);
 	return diffuse;
 }
 
@@ -67,14 +94,13 @@ float4 Specular(float3 vNormal)
 	// Specular Lighting
 	float  fPower = 0.0f;
 #ifndef HALF_VECTOR
-	float3 R = reflect(g_vLightDir, vNormal);
-	fPower = pow(saturate(dot(R, -g_vEyeDir)), g_fIntensity);
+	float3 R = reflect(-cb_vec_light, vNormal);
+	fPower = pow(saturate(dot(R, -cb_vec_eye_dir)), cb_SpecularIntensity);
 #else
-	float3 vHalf = normalize(-g_vLightDir + -g_vEyeDir);
+	float3 vHalf = normalize(-cb_vec_light + -cb_vec_eye_dir);
 	fPower = pow(saturate(dot(vNormal, vHalf)), 30.0f);
 #endif
-	float4 specular = g_cSpecularMaterial * g_cSpecularLightColor * fPower;
-	//float4 specular = float4(fPower, fPower, fPower,1.0f);
+	float4 specular = cb_SpecularMaterial * cb_SpecularLightColor * fPower;
 	return specular;
 }
 
@@ -86,14 +112,13 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	VS_OUTPUT vOut = (VS_OUTPUT)0;
 	
 	vOut.p = mul(float4(vIn.p, 1.0f), WIDEN(matWorld));
-	//vOut.p = mul(vOut.p, WIDEN(matWorld));
 	vOut.p = mul(vOut.p, WIDEN(matView));
 	vOut.p = mul(vOut.p, WIDEN(matProj));
-	vOut.n = normalize(mul(vIn.n, (float3x3)g_matWorldInverse));
+	vOut.n = vIn.n;
 	vOut.t = vIn.t;
-	vOut.c.x = dot(vOut.n, normalize(-g_vLightDir));
-	vOut.c.y = dot(vOut.n, normalize(-g_vLightDir));// vIn.c * g_MeshColor;
-	vOut.c.z = dot(vOut.n, normalize(-g_vLightDir));
+	vOut.c.x = dot(vOut.n, normalize(-cb_vec_light));
+	vOut.c.y = dot(vOut.n, normalize(-cb_vec_light));// vIn.c * g_MeshColor;
+	vOut.c.z = dot(vOut.n, normalize(-cb_vec_light));
 	vOut.c.w = 1.0f;
 	return vOut;
 }

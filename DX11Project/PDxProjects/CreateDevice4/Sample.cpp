@@ -22,7 +22,7 @@ bool Sample::Init()
 
 
 	ship_.Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", 
-		"PS", L"data/obj/turret/turret8.PNG", L"data/obj/turret/");
+		"PS", L"data/obj/ship.PNG", L"data/obj/");
 
 	D3DXMatrixIdentity(&mat_obj_world_);
 	D3DXMatrixIdentity(&mat_box_world_);
@@ -54,10 +54,13 @@ bool Sample::Init()
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
 		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
 
+	PLightObj* map_light = new PLightObj();
+	map_light->Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
 
-	map_.Init(device_, immediate_device_context_);
+
+	map_.Init(device_, immediate_device_context_, map_light);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
-
 
 	PMapDesc md;
 	md.vertex_cols = map_.vertex_cols();
@@ -67,13 +70,13 @@ bool Sample::Init()
 	md.vs_func = "VS";
 	md.ps_path = L"NormalMap.hlsl";
 	md.ps_func = "PS";
-	md.texture_name = L"tile";
+	md.texture_name = L"block1";
 
 	map_.SetNormalTexture(L"test");
 	if (map_.Load(md) == false)
 		assert(false);
 
-	CreateConstantBuffer();
+	//CreateConstantBuffer();
 
 	return true;
 }
@@ -203,10 +206,10 @@ bool Sample::Render()
 		
 		immediate_device_context_->IASetVertexBuffers(0, 2, buffer, stride, offset);
 		immediate_device_context_->PSSetShaderResources(1, 1, map_.normal_texture()->shader_res_view_double_ptr());
-		immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
-		immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
-		immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		//immediate_device_context_->VSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		//immediate_device_context_->VSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
+		//immediate_device_context_->PSSetConstantBuffers(1, 1, constant_buffer_changes_everyframe_.GetAddressOf());
+		//immediate_device_context_->PSSetConstantBuffers(2, 1, constant_buffer_nearly_not_changes_.GetAddressOf());
 		map_.PostRender();
 	
 
@@ -318,32 +321,32 @@ void Sample::MessageProc(MSG msg)
 	if (main_camera_ == nullptr) return;
 	main_camera_->MessageProc(msg);
 }
-
-HRESULT Sample::CreateConstantBuffer()
-{
-	HRESULT hr;
-	D3D11_BUFFER_DESC cb_everyframe_desc;
-	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_ChangesEveryFrame);
-	cb_everyframe_desc.Usage = D3D11_USAGE_DYNAMIC;
-	cb_everyframe_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb_everyframe_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cb_everyframe_desc.MiscFlags = 0;
-	hr = device_->CreateBuffer(&cb_everyframe_desc, NULL, constant_buffer_changes_everyframe_.GetAddressOf());
-
-	if (FAILED(hr))
-		assert(false);
-
-	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_NearlyNotChange);
-	cb_nearly_not_changes_.cb_AmbientLightColor = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
-	cb_nearly_not_changes_.cb_DiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
-	cb_nearly_not_changes_.cb_SpecularLightColor = D3DXVECTOR4(1, 1, 1, 30.0f);
-
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = &cb_nearly_not_changes_;
-	hr = device_->CreateBuffer(&cb_everyframe_desc, &InitData, constant_buffer_nearly_not_changes_.GetAddressOf());
-	if (FAILED(hr))
-		assert(false);
-
-	return hr;
-}
+//
+//HRESULT Sample::CreateConstantBuffer()
+//{
+//	HRESULT hr;
+//
+//	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_ChangesEveryFrame);
+//	cb_everyframe_desc.Usage = D3D11_USAGE_DYNAMIC;
+//	cb_everyframe_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+//	cb_everyframe_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+//	cb_everyframe_desc.MiscFlags = 0;
+//	hr = device_->CreateBuffer(&cb_everyframe_desc, NULL, constant_buffer_changes_everyframe_.GetAddressOf());
+//
+//	if (FAILED(hr))
+//		assert(false);
+//
+//	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_NearlyNotChange);
+//	cb_nearly_not_changes_.cb_AmbientLightColor = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
+//	cb_nearly_not_changes_.cb_DiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
+//	cb_nearly_not_changes_.cb_SpecularLightColor = D3DXVECTOR4(1, 1, 1, 20.0f);
+//
+//	D3D11_SUBRESOURCE_DATA InitData;
+//	ZeroMemory(&InitData, sizeof(InitData));
+//	InitData.pSysMem = &cb_nearly_not_changes_;
+//	hr = device_->CreateBuffer(&cb_everyframe_desc, &InitData, constant_buffer_nearly_not_changes_.GetAddressOf());
+//	if (FAILED(hr))
+//		assert(false);
+//
+//	return hr;
+//}

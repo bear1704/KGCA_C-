@@ -2,11 +2,7 @@
 
 PLightObj::PLightObj()
 {
-	//ZeroMemory(&cb_light_, sizeof(LIGHT_CONSTANT_BUFFER));
-	//ZeroMemory(&light_vector_, sizeof(D3DXVECTOR3));
-	//ZeroMemory(&light_world_, sizeof(D3DXMATRIX));
-	//ZeroMemory(&light_trs_, sizeof(D3DXMATRIX));
-	//ZeroMemory(&light_world_, sizeof(D3DXMATRIX));
+
 }
 
 PLightObj::~PLightObj()
@@ -19,26 +15,31 @@ bool PLightObj::Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3
 {
 	device_ = device;
 	context_ = context;
-	ZeroMemory(&cb_light_, sizeof(LIGHT_CONSTANT_BUFFER));
+	ZeroMemory(&cb_nearly_not_change_, sizeof(CB_VS_LightNearlyNotChange));
+	ZeroMemory(&cb_change_everyframe_, sizeof(CB_VS_ChangesEveryFrame));
 	ZeroMemory(&light_direction_, sizeof(D3DXVECTOR3));
 	ZeroMemory(&light_trs_, sizeof(LightTRS));
 	D3DXMatrixIdentity(&light_world_);
+	D3DXMatrixIdentity(&mat_normal_);
 	light_trs_.light_trans_.x = 100.0f;
-	light_trs_.light_trans_.y = 100.0f;
+	light_trs_.light_trans_.y = 200.0f;
 	light_trs_.light_trans_.z = 0.0f;
 	D3DXMatrixIdentity(&light_init_world_);
 	D3DXMatrixIdentity(&light_world_);
-	cb_light_.g_AmbientMaterial = ambient_material;
-	cb_light_.g_AmbientColor = ambient_color;
-	cb_light_.g_DiffuseMaterial = diffuse_material;
-	cb_light_.g_DiffuseColor = diffuse_color;
-	cb_light_.g_SpecularMaterial = specular_material;
-	cb_light_.g_SpecularColor = specular_color;
+	
+	cb_nearly_not_change_.ambient_material = ambient_material;
+	cb_nearly_not_change_.ambient_color = ambient_color;
+	cb_nearly_not_change_.diffuse_material = diffuse_material;
+	cb_nearly_not_change_.diffuse_color = diffuse_color;
+	cb_nearly_not_change_.specular_material = specular_material;
+	cb_nearly_not_change_.specular_color = specular_color;
+	cb_nearly_not_change_.specualr_intensity = 30.0f;
+	cb_nearly_not_change_.is_dirty = false;
+	
 	camera_ = camera;
 	
-	constant_buffer_light_.Attach(DX::CreateConstantBuffer(device_, &cb_light_, 1, sizeof(LIGHT_CONSTANT_BUFFER), false));
-
-
+	cbuffer_light_nearly_not_changed_.Attach(DX::CreateConstantBuffer(device_, &cb_nearly_not_change_, 1, sizeof(CB_VS_LightNearlyNotChange), true));
+	cbuffer_change_every_frame_.Attach(DX::CreateConstantBuffer(device_, &cb_change_everyframe_, 1, sizeof(CB_VS_ChangesEveryFrame), true));
 
 	return true;
 }
@@ -47,8 +48,7 @@ bool PLightObj::Frame()
 {
 	D3DXMatrixTranslation(&light_init_world_, light_trs_.light_trans_.x, light_trs_.light_trans_.y , light_trs_.light_trans_.z);
 	D3DXMATRIX mat_rotation;
-	//D3DXMatrixRotationYawPitchRoll(&mat_rotation, light_trs_.light_rot_.x, light_trs_.light_rot_.y, light_trs_.light_rot_.z);
-	D3DXMatrixRotationY(&mat_rotation, g_fGameTimer*0.1f);
+	D3DXMatrixRotationY(&mat_rotation, g_fGameTimer*1.0f);
 	D3DXMatrixMultiply(&light_world_, &light_init_world_, &mat_rotation);
 
 	light_position_.x = light_world_._41;
@@ -56,39 +56,51 @@ bool PLightObj::Frame()
 	light_position_.z = light_world_._43;
 
 	D3DXVec3Normalize(&light_direction_, &light_position_);
+	
 	light_direction_ *= -1.0f;
 
-	cb_light_.g_vLightDir.x = light_direction_.x;
-	cb_light_.g_vLightDir.y = light_direction_.y;
-	cb_light_.g_vLightDir.z = light_direction_.z;
-	cb_light_.g_vLightDir.w = 1;
-
-	cb_light_.g_vEyeDir.x = camera_->vec_look_.x;
-	cb_light_.g_vEyeDir.y = camera_->vec_look_.y;
-	cb_light_.g_vEyeDir.z = camera_->vec_look_.z;
-	cb_light_.g_vEyeDir.w = 20.0f; // 빛의 밝기 강도
-	
-	cb_light_.g_vEyePos.x = camera_->camera_position_.x;
-	cb_light_.g_vEyePos.y = camera_->camera_position_.y;
-	cb_light_.g_vEyePos.z = camera_->camera_position_.z;
-	cb_light_.g_vEyePos.w = 50.0f;
 	return true;
 }
 
 bool PLightObj::Render()
 {
-	//D3DXMATRIX matInvWorld;
-	//D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
-	//D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-	//D3DXMatrixTranspose(&cb_light_.g_matInvWorld, &matInvWorld);
+	D3D11_MAPPED_SUBRESOURCE map_subres;
+	if (SUCCEEDED(context_->Map((ID3D11Resource*)cbuffer_change_every_frame_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &map_subres)))
+	{
+		CB_VS_ChangesEveryFrame* data = (CB_VS_ChangesEveryFrame*)map_subres.pData;
+		data->mat_normal = mat_normal_;
+		data->vec_light = light_direction_;
+		data->vec_look = camera_->vec_look_;
+		data->camera_pos = camera_->camera_position_;
 
-	context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);
-	context_->VSSetConstantBuffers(1, 1, constant_buffer_light_.GetAddressOf());
-	context_->PSSetConstantBuffers(1, 1, constant_buffer_light_.GetAddressOf());
+		context_->Unmap(cbuffer_change_every_frame_.Get(), 0);
+	}
 
-	D3DXMatrixIdentity(&cb_light_.g_matInvWorld);  //이거 왜넣는거지?
-	context_->UpdateSubresource(constant_buffer_light_.Get(), 0, NULL, &cb_light_, 0, 0);
+	//변할때만 업데이트
+	if (cb_nearly_not_change_.is_dirty == true)
+	{
+		D3D11_MAPPED_SUBRESOURCE map_subres1;
+		if (SUCCEEDED(context_->Map((ID3D11Resource*)cbuffer_light_nearly_not_changed_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &map_subres1)))
+		{
+			CB_VS_LightNearlyNotChange* data = (CB_VS_LightNearlyNotChange*)map_subres1.pData;
+			data->ambient_color = cb_nearly_not_change_.ambient_color;
+			data->ambient_material = cb_nearly_not_change_.ambient_material;
+			data->diffuse_color = cb_nearly_not_change_.diffuse_color;
+			data->diffuse_material = cb_nearly_not_change_.diffuse_material;
+			data->specular_color = cb_nearly_not_change_.specular_color;
+			data->specular_material = cb_nearly_not_change_.specular_material;
+			data->specular_color.w = 20.0f;
+			data->is_dirty = false;
 
+			context_->Unmap(cbuffer_light_nearly_not_changed_.Get(), 0);
+		}
+	}
+
+
+	context_->VSSetConstantBuffers(1, 1, cbuffer_change_every_frame_.GetAddressOf());
+	context_->VSSetConstantBuffers(2, 1, cbuffer_light_nearly_not_changed_.GetAddressOf());
+	context_->PSSetConstantBuffers(1, 1, cbuffer_change_every_frame_.GetAddressOf());
+	context_->PSSetConstantBuffers(2, 1, cbuffer_light_nearly_not_changed_.GetAddressOf());
 	return true;
 }
 
@@ -106,4 +118,9 @@ D3DXVECTOR3 PLightObj::light_direction()
 D3DXVECTOR3 PLightObj::light_position()
 {
 	return light_position_;
+}
+
+void PLightObj::set_camera(PCamera* camera)
+{
+	camera_ = camera;
 }

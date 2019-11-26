@@ -196,6 +196,7 @@ HRESULT PSkmObj::CreateVertexData()
 		for (int i = 0; i < cur_object.info.vertex_list.size(); i++)
 		{
 			cur_object.vertices_list[i] = std::move(cur_object.info.vertex_list[i]);
+			ReviseNotUseIdxWeightVert(cur_object.vertices_list[i]);
 		}
 	}
 	return S_OK;
@@ -262,7 +263,6 @@ HRESULT PSkmObj::CreateInputLayout()
 
 bool PSkmObj::PreRender()
 {
-	//주의! : 다 띄우고 난 다음 의미없는 코드일경우 지울 것
 	dx_helper_.PreRender(immediate_context_, dx_helper_.vertex_size_); 
 	
 	D3D11_MAPPED_SUBRESOURCE map_subres;
@@ -419,5 +419,20 @@ void PSkmObj::Interpolate(PSkinMesh& mesh, D3DXMATRIX& mat_parent, float elapsed
 	mat_animation._42 = mat_anim_pos._42;
 	mat_animation._43 = mat_anim_pos._43;
 	mesh.mat_calculation = mat_animation * mat_parent;
+}
+
+void PSkmObj::ReviseNotUseIdxWeightVert(std::vector<Vertex_PNCTW8I8>& vert)
+{
+	for (int ii = 0; ii < vert.size(); ii++)
+	{
+		if (vert[ii].i0.x == 0 && vert[ii].i0.y == 0 && vert[ii].i0.z == 0 && vert[ii].i0.w == 0)
+		{
+			if (vert[ii].i1.x == 0 && vert[ii].i1.y == 0 && vert[ii].i1.z == 0 && vert[ii].i1.w == 0)
+			{
+				vert[ii].i0.x = 0.0f;
+				vert[ii].w0.x = 1.0f;
+			}
+		}
+	}
 }
 
