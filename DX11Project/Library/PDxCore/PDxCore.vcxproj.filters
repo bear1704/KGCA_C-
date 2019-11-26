@@ -298,9 +298,6 @@
     <FxCompile Include="ModelView.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="DiffuseLight.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
@@ -308,6 +305,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Skybox.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DiffuseLight.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

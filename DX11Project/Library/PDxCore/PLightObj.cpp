@@ -2,7 +2,7 @@
 
 PLightObj::PLightObj()
 {
-
+	numberof_constant_buffer_ = 0;
 }
 
 PLightObj::~PLightObj()
@@ -10,8 +10,8 @@ PLightObj::~PLightObj()
 }
 
 bool PLightObj::Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3DXVECTOR4 diffuse_material, 
-	D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color,
-	ID3D11Device* device, ID3D11DeviceContext* context, PCamera* camera)
+	D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color, D3DXVECTOR3 position,
+	int numberof_thisobj_cbuffer,ID3D11Device* device, ID3D11DeviceContext* context, PCamera* camera)
 {
 	device_ = device;
 	context_ = context;
@@ -21,9 +21,9 @@ bool PLightObj::Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3
 	ZeroMemory(&light_trs_, sizeof(LightTRS));
 	D3DXMatrixIdentity(&light_world_);
 	D3DXMatrixIdentity(&mat_normal_);
-	light_trs_.light_trans_.x = 100.0f;
-	light_trs_.light_trans_.y = 200.0f;
-	light_trs_.light_trans_.z = 0.0f;
+	light_trs_.light_trans_.x = position.x;
+	light_trs_.light_trans_.y = position.y;
+	light_trs_.light_trans_.z = position.z;
 	D3DXMatrixIdentity(&light_init_world_);
 	D3DXMatrixIdentity(&light_world_);
 	
@@ -37,7 +37,8 @@ bool PLightObj::Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3
 	cb_nearly_not_change_.is_dirty = false;
 	
 	camera_ = camera;
-	
+	numberof_constant_buffer_ = numberof_thisobj_cbuffer;
+
 	cbuffer_light_nearly_not_changed_.Attach(DX::CreateConstantBuffer(device_, &cb_nearly_not_change_, 1, sizeof(CB_VS_LightNearlyNotChange), true));
 	cbuffer_change_every_frame_.Attach(DX::CreateConstantBuffer(device_, &cb_change_everyframe_, 1, sizeof(CB_VS_ChangesEveryFrame), true));
 
@@ -96,11 +97,10 @@ bool PLightObj::Render()
 		}
 	}
 
-
-	context_->VSSetConstantBuffers(1, 1, cbuffer_change_every_frame_.GetAddressOf());
-	context_->VSSetConstantBuffers(2, 1, cbuffer_light_nearly_not_changed_.GetAddressOf());
-	context_->PSSetConstantBuffers(1, 1, cbuffer_change_every_frame_.GetAddressOf());
-	context_->PSSetConstantBuffers(2, 1, cbuffer_light_nearly_not_changed_.GetAddressOf());
+	context_->VSSetConstantBuffers(numberof_constant_buffer_,     1, cbuffer_change_every_frame_.GetAddressOf());
+	context_->VSSetConstantBuffers(numberof_constant_buffer_ + 1, 1, cbuffer_light_nearly_not_changed_.GetAddressOf());
+	context_->PSSetConstantBuffers(numberof_constant_buffer_,     1, cbuffer_change_every_frame_.GetAddressOf());
+	context_->PSSetConstantBuffers(numberof_constant_buffer_ + 1, 1, cbuffer_light_nearly_not_changed_.GetAddressOf());
 	return true;
 }
 

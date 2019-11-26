@@ -40,6 +40,57 @@ cbuffer cb1 : register(b1)
 	matrix g_mat_anim[MAX_BONE_MATRIX];
 };
 
+cbuffer cbChangesEveryFrame : register(b2)
+{
+	float3				cb_vec_light		:packoffset(c4);
+	float				cb_padding1 : packoffset(c4.w);
+	float3				cb_vec_camera_pos	:packoffset(c5);
+	float				cb_padding2 : packoffset(c5.w);
+	float3				cb_vec_eye_dir		:packoffset(c6);
+	float				cb_padding3 : packoffset(c6.w);
+};
+
+cbuffer cbNearlyNotChange: register(b3)
+{
+	float4				cb_AmbientMaterial	: packoffset(c0);
+	float4				cb_DiffuseMaterial	: packoffset(c1);
+	float4				cb_SpecularMaterial	: packoffset(c2);
+
+	float4				cb_AmbientLightColor	: packoffset(c3);
+	float4				cb_DiffuseLightColor	: packoffset(c4);
+	float4				cb_SpecularLightColor	: packoffset(c5);
+
+	float				cb_is_dirty : packoffset(c6.x);
+	float				cb_SpecularIntensity : packoffset(c6.y);
+	float2				cb_notchange_padding			: packoffset(c6.z);
+}
+
+float4 Diffuse(float3 vNormal)
+{
+	float diffuse_intensity = max(0, dot(vNormal, normalize(-cb_vec_light)));
+	float4 diffuse = cb_AmbientMaterial * cb_AmbientLightColor +
+		(cb_DiffuseMaterial * cb_DiffuseLightColor * diffuse_intensity);
+	return diffuse;
+}
+
+float4 Specular(float3 vNormal)
+{
+	// Specular Lighting
+	float  fPower = 0.0f;
+#ifndef HALF_VECTOR
+	float3 R = reflect(-cb_vec_light, vNormal);
+	fPower = pow(saturate(dot(R, -cb_vec_eye_dir)), cb_SpecularIntensity);
+#else
+	float3 vHalf = normalize(-cb_vec_light + -cb_vec_eye_dir);
+	fPower = pow(saturate(dot(vNormal, vHalf)), 30.0f);
+#endif
+	float4 specular = cb_SpecularMaterial * cb_SpecularLightColor * fPower;
+	return specular;
+}
+
+
+
+
 VS_OUTPUT VS(VS_INPUT input)
 {
 	VS_OUTPUT pOut = (VS_OUTPUT)0;
@@ -90,10 +141,17 @@ VS_OUTPUT VS(VS_INPUT input)
 
 float4 PS(VS_OUTPUT input) : SV_TARGET
 {
-	float3 vec_light = float3(0.0f, 0.0f, 1.0f) * -1.0f;
-	float fdot = max(0.33f, dot(vec_light, input.normal));
-	float4 vec_color = float4(fdot, fdot, fdot, 1.0f);
-	float4 color = vec_color * g_tex_diffuse.Sample(s0, input.tex);
+	//float3 vec_light = float3(0.0f, 0.0f, 1.0f) * -1.0f;
+	//float fdot = max(0.33f, dot(vec_light, input.normal));
+	//float4 vec_color = float4(fdot, fdot, fdot, 1.0f);
+	//float4 color = vec_color * g_tex_diffuse.Sample(s0, input.tex);
 
-	return color * float4(input.color.xyz, 1.0f);
+	//return color * float4(input.color.xyz, 1.0f);
+
+	float4 tex_color = g_tex_diffuse.Sample(s0, input.tex);
+	float4 final_color = tex_color * (Diffuse(input.normal) + Specular(input.normal)) * input.color;
+	final_color.a = 1.0f;
+	return final_color;
+
 }
+

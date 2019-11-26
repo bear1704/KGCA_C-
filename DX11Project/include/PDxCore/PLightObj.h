@@ -5,26 +5,6 @@
 #include "PDxHelper.h"
 #include "PCamera.h"
 
-//struct LIGHT_CONSTANT_BUFFER
-//{
-//	D3DXMATRIX g_matInvWorld;
-//
-//	D3DXVECTOR4 g_AmbientMaterial;
-//	D3DXVECTOR4 g_DiffuseMaterial;
-//	D3DXVECTOR4 g_SpecularMaterial;
-//	D3DXVECTOR4 g_EmissionMaterial;
-//
-//	//Light
-//	D3DXVECTOR4			g_AmbientColor;
-//	D3DXVECTOR4			g_DiffuseColor;
-//	D3DXVECTOR4			g_SpecularColor;
-//	D3DXVECTOR4			g_vLightDir; // w = light damping(attenuation) : 감쇠
-//	D3DXVECTOR4			g_vLightPos; // w = light radius
-//	D3DXVECTOR4			g_vEyeDir;// w = light intensity : 강도
-//	D3DXVECTOR4			g_vEyePos;// w = light radius	
-//
-//};
-
 struct CB_VS_ChangesEveryFrame
 {
 	D3DXMATRIX mat_normal;
@@ -78,6 +58,10 @@ private:
 	D3DXVECTOR3 light_init_pos_;
 	LightTRS light_trs_;
 	PCamera* camera_;
+	/*해당 lightobj를 가지는 오브젝트/객체가 자신의 cb를 얼마나 가지고 있는지 
+	(ex. matworld,matview 등을 담당하는 cb1개, g_animation_matrix를 담당하는 cb 1개가 있다면 value = 2;)
+	*/
+	int numberof_constant_buffer_;
 
 public:
 	PLightObj();
@@ -86,8 +70,8 @@ public:
 public:
 	D3DXMATRIX mat_normal_;//노말맵에서 사용하는 용도
 	bool Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3DXVECTOR4 diffuse_material,
-		D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color
-		, ID3D11Device* device,ID3D11DeviceContext* context ,PCamera* camera);
+		D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color, D3DXVECTOR3 position,
+		int numberof_cbuffer, ID3D11Device* device,ID3D11DeviceContext* context, PCamera* camera);
 	bool Frame();
 	bool Render();
 	bool Release();

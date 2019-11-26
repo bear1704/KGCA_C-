@@ -148,14 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PKgcObj.cpp" />
-    <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="PMatObj.cpp" />
     <ClCompile Include="PSkmObj.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKgcObj.h" />
-    <ClInclude Include="PLightObj.h" />
     <ClInclude Include="PMatObj.h" />
     <ClInclude Include="PSkmObj.h" />
     <ClInclude Include="Sample.h" />

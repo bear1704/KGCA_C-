@@ -1,5 +1,6 @@
 #pragma once
 #include "PModel.h"
+#include "PLightObj.h"
 
 class PMatObj : public PModel
 {
@@ -14,7 +15,7 @@ public:
 	float elapsed_time_;
 	MaxScene scene_;
 	PTexture* texture_;
-
+	PLightObj* light_obj_;
 public:
 	bool Init(ID3D11Device* device, ID3D11DeviceContext* context,
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,

@@ -51,12 +51,12 @@ bool Sample::Init()
 	dx_minimap_rt_.Create(device_, 800, 600);
 	
 	
-	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1),device_, immediate_device_context_, main_camera_);
+	light_obj_.Init(D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1,1,1,1), D3DXVECTOR3(150.0f, 300.0f, 0.0f) ,device_, immediate_device_context_, main_camera_);
 
 	PLightObj* map_light = new PLightObj();
-	map_light->Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
+	map_light->Init(D3DXVECTOR4(1.4f, 1.4f, 1.4f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(200.0f, 300.0f, 0.0f), device_, immediate_device_context_, main_camera_);
 
 
 	map_.Init(device_, immediate_device_context_, map_light);

@@ -127,6 +127,10 @@ bool PMatObj::Frame()
 		}
 	}
 
+
+	if (light_obj_ != nullptr)
+		light_obj_->Frame();
+
 	return true;
 }
 
@@ -220,6 +224,9 @@ HRESULT PMatObj::CreateIndexData()
 
 bool PMatObj::PostRender()
 {
+
+	if (light_obj_ != nullptr)
+		light_obj_->Render();
 
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{

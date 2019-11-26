@@ -196,6 +196,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\ModelViewer\PKgcObj.h" />
+    <ClInclude Include="..\ModelViewer\PMatObj.h" />
+    <ClInclude Include="..\ModelViewer\PSkmObj.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -212,6 +215,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ModelViewer\PKgcObj.cpp" />
+    <ClCompile Include="..\ModelViewer\PMatObj.cpp" />
+    <ClCompile Include="..\ModelViewer\PSkmObj.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

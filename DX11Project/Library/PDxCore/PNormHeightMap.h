@@ -1,6 +1,7 @@
 #pragma once
 #include "PMap.h"
 #include "PNormalMapHelper.h"
+#include "PLightObj.h"
 
 class PNormHeightMap :
 	public PHeightMap

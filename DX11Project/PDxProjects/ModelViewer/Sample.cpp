@@ -22,10 +22,18 @@ bool Sample::Init()
 		free_camera_.vec_view_target_, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	free_camera_.CreateProjectionMatrix();
 	main_camera_ = &free_camera_;
-	Load();
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(200.0f, 100.0f, 0.0f) , 1 ,device_, immediate_device_context_, main_camera_);
+	model_light = new PLightObj();
+	model_light->Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(200.0f, 100.0f, 0.0f), 2 , device_, immediate_device_context_, main_camera_);
 
+
+
+
+
+	//맨 마지막
+	Load();
 	return true;
 }
 
@@ -66,7 +74,6 @@ bool Sample::Frame()
 	{
 		Load();
 	}
-	light_obj_.Frame();
 
 
 
@@ -77,6 +84,7 @@ bool Sample::Frame()
 		object_list_[obj]->Frame();
 	}
 	main_camera_->Frame();
+	light_obj_.Frame();
 
 	return true;
 }
@@ -120,13 +128,18 @@ bool Sample::Load()
 	else if (file_type == FILE_EXTENSION_TYPE::SKM)
 	{
 		model = new PSkmObj;
+		PSkmObj* obj = static_cast<PSkmObj*>(model);
+		obj->light_obj_ = model_light;
 		int load_index = loadfiles_dir_.size() - 1;
-		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS", 
+		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS",
 			loadfiles_dir_[load_index], L"data/texture/");
+		
 	}
 	else if (file_type == FILE_EXTENSION_TYPE::MAT)
 	{
 		model = new PMatObj;
+		PMatObj* obj = static_cast<PMatObj*>(model);
+		obj->light_obj_ = model_light;
 		int load_index = loadfiles_dir_.size() - 1;
 		model->Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS",
 			loadfiles_dir_[load_index], L"data/texture/");

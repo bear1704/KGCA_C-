@@ -15,6 +15,7 @@ cbuffer cb0: register(b0)
 
 cbuffer cbChangesEveryFrame : register(b1)
 {
+	matrix				cb_mat_normal		:packoffset(c0);
 	float3				cb_vec_light		:packoffset(c4);
 	float				cb_padding1			:packoffset(c4.w);
 	float3				cb_vec_camera_pos	:packoffset(c5);

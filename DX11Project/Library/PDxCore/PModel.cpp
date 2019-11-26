@@ -31,6 +31,7 @@ bool PModel::Frame()
 
 bool PModel::Frame(D3DXMATRIX* matrix)
 {
+
 	return true;
 }
 
@@ -47,34 +48,6 @@ bool PModel::PreRender()
 
 bool PModel::Render()
 {
-	D3D11_MAPPED_SUBRESOURCE mapped_subresource;
-	/*HRESULT hr = immediate_context_->Map(
-		dx_helper_.constant_buffer_.Get(), 0,
-		D3D11_MAP_WRITE_DISCARD, 0, &mapped_subresource);
-
-	if (SUCCEEDED(hr))
-	{
-		VS_CB_WVP* data = (VS_CB_WVP*)mapped_subresource.pData;
-		data->matWorld = constant_data_.matWorld;
-		data->matView = constant_data_.matView;
-		data->matProj = constant_data_.matProj;
-		data->color[0] = 1.0f;
-		data->etc[0] = g_fGameTimer;
-
-		immediate_context_->Unmap(dx_helper_.constant_buffer_.Get(), 0);
-
-	}*/
-	//
-
-		////constant_data_.color[0] = 1.0f;
-		////constant_data_.etc[0] = g_fGameTimer;
-
-	constant_data_.etc[0] = g_fGameTimer;
-
-
-		immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0,
-			NULL, &constant_data_, 0, 0); 
-
 	PreRender();
 	PostRender();
 

@@ -125,6 +125,9 @@ bool PSkmObj::Frame()
 		D3DXMatrixTranspose(&cb_bonedata_.g_matrix[obj], &bone_matrix[obj]);
 	}
 
+	if (light_obj_ != nullptr)
+		light_obj_->Frame();
+
 	return true;
 }
 
@@ -272,6 +275,10 @@ bool PSkmObj::PreRender()
 	immediate_context_->Unmap(cbuffer_bone_anim_.Get(), 0);
 
 	immediate_context_->VSSetConstantBuffers(1, 1, cbuffer_bone_anim_.GetAddressOf());
+
+	if (light_obj_ != nullptr)
+		light_obj_->Render();
+
 	return true;
 }
 

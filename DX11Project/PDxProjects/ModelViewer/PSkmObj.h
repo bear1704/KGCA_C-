@@ -1,5 +1,6 @@
 #pragma once
 #include "PModel.h"
+#include "PLightObj.h"
 
 #define MAX_BONE 255
 
@@ -13,7 +14,7 @@ class PSkmObj : public PModel
 {
 private:
 	PParser parse;
-
+	
 public:
 	PSkmObj();
 	virtual ~PSkmObj();
@@ -25,6 +26,7 @@ public:
 	std::vector<Vertex_PNCTW8I8> vertex_list_;
 	float elapsed_time_;
 	MaxScene scene_;
+	PLightObj* light_obj_;
 public:
 	D3DXMATRIX bone_matrix[MAX_BONE];
 	CB_BoneAnimation cb_bonedata_;
@@ -37,7 +39,6 @@ public:
 		std::wstring vs_file_path, std::string vs_func_name, std::wstring ps_file_path, std::string ps_func_name,
 		std::wstring object_path = L"", std::wstring texcomp_path = L"") override;
 	virtual bool Frame() override;
-	//virtual bool Frame(D3DXMATRIX* matrix); //왜쓰는거지
 	virtual HRESULT CreateVertexBuffer()	override;
 	virtual HRESULT CreateIndexBuffer()		override;
 	virtual HRESULT CreateVertexData()		override;
