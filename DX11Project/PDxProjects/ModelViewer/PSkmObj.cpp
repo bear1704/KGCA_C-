@@ -288,9 +288,16 @@ bool PSkmObj::PostRender()
 	for (int obj = 0; obj < object_list_.size(); obj++)
 	{
 
-		//constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
-		constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
 
+		if (object_list_.size() == 1)
+		{
+		}
+		else
+		{
+			//모델뷰어에서는 오브젝트가 무조건 한 개일 수 밖에 없음(애니메이션 미적용에, skm이므로. 그런데, 예상 못할 오류를 대비해 이 코드를 남겨놓음.
+			constant_data_.matWorld = object_list_[obj].mat_inverse_world * object_list_[obj].mat_calculation;
+			assert(false);
+		}
 		D3DXMatrixTranspose(&constant_data_.matWorld, &constant_data_.matWorld);
 
 		immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0, NULL, &constant_data_, 0, 0);

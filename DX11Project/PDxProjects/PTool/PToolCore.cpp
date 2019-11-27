@@ -58,8 +58,6 @@ bool PToolCore::Init()
 		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f, 200.0f, 0.0f), 2, device_, immediate_device_context_, main_camera_);
 	//CreateConstantBuffer();
 
-	Load();
-
 	return true;
 }
 
@@ -155,7 +153,8 @@ bool PToolCore::Render()
 
 		for (int obj = 0; obj < object_list_.size(); obj++)
 		{
-			object_list_[obj]->SetWVPMatrix(nullptr, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
+			object_list_[obj]->SetWVPMatrix((D3DXMATRIX*)&object_list_[obj]->matWorld_, 
+				(D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
 			object_list_[obj]->Render();
 		}
 
@@ -267,14 +266,21 @@ bool PToolCore::Load()
 	FILE_EXTENSION_TYPE file_type = LoadFileDialog(L"*", L"ModelView");
 	PModel* model = nullptr;
 	
+	
 	if (file_type == FILE_EXTENSION_TYPE::KGC)
+	{
 		model = new PKgcObj;
+		model->mytype = file_type;
+		model->object_name_ = last_time_objname;
+	}
 	else if (file_type == FILE_EXTENSION_TYPE::SKM)
 	{
 		model = new PSkmObj;
 		PSkmObj* obj = static_cast<PSkmObj*>(model);
 		obj->light_obj_ = model_light_;
 		int load_index = loadfiles_dir_.size() - 1;
+		model->mytype = file_type;
+		model->object_name_ = last_time_objname;
 		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS",
 			loadfiles_dir_[load_index], L"data/texture/");
 	
@@ -285,6 +291,8 @@ bool PToolCore::Load()
 		PMatObj* obj = static_cast<PMatObj*>(model);
 		obj->light_obj_ = model_light_;
 		int load_index = loadfiles_dir_.size() - 1;
+		model->mytype = file_type;
+		model->object_name_ = last_time_objname;
 		model->Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS",
 			loadfiles_dir_[load_index], L"data/texture/");
 	}
@@ -357,6 +365,8 @@ FILE_EXTENSION_TYPE PToolCore::LoadFileDialog(const TCHAR* extension, const TCHA
 	Ext[5] = '\0';
 	_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
 	
+	last_time_objname = szFileName;
+
 	multibyte_string FileExt = Ext;
 	multibyte_string FileKgcExt = L".kgc";
 	multibyte_string FileSkmExt = L".skm";

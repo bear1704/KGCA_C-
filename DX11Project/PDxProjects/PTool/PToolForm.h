@@ -4,6 +4,7 @@
 
 // PToolForm 폼 보기
 
+
 class PToolForm : public CFormView
 {
 	DECLARE_DYNCREATE(PToolForm)
@@ -36,6 +37,7 @@ public:
 	PParser parse;
 	FILE* fp;
 	PEffectObject* m_pCurrentEffObj;
+	PModel* m_pCurrentObject;
 
 	afx_msg void OnBnClickedBtnCreateplane();
 	CComboBox m_CtlBlendSrc;
@@ -62,6 +64,33 @@ public:
 	float m_VeloZ;
 	float m_LaunchTime;
 	float m_LifeTIme;
+	afx_msg void OnBnClickedBtnCreateobject();
+	afx_msg void OnBnClickedBtnObjectapply();
+	float m_WorldTx;
+	float m_WorldTy;
+	float m_WorldTz;
+	float m_WorldRx;
+	float m_WorldRy;
+	float m_WorldRz;
+	float m_WorldSx;
+	float m_WorldSy;
+	float m_WorldSz;
+	afx_msg void OnBnClickedBtnRefreshobj();
+	CComboBox m_CtlObjectList;
+	afx_msg void OnCbnSelchangeComboObjectlist();
+	float m_AxisX;
+	float m_AxisY;
+	float m_AxisZ;
+	float m_Radius;
+	BOOL m_IsClockWise;
+	float m_RotateSpeed;
+	BOOL m_IsAnimationOn;
+	float m_EffectTx;
+	float m_EffectTy;
+	float m_EffectTz;
+	float m_EffectSx;
+	float m_EffectSy;
+	float m_EffectSz;
 };
 
 

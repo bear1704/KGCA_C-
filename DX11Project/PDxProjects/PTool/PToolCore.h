@@ -59,9 +59,10 @@ public:
 	PLightObj light_obj_;
 	PLightObj* model_light_;
 	PEffectObject effect_plane_;
+	
 	std::vector<PModel*> object_list_;
 	std::vector<multibyte_string> loadfiles_dir_;
-
+	multibyte_string last_time_objname;
 	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
 	//CB_VS_NearlyNotChange cb_nearly_not_changes_;
 	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;

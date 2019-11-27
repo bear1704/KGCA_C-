@@ -11,13 +11,21 @@ struct PInstance
 	D3DXVECTOR4 color;
 };
 
+struct PEffectAnimation
+{
+	D3DXVECTOR3		rotate_axis;
+	float			radius;
+	bool			clockwise;
+	float			current_angle;
+	float			speed;
+};
+
 class PParticle : public PSprite
 {
 public:
 	PParticle();
 	~PParticle();
 public:
-	D3DXVECTOR3 point_pos; //GS에서 평면으로 업그레이드 되는 점(point)
 	EffectInfo effect_info;
 	D3DXVECTOR3 position;
 	D3DXVECTOR3 scale;
@@ -39,13 +47,20 @@ public:
 	PParticle*					original_particle_; //원형판 파티클
 	std::vector<PParticle>		particle_list_;   //실제 렌더되는 파티클 리스트
 	std::vector<PInstance>		instance_list_;
+	D3DXVECTOR3					world_t_xyz; //반경 회전이 적용된 월드행렬의 위치값
 
+	//animation
+	PEffectAnimation			animation_info_;
+	bool						is_animate;
+
+	//particle etc..
+	float						launch_time;
 	D3DXMATRIX					mat_billboard_;
 	D3DXMATRIX					plane_rot_matrix_;  //파티클들의 rotation 계산을 위해 저장, 빌보드용
 	D3DXVECTOR4					color_;
-	float						launch_time;
 	D3D11_BLEND					src_blend_;
 	D3D11_BLEND					dest_blend_;
+
 	Microsoft::WRL::ComPtr<ID3D11Buffer> instance_buffer_;
 	//Microsoft::WRL::ComPtr<ID3D11GeometryShader> gs_draw; //실제 그릴 버퍼
 	//Microsoft::WRL::ComPtr<ID3D11GeometryShader> gs_stream_out; //출력되는 스트림을 저장하는 버퍼 (서로 프레임마다 스왑됨)
@@ -80,5 +95,6 @@ public:
 	void set_fadein(float f);
 	void set_fadeout(float f);
 	void set_mat_bilboard(D3DXMATRIX bill);
+	void SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj) override;
 };
 

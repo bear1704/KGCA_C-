@@ -70,6 +70,7 @@ static multibyte_string string_to_multibyte(std::string str)
 	return ret;
 }
 
+
 enum class KEYSTAT
 {
 	KEY_FREE,

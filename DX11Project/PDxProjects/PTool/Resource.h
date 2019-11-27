@@ -43,6 +43,7 @@
 #define IDD_CreatePlane                 314
 #define IDC_BTN_CREATEPLANE             1000
 #define IDC_EDIT_WIDTH                  1001
+#define IDC_BTN_CREATEOBJECT            1001
 #define IDC_EDIT_HEIGHT                 1002
 #define IDC_CHECK_IsLoop                1005
 #define IDC_Btn_SelectTexture           1006
@@ -88,6 +89,31 @@
 #define IDC_EDIT_VeloZ                  1053
 #define IDC_EDIT_Gravity                1054
 #define IDC_EDIT_LaunchTime             1055
+#define IDC_Btn_ObjectApply             1056
+#define IDC_EDIT_Object_Tx              1057
+#define IDC_EDIT_Object_Ty              1058
+#define IDC_EDIT_Object_Tz              1059
+#define IDC_EDIT_Object_Rx              1060
+#define IDC_EDIT_Object_Ry              1061
+#define IDC_EDIT_Object_Rz              1062
+#define IDC_EDIT_Object_Sx              1063
+#define IDC_EDIT_Object_Sy              1064
+#define IDC_EDIT_Object_Sz              1065
+#define IDC_COMBO_ObjectList            1066
+#define IDC_Btn_RefreshObj              1067
+#define IDC_EDIT_AxisX                  1068
+#define IDC_EDIT_AxisY                  1069
+#define IDC_EDIT_AxisZ                  1070
+#define IDC_EDIT_Radius                 1071
+#define IDC_CHECK_ClockWise             1072
+#define IDC_EDIT_Speed                  1073
+#define IDC_CHECK1                      1074
+#define IDC_EDIT_EffTx                  1075
+#define IDC_EDIT_EffTy                  1076
+#define IDC_EDIT_EffTz                  1077
+#define IDC_EDIT_EffSx                  1078
+#define IDC_EDIT_EffSy                  1079
+#define IDC_EDIT_EffSz                  1080
 
 // Next default values for new objects
 // 
@@ -95,7 +121,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1056
+#define _APS_NEXT_CONTROL_VALUE         1082
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

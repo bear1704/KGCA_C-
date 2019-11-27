@@ -19,7 +19,7 @@
     <Filter Include="toolFrame">
       <UniqueIdentifier>{f705be4c-2e97-4248-949e-f9ed0e28043e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewFilter1">
+    <Filter Include="ModelViewer">
       <UniqueIdentifier>{3185a3e1-3a17-4ff9-8bf6-3ed57c728406}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -67,13 +67,13 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="..\ModelViewer\PKgcObj.h">
-      <Filter>NewFilter1</Filter>
+      <Filter>ModelViewer</Filter>
     </ClInclude>
     <ClInclude Include="..\ModelViewer\PMatObj.h">
-      <Filter>NewFilter1</Filter>
+      <Filter>ModelViewer</Filter>
     </ClInclude>
     <ClInclude Include="..\ModelViewer\PSkmObj.h">
-      <Filter>NewFilter1</Filter>
+      <Filter>ModelViewer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,13 +111,13 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="..\ModelViewer\PKgcObj.cpp">
-      <Filter>NewFilter1</Filter>
+      <Filter>ModelViewer</Filter>
     </ClCompile>
     <ClCompile Include="..\ModelViewer\PMatObj.cpp">
-      <Filter>NewFilter1</Filter>
+      <Filter>ModelViewer</Filter>
     </ClCompile>
     <ClCompile Include="..\ModelViewer\PSkmObj.cpp">
-      <Filter>NewFilter1</Filter>
+      <Filter>ModelViewer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

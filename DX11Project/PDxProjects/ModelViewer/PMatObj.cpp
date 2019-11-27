@@ -93,7 +93,7 @@ bool PMatObj::Init(ID3D11Device* device, ID3D11DeviceContext* context, std::wstr
 	texinfo.tex_name = L"bk.bmp";
 	texinfo.tex_path = texcomp_path + texinfo.tex_name;
 	PTextureManager::GetInstance().LoadTextureWithoutScript(texinfo, device);
-	texture_ = PTextureManager::GetInstance().GetTextureFromMap(L"bk.bmp");
+	texture_ = PTextureManager::GetInstance().GetTextureFromMap(L"bk");
 
 
 	Create(device_, immediate_context_, vs_file_path, vs_func_name, ps_file_path, ps_func_name);

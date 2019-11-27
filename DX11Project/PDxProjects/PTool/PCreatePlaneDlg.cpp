@@ -108,13 +108,14 @@ void PCreatePlaneDlg::OnBnClickedOk()
 	D3DXMatrixIdentity(&mat_rot);
 	D3DXMatrixIdentity(&mat_scale);
 	D3DXMatrixIdentity(&mat_world);
-	D3DXMatrixRotationYawPitchRoll(&mat_rot, m_WorldRx, m_WorldRy, m_WorldRz);
+	D3DXMatrixRotationYawPitchRoll(&mat_rot, m_WorldRy, m_WorldRx, m_WorldRz);
 	D3DXMatrixScaling(&mat_scale, m_WorldSx, m_WorldSy, m_WorldSz);
-	
+
 	mat_world = mat_scale * mat_rot;
 	mat_world._41 = m_WorldTx;
 	mat_world._42 = m_WorldTy;
 	mat_world._43 = m_WorldTz;
+
 
 	// > 1  이면 다중텍스쳐 스프라이트
 	if (m_IsMultiTexture == TRUE)
@@ -150,6 +151,9 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		pp->width_ = m_PlaneWidth;
 		pp->height_ = m_PlaneHeight;
 		pp->plane_rot_matrix_ = mat_rot;
+		pp->vec_rotation_for_object_.x = m_WorldRx;
+		pp->vec_rotation_for_object_.y = m_WorldRy;
+		pp->vec_rotation_for_object_.z = m_WorldRz;
 		app->m_tool.effect_plane_.eff_list_.push_back(pp);
 		tex_list.clear();
 	}
@@ -219,6 +223,9 @@ void PCreatePlaneDlg::OnBnClickedOk()
 		pp->width_ = m_PlaneWidth;
 		pp->height_ = m_PlaneHeight;
 		pp->plane_rot_matrix_ = mat_rot;
+		pp->vec_rotation_for_object_.x = m_WorldRx;
+		pp->vec_rotation_for_object_.y = m_WorldRy;
+		pp->vec_rotation_for_object_.z = m_WorldRz;
 		app->m_tool.effect_plane_.eff_list_.push_back(pp);
 		tex_list.clear();
 	}

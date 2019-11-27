@@ -103,6 +103,7 @@ public:
 	D3DXMATRIX matWorld_;
 	D3DXMATRIX matView_;
 	D3DXMATRIX matProj_;
+	D3DXVECTOR3 vec_rotation_for_object_; //오브젝트 회전 시, 회전값을 보존하기 위한 벡터(쿼터니언 -> 오일러 회전값 변환이 너무 어려움..)
 	ID3D11Device* device_;
 	ID3D11DeviceContext* immediate_context_;
 	DX::PDxHelper dx_helper_;
@@ -112,6 +113,7 @@ public:
 	PTexture* texture_; //Sprite를 사용하지 않는 보통 오브젝트에서 사용되는 텍스쳐 
 	FILE* file_;
 	bool be_using_sprite_;
+	multibyte_string object_name_;
 	FILE_EXTENSION_TYPE mytype;
 
 public:

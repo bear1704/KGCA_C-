@@ -16,6 +16,14 @@ PEffectObject::PEffectObject()
 	color_.w = 1.0f;
 	spawn_time_counter_ = 0.0f;
 	launch_time = 1.0f;
+	
+	//test
+	animation_info_.current_angle = 0.0f;
+	animation_info_.radius = 1.0f;
+	animation_info_.rotate_axis = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+	animation_info_.speed = 5.0f;
+	//test end
+	is_animate = false;
 }
 
 PEffectObject::~PEffectObject()
@@ -88,6 +96,22 @@ bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 
 bool PEffectObject::Frame()
 {
+
+	if (is_animate)
+	{
+		float cwise = -1.0f;
+		if (!animation_info_.clockwise)
+			cwise = 1.0f;
+
+		D3DXMATRIX mat_rot;
+		D3DXMatrixIdentity(&mat_rot);
+		animation_info_.current_angle += g_SecondPerFrame * animation_info_.speed * cwise;
+		D3DXMatrixRotationAxis(&mat_rot, &animation_info_.rotate_axis, animation_info_.current_angle);
+		world_t_xyz = D3DXVECTOR3(matWorld_._41 * animation_info_.radius, 
+			matWorld_._42 * animation_info_.radius, matWorld_._43 * animation_info_.radius);
+		D3DXVec3TransformCoord(&world_t_xyz, &world_t_xyz, &mat_rot);
+	}
+
 	D3DXMATRIX mat_scale;
 	D3DXMATRIX mat_rotation;
 	D3DXMatrixIdentity(&mat_scale);
@@ -120,7 +144,6 @@ bool PEffectObject::Frame()
 		D3DXMatrixTranspose(&instance_list_[ii].mat_world, &mat_rotation);
 		instance_list_[ii].color.w = particle_list_[ii].get_alpha_();
 	}
-
 	D3D11_MAPPED_SUBRESOURCE ms;
 	if (SUCCEEDED(immediate_context_->Map(
 		instance_buffer_.Get(), 0,
@@ -144,7 +167,7 @@ bool PEffectObject::Render()
 		PParticle* pt = &(*iter);
 		
 		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_enable_nowrite_zbuffer);
-		
+		DX::ApplyRasterizerState(immediate_context_, DX::PDxState::rs_state_nocull_);
 		PreRender();
 		pt->Render(device_, immediate_context_, vertex_list_, dx_helper_, false);
 		PostRender();
@@ -158,6 +181,9 @@ bool PEffectObject::Render()
 			iter++;
 
 	}
+
+	
+	DX::ApplyRasterizerState(immediate_context_, DX::PDxState::rs_state_solidframe_);
 	DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
 	return true;
 }
@@ -281,6 +307,31 @@ void PEffectObject::set_mat_bilboard(D3DXMATRIX bill)
 	mat_billboard_ = bill;
 }
 
+
+void PEffectObject::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
+{
+	if (world != nullptr)
+		matWorld_ = *world;
+	if (view != nullptr)
+		matView_ = *view;
+	if (proj != nullptr)
+		matProj_ = *proj;
+
+	if (world == nullptr)
+		D3DXMatrixIdentity(&matWorld_);
+
+	D3DXMATRIX final_world;
+	D3DXMatrixTranslation(&final_world, world_t_xyz.x, world_t_xyz.y, world_t_xyz.z);
+
+	final_world = matWorld_ * final_world;
+
+	D3DXMatrixTranspose(&constant_data_.matWorld, &final_world);
+	D3DXMatrixTranspose(&constant_data_.matView, &matView_);
+	D3DXMatrixTranspose(&constant_data_.matProj, &matProj_);
+
+}
+
+
 PParticle::PParticle()
 {
 	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -358,3 +409,4 @@ bool PParticle::Frame()
 	position += move * g_SecondPerFrame;
 
 }
+

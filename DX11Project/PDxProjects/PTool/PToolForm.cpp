@@ -41,6 +41,28 @@ PToolForm::PToolForm()
 	, m_VeloZ(0)
 	, m_LaunchTime(0)
 	, m_LifeTIme(0)
+	, m_WorldTx(0)
+	, m_WorldTy(0)
+	, m_WorldTz(0)
+	, m_WorldRx(0)
+	, m_WorldRy(0)
+	, m_WorldRz(0)
+	, m_WorldSx(0)
+	, m_WorldSy(0)
+	, m_WorldSz(0)
+	, m_AxisX(0)
+	, m_AxisY(0)
+	, m_AxisZ(0)
+	, m_Radius(0)
+	, m_IsClockWise(false)
+	, m_RotateSpeed(0)
+	, m_IsAnimationOn(FALSE)
+	, m_EffectTx(0)
+	, m_EffectTy(0)
+	, m_EffectTz(0)
+	, m_EffectSx(0)
+	, m_EffectSy(0)
+	, m_EffectSz(0)
 {
 
 }
@@ -74,6 +96,29 @@ void PToolForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_VeloZ, m_VeloZ);
 	DDX_Text(pDX, IDC_EDIT_LaunchTime, m_LaunchTime);
 	DDX_Text(pDX, IDC_EDIT_LifeTime, m_LifeTIme);
+	DDX_Text(pDX, IDC_EDIT_Object_Tx, m_WorldTx);
+	DDX_Text(pDX, IDC_EDIT_Object_Ty, m_WorldTy);
+	DDX_Text(pDX, IDC_EDIT_Object_Tz, m_WorldTz);
+	DDX_Text(pDX, IDC_EDIT_Object_Rx, m_WorldRx);
+	DDX_Text(pDX, IDC_EDIT_Object_Ry, m_WorldRy);
+	DDX_Text(pDX, IDC_EDIT_Object_Rz, m_WorldRz);
+	DDX_Text(pDX, IDC_EDIT_Object_Sx, m_WorldSx);
+	DDX_Text(pDX, IDC_EDIT_Object_Sy, m_WorldSy);
+	DDX_Text(pDX, IDC_EDIT_Object_Sz, m_WorldSz);
+	DDX_Control(pDX, IDC_COMBO_ObjectList, m_CtlObjectList);
+	DDX_Text(pDX, IDC_EDIT_AxisX, m_AxisX);
+	DDX_Text(pDX, IDC_EDIT_AxisY, m_AxisY);
+	DDX_Text(pDX, IDC_EDIT_AxisZ, m_AxisZ);
+	DDX_Text(pDX, IDC_EDIT_Radius, m_Radius);
+	DDX_Check(pDX, IDC_CHECK_ClockWise, m_IsClockWise);
+	DDX_Text(pDX, IDC_EDIT_Speed, m_RotateSpeed);
+	DDX_Check(pDX, IDC_CHECK1, m_IsAnimationOn);
+	DDX_Text(pDX, IDC_EDIT_EffTx, m_EffectTx);
+	DDX_Text(pDX, IDC_EDIT_EffTy, m_EffectTy);
+	DDX_Text(pDX, IDC_EDIT_EffTz, m_EffectTz);
+	DDX_Text(pDX, IDC_EDIT_EffSx, m_EffectSx);
+	DDX_Text(pDX, IDC_EDIT_EffSy, m_EffectSy);
+	DDX_Text(pDX, IDC_EDIT_EffSz, m_EffectSz);
 }
 
 BEGIN_MESSAGE_MAP(PToolForm, CFormView)
@@ -87,6 +132,10 @@ BEGIN_MESSAGE_MAP(PToolForm, CFormView)
 	ON_BN_CLICKED(IDC_Btn_EffectApply, &PToolForm::OnBnClickedBtnEffectapply)
 	ON_BN_CLICKED(IDC_Btn_Refresh, &PToolForm::OnBnClickedBtnRefresh)
 	ON_CBN_SELCHANGE(IDC_COMBO_PlaneList, &PToolForm::OnCbnSelchangeComboPlanelist)
+	ON_BN_CLICKED(IDC_BTN_CREATEOBJECT, &PToolForm::OnBnClickedBtnCreateobject)
+	ON_BN_CLICKED(IDC_Btn_ObjectApply, &PToolForm::OnBnClickedBtnObjectapply)
+	ON_BN_CLICKED(IDC_Btn_RefreshObj, &PToolForm::OnBnClickedBtnRefreshobj)
+	ON_CBN_SELCHANGE(IDC_COMBO_ObjectList, &PToolForm::OnCbnSelchangeComboObjectlist)
 END_MESSAGE_MAP()
 
 
@@ -640,6 +689,39 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	index = m_CtlBlendDest.GetCurSel();
 	m_pCurrentEffObj->dest_blend_ = (D3D11_BLEND)(index + 1);
 
+	if (m_IsAnimationOn == TRUE)
+		m_pCurrentEffObj->is_animate = true;
+	else
+		m_pCurrentEffObj->is_animate = false;
+	
+	if (m_IsClockWise == TRUE)
+		m_pCurrentEffObj->animation_info_.clockwise = true;
+	else
+		m_pCurrentEffObj->animation_info_.clockwise = false;
+	
+	m_pCurrentEffObj->animation_info_.radius = m_Radius;
+	m_pCurrentEffObj->animation_info_.rotate_axis = D3DXVECTOR3(m_AxisX, m_AxisY, m_AxisZ);
+	m_pCurrentEffObj->animation_info_.speed = m_RotateSpeed;
+
+	D3DXMATRIX mat_scl;
+	D3DXMatrixScaling(&mat_scl, m_EffectSx, m_EffectSy, m_EffectSz);
+
+	m_pCurrentEffObj->matWorld_._41 = 0.0f;
+	m_pCurrentEffObj->matWorld_._42 = 0.0f;
+	m_pCurrentEffObj->matWorld_._43 = 0.0f;
+
+	m_pCurrentEffObj->matWorld_ *= mat_scl;
+	
+	D3DXMATRIX mat_trans;
+	D3DXMatrixTranslation(&mat_trans, m_EffectTx, m_EffectTy, m_EffectTz);
+
+	m_pCurrentEffObj->matWorld_ *= mat_trans;
+
+	m_pCurrentEffObj->world_t_xyz.x = m_pCurrentEffObj->matWorld_._41;
+	m_pCurrentEffObj->world_t_xyz.y = m_pCurrentEffObj->matWorld_._42;
+	m_pCurrentEffObj->world_t_xyz.z = m_pCurrentEffObj->matWorld_._43;
+
+
 	//external force 들어갈 자리
 }
 
@@ -651,7 +733,7 @@ void PToolForm::OnBnClickedBtnRefresh()
 	UpdateData(TRUE);
 	m_CtlPlaneList.ResetContent();
 
-	std::vector<PEffectObject*> object_list = app->m_tool.effect_plane_.eff_list_;
+	std::vector<PEffectObject*>& object_list = app->m_tool.effect_plane_.eff_list_;
 	
 	for (PEffectObject* sp : object_list)
 	{
@@ -694,8 +776,114 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 			m_CtlBlendSrc.SetCurSel(m_pCurrentEffObj->src_blend_ - 1);
 			m_CtlBlendDest.SetCurSel(m_pCurrentEffObj->dest_blend_ - 1);
 
+			if (m_pCurrentEffObj->is_animate == true)
+				m_IsAnimationOn = TRUE;
+			else
+				m_IsAnimationOn = FALSE;
+
+			if (m_pCurrentEffObj->animation_info_.clockwise == true)
+				m_IsClockWise = TRUE;
+			else
+				m_IsClockWise = FALSE;
+
+			m_Radius = m_pCurrentEffObj->animation_info_.radius;
+			m_AxisX = m_pCurrentEffObj->animation_info_.rotate_axis.x;
+			m_AxisY = m_pCurrentEffObj->animation_info_.rotate_axis.y;
+			m_AxisZ = m_pCurrentEffObj->animation_info_.rotate_axis.z;
+			m_RotateSpeed = m_pCurrentEffObj->animation_info_.speed;
+
+			D3DXVECTOR3 mat_t, mat_s;
+			D3DXQUATERNION quat_r;
+			D3DXMatrixDecompose(&mat_s, &quat_r, &mat_t, &m_pCurrentEffObj->matWorld_);
+
+			m_EffectTx = mat_t.x; m_EffectTy = mat_t.y; m_EffectTz = mat_t.z;
+			m_EffectSx = mat_s.x; m_EffectSy = mat_s.y; m_EffectSz = mat_s.z;
+
 			UpdateData(FALSE);
 			break;
+		}
+	}
+}
+
+
+void PToolForm::OnBnClickedBtnCreateobject()
+{
+	app->m_tool.Load();
+}
+
+
+void PToolForm::OnBnClickedBtnObjectapply()
+{
+	UpdateData(TRUE);
+	D3DXMATRIX mat_rot;
+	D3DXMATRIX mat_scale;
+	D3DXMATRIX mat_world;
+	D3DXMatrixIdentity(&mat_rot);
+	D3DXMatrixIdentity(&mat_scale);
+	D3DXMatrixIdentity(&mat_world);
+	D3DXMatrixRotationYawPitchRoll(&mat_rot, m_WorldRy, m_WorldRx, m_WorldRz);
+	D3DXMatrixScaling(&mat_scale, m_WorldSx, m_WorldSy, m_WorldSz);
+
+	mat_world = mat_scale * mat_rot;
+	mat_world._41 = m_WorldTx;
+	mat_world._42 = m_WorldTy;
+	mat_world._43 = m_WorldTz;
+
+	m_pCurrentObject->vec_rotation_for_object_.x = m_WorldRx;
+	m_pCurrentObject->vec_rotation_for_object_.y = m_WorldRy;
+	m_pCurrentObject->vec_rotation_for_object_.z = m_WorldRz;
+
+	D3DXMatrixTranspose(&mat_world, &mat_world);
+	m_pCurrentObject->matWorld_ = mat_world;
+
+}
+
+
+void PToolForm::OnBnClickedBtnRefreshobj()
+{
+	UpdateData(TRUE);
+	m_CtlObjectList.ResetContent();
+
+	std::vector<PModel*>& object_list = app->m_tool.object_list_;
+
+	for (PModel* md : object_list)
+	{
+		m_CtlObjectList.AddString(md->object_name_.c_str());
+	}
+}
+
+
+void PToolForm::OnCbnSelchangeComboObjectlist()
+{
+
+	int index = m_CtlObjectList.GetCurSel();
+	CString cstr;
+	m_CtlObjectList.GetLBText(index, cstr);
+
+	multibyte_string mstr = cstr;
+
+	auto list = app->m_tool.object_list_;
+
+	for (int ii = 0; ii < list.size(); ii++)
+	{
+		if (list[ii]->object_name_ == mstr)
+		{
+			m_pCurrentObject = list[ii];			
+
+			D3DXVECTOR3 world_scale;
+			D3DXVECTOR3 world_trans;
+			D3DXVECTOR3 world_rot;
+			D3DXQUATERNION quat_rot;
+			
+			D3DXMatrixDecompose(&world_scale, &quat_rot, &world_trans, &m_pCurrentObject->matWorld_);
+
+			D3DXVECTOR3& vec = m_pCurrentObject->vec_rotation_for_object_;
+			m_WorldTx = world_trans.x;  m_WorldRx = vec.x; m_WorldSx = world_scale.x;
+			m_WorldTy = world_trans.y;  m_WorldRy = vec.y; m_WorldSy = world_scale.y;
+			m_WorldTz = world_trans.z;  m_WorldRz = vec.z; m_WorldSz = world_scale.z;
+			
+			UpdateData(FALSE);
+			
 		}
 	}
 }
