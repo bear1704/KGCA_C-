@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PToolCore.h"
 
-
 PToolCore::PToolCore()
 {
 
@@ -52,11 +51,14 @@ bool PToolCore::Init()
 
 	dx_rt_.Create(device_, 800, 600);
 
-
+	model_light_ = new PLightObj();
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f ,200.0f, 0.0f), 1,device_, immediate_device_context_, main_camera_);
+	model_light_->Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f, 200.0f, 0.0f), 2, device_, immediate_device_context_, main_camera_);
+	//CreateConstantBuffer();
 
-	CreateConstantBuffer();
+	Load();
 
 	return true;
 }
@@ -114,6 +116,10 @@ bool PToolCore::Frame()
 		effect_plane_.eff_list_[ii]->set_mat_bilboard(mat_billboard);
 		effect_plane_.eff_list_[ii]->Frame();
 	}
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		object_list_[obj]->Frame();
+	}
 	return true;
 }
 
@@ -147,9 +153,13 @@ bool PToolCore::Render()
 		skybox_.SetWVPMatrix(&mat_sky_world, &mat_sky_view, &main_camera_->matProj_);
 		skybox_.Render();
 
-		
+		for (int obj = 0; obj < object_list_.size(); obj++)
+		{
+			object_list_[obj]->SetWVPMatrix(nullptr, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
+			object_list_[obj]->Render();
+		}
 
-		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
+		//DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_nocull_);
 		
 		
 		for (int jj = 0 ; jj < effect_plane_.eff_list_.size(); jj++)
@@ -169,6 +179,7 @@ bool PToolCore::Render()
 		DX::ApplyRasterizerState(immediate_device_context_, DX::PDxState::rs_state_solidframe_);
 		DX::ApplyBlendState(immediate_device_context_, DX::PDxState::blend_state_alphablend_);
 		DX::ApplySamplerState(immediate_device_context_, DX::PDxState::sampler_state_anisotropic);
+	
 	
 		dx_rt_.End(immediate_device_context_);
 	}
@@ -207,6 +218,10 @@ bool PToolCore::Release()
 	{
 		effect_plane_.eff_list_[ii]->Release();
 	}
+	for (int obj = 0; obj < object_list_.size(); obj++)
+	{
+		object_list_[obj]->Release();
+	}
 	return true;
 }
 
@@ -217,32 +232,139 @@ void PToolCore::MessageProc(MSG msg)
 	if (main_camera_ == nullptr) return;
 	main_camera_->MessageProc(msg);
 }
+//
+//HRESULT PToolCore::CreateConstantBuffer()
+//{
+//	HRESULT hr;
+//	D3D11_BUFFER_DESC cb_everyframe_desc;
+//	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_ChangesEveryFrame);
+//	cb_everyframe_desc.Usage = D3D11_USAGE_DYNAMIC;
+//	cb_everyframe_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+//	cb_everyframe_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+//	cb_everyframe_desc.MiscFlags = 0;
+//	hr = device_->CreateBuffer(&cb_everyframe_desc, NULL, constant_buffer_changes_everyframe_.GetAddressOf());
+//
+//	if (FAILED(hr))
+//		assert(false);
+//
+//	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_NearlyNotChange);
+//	cb_nearly_not_changes_.cb_AmbientLightColor = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
+//	cb_nearly_not_changes_.cb_DiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
+//	cb_nearly_not_changes_.cb_SpecularLightColor = D3DXVECTOR4(1, 1, 1, 30.0f);
+//
+//	D3D11_SUBRESOURCE_DATA InitData;
+//	ZeroMemory(&InitData, sizeof(InitData));
+//	InitData.pSysMem = &cb_nearly_not_changes_;
+//	hr = device_->CreateBuffer(&cb_everyframe_desc, &InitData, constant_buffer_nearly_not_changes_.GetAddressOf());
+//	if (FAILED(hr))
+//		assert(false);
+//
+//	return hr;
+//}
 
-HRESULT PToolCore::CreateConstantBuffer()
+bool PToolCore::Load()
 {
-	HRESULT hr;
-	D3D11_BUFFER_DESC cb_everyframe_desc;
-	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_ChangesEveryFrame);
-	cb_everyframe_desc.Usage = D3D11_USAGE_DYNAMIC;
-	cb_everyframe_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb_everyframe_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cb_everyframe_desc.MiscFlags = 0;
-	hr = device_->CreateBuffer(&cb_everyframe_desc, NULL, constant_buffer_changes_everyframe_.GetAddressOf());
+	FILE_EXTENSION_TYPE file_type = LoadFileDialog(L"*", L"ModelView");
+	PModel* model = nullptr;
+	
+	if (file_type == FILE_EXTENSION_TYPE::KGC)
+		model = new PKgcObj;
+	else if (file_type == FILE_EXTENSION_TYPE::SKM)
+	{
+		model = new PSkmObj;
+		PSkmObj* obj = static_cast<PSkmObj*>(model);
+		obj->light_obj_ = model_light_;
+		int load_index = loadfiles_dir_.size() - 1;
+		model->Init(device_, immediate_device_context_, L"ModelView.hlsl", "VS", L"ModelView.hlsl", "PS",
+			loadfiles_dir_[load_index], L"data/texture/");
+	
+	}
+	else if (file_type == FILE_EXTENSION_TYPE::MAT)
+	{
+		model = new PMatObj;
+		PMatObj* obj = static_cast<PMatObj*>(model);
+		obj->light_obj_ = model_light_;
+		int load_index = loadfiles_dir_.size() - 1;
+		model->Init(device_, immediate_device_context_, L"DiffuseLight.hlsl", "VS", L"DiffuseLight.hlsl", "PS",
+			loadfiles_dir_[load_index], L"data/texture/");
+	}
+	object_list_.push_back(model);
+	return true;
+}
 
-	if (FAILED(hr))
-		assert(false);
+FILE_EXTENSION_TYPE PToolCore::LoadFileDialog(const TCHAR* extension, const TCHAR* title)
+{
+	OPENFILENAME    ofn = { 0, };
+	TCHAR           szFile[MAX_PATH] = { 0, };
+	TCHAR			szFileTitle[MAX_PATH] = { 0, };
+	static TCHAR* szFilter;
+	
+	TCHAR lpCurBuffer[256] = { 0, };
+	GetCurrentDirectory(256, lpCurBuffer);
+	
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	_tcscpy_s(szFile, _T("*."));
+	_tcscat_s(szFile, extension);
+	_tcscat_s(szFile, _T("\0"));
+	
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = GetActiveWindow();
+	ofn.lpstrFilter = szFilter;
+	ofn.lpstrCustomFilter = NULL;
+	ofn.nMaxCustFilter = 0L;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrFileTitle = szFileTitle;
+	ofn.nMaxFileTitle = MAX_PATH;
+	ofn.lpstrInitialDir = _T("../../data/Obj/");
+	ofn.lpstrTitle = title;
+	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+	ofn.nFileOffset = 0;
+	ofn.nFileExtension = 0;
+	ofn.lpstrDefExt = extension;
+	
+	if (!GetOpenFileName(&ofn))
+	{
+		return FILE_EXTENSION_TYPE::ERROR_OCCUR;
+	}
+	TCHAR* load = _tcstok(szFile, _T("\n"));
+	multibyte_string dir = szFile;
+	load = &load[_tcslen(load) + 1];
+	if (*load == 0)
+	{
+		loadfiles_dir_.push_back(dir);
+	}
+	
+	while (*load != 0)
+	{
+		multibyte_string dir = szFile;
+		load = _tcstok(load, _T("\n"));
+		dir += _T("\\");
+		dir += load;
+		loadfiles_dir_.push_back(dir);
+		load = &load[_tcslen(load) + 1];
+	}
+	SetCurrentDirectory(lpCurBuffer);
+	
+	TCHAR szFileName[256];
+	TCHAR Drive[MAX_PATH];
+	TCHAR Dir[MAX_PATH];
+	TCHAR FName[MAX_PATH];
+	TCHAR Ext[MAX_PATH];
+	_tsplitpath_s(loadfiles_dir_[loadfiles_dir_.size() - 1].c_str(),
+		Drive, Dir, FName, Ext);
+	Ext[5] = '\0';
+	_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
+	
+	multibyte_string FileExt = Ext;
+	multibyte_string FileKgcExt = L".kgc";
+	multibyte_string FileSkmExt = L".skm";
+	multibyte_string FileMatExt = L".anim";
+	if (FileExt == FileKgcExt) return FILE_EXTENSION_TYPE::KGC;
+	if (FileExt == FileSkmExt) return FILE_EXTENSION_TYPE::SKM;
+	if (FileExt == FileMatExt) return FILE_EXTENSION_TYPE::MAT;
 
-	cb_everyframe_desc.ByteWidth = sizeof(CB_VS_NearlyNotChange);
-	cb_nearly_not_changes_.cb_AmbientLightColor = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
-	cb_nearly_not_changes_.cb_DiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
-	cb_nearly_not_changes_.cb_SpecularLightColor = D3DXVECTOR4(1, 1, 1, 30.0f);
+	return FILE_EXTENSION_TYPE::ERROR_OCCUR;
 
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = &cb_nearly_not_changes_;
-	hr = device_->CreateBuffer(&cb_everyframe_desc, &InitData, constant_buffer_nearly_not_changes_.GetAddressOf());
-	if (FAILED(hr))
-		assert(false);
-
-	return hr;
 }

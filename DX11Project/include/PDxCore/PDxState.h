@@ -22,6 +22,7 @@ namespace DX
 
 		static ID3D11DepthStencilState* depth_stencil_state_enable_;
 		static ID3D11DepthStencilState* depth_stencil_state_disable_;
+		static ID3D11DepthStencilState* depth_stencil_enable_nowrite_zbuffer;
 		
 	
 		static void SetState(ID3D11Device* current_device);

@@ -1,7 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #include "PCore.h"
-#include "PCore.h"
 #include "PTexture.h"
 #include "PShape.h"
 #include "PDxState.h"
@@ -13,6 +12,10 @@
 #include "PLightObj.h"
 #include "PNormHeightMap.h"
 #include "PEffectObject.h"
+#include "PKgcObj.h"
+#include "PSkmObj.h"
+#include "PMatObj.h"
+
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment (lib, "PDxCoreLib64_D.lib")
@@ -54,11 +57,14 @@ public:
 	PSkyBox skybox_;
 
 	PLightObj light_obj_;
+	PLightObj* model_light_;
 	PEffectObject effect_plane_;
+	std::vector<PModel*> object_list_;
+	std::vector<multibyte_string> loadfiles_dir_;
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
-	CB_VS_NearlyNotChange cb_nearly_not_changes_;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_changes_everyframe_;
+	//CB_VS_NearlyNotChange cb_nearly_not_changes_;
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer_nearly_not_changes_;
 
 	D3DXMATRIX mat_billboard;
 
@@ -66,6 +72,7 @@ public:
 
 public:
 	void MessageProc(MSG msg) override;
-	HRESULT CreateConstantBuffer();
-
+	//HRESULT CreateConstantBuffer();
+	bool Load();
+	FILE_EXTENSION_TYPE LoadFileDialog(const TCHAR* extension, const TCHAR* title);
 };

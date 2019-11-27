@@ -13,7 +13,8 @@ namespace DX
 	ID3D11SamplerState* PDxState::sampler_state_wrap_point = 0;
 	ID3D11DepthStencilState* PDxState::depth_stencil_state_enable_ = 0;
 	ID3D11DepthStencilState* PDxState::depth_stencil_state_disable_ = 0;
-
+	ID3D11DepthStencilState* PDxState::depth_stencil_enable_nowrite_zbuffer = 0;
+	
 
 	void DX::PDxState::SetState(ID3D11Device* current_device)
 	{
@@ -31,6 +32,11 @@ namespace DX
 		
 		depth_stencil_desc.DepthEnable = FALSE;
 		current_device->CreateDepthStencilState(&depth_stencil_desc, &depth_stencil_state_disable_);
+
+		depth_stencil_desc.DepthEnable = TRUE;
+		depth_stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+		current_device->CreateDepthStencilState(&depth_stencil_desc, &depth_stencil_enable_nowrite_zbuffer);
+
 #pragma endregion
 
 

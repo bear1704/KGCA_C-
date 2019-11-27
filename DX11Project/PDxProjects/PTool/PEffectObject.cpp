@@ -143,11 +143,12 @@ bool PEffectObject::Render()
 
 		PParticle* pt = &(*iter);
 		
-		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_disable_);
+		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_enable_nowrite_zbuffer);
+		
 		PreRender();
 		pt->Render(device_, immediate_context_, vertex_list_, dx_helper_, false);
 		PostRender();
-		DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
+		//DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
 
 		if (pt->get_is_dead_() == true)
 		{
@@ -157,7 +158,7 @@ bool PEffectObject::Render()
 			iter++;
 
 	}
-
+	DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
 	return true;
 }
 
