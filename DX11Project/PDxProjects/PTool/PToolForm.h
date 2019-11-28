@@ -37,6 +37,7 @@ public:
 	PParser parse;
 	FILE* fp;
 	PEffectObject* m_pCurrentEffObj;
+	std::vector<PEffectObject*> m_pCurrentEffectObjectList;
 	PModel* m_pCurrentObject;
 
 	afx_msg void OnBnClickedBtnCreateplane();
@@ -91,6 +92,13 @@ public:
 	float m_EffectSx;
 	float m_EffectSy;
 	float m_EffectSz;
+	BOOL m_IsUsingBillboard;
+	CListBox m_EffectListBox;
+	afx_msg void OnBnClickedBtnEffectadd();
+	afx_msg void OnBnClickedBtnEffectremove();
+	afx_msg void OnBnClickedBtnApplyall();
+	afx_msg void OnBnClickedBtnEffectallsel();
+	BOOL m_IsUsingFountain;
 };
 
 

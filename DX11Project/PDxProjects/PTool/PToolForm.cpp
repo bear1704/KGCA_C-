@@ -63,6 +63,8 @@ PToolForm::PToolForm()
 	, m_EffectSx(0)
 	, m_EffectSy(0)
 	, m_EffectSz(0)
+	, m_IsUsingBillboard(FALSE)
+	, m_IsUsingFountain(FALSE)
 {
 
 }
@@ -119,6 +121,9 @@ void PToolForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_EffSx, m_EffectSx);
 	DDX_Text(pDX, IDC_EDIT_EffSy, m_EffectSy);
 	DDX_Text(pDX, IDC_EDIT_EffSz, m_EffectSz);
+	DDX_Check(pDX, IDC_CHECK_Billboard, m_IsUsingBillboard);
+	DDX_Control(pDX, IDC_LIST_EffectList, m_EffectListBox);
+	DDX_Check(pDX, IDC_CHECK_UseFountain, m_IsUsingFountain);
 }
 
 BEGIN_MESSAGE_MAP(PToolForm, CFormView)
@@ -136,6 +141,10 @@ BEGIN_MESSAGE_MAP(PToolForm, CFormView)
 	ON_BN_CLICKED(IDC_Btn_ObjectApply, &PToolForm::OnBnClickedBtnObjectapply)
 	ON_BN_CLICKED(IDC_Btn_RefreshObj, &PToolForm::OnBnClickedBtnRefreshobj)
 	ON_CBN_SELCHANGE(IDC_COMBO_ObjectList, &PToolForm::OnCbnSelchangeComboObjectlist)
+	ON_BN_CLICKED(IDC_Btn_EffectAdd, &PToolForm::OnBnClickedBtnEffectadd)
+	ON_BN_CLICKED(IDC_Btn_EffectRemove, &PToolForm::OnBnClickedBtnEffectremove)
+	ON_BN_CLICKED(IDC_Btn_ApplyAll, &PToolForm::OnBnClickedBtnApplyall)
+	ON_BN_CLICKED(IDC_Btn_EffectAllSel, &PToolForm::OnBnClickedBtnEffectallsel)
 END_MESSAGE_MAP()
 
 
@@ -283,7 +292,7 @@ void PToolForm::OnBnClickedBtnSave()
 		fclose(fp);
 
 	}
-
+	
 
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
@@ -648,18 +657,6 @@ void PToolForm::OnBnClickedCheckBlend()
 	else
 		app->m_tool.blend_desc_.RenderTarget[0].BlendEnable = false;
 
-	//int index = m_CtlBlendSrc.GetCurSel();
-	//app->m_tool.blend_desc_.RenderTarget[0].SrcBlend = (D3D11_BLEND)(index + 1);
-
-	//index = m_CtlBlendDest.GetCurSel();
-	//app->m_tool.blend_desc_.RenderTarget[0].DestBlend = (D3D11_BLEND)(index + 1);
-	//
-	//HRESULT hr;
-	//if (FAILED(hr = device->CreateBlendState(
-	//	&app->m_tool.blend_desc_, &app->m_tool.blend_state_)))
-	//{
-	//	return;
-	//}
 }
 
 /*
@@ -684,6 +681,7 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	
 	m_pCurrentEffObj->launch_time = m_LaunchTime;
 	
+	
 	int index = m_CtlBlendSrc.GetCurSel();
 	m_pCurrentEffObj->src_blend_ = (D3D11_BLEND)(index + 1);
 	index = m_CtlBlendDest.GetCurSel();
@@ -698,13 +696,27 @@ void PToolForm::OnBnClickedBtnEffectapply()
 		m_pCurrentEffObj->animation_info_.clockwise = true;
 	else
 		m_pCurrentEffObj->animation_info_.clockwise = false;
+
+	if (m_IsUsingBillboard == TRUE)
+		m_pCurrentEffObj->is_use_billboard_ = true;
+	else
+		m_pCurrentEffObj->is_use_billboard_ = false;
 	
+	if (m_IsUsingFountain == TRUE)
+		m_pCurrentEffObj->is_use_fountain_ = true;
+	else
+		m_pCurrentEffObj->is_use_fountain_ = false;
+
 	m_pCurrentEffObj->animation_info_.radius = m_Radius;
 	m_pCurrentEffObj->animation_info_.rotate_axis = D3DXVECTOR3(m_AxisX, m_AxisY, m_AxisZ);
 	m_pCurrentEffObj->animation_info_.speed = m_RotateSpeed;
 
 	D3DXMATRIX mat_scl;
 	D3DXMatrixScaling(&mat_scl, m_EffectSx, m_EffectSy, m_EffectSz);
+	
+	D3DXVECTOR3 tr = D3DXVECTOR3(m_pCurrentEffObj->matWorld_._41,
+		m_pCurrentEffObj->matWorld_._42, m_pCurrentEffObj->matWorld_._43);
+
 
 	m_pCurrentEffObj->matWorld_._41 = 0.0f;
 	m_pCurrentEffObj->matWorld_._42 = 0.0f;
@@ -712,9 +724,13 @@ void PToolForm::OnBnClickedBtnEffectapply()
 
 	m_pCurrentEffObj->matWorld_ *= mat_scl;
 	
+	m_pCurrentEffObj->matWorld_._41 = tr.x;
+	m_pCurrentEffObj->matWorld_._42 = tr.y;
+	m_pCurrentEffObj->matWorld_._43 = tr.z;
+
 	D3DXMATRIX mat_trans;
 	D3DXMatrixTranslation(&mat_trans, m_EffectTx, m_EffectTy, m_EffectTz);
-
+	
 	m_pCurrentEffObj->matWorld_ *= mat_trans;
 
 	m_pCurrentEffObj->world_t_xyz.x = m_pCurrentEffObj->matWorld_._41;
@@ -737,7 +753,7 @@ void PToolForm::OnBnClickedBtnRefresh()
 	
 	for (PEffectObject* sp : object_list)
 	{
-		multibyte_string mstr = string_to_multibyte(sp->original_particle_->get_name());
+		multibyte_string mstr = sp->name;
 		m_CtlPlaneList.AddString(mstr.c_str());
 	}
 
@@ -752,13 +768,13 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 	CString cstr;
 	m_CtlPlaneList.GetLBText(index, cstr);
 
-	std::string str = CT2CA(cstr);
+	std::wstring str = CT2CW(cstr);
 
 	auto list = app->m_tool.effect_plane_.eff_list_;
 
 	for (int ii = 0; ii < list.size(); ii++)
 	{
-		if (list[ii]->original_particle_->get_name() == str)
+		if (list[ii]->name == str)
 		{
 			m_pCurrentEffObj = list[ii];
 			m_FadeOutNum = m_pCurrentEffObj->original_particle_->effect_info.fadeout_time;
@@ -776,6 +792,11 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 			m_CtlBlendSrc.SetCurSel(m_pCurrentEffObj->src_blend_ - 1);
 			m_CtlBlendDest.SetCurSel(m_pCurrentEffObj->dest_blend_ - 1);
 
+			if(m_pCurrentEffObj->is_use_fountain_ == true)
+				m_IsUsingFountain = TRUE;
+			else
+				m_IsUsingFountain = FALSE;
+
 			if (m_pCurrentEffObj->is_animate == true)
 				m_IsAnimationOn = TRUE;
 			else
@@ -785,6 +806,11 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 				m_IsClockWise = TRUE;
 			else
 				m_IsClockWise = FALSE;
+
+			if (m_pCurrentEffObj->is_use_billboard_ == true)
+				m_IsUsingBillboard = TRUE;
+			else
+				m_IsUsingBillboard = FALSE;
 
 			m_Radius = m_pCurrentEffObj->animation_info_.radius;
 			m_AxisX = m_pCurrentEffObj->animation_info_.rotate_axis.x;
@@ -884,6 +910,105 @@ void PToolForm::OnCbnSelchangeComboObjectlist()
 			
 			UpdateData(FALSE);
 			
+		}
+	}
+}
+
+
+void PToolForm::OnBnClickedBtnEffectadd()
+{
+	int idx = m_EffectListBox.FindStringExact(0, m_pCurrentEffObj->name.c_str());
+
+	if (idx == -1)
+	{
+		m_EffectListBox.AddString(m_pCurrentEffObj->name.c_str());
+	}
+}
+
+
+void PToolForm::OnBnClickedBtnEffectremove()
+{
+	int idx = m_EffectListBox.GetCurSel();
+	m_EffectListBox.DeleteString(idx);
+}
+
+
+void PToolForm::OnBnClickedBtnApplyall()
+{
+	
+	m_pCurrentEffectObjectList.clear();
+	std::vector<PEffectObject*>& efflist = app->m_tool.effect_plane_.eff_list_;
+
+	for (int ii = 0; ii < m_EffectListBox.GetCount(); ii++)
+	{
+		CString cstr;
+		m_EffectListBox.GetText(ii, cstr);
+		auto iter = std::find_if(efflist.begin(), efflist.end(), [&cstr](PEffectObject* obj) {return cstr == obj->name.c_str(); });
+		if (iter != efflist.end())
+		{
+			m_pCurrentEffectObjectList.push_back(*iter);
+		}
+	}
+
+	for (int ii = 0; ii < m_pCurrentEffectObjectList.size(); ii++)
+	{
+		UpdateData(TRUE);
+
+		int index = m_CtlBlendSrc.GetCurSel();
+		m_pCurrentEffectObjectList[ii]->src_blend_ = (D3D11_BLEND)(index + 1);
+		index = m_CtlBlendDest.GetCurSel();
+		m_pCurrentEffectObjectList[ii]->dest_blend_ = (D3D11_BLEND)(index + 1);
+
+		if (m_IsUsingBillboard == TRUE)
+			m_pCurrentEffectObjectList[ii]->is_use_billboard_ = true;
+		else
+			m_pCurrentEffectObjectList[ii]->is_use_billboard_ = false;
+
+
+		D3DXMATRIX mat_scl;
+		D3DXMatrixScaling(&mat_scl, m_EffectSx, m_EffectSy, m_EffectSz);
+
+		D3DXVECTOR3 tr = D3DXVECTOR3(m_pCurrentEffectObjectList[ii]->matWorld_._41, 
+			m_pCurrentEffectObjectList[ii]->matWorld_._42, m_pCurrentEffectObjectList[ii]->matWorld_._43);
+
+		m_pCurrentEffectObjectList[ii]->matWorld_._41 = 0.0f;
+		m_pCurrentEffectObjectList[ii]->matWorld_._42 = 0.0f;
+		m_pCurrentEffectObjectList[ii]->matWorld_._43 = 0.0f;
+
+		m_pCurrentEffectObjectList[ii]->matWorld_ *= mat_scl;
+
+
+		m_pCurrentEffectObjectList[ii]->matWorld_._41 = tr.x;
+		m_pCurrentEffectObjectList[ii]->matWorld_._42 = tr.y;
+		m_pCurrentEffectObjectList[ii]->matWorld_._43 = tr.z;
+
+		D3DXMATRIX mat_trans;
+		D3DXMatrixTranslation(&mat_trans, m_EffectTx, m_EffectTy, m_EffectTz);
+
+
+		m_pCurrentEffectObjectList[ii]->matWorld_ *= mat_trans;
+
+		m_pCurrentEffectObjectList[ii]->world_t_xyz.x = m_pCurrentEffectObjectList[ii]->matWorld_._41;
+		m_pCurrentEffectObjectList[ii]->world_t_xyz.y = m_pCurrentEffectObjectList[ii]->matWorld_._42;
+		m_pCurrentEffectObjectList[ii]->world_t_xyz.z = m_pCurrentEffectObjectList[ii]->matWorld_._43;
+
+	}
+}
+
+
+void PToolForm::OnBnClickedBtnEffectallsel()
+{
+	m_pCurrentEffectObjectList.clear();
+	std::vector<PEffectObject*>& efflist = app->m_tool.effect_plane_.eff_list_;
+
+	for (int ii = 0; ii < m_EffectListBox.GetCount(); ii++)
+	{
+		CString cstr;
+		m_EffectListBox.GetText(ii, cstr);
+		auto iter = std::find_if(efflist.begin(), efflist.end(), [&cstr](PEffectObject* obj) {return cstr == obj->name.c_str(); });
+		if (iter != efflist.end())
+		{
+			m_pCurrentEffectObjectList.push_back(*iter);
 		}
 	}
 }

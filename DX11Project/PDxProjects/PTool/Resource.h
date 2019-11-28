@@ -114,6 +114,13 @@
 #define IDC_EDIT_EffSx                  1078
 #define IDC_EDIT_EffSy                  1079
 #define IDC_EDIT_EffSz                  1080
+#define IDC_CHECK_Billboard             1087
+#define IDC_LIST_EffectList             1088
+#define IDC_Btn_EffectAdd               1089
+#define IDC_Btn_EffectRemove            1090
+#define IDC_Btn_ApplyAll                1091
+#define IDC_Btn_EffectAllSel            1092
+#define IDC_CHECK_UseFountain           1093
 
 // Next default values for new objects
 // 
@@ -121,7 +128,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1082
+#define _APS_NEXT_CONTROL_VALUE         1094
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

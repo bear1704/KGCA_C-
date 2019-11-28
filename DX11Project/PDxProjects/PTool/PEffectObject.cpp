@@ -24,6 +24,7 @@ PEffectObject::PEffectObject()
 	animation_info_.speed = 5.0f;
 	//test end
 	is_animate = false;
+	is_use_billboard_ = false;
 }
 
 PEffectObject::~PEffectObject()
@@ -97,6 +98,9 @@ bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
 bool PEffectObject::Frame()
 {
 
+	if (original_particle_ == nullptr)
+		return false;
+
 	if (is_animate)
 	{
 		float cwise = -1.0f;
@@ -107,9 +111,16 @@ bool PEffectObject::Frame()
 		D3DXMatrixIdentity(&mat_rot);
 		animation_info_.current_angle += g_SecondPerFrame * animation_info_.speed * cwise;
 		D3DXMatrixRotationAxis(&mat_rot, &animation_info_.rotate_axis, animation_info_.current_angle);
-		world_t_xyz = D3DXVECTOR3(matWorld_._41 * animation_info_.radius, 
-			matWorld_._42 * animation_info_.radius, matWorld_._43 * animation_info_.radius);
+		D3DXVECTOR3 normalized_world = D3DXVECTOR3(matWorld_._41, matWorld_._42, matWorld_._43);
+		D3DXVec3Normalize(&normalized_world, &normalized_world);
+		world_t_xyz = D3DXVECTOR3(normalized_world.x + animation_info_.radius, 
+			normalized_world.y + animation_info_.radius, normalized_world.z + animation_info_.radius);
+		
 		D3DXVec3TransformCoord(&world_t_xyz, &world_t_xyz, &mat_rot);
+
+		world_t_xyz.x += matWorld_._41;
+		world_t_xyz.y += matWorld_._42;
+		world_t_xyz.z += matWorld_._43;
 	}
 
 	D3DXMATRIX mat_scale;
@@ -119,6 +130,17 @@ bool PEffectObject::Frame()
 
 	PParticle ptcl = *original_particle_;
 	spawn_time_counter_ += g_SecondPerFrame;
+	
+	if (is_use_fountain_)
+	{
+		std::uniform_real_distribution<float> dist((original_particle_->gravity.y) * -1.0f, (original_particle_->gravity.y) * -1.0f + 230.0f);
+		std::uniform_real_distribution<float> dist_normal(-50.0f, 50.0f);
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		ptcl.velocity.x = dist_normal(mt);
+		ptcl.velocity.y = dist(mt);
+		ptcl.velocity.z = dist_normal(mt);
+	}
 
 	if (spawn_time_counter_ > launch_time)
 	{
@@ -132,12 +154,17 @@ bool PEffectObject::Frame()
 	int size = particle_list_.size();
 	for (int ii = 0; ii < size; ii++)
 	{
+
 		particle_list_[ii].Frame();
 
-		mat_rotation = mat_billboard_;
+		if(is_use_billboard_ == true)
+			mat_rotation = mat_billboard_;
+
 		mat_scale._11 = particle_list_[ii].scale.x;
 		mat_scale._22 = particle_list_[ii].scale.y;
 		mat_scale._33 = particle_list_[ii].scale.z;
+		mat_rotation *= mat_scale;
+
 		mat_rotation._41 = particle_list_[ii].position.x;
 		mat_rotation._42 = particle_list_[ii].position.y;
 		mat_rotation._43 = particle_list_[ii].position.z;
@@ -171,7 +198,6 @@ bool PEffectObject::Render()
 		PreRender();
 		pt->Render(device_, immediate_context_, vertex_list_, dx_helper_, false);
 		PostRender();
-		//DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
 
 		if (pt->get_is_dead_() == true)
 		{
@@ -405,8 +431,11 @@ bool PParticle::Frame()
 		time_after_spriteopen_ = 0;
 	}
 
-	D3DXVECTOR3 move = velocity + gravity + external_force;
-	position += move * g_SecondPerFrame;
+	
 
+	velocity += gravity * g_SecondPerFrame;
+	D3DXVECTOR3 move = velocity + external_force;
+	position += move * g_SecondPerFrame;
+	
 }
 

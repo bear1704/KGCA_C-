@@ -1,6 +1,7 @@
 #pragma once
 #include "PShape.h"
 #include "PSpriteManager.h"
+#include <random>
 
 const int kMaxParticle = 1000;
 
@@ -60,11 +61,16 @@ public:
 	D3DXVECTOR4					color_;
 	D3D11_BLEND					src_blend_;
 	D3D11_BLEND					dest_blend_;
+	bool						is_use_billboard_;
+	bool						is_use_fountain_;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> instance_buffer_;
 	//Microsoft::WRL::ComPtr<ID3D11GeometryShader> gs_draw; //실제 그릴 버퍼
 	//Microsoft::WRL::ComPtr<ID3D11GeometryShader> gs_stream_out; //출력되는 스트림을 저장하는 버퍼 (서로 프레임마다 스왑됨)
 	//Microsoft::WRL::ComPtr<ID3D11VertexShader> vs_donothing;
+
+	std::random_device rd;
+	std::mt19937 mt;
 
 private:
 	float						spawn_time_counter_; //생성 파티클에서, 생성하는 시간 간격
