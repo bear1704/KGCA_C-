@@ -145,6 +145,7 @@ BEGIN_MESSAGE_MAP(PToolForm, CFormView)
 	ON_BN_CLICKED(IDC_Btn_EffectRemove, &PToolForm::OnBnClickedBtnEffectremove)
 	ON_BN_CLICKED(IDC_Btn_ApplyAll, &PToolForm::OnBnClickedBtnApplyall)
 	ON_BN_CLICKED(IDC_Btn_EffectAllSel, &PToolForm::OnBnClickedBtnEffectallsel)
+	ON_BN_CLICKED(IDC_Btn_DeleteItem, &PToolForm::OnBnClickedBtnDeleteitem)
 END_MESSAGE_MAP()
 
 
@@ -353,11 +354,6 @@ void PToolForm::SaveData()
 			
 			sname.assign(plane->name.begin(), plane->name.end());
 			parse.Push("name", sname);
-			
-			if (m_IsAlphaBlend == TRUE)
-				parse.Push("blend", "TRUE");
-			else
-				parse.Push("blend", "FALSE");
 
 			if(ori_particle->get_lifetime_() > 999999999.0f)
 				parse.Push("lifetime", std::to_string(777.0f));
@@ -396,6 +392,37 @@ void PToolForm::SaveData()
 			parse.Push("Particle_ExternalForce",str);
 			parse.Push("BlendSrc", std::to_string(plane->src_blend_));
 			parse.Push("BlendDest", std::to_string(plane->dest_blend_));
+//patch
+			parse.Push("Anim_Rot_Vec", std::to_string(plane->animation_info_.rotate_axis.x) + "," + std::to_string(plane->animation_info_.rotate_axis.y) +
+				"," + std::to_string(plane->animation_info_.rotate_axis.z));
+			parse.Push("Anim_Radius", std::to_string(plane->animation_info_.radius));
+			parse.Push("Anim_Speed", std::to_string(plane->animation_info_.speed));
+
+			if (plane->is_use_billboard_ == true)
+				parse.Push("Use_BillBoard", "TRUE");
+			else
+				parse.Push("Use_BillBoard", "FALSE");
+
+			if (plane->is_use_fountain_ == true)
+				parse.Push("Use_Fountain", "TRUE");
+			else
+				parse.Push("Use_Fountain", "FALSE");
+
+			if (plane->is_use_alphablend_ == true)
+				parse.Push("Use_AlphaBlend", "TRUE");
+			else
+				parse.Push("Use_AlphaBlend", "FALSE");
+
+			if (plane->is_animate == true)
+				parse.Push("Use_Animation", "TRUE");
+			else
+				parse.Push("Use_Animation", "FALSE");
+
+			if (plane->animation_info_.clockwise == true)
+				parse.Push("Use_ClockWise", "TRUE");
+			else
+				parse.Push("Use_ClockWise", "FALSE");
+//patch end
 
 			int tex_list_size = ori_particle->get_texture_list_ptr()->size();
 			for (int ii = 0 ; ii < tex_list_size; ii++)
@@ -538,6 +565,48 @@ void PToolForm::LoadData(std::string path)
 				{
 					pp->dest_blend_ = (D3D11_BLEND)std::stoi(iter->second);
 				}
+				else if (iter->first == "Anim_Rot_Vec")
+				{
+					std::vector<string> split = parse.SplitString(iter->second, ',');
+					pp->animation_info_.rotate_axis = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
+				}
+				else if (iter->first == "Use_BillBoard")
+				{
+					if (iter->second == "TRUE")
+						pp->is_use_billboard_ = true;
+
+					else
+						pp->is_use_billboard_ = false;
+				}
+				else if (iter->first == "Use_Fountain")
+				{
+					if (iter->second == "TRUE")
+						pp->is_use_fountain_ = true;
+					else
+						pp->is_use_fountain_ = false;
+				}
+				else if (iter->first == "Use_AlphaBlend")
+				{
+				if (iter->second == "TRUE")
+					pp->is_use_alphablend_ = true;
+				else
+					pp->is_use_alphablend_ = false;
+				}
+				else if (iter->first == "Use_Animation")
+				{
+				if (iter->second == "TRUE")
+					pp->is_animate = true;
+				else
+					pp->is_animate = false;
+				}
+				else if (iter->first == "Use_ClockWise")
+				{
+				if (iter->second == "TRUE")
+					pp->animation_info_.clockwise = true;
+				else
+					pp->animation_info_.clockwise = false;
+				}
+
 				else if (iter->first == "tex_path")
 				{
 					TextureInfo info;
@@ -680,12 +749,12 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	m_pCurrentEffObj->original_particle_->velocity.z = m_VeloZ;
 	
 	m_pCurrentEffObj->launch_time = m_LaunchTime;
-	
-	
-	int index = m_CtlBlendSrc.GetCurSel();
-	m_pCurrentEffObj->src_blend_ = (D3D11_BLEND)(index + 1);
-	index = m_CtlBlendDest.GetCurSel();
-	m_pCurrentEffObj->dest_blend_ = (D3D11_BLEND)(index + 1);
+
+
+	if (m_IsAlphaBlend == TRUE)
+		m_pCurrentEffObj->is_use_alphablend_ = true;
+	else
+		m_pCurrentEffObj->is_use_alphablend_ = false;
 
 	if (m_IsAnimationOn == TRUE)
 		m_pCurrentEffObj->is_animate = true;
@@ -710,6 +779,22 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	m_pCurrentEffObj->animation_info_.radius = m_Radius;
 	m_pCurrentEffObj->animation_info_.rotate_axis = D3DXVECTOR3(m_AxisX, m_AxisY, m_AxisZ);
 	m_pCurrentEffObj->animation_info_.speed = m_RotateSpeed;
+
+	//알파블렌드 사용유무에따라 ON/OFF
+	if (m_pCurrentEffObj->is_use_alphablend_)
+	{
+		int index = m_CtlBlendSrc.GetCurSel();
+		m_pCurrentEffObj->src_blend_ = (D3D11_BLEND)(index + 1);
+		index = m_CtlBlendDest.GetCurSel();
+		m_pCurrentEffObj->dest_blend_ = (D3D11_BLEND)(index + 1);
+	}
+	else
+	{
+		m_pCurrentEffObj->src_blend_ = (D3D11_BLEND)(D3D11_BLEND_ONE);
+		m_pCurrentEffObj->dest_blend_ = (D3D11_BLEND)(D3D11_BLEND_SRC_COLOR);
+	}
+
+
 
 	D3DXMATRIX mat_scl;
 	D3DXMatrixScaling(&mat_scl, m_EffectSx, m_EffectSy, m_EffectSz);
@@ -737,6 +822,7 @@ void PToolForm::OnBnClickedBtnEffectapply()
 	m_pCurrentEffObj->world_t_xyz.y = m_pCurrentEffObj->matWorld_._42;
 	m_pCurrentEffObj->world_t_xyz.z = m_pCurrentEffObj->matWorld_._43;
 
+	
 
 	//external force 들어갈 자리
 }
@@ -1001,14 +1087,31 @@ void PToolForm::OnBnClickedBtnEffectallsel()
 	m_pCurrentEffectObjectList.clear();
 	std::vector<PEffectObject*>& efflist = app->m_tool.effect_plane_.eff_list_;
 
-	for (int ii = 0; ii < m_EffectListBox.GetCount(); ii++)
+	for (int ii = 0; ii < efflist.size(); ii++)
 	{
-		CString cstr;
-		m_EffectListBox.GetText(ii, cstr);
-		auto iter = std::find_if(efflist.begin(), efflist.end(), [&cstr](PEffectObject* obj) {return cstr == obj->name.c_str(); });
-		if (iter != efflist.end())
+		int idx = m_EffectListBox.FindStringExact(0, efflist[ii]->name.c_str());
+
+		if (idx == -1)
 		{
-			m_pCurrentEffectObjectList.push_back(*iter);
+			m_EffectListBox.AddString(efflist[ii]->name.c_str());
 		}
 	}
+}
+
+
+void PToolForm::OnBnClickedBtnDeleteitem()
+{
+	int idx = m_CtlPlaneList.GetCurSel();
+	std::vector<PEffectObject*>& efflist = app->m_tool.effect_plane_.eff_list_;
+	CString str;
+	m_CtlPlaneList.GetLBText(idx, str);
+
+	auto iter = std::find_if(efflist.begin(), efflist.end(), [&str](PEffectObject* obj) {return  obj->name.c_str() == str; });
+
+	PEffectObject* eff = *iter;
+	eff->Release();
+
+	efflist.erase(iter);
+	m_CtlPlaneList.DeleteString(idx);
+	
 }

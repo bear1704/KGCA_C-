@@ -99,6 +99,7 @@ public:
 	afx_msg void OnBnClickedBtnApplyall();
 	afx_msg void OnBnClickedBtnEffectallsel();
 	BOOL m_IsUsingFountain;
+	afx_msg void OnBnClickedBtnDeleteitem();
 };
 
 

@@ -114,6 +114,7 @@
 #define IDC_EDIT_EffSx                  1078
 #define IDC_EDIT_EffSy                  1079
 #define IDC_EDIT_EffSz                  1080
+#define IDC_Btn_DeleteItem              1081
 #define IDC_CHECK_Billboard             1087
 #define IDC_LIST_EffectList             1088
 #define IDC_Btn_EffectAdd               1089

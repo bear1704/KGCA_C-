@@ -63,6 +63,7 @@ public:
 	D3D11_BLEND					dest_blend_;
 	bool						is_use_billboard_;
 	bool						is_use_fountain_;
+	bool						is_use_alphablend_;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> instance_buffer_;
 	//Microsoft::WRL::ComPtr<ID3D11GeometryShader> gs_draw; //실제 그릴 버퍼
@@ -86,12 +87,12 @@ public:
 	//HRESULT LoadShaderFromFile(ID3D11Device* device_, ShaderFileName filenames) override;
 	bool Frame() override;
 	bool Render() override;
+	bool Release() override;
 
 	virtual HRESULT CreateInputLayout() override;
 	virtual HRESULT CreateVertexData() override;
 	virtual HRESULT CreateVertexBuffer() override;
 	bool PostRender() override;
-
 
 
 public:

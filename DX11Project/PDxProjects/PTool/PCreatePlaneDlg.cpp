@@ -298,7 +298,7 @@ void PCreatePlaneDlg::OnBnClickedBtnInitialize()
 {
 	m_WorldTx = 0.0f;
 	m_WorldTy = 0.0f;
-	m_WorldTz = 10.0f;
+	m_WorldTz = 0.0f;
 	m_WorldRx = 0.0f;
 	m_WorldRy = 0.0f;
 	m_WorldRz = 0.0f; 

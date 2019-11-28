@@ -29,7 +29,15 @@ PEffectObject::PEffectObject()
 
 PEffectObject::~PEffectObject()
 {
-
+	if (original_particle_)
+	{
+		delete original_particle_;
+		original_particle_ = nullptr;
+	}
+	for (int ii = 0; ii < eff_list_.size(); ii++)
+	{
+		delete eff_list_[ii];
+	}
 }
 
 bool PEffectObject::Init(ID3D11Device* device, ID3D11DeviceContext* context,
@@ -131,6 +139,7 @@ bool PEffectObject::Frame()
 	PParticle ptcl = *original_particle_;
 	spawn_time_counter_ += g_SecondPerFrame;
 	
+	//fountain 체크박스 켤 경우, 파티클 분수를 위해 난수형성
 	if (is_use_fountain_)
 	{
 		std::uniform_real_distribution<float> dist((original_particle_->gravity.y) * -1.0f, (original_particle_->gravity.y) * -1.0f + 230.0f);
@@ -211,6 +220,22 @@ bool PEffectObject::Render()
 	
 	DX::ApplyRasterizerState(immediate_context_, DX::PDxState::rs_state_solidframe_);
 	DX::ApplyDepthStencilState(immediate_context_, DX::PDxState::depth_stencil_state_enable_);
+	return true;
+}
+
+bool PEffectObject::Release()
+{
+	if (original_particle_) 
+	{
+		delete original_particle_;
+		original_particle_ = nullptr;
+	}
+
+	for (int ii = 0; ii < eff_list_.size(); ii++)
+	{
+		delete eff_list_[ii];
+	}
+
 	return true;
 }
 
