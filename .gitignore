@@ -234,3 +234,5 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+DX11Project/PDxProjects/PTool/Effect/Effect.zip
+DX11Project/PDxProjects/PTool/Effect/effect.bmp
