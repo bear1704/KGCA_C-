@@ -264,6 +264,10 @@ void PToolCore::MessageProc(MSG msg)
 bool PToolCore::Load()
 {
 	FILE_EXTENSION_TYPE file_type = LoadFileDialog(L"*", L"ModelView");
+
+	if (file_type == FILE_EXTENSION_TYPE::ERROR_OCCUR)
+		return false;
+
 	PModel* model = nullptr;
 	
 	
@@ -315,6 +319,11 @@ FILE_EXTENSION_TYPE PToolCore::LoadFileDialog(const TCHAR* extension, const TCHA
 	_tcscat_s(szFile, extension);
 	_tcscat_s(szFile, _T("\0"));
 	
+	TCHAR path[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, path);
+	StrCat(path, L"\\Model");
+
+	ofn.lpstrInitialDir = path;
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.hwndOwner = GetActiveWindow();
 	ofn.lpstrFilter = szFilter;
@@ -325,7 +334,6 @@ FILE_EXTENSION_TYPE PToolCore::LoadFileDialog(const TCHAR* extension, const TCHA
 	ofn.nMaxFile = MAX_PATH;
 	ofn.lpstrFileTitle = szFileTitle;
 	ofn.nMaxFileTitle = MAX_PATH;
-	ofn.lpstrInitialDir = _T("../../data/Obj/");
 	ofn.lpstrTitle = title;
 	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
 	ofn.nFileOffset = 0;

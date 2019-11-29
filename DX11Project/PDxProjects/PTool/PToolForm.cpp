@@ -280,6 +280,13 @@ void PToolForm::OnBnClickedBtnSave()
 	ZeroMemory(&str_file, sizeof(str_file));
 	dlg.m_ofn.lpstrFile = file_path.GetBuffer(4096);
 	dlg.m_ofn.nMaxFile = sizeof(str_file);
+	TCHAR path[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, path);
+	StrCat(path, L"\\Save");
+
+	dlg.m_ofn.lpstrInitialDir = path;
+
+
 
 	if (dlg.DoModal() == IDOK)
 	{
@@ -311,6 +318,11 @@ void PToolForm::OnBnClickedBtnLoad()
 	ZeroMemory(&str_file, sizeof(str_file));
 	dlg.m_ofn.lpstrFile = file_path.GetBuffer(4096);
 	dlg.m_ofn.nMaxFile = sizeof(str_file);
+	TCHAR path[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, path);
+	StrCat(path, L"\\Save");
+
+	dlg.m_ofn.lpstrInitialDir = path;
 
 	
 	if (dlg.DoModal() == IDOK)
@@ -454,11 +466,13 @@ void PToolForm::SaveData()
 
 void PToolForm::LoadData(std::string path)
 {
+
 	PairVec vec;
 	parse.XmlParse(path, &vec, true);
 
 	auto iter = vec.begin();
 		
+
 	while (iter != vec.end())
 	{
 		PEffectObject* pp = new PEffectObject();
@@ -474,7 +488,6 @@ void PToolForm::LoadData(std::string path)
 		D3DXVECTOR3 particle_gravity;
 		D3DXVECTOR3 particle_external_force;
 		
-
 		if (iter->second == "effect")
 		{
 			while (true)
@@ -570,6 +583,14 @@ void PToolForm::LoadData(std::string path)
 					std::vector<string> split = parse.SplitString(iter->second, ',');
 					pp->animation_info_.rotate_axis = D3DXVECTOR3(std::stof(split[0]), std::stof(split[1]), std::stof(split[2]));
 				}
+				else if (iter->first == "Anim_Radius")
+				{
+					pp->animation_info_.radius = std::stof(iter->second);
+				}
+				else if (iter->first == "Anim_Speed")
+				{
+					pp->animation_info_.speed = std::stof(iter->second);
+				}
 				else if (iter->first == "Use_BillBoard")
 				{
 					if (iter->second == "TRUE")
@@ -654,7 +675,6 @@ void PToolForm::LoadData(std::string path)
 
 			}
 
-
 			//OFFSET 이펙트일 시의 텍스쳐 바운더리 추가 작업
 			if (eff_info.is_multi_texture == false)
 			{
@@ -703,7 +723,6 @@ void PToolForm::LoadData(std::string path)
 			pp->plane_rot_matrix_ = mat_rot;
 
 			app->m_tool.effect_plane_.eff_list_.push_back(pp);
-
 			iter++;
 		}
 
@@ -734,6 +753,9 @@ void PToolForm::OnBnClickedCheckBlend()
 void PToolForm::OnBnClickedBtnEffectapply()
 {
 	UpdateData(TRUE);
+
+	if (m_pCurrentEffObj == nullptr)
+		return;
 
 	m_pCurrentEffObj->original_particle_->effect_info.fadeout_time = m_FadeOutNum;
 	m_pCurrentEffObj->original_particle_->effect_info.current_fadeout_time = m_FadeOutNum;
@@ -875,8 +897,10 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 			m_LaunchTime = m_pCurrentEffObj->launch_time;
 			m_LifeTIme = m_pCurrentEffObj->original_particle_->get_lifetime_();
 
+
 			m_CtlBlendSrc.SetCurSel(m_pCurrentEffObj->src_blend_ - 1);
 			m_CtlBlendDest.SetCurSel(m_pCurrentEffObj->dest_blend_ - 1);
+
 
 			if(m_pCurrentEffObj->is_use_fountain_ == true)
 				m_IsUsingFountain = TRUE;
@@ -904,12 +928,12 @@ void PToolForm::OnCbnSelchangeComboPlanelist()
 			m_AxisZ = m_pCurrentEffObj->animation_info_.rotate_axis.z;
 			m_RotateSpeed = m_pCurrentEffObj->animation_info_.speed;
 
-			D3DXVECTOR3 mat_t, mat_s;
-			D3DXQUATERNION quat_r;
-			D3DXMatrixDecompose(&mat_s, &quat_r, &mat_t, &m_pCurrentEffObj->matWorld_);
+			//D3DXVECTOR3 mat_t, mat_s;
+			//D3DXQUATERNION quat_r;
+			//D3DXMatrixDecompose(&mat_s, &quat_r, &mat_t, &m_pCurrentEffObj->matWorld_);
 
-			m_EffectTx = mat_t.x; m_EffectTy = mat_t.y; m_EffectTz = mat_t.z;
-			m_EffectSx = mat_s.x; m_EffectSy = mat_s.y; m_EffectSz = mat_s.z;
+			m_EffectTx = 0; m_EffectTy = 0; m_EffectTz = 0;
+			m_EffectSx = 1; m_EffectSy = 1; m_EffectSz = 1;
 
 			UpdateData(FALSE);
 			break;
@@ -927,6 +951,10 @@ void PToolForm::OnBnClickedBtnCreateobject()
 void PToolForm::OnBnClickedBtnObjectapply()
 {
 	UpdateData(TRUE);
+	
+	if (m_pCurrentObject == nullptr)
+		return;
+
 	D3DXMATRIX mat_rot;
 	D3DXMATRIX mat_scale;
 	D3DXMATRIX mat_world;
@@ -1003,6 +1031,9 @@ void PToolForm::OnCbnSelchangeComboObjectlist()
 
 void PToolForm::OnBnClickedBtnEffectadd()
 {
+	if (m_pCurrentEffObj == nullptr)
+		return;
+
 	int idx = m_EffectListBox.FindStringExact(0, m_pCurrentEffObj->name.c_str());
 
 	if (idx == -1)

@@ -245,9 +245,13 @@ void PCreatePlaneDlg::OnBtnClickedSelectTexture()
 	);
 	CString file_path;
 	char str_file[4096];
+	TCHAR path[MAX_PATH];
 	dlg.m_ofn.lpstrFile = file_path.GetBuffer(4096);
 	dlg.m_ofn.nMaxFile = sizeof(str_file);
+	GetCurrentDirectory(MAX_PATH, path);
+	StrCat(path, L"\\Effect");
 
+	dlg.m_ofn.lpstrInitialDir = path;
 
 
 	if (dlg.DoModal() == IDOK)
@@ -257,8 +261,13 @@ void PCreatePlaneDlg::OnBtnClickedSelectTexture()
 		for (POSITION ii = dlg.GetStartPosition(); ii != NULL;)
 		{
 			CString path = dlg.GetNextPathName(ii);
+			int a = path.Find(L"Effect");
+			CString relativepath = path.Mid(a, path.GetLength() - a);
 			TextureInfo info;
-			info.tex_path = path;
+			//info.tex_path = path;
+			info.tex_path = relativepath;
+			//주의 : 땜빵
+
 			PTexture* tex = PTextureManager::GetInstance().LoadTextureWithoutScript(info, app->m_tool.device());
 			if (tex == nullptr)
 			{
@@ -308,7 +317,7 @@ void PCreatePlaneDlg::OnBnClickedBtnInitialize()
 	m_PlaneHeight = 10.0f;
 	m_PlaneWidth = 10.0f;
 	m_FrameInterval = 0.1f;
-	m_LifeTime = 777.0f;
+	m_LifeTime = 3.0f;
 	UpdateData(FALSE);
 }
 

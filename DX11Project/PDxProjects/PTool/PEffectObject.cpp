@@ -142,7 +142,7 @@ bool PEffectObject::Frame()
 	//fountain 체크박스 켤 경우, 파티클 분수를 위해 난수형성
 	if (is_use_fountain_)
 	{
-		std::uniform_real_distribution<float> dist((original_particle_->gravity.y) * -1.0f, (original_particle_->gravity.y) * -1.0f + 230.0f);
+		std::uniform_real_distribution<float> dist((original_particle_->gravity.y) / 2.0f, (original_particle_->gravity.y) * -1.0f + 130.0f);
 		std::uniform_real_distribution<float> dist_normal(-50.0f, 50.0f);
 		std::random_device rd;
 		std::mt19937 mt(rd());
@@ -386,7 +386,7 @@ void PEffectObject::SetWVPMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX
 PParticle::PParticle()
 {
 	velocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	gravity = D3DXVECTOR3(0.0f, -9.8f, 0.0f);
+	gravity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	external_force = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
