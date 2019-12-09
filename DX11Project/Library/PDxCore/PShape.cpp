@@ -256,7 +256,7 @@ bool PBoxObject::Render()
 		0, NULL, &vertex_list_.at(0), 0, 0);
 	dx_helper_.shader_res_view_ = texture_->shader_res_view();
 
-
+	immediate_context_->UpdateSubresource(dx_helper_.constant_buffer_.Get(), 0, NULL, &constant_data_, 0, 0);
 	PModel::Render();
 	return true;
 }

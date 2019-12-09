@@ -223,6 +223,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PParser.h" />
     <ClInclude Include="PPhysicsModule.h" />
     <ClInclude Include="PObject.h" />
+    <ClInclude Include="PSelect.h" />
     <ClInclude Include="PShape.h" />
     <ClInclude Include="PSkyBox.h" />
     <ClInclude Include="PSound.h" />
@@ -267,6 +268,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PParser.cpp" />
     <ClCompile Include="PPhysicsModule.cpp" />
     <ClCompile Include="PObject.cpp" />
+    <ClCompile Include="PSelect.cpp" />
     <ClCompile Include="PShape.cpp" />
     <ClCompile Include="PSkyBox.cpp" />
     <ClCompile Include="PSound.cpp" />

@@ -53,6 +53,6 @@ public:
 	bool DrawQuadTree(PNode* node);
 
 };
-PCORE_RUN(L"QuadTree_1", 0, 0, 1024, 768);
+PCORE_RUN(L"OBB_AABB_RAY", 0, 0, 1024, 768);
 
 

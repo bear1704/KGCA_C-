@@ -127,6 +127,7 @@
     <ClCompile Include="lightweight.cpp" />
     <ClCompile Include="locality.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="network.cpp" />
     <ClCompile Include="ptr.cpp" />
     <ClCompile Include="ref.cpp" />
   </ItemGroup>

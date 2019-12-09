@@ -99,6 +99,23 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	return vOut;
 }
 
+VS_OUTPUT VS_NoLight(VS_INPUT vIn)
+{
+	VS_OUTPUT vOut = (VS_OUTPUT)0;
+
+	vOut.p = mul(float4(vIn.p, 1.0f), WIDEN(matWorld));
+	//vOut.p = mul(vOut.p, WIDEN(matWorld));
+	vOut.p = mul(vOut.p, WIDEN(matView));
+	vOut.p = mul(vOut.p, WIDEN(matProj));
+	vOut.n = vIn.n;
+	vOut.t = vIn.t;
+	vOut.c = vIn.c;
+	vOut.c.w = 1.0f;
+	return vOut;
+}
+
+
+
 
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
@@ -108,6 +125,12 @@ float4 PS(VS_OUTPUT vIn) : SV_Target
 	return vFinalColor;
 }
 
+
+float4 PS_Frustum(VS_OUTPUT input) : SV_TARGET
+{
+	float4 color = input.c;
+	return color;
+}
 
 ////--------------------------------------------------------------------------------------
 //// Pixel Shader
