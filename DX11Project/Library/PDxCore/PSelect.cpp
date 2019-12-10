@@ -2,6 +2,9 @@
 
 PSelect::PSelect()
 {
+	D3DXMatrixIdentity(&mat_world_);
+	D3DXMatrixIdentity(&mat_view_);
+	D3DXMatrixIdentity(&mat_proj_);
 }
 
 PSelect::~PSelect()
@@ -90,7 +93,8 @@ void PSelect::SetMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 
 void PSelect::RefreshPickingRay()
 {
-	if (g_InputActionMap.leftClick == KEYSTAT::KEY_PUSH || g_InputActionMap.leftClick == KEYSTAT::KEY_HOLD)
+
+	//if (g_InputActionMap.rightClick == KEYSTAT::KEY_PUSH || g_InputActionMap.rightClick == KEYSTAT::KEY_HOLD)
 	{
 		POINT cursor;
 		GetCursorPos(&cursor);
@@ -103,7 +107,7 @@ void PSelect::RefreshPickingRay()
 		v.x = (((2.0f * cursor.x) / g_rectangle_client.right) - 1) / mat_proj_._11;
 		v.y = -(((2.0f * cursor.y) / g_rectangle_client.bottom) - 1) / mat_proj_._22;
 		v.z = 1.0f;
-		
+
 		D3DXMATRIX mat_world_view = mat_world_ * mat_view_;
 		D3DXMATRIX m;
 		D3DXMatrixInverse(&m, NULL, &mat_world_view);
@@ -124,8 +128,8 @@ bool PSelect::CheckRaytoOBBCollision(P_BOX* box, PickingRay* ray)
 	//s -> OBBcenter와 ray의 origin을 잇는 벡터와 분리축의 투영 결과  sa -> s의 절대값(Vec R->)
  	//f -> ray와 ray-box투영벡터 방향검사(p.376)를 위한 값(vec x dot vec d)   fa -> f의 절대값
 	float f[3], s[3], fa[3], sa[3];
-	float t_min = -999999.0f;
-	float t_max = 999999.0f;
+	t_min = -999999.0f;
+	t_max = 999999.0f;
 
 	D3DXVECTOR3 box_to_rayorigin = ray->origin - box->center;
 
@@ -138,9 +142,10 @@ bool PSelect::CheckRaytoOBBCollision(P_BOX* box, PickingRay* ray)
 		sa[v] = std::fabs(s[v]);
 
 		//p.376 반직선 방향검사 / p.375 분리축 투영 거리 검사 
-		if (sa[v] * f[v] >= 0.0f && sa[v] > box->obb_extents[v])
+		if (s[v] * f[v] >= 0.0f && sa[v] > box->obb_extents[v])
+		{
 			return false;
-
+		}
 		//AABB 체크
 		float t1 = (-s[v] - box->obb_extents[v]) / f[v];
 		float t2 = (-s[v] + box->obb_extents[v]) / f[v];
@@ -153,7 +158,6 @@ bool PSelect::CheckRaytoOBBCollision(P_BOX* box, PickingRay* ray)
 
 		if (t_min > t_max)
 		{
-			assert(false); //aabb 요소가 안들어가있을수도 있음
 			return false;
 		}
 			
@@ -176,6 +180,7 @@ bool PSelect::CheckRaytoOBBCollision(P_BOX* box, PickingRay* ray)
 
 	if (sn_cross[0] > fw)
 	{
+		assert(false);
 		//m_vDxR = vDxR;
 		return false;
 	}
@@ -187,6 +192,7 @@ bool PSelect::CheckRaytoOBBCollision(P_BOX* box, PickingRay* ray)
 
 	if (sn_cross[1] > fw)
 	{
+		assert(false);
 		return false;
 	}
 
@@ -198,6 +204,7 @@ bool PSelect::CheckRaytoOBBCollision(P_BOX* box, PickingRay* ray)
 
 	if (sn_cross[2] > fw)
 	{
+		assert(false);
 		return false;
 	}
 

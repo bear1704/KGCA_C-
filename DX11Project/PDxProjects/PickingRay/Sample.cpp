@@ -29,26 +29,14 @@ bool Sample::Init()
 	rt_screen_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS_NoLight");
 	minimap_rt_.Create(device_, 1024, 1024);
 
-	//box_obj_.OBBInit(device_, immediate_device_context_, L"data/Shader/VertexShader.hlsl", "VS", L"data/Shader/PixelShader.hlsl", "PS",
-	//	5, 1, 1, D3DXVECTOR3(0.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), 
-	//	L"blue");
-	//box_obj2_.OBBInit(device_, immediate_device_context_, L"data/Shader/VertexShader.hlsl", "VS", L"data/Shader/PixelShader.hlsl", "PS",
-	//	4, 4, 1, D3DXVECTOR3(10.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f),
-	//	L"blue");
-
 	box_obj_.OBBInit(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS",
 		5, 1, 1, D3DXVECTOR3(0.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), 
 		L"blue");
+	box_obj_.object_name_ = L"box1";
 	box_obj2_.OBBInit(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS",
 		4, 4, 1, D3DXVECTOR3(10.0f, 35.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f),
 		L"blue");
-
-
-
-
-	//D3DXMATRIX mat_rot;
-	//D3DXMatrixRotationYawPitchRoll(&mat_rot, 0.0f, 0.0f, 30.8f);
-	//box_obj_.matWorld_ *= mat_rot;
+	box_obj2_.object_name_ = L"box2";
 
 	map_.Init(device_, immediate_device_context_, &light_obj_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
@@ -70,10 +58,10 @@ bool Sample::Init()
 
 	quadtree_.Build(&map_, 7, 10.0f);
 
-
-
 	//프러스텀 표시/비표시
 	main_camera_->render_frustum_ = false;
+
+	line_obj_.Init(device_, immediate_device_context_, L"data/Shader/LineShader.hlsl");
 
 	return true;
 }
@@ -163,6 +151,7 @@ bool Sample::Frame()
 	quadtree_.Update(main_camera_);
 	quadtree_.Frame();
 	map_.Frame(light_obj_.light_direction(), main_camera_->camera_position_, main_camera_->vec_look_);
+	select_.SetMatrix(nullptr, &main_camera_->matView_, &main_camera_->matProj_);
 
 	return true;
 }
@@ -195,6 +184,31 @@ bool Sample::Render()
 
 	box_obj2_.SetWVPMatrix((D3DXMATRIX*)& box_obj2_.matWorld_, (D3DXMATRIX*)& main_camera_->matView_, (D3DXMATRIX*)& main_camera_->matProj_);
 	box_obj2_.Render();
+	
+
+	if (g_InputActionMap.rightClick == KEYSTAT::KEY_HOLD || g_InputActionMap.rightClick == KEYSTAT::KEY_PUSH)
+	{
+		if (select_.CheckRaytoOBBCollision(&box_obj_.box_blueprint_))
+		{
+			TCHAR szBuffer[256];
+			_stprintf_s(szBuffer, _T(" %s 박스와 직선의 충돌, 교점=(%10.4f, %10.4f, %10.4f)"),
+				box_obj_.object_name_.c_str(), select_.intersection_.x, select_.intersection_.y, select_.intersection_.z);
+			MessageBox(0, szBuffer, _T("충돌"), MB_OK);
+		}
+		if (select_.CheckRaytoOBBCollision(&box_obj2_.box_blueprint_))
+		{
+			TCHAR szBuffer[256];
+			_stprintf_s(szBuffer, _T(" %s 박스와 직선의 충돌, 교점=(%10.4f, %10.4f, %10.4f)"),
+				box_obj2_.object_name_.c_str(), select_.intersection_.x, select_.intersection_.y, select_.intersection_.z);
+			MessageBox(0, szBuffer, _T("충돌"), MB_OK);
+		}
+
+		line_start_ = select_.picking_ray_.origin;
+		line_end_ = select_.picking_ray_.origin + select_.picking_ray_.direction * select_.t_min;
+	}
+	line_obj_.SetWVPMatrix(nullptr, (D3DXMATRIX*)&main_camera_->matView_, (D3DXMATRIX*)&main_camera_->matProj_);
+	line_obj_.Draw(line_start_,line_end_, D3DXVECTOR4(1, 0, 0, 1));
+
 
 	main_camera_->Render(immediate_device_context_);
 

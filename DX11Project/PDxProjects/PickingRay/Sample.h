@@ -5,6 +5,7 @@
 #include "PDxRenderTarget.h"
 #include "PQuadTree.h"
 #include "PNormHeightMap.h"
+#include "PSelect.h"
 #include <random>
 #include <functional>
 
@@ -37,9 +38,13 @@ public:
 	PBoxObject		box_obj_;
 	PBoxObject		box_obj2_;
 	PDxRenderTarget minimap_rt_;
-	PPlaneObject rt_screen_;
-	PLineObject line_obj_;
-	PNormHeightMap map_;
+	PPlaneObject	rt_screen_;
+	PLineObject		line_obj_;
+	PNormHeightMap	map_;
+	PSelect			select_;
+
+	D3DXVECTOR3 line_start_;
+	D3DXVECTOR3 line_end_;
 
 
 public:

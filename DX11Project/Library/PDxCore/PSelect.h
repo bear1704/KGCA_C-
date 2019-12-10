@@ -27,6 +27,10 @@ public:
 	D3DXMATRIX mat_view_;
 	D3DXMATRIX mat_proj_;
 	D3DXVECTOR3 intersection_; //레이의 원점 -> 교점까지의 벡터(정규화안됨)
+
+	float t_min;
+	float t_max;
+
 public:
 	//반직선과 평면의 교차여부를 판정하고 반직선의 교점 좌표값을 얻는다
 	bool GetIntersection(OUT_ D3DXVECTOR3& intersection, 
