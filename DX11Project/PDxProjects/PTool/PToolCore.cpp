@@ -53,9 +53,11 @@ bool PToolCore::Init()
 
 	model_light_ = new PLightObj();
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f ,200.0f, 0.0f), 1,device_, immediate_device_context_, main_camera_);
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f ,200.0f, 0.0f), 1,device_, 
+		immediate_device_context_, main_camera_, true);
 	model_light_->Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f, 200.0f, 0.0f), 2, device_, immediate_device_context_, main_camera_);
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f, 200.0f, 0.0f), 2, device_, immediate_device_context_, 
+		main_camera_, true);
 	//CreateConstantBuffer();
 
 	return true;

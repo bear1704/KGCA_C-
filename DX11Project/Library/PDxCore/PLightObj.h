@@ -62,6 +62,7 @@ private:
 	(ex. matworld,matview 등을 담당하는 cb1개, g_animation_matrix를 담당하는 cb 1개가 있다면 value = 2;)
 	*/
 	int numberof_constant_buffer_;
+	bool is_rotate_;
 
 public:
 	PLightObj();
@@ -71,7 +72,7 @@ public:
 	D3DXMATRIX mat_normal_;//노말맵에서 사용하는 용도
 	bool Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3DXVECTOR4 diffuse_material,
 		D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color, D3DXVECTOR3 position,
-		int numberof_cbuffer, ID3D11Device* device,ID3D11DeviceContext* context, PCamera* camera);
+		int numberof_cbuffer, ID3D11Device* device,ID3D11DeviceContext* context, PCamera* camera, bool is_rotate);
 	bool Frame();
 	bool Render();
 	bool Release();

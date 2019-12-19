@@ -11,7 +11,7 @@ PLightObj::~PLightObj()
 
 bool PLightObj::Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3DXVECTOR4 diffuse_material, 
 	D3DXVECTOR4 diffuse_color, D3DXVECTOR4 specular_material, D3DXVECTOR4 specular_color, D3DXVECTOR3 position,
-	int numberof_thisobj_cbuffer,ID3D11Device* device, ID3D11DeviceContext* context, PCamera* camera)
+	int numberof_thisobj_cbuffer,ID3D11Device* device, ID3D11DeviceContext* context, PCamera* camera, bool is_rotate)
 {
 	device_ = device;
 	context_ = context;
@@ -42,6 +42,8 @@ bool PLightObj::Init(D3DXVECTOR4 ambient_material, D3DXVECTOR4 ambient_color, D3
 	cbuffer_light_nearly_not_changed_.Attach(DX::CreateConstantBuffer(device_, &cb_nearly_not_change_, 1, sizeof(CB_VS_LightNearlyNotChange), true));
 	cbuffer_change_every_frame_.Attach(DX::CreateConstantBuffer(device_, &cb_change_everyframe_, 1, sizeof(CB_VS_ChangesEveryFrame), true));
 
+	is_rotate_ = is_rotate;
+
 	return true;
 }
 
@@ -49,7 +51,11 @@ bool PLightObj::Frame()
 {
 	D3DXMatrixTranslation(&light_init_world_, light_trs_.light_trans_.x, light_trs_.light_trans_.y , light_trs_.light_trans_.z);
 	D3DXMATRIX mat_rotation;
-	D3DXMatrixRotationY(&mat_rotation, g_fGameTimer*1.0f);
+	D3DXMatrixIdentity(&mat_rotation);
+	
+	if(is_rotate_)
+		D3DXMatrixRotationY(&mat_rotation, g_fGameTimer*1.0f);
+
 	D3DXMatrixMultiply(&light_world_, &light_init_world_, &mat_rotation);
 
 	light_position_.x = light_world_._41;

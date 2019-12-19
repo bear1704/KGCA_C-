@@ -22,8 +22,10 @@ bool Sample::Init()
 		free_camera_.vec_view_target_, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	free_camera_.CreateProjectionMatrix();
 	main_camera_ = &free_camera_;
+
 	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), device_, immediate_device_context_, main_camera_);
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(0.0f, 100.0f, 0.0f), 1, device_, 
+		immediate_device_context_, main_camera_, false);
 
 	rt_screen_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS_NoLight");
 	minimap_rt_.Create(device_, 1024, 1024);
@@ -32,7 +34,7 @@ bool Sample::Init()
 	line_obj_.Init(device_, immediate_device_context_, L"data/Shader/LineShader.hlsl");
 	
 
-	map_.Init(device_, immediate_device_context_);
+	map_.Init(device_, immediate_device_context_, &light_obj_);
 	map_.CreateHeightMap(device_, immediate_device_context_, L"data/texture/heightMap513.bmp");
 
 
@@ -133,12 +135,12 @@ bool Sample::Render()
 	light_obj_.Render();
 	line_obj_.SetWVPMatrix(nullptr, (D3DXMATRIX*)&main_camera_->matView_, (D3DXMATRIX*)&main_camera_->matProj_);
 	
-	/*
+	
 	for (int i = 0; i < quadtree_.drawnode_list_.size(); i++)
 	{
  		DrawQuadTree(quadtree_.drawnode_list_[i]);
 	}
-
+	/*
 	for (int i = 0; i < quadtree_.drawobj_list_.size(); i++)
 	{
 		P_BOX* pbox = (P_BOX*)quadtree_.drawobj_list_[i];

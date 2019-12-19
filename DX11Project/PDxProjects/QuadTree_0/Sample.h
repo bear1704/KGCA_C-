@@ -16,7 +16,7 @@
 
 
 
-PScene* g_current_scene_;
+//PScene* g_current_scene_;
 
 class Sample : public PCore
 {

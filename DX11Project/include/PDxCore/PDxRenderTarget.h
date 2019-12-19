@@ -6,6 +6,7 @@ class PDxRenderTarget
 public:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture_;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shader_res_view_;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> depth_stencil_shader_res_view_;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target_view_;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depth_stencil_texture_;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view_;
@@ -16,6 +17,10 @@ public:
 	UINT numberof_view_port_;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target_view_old_;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view_old_;
+
+	DXGI_FORMAT						depthstencil_format_;
+	D3D11_DEPTH_STENCIL_VIEW_DESC	depthstencil_desc_;
+	bool							is_depth_shadow_rt_;
 
 public:
 	HRESULT Create(ID3D11Device* device, float width, float height);

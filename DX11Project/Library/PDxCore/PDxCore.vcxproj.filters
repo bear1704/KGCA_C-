@@ -40,6 +40,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{08d4dc7e-d867-46a1-bf1f-55b4ee13aab7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\AnimationiObject">
+      <UniqueIdentifier>{d605e502-ea07-4823-addf-d99c44b331e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -177,6 +180,15 @@
     <ClInclude Include="PSelect.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
+    <ClInclude Include="PKgcObj.h">
+      <Filter>소스 파일\AnimationiObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PMatObj.h">
+      <Filter>소스 파일\AnimationiObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PSkmObj.h">
+      <Filter>소스 파일\AnimationiObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCore.cpp">
@@ -298,6 +310,15 @@
     </ClCompile>
     <ClCompile Include="PSelect.cpp">
       <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="PKgcObj.cpp">
+      <Filter>소스 파일\AnimationiObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PMatObj.cpp">
+      <Filter>소스 파일\AnimationiObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PSkmObj.cpp">
+      <Filter>소스 파일\AnimationiObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

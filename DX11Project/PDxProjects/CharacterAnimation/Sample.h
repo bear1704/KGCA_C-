@@ -21,7 +21,17 @@
 #pragma comment (lib, "fmod_vc.lib")
 #pragma comment (lib, "winmm.lib")
 
-
+class PSCharacter
+{
+public:
+	PSCharacter();
+	~PSCharacter();
+public:
+	std::vector<PModel*> object_list_;
+	multibyte_string character_name_;
+	multibyte_string shader_name_;
+	PMatObj* matrix_;
+};
 
 struct CB_VS_ChangesEveryFrame
 {
@@ -38,18 +48,6 @@ struct CB_VS_NearlyNotChange
 	D3DXVECTOR4 cb_AmbientLightColor;
 	D3DXVECTOR4 cb_DiffuseLightColor;
 	D3DXVECTOR4 cb_SpecularLightColor;
-};
-
-class PSCharacter
-{
-public:
-	PSCharacter();
-	~PSCharacter();
-public:
-	std::vector<PModel*> object_list_;
-	multibyte_string character_name_;
-	multibyte_string shader_name_;
-	PMatObj* matrix_;
 };
 
 

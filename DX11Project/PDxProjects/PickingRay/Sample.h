@@ -43,6 +43,9 @@ public:
 	PNormHeightMap	map_;
 	PSelect			select_;
 
+	PImportObject importobj_;
+
+
 	D3DXVECTOR3 line_start_;
 	D3DXVECTOR3 line_end_;
 

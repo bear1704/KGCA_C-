@@ -1,7 +1,7 @@
 #pragma once
 #include "PCore.h"
 #include "PFreeCamera.h"
-#include "PLightObj.h"
+//#include "PLightObj.h"
 #include "PDxRenderTarget.h"
 #include "PQuadTree.h"
 #include "PNormHeightMap.h"

@@ -93,7 +93,6 @@ void PSelect::SetMatrix(D3DXMATRIX* world, D3DXMATRIX* view, D3DXMATRIX* proj)
 
 void PSelect::RefreshPickingRay()
 {
-
 	//if (g_InputActionMap.rightClick == KEYSTAT::KEY_PUSH || g_InputActionMap.rightClick == KEYSTAT::KEY_HOLD)
 	{
 		POINT cursor;

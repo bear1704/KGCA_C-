@@ -214,8 +214,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PFrustum.h" />
     <ClInclude Include="PImageControl.h" />
     <ClInclude Include="PInput.h" />
+    <ClInclude Include="PKgcObj.h" />
     <ClInclude Include="PLightObj.h" />
     <ClInclude Include="PMap.h" />
+    <ClInclude Include="PMatObj.h" />
     <ClInclude Include="PModel.h" />
     <ClInclude Include="PNormalMapHelper.h" />
     <ClInclude Include="PNormHeightMap.h" />
@@ -225,6 +227,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClInclude Include="PObject.h" />
     <ClInclude Include="PSelect.h" />
     <ClInclude Include="PShape.h" />
+    <ClInclude Include="PSkmObj.h" />
     <ClInclude Include="PSkyBox.h" />
     <ClInclude Include="PSound.h" />
     <ClInclude Include="PSoundMgr.h" />
@@ -259,8 +262,10 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PFrustum.cpp" />
     <ClCompile Include="PImageControl.cpp" />
     <ClCompile Include="PInput.cpp" />
+    <ClCompile Include="PKgcObj.cpp" />
     <ClCompile Include="PLightObj.cpp" />
     <ClCompile Include="PMap.cpp" />
+    <ClCompile Include="PMatObj.cpp" />
     <ClCompile Include="PModel.cpp" />
     <ClCompile Include="PNormalMapHelper.cpp" />
     <ClCompile Include="PNormHeightMap.cpp" />
@@ -270,6 +275,7 @@ copy "..\\..\\FMOD\\lib\\x64\\*.dll" "../../output/Release"</Command>
     <ClCompile Include="PObject.cpp" />
     <ClCompile Include="PSelect.cpp" />
     <ClCompile Include="PShape.cpp" />
+    <ClCompile Include="PSkmObj.cpp" />
     <ClCompile Include="PSkyBox.cpp" />
     <ClCompile Include="PSound.cpp" />
     <ClCompile Include="PSoundMgr.cpp" />

@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 
+
+#ifdef TEST
 using namespace std;
 int** already_come;
 
@@ -91,3 +93,5 @@ int main()
 
     return 0;
 }
+
+#endif 

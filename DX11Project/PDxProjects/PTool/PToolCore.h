@@ -12,9 +12,9 @@
 #include "PLightObj.h"
 #include "PNormHeightMap.h"
 #include "PEffectObject.h"
-#include "PKgcObj.h"
-#include "PSkmObj.h"
-#include "PMatObj.h"
+#include "../ModelViewer/PKgcObj.h"
+#include "../ModelViewer/PSkmObj.h"
+#include "../ModelViewer/PMatObj.h"
 
 
 #if defined(DEBUG) || defined(_DEBUG)

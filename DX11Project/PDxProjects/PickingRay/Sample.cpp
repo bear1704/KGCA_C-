@@ -1,5 +1,6 @@
 #include "Sample.h"
 
+int g_temp_color = 1;
 
 Sample::Sample()
 {
@@ -23,8 +24,10 @@ bool Sample::Init()
 	free_camera_.CreateProjectionMatrix();
 	main_camera_ = &free_camera_;
 	
-	light_obj_.Init(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1),
-		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR3(100.0f, 200.0f, 0.0f), 1, device_, immediate_device_context_, main_camera_);
+	light_obj_.Init(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),
+		D3DXVECTOR4(1, 1, 1, 1),
+		D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR4(1, 1, 1, 1), 
+		D3DXVECTOR3(0.0f, 100.0f, -200.0f), 1, device_, immediate_device_context_, main_camera_, true);
 
 	rt_screen_.Init(device_, immediate_device_context_, L"data/Shader/DiffuseLight.hlsl", "VS", L"data/Shader/DiffuseLight.hlsl", "PS_NoLight");
 	minimap_rt_.Create(device_, 1024, 1024);
@@ -52,11 +55,11 @@ bool Sample::Init()
 	md.ps_func = "PS";
 	md.texture_name = L"stone_wall";
 
-	map_.SetNormalTexture(L"test");
+	map_.SetNormalTexture(L"stone_wall");
 	if (map_.Load(md) == false)
 		assert(false);
 
-	quadtree_.Build(&map_, 7, 10.0f);
+	quadtree_.Build(&map_, 5, 10.0f);
 
 	//프러스텀 표시/비표시
 	main_camera_->render_frustum_ = false;
@@ -139,7 +142,11 @@ bool Sample::Frame()
 		D3DXVECTOR3 vec = -(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 		box_obj_.ScaleBox(vec);
 	}
-
+	if (g_InputActionMap.jumpKey == KEYSTAT::KEY_PUSH)
+	{
+		if (++g_temp_color > 7)
+			g_temp_color = 1;
+	}
 
 
 #pragma endregion
@@ -162,7 +169,16 @@ bool Sample::Render()
 	//line_obj_.SetWVPMatrix(nullptr, (D3DXMATRIX*)&main_camera_->matView_, (D3DXMATRIX*)&main_camera_->matProj_);
 	light_obj_.Render();
 
+	/*for (int i = 0; i < quadtree_.drawnode_list_.size(); i++)
+	{
+		DrawQuadTree(quadtree_.drawnode_list_[i]);
+		
+	}*/
 
+
+	//DrawQuadTree(quadtree_.rootnode_);
+	
+	
 	map_.SetWVPMatrix(nullptr, (D3DXMATRIX*) &main_camera_->matView_, (D3DXMATRIX*) &main_camera_->matProj_);
 	quadtree_.Render(immediate_device_context_);
 
@@ -276,40 +292,60 @@ bool Sample::DrawQuadTree(PNode* node)
 {
 	if (node == nullptr) return true;
 
+	
 	D3DXVECTOR4 color = D3DXVECTOR4(1, 1, 1, 1);
 	if (node->depth_ == 1)
 		color = D3DXVECTOR4(1, 0, 0, 1);
-	if (node->depth_ == 2)
+	else if (node->depth_ == 2)
 		color = D3DXVECTOR4(0, 1, 0, 1);
-	if (node->depth_ == 3)
+	else if (node->depth_ == 3)
 		color = D3DXVECTOR4(0, 0, 1, 1);
-	if (node->depth_ == 4)
+	else if (node->depth_ == 4)
 		color = D3DXVECTOR4(1, 1, 0, 0);
-	if (node->depth_ == 5)
+	else if (node->depth_ == 5)
 		color = D3DXVECTOR4(1, 0, 1, 1);
-	if (node->depth_ == 6)
+	else if (node->depth_ == 6)
 		color = D3DXVECTOR4(1, 1, 1, 1);
-	if (node->depth_ >= 7)
+	else if (node->depth_ >= 7)
 		color = D3DXVECTOR4(0, 0, 0, 1);
 
 	D3DXVECTOR3 max = node->box_blueprint_.aabb_max;
 	D3DXVECTOR3 min = node->box_blueprint_.aabb_min;
 
-	D3DXVECTOR3 start = D3DXVECTOR3(min.x, node->depth_ * 0.1f, max.z);
-	D3DXVECTOR3 end = D3DXVECTOR3(max.x, node->depth_ * 0.1f, max.z);
-	line_obj_.Draw(start, end, color);
+	D3DXVECTOR3 start = D3DXVECTOR3(min.x, node->depth_ * 0.2f, max.z);
+	D3DXVECTOR3 end = D3DXVECTOR3(max.x, node->depth_ * 0.2f, max.z);
+	start.y += 30.0f;
+	end.y += 30.0f;
+	if (node->depth_ == g_temp_color)
+	{
+		line_obj_.Draw(start, end, color);
+	}
+	start = D3DXVECTOR3(max.x, node->depth_ * 0.2f, max.z);
+	end = D3DXVECTOR3(max.x, node->depth_ * 0.2f, min.z);
+	start.y += 29.0f;
+	end.y += 29.0f;
+	if (node->depth_ == g_temp_color)
+	{
+		line_obj_.Draw(start, end, color);
+	}
 
-	start = D3DXVECTOR3(max.x, node->depth_ * 0.1f, max.z);
-	end = D3DXVECTOR3(max.x, node->depth_ * 0.1f, min.z);
-	line_obj_.Draw(start, end, color);
+	start = D3DXVECTOR3(max.x, node->depth_ * 0.2f, min.z);
+	end = D3DXVECTOR3(min.x, node->depth_ * 0.2f, min.z);
+	start.y += 28.0f;
+	end.y += 28.0f;
+	if (node->depth_ == g_temp_color)
+	{
+		line_obj_.Draw(start, end, color);
+	}
 
-	start = D3DXVECTOR3(max.x, node->depth_ * 0.1f, min.z);
-	end = D3DXVECTOR3(min.x, node->depth_ * 0.1f, min.z);
-	line_obj_.Draw(start, end, color);
-
-	start = D3DXVECTOR3(min.x, node->depth_ * 0.1f, min.z);
-	end = D3DXVECTOR3(min.x, node->depth_ * 0.1f, max.z);
-	line_obj_.Draw(start, end, color);
+	start = D3DXVECTOR3(min.x, node->depth_ * 0.2f, min.z);
+	end = D3DXVECTOR3(min.x, node->depth_ * 0.2f, max.z);
+	start.y += 27.0f;
+	end.y += 27.0f;
+	if (node->depth_ == g_temp_color)
+	{
+		line_obj_.Draw(start, end, color);
+	}
 
 	for (int i = 0; i < node->object_list_.size(); i++)
 	{

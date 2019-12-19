@@ -64,6 +64,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PickingRay", "PickingRay\Pi
 		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DepthMapShadow", "DepthMapShadow\DepthMapShadow.vcxproj", "{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6C1D4AA-85DF-423B-96FD-0E0BD50864E2} = {D6C1D4AA-85DF-423B-96FD-0E0BD50864E2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -200,6 +205,14 @@ Global
 		{648E1735-E16E-4F90-AFE8-38EBB4FB476F}.Release|x64.Build.0 = Release|x64
 		{648E1735-E16E-4F90-AFE8-38EBB4FB476F}.Release|x86.ActiveCfg = Release|Win32
 		{648E1735-E16E-4F90-AFE8-38EBB4FB476F}.Release|x86.Build.0 = Release|Win32
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Debug|x64.ActiveCfg = Debug|x64
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Debug|x64.Build.0 = Debug|x64
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Debug|x86.ActiveCfg = Debug|Win32
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Debug|x86.Build.0 = Debug|Win32
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Release|x64.ActiveCfg = Release|x64
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Release|x64.Build.0 = Release|x64
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Release|x86.ActiveCfg = Release|Win32
+		{953654CE-72C8-4D0F-B4BC-3598E3E3E09B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
