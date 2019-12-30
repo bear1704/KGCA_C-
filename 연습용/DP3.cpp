@@ -1,3 +1,4 @@
+#ifdef TEST
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -40,3 +41,5 @@ int main()
     int ret = solution(m);
 
 }
+
+#endif TEST
